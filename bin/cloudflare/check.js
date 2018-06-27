@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node cloudflare/check --zone dev
+ * $ node bin/cloudflare/check --zone dev
  */
 
 const Deployer = require('deployer2')
@@ -32,4 +32,4 @@ deployer
         
         await cf.get('pagerules')
     
-})
+    })

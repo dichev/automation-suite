@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node sys-metrics/init --host dev-hermes-web1
+ * $ node bin/sys-metrics/init --host dev-hermes-web1
  */
 
 

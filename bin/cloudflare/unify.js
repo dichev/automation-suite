@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node cloudflare/unify --zone dev
+ * $ node bin/cloudflare/unify --zone dev
  */
 
 const Deployer = require('deployer2')

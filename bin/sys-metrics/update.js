@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node sys-metrics/update --host dev-hermes-web1 --revision v3.2.5
+ * $ node bin/sys-metrics/update --host dev-hermes-web1 --revision v3.2.5
  */
 
 
