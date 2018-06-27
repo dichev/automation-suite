@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "deployer2": "*"
+    "deployer2": "git+ssh://git@gitlab.dopamine.bg:tools/lab/deployer2.git"
   }
 }
