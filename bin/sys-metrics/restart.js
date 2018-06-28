@@ -7,7 +7,7 @@
  */
 
 
-let Deployer = require('deployer2')
+const Deployer = require('deployer2')
 let deployer = new Deployer()
 deployer
     .option('-h, --host <name>', 'The target host name (all hosts are predefined in deployer configuration)')

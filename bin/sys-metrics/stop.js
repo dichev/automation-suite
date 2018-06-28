@@ -7,7 +7,7 @@
  */
 
 
-let Deployer = require('deployer2')
+const Deployer = require('deployer2')
 let deployer = new Deployer()
 
 

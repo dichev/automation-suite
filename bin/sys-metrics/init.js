@@ -7,7 +7,7 @@
  */
 
 
-let Deployer = require('deployer2')
+const Deployer = require('deployer2')
 let deployer = new Deployer()
 
 
@@ -27,8 +27,8 @@ deployer
             apt-get -y install nodejs
         `)
         
-        ssh.exec('mkdir -p dopamine/sys-metrics')
-        ssh.chdir('dopamine/sys-metrics')
+        ssh.exec('mkdir -p /opt/dopamine/sys-metrics')
+        ssh.chdir('/opt/dopamine/sys-metrics')
         ssh.exec('git clone git@gitlab.dopamine.bg:releases/sys-metrics.git .')
         ssh.exec('systemctl enable /opt/dopamine/sys-metrics/sys-metrics.service')
         ssh.exec('systemctl start sys-metrics')

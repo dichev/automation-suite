@@ -6,9 +6,7 @@
  * $ node bin/servers-conf/update-nginx-only --host dev-hermes-lb
  */
 
-const installed = require('./.installed.json')
-
-let Deployer = require('deployer2')
+const Deployer = require('deployer2')
 let deployer = new Deployer()
 deployer
     .option('-h, --host <dev-hermes-lb|belgium-lb1>', 'The target host name (all hosts are predefined in deployer configuration)')
