@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+'use strict';
+
+/**
+ * Usage:
+ * $ node bin/deployer2-compose --hosts all -p 3 -e "node bin/sys-metrics/restart --revision v3.2.5 --host HOST"
+ */
+
+const fs = require('fs')
+const Deployer = require('deployer2')
+const getAllHosts = (cmd) => { // TODO: this is too hacky, should be refactored or the path to file should be passed as --hosts
+    let cmdPath = cmd.match(/(bin\/.+?)\//)
+    if (cmdPath && cmdPath[1]) {
+        let json = `${cmdPath[1]}/.installed.json`
+        return JSON.parse(fs.readFileSync(json)).hosts
+    }
+    throw Error('There is no configuration file for all hosts. Please specify them as list')
+}
+
+
+let deployer = new Deployer()
+deployer
+    .option('-e, --execute-command <cmd>', 'this command to be executed multiple times. it should contain keyword HOST to be replaced dynamically, for example: "node bin/sys-metrics/restart --host HOST"')
+    .option('-H, --hosts <list|all>', 'Comma-separated list of hosts, or configuration file, or the magic keyword "all"')
+    .option('-p, --parallel [limit]', 'Define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially')
+    
+    .run(async () => {
+        const cmd = deployer.params.executeCommand
+        const hosts = deployer.params.hosts === 'all' ? getAllHosts(cmd) : deployer.params.hosts.split(',')
+        
+        for (let host of hosts) {
+            console.log(cmd.replace(/HOST/g, host))
+            // TODO: execute here
+        }
+    })
+
