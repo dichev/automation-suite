@@ -15,8 +15,9 @@ let deployer = new Deployer({hosts: installed.hosts})
 
 deployer
     .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts })
-   
-    .loop('hosts', async (host) => {
+    .loop('hosts')
+
+    .run(async (host) => {
         let ssh = await deployer.ssh(deployer.params.host, 'root')
         
         await ssh.chdir('/opt/dopamine/sys-metrics')

@@ -15,8 +15,9 @@ let deployer = new Deployer()
 
 deployer
     .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases. Available: ${zones}`, { choices: zones })
-    
-    .loop('zones', async (zone) => {
+    .loop('zones')
+
+    .run(async (zone) => {
     
         const cfg = secret[zone]
         
