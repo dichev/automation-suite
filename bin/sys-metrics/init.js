@@ -3,21 +3,22 @@
 
 /**
  * Usage:
- * $ node bin/sys-metrics/init --host dev-hermes-web1
+ * $ node bin/sys-metrics/init --hosts dev-hermes-web1
  */
 
 
 const Deployer = require('deployer2')
-let deployer = new Deployer()
+const installed = require('./.installed.json')
+let deployer = new Deployer({hosts: installed.hosts})
 
 
 deployer
-    .option('-h, --host <name>', 'The target host name (all hosts are predefined in deployer configuration)')
+    .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts })
    
-    .run(async () => {
-        let ssh = await deployer.ssh(deployer.params.host, 'root')
+    .loop('hosts', async (host) => {
+        let ssh = await deployer.ssh(host, 'root')
         
-        ssh.exec(`
+        await ssh.exec(`
             ssh-keyscan -H gitlab.dopamine.bg >> ~/.ssh/known_hosts
             ssh-keyscan -H monitoring.d >> ~/.ssh/known_hosts
             
@@ -27,12 +28,12 @@ deployer
             apt-get -y install nodejs
         `)
         
-        ssh.exec('mkdir -p /opt/dopamine/sys-metrics')
-        ssh.chdir('/opt/dopamine/sys-metrics')
-        ssh.exec('git clone git@gitlab.dopamine.bg:releases/sys-metrics.git .')
-        ssh.exec('systemctl enable /opt/dopamine/sys-metrics/sys-metrics.service')
-        ssh.exec('systemctl start sys-metrics')
-        ssh.exec('systemctl status sys-metrics | head -n 3')
+        await ssh.exec('mkdir -p /opt/dopamine/sys-metrics')
+        await ssh.chdir('/opt/dopamine/sys-metrics')
+        await ssh.exec('git clone git@gitlab.dopamine.bg:releases/sys-metrics.git .')
+        await ssh.exec('systemctl enable /opt/dopamine/sys-metrics/sys-metrics.service')
+        await ssh.exec('systemctl start sys-metrics')
+        await ssh.exec('systemctl status sys-metrics | head -n 3')
         
         console.info('Sys metrics are deployed successfully and now are active!')
     })

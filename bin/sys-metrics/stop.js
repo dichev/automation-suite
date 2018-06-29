@@ -3,18 +3,20 @@
 
 /**
  * Usage:
- * $ node bin/sys-metrics/stop --host dev-hermes-web1
+ * $ node bin/sys-metrics/stop --hosts dev-hermes-web1,dev-hermes-web2
+ * $ node bin/sys-metrics/stop --hosts all
  */
 
 
 const Deployer = require('deployer2')
-let deployer = new Deployer()
+const installed = require('./.installed.json')
+let deployer = new Deployer({hosts: installed.hosts})
 
 
 deployer
-    .option('-h, --host <name>', 'The target host name (all hosts are predefined in deployer configuration)')
+    .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts })
    
-    .run(async () => {
+    .loop('hosts', async (host) => {
         let ssh = await deployer.ssh(deployer.params.host, 'root')
         
         await ssh.chdir('/opt/dopamine/sys-metrics')

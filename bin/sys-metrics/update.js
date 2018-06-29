@@ -3,19 +3,21 @@
 
 /**
  * Usage:
- * $ node bin/sys-metrics/update --host dev-hermes-web1 --revision v3.2.5
+ * $ node bin/sys-metrics/check --hosts all --revision v3.2.5
  */
 
 
 const Deployer = require('deployer2')
-let deployer = new Deployer()
+const installed = require('./.installed.json')
+let deployer = new Deployer({hosts: installed.hosts})
+
 
 deployer
-    .option('-h, --host <name>', 'The target host name (all hosts are predefined in deployer configuration)')
+    .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts })
     .option('-r, --revision <tag>', 'The target version as tag name')
-    
-    .run(async () => {
-    
+   
+    .loop('hosts', async (host) => {
+
         let ssh = await deployer.ssh(deployer.params.host, 'root')
         
         console.info('\n1. Fetch from the remote:')

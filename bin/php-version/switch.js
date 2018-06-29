@@ -18,6 +18,6 @@ deployer
     .run(async () => {
         let ssh = await deployer.ssh(deployer.params.host, 'root')
         await ssh.exec('rm /opt/phpbrew/php/php')
-        await ssh.exec('ln -s /opt/phpbrew/php/php'+ deployer.params.version ' /opt/phpbrew/php/php')
+        await ssh.exec('ln -s /opt/phpbrew/php/php'+ deployer.params.version + ' /opt/phpbrew/php/php')
     })
 
