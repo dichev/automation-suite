@@ -1,11 +1,11 @@
 {
-	"hosts": [
-		"dev-hermes-lb",
-		"pokerstars-lb1",
-		"iom-lb",
-		"gib-lb1",
-		"manila-lb",
-		"tw-lb",
-		"belgium-lb"
-	]
+    "hosts": [
+        "dev-hermes-lb",
+        "pokerstars-lb1",
+        "iom-lb",
+        "gib-lb1",
+        "manila-lb",
+        "tw-lb",
+        "belgium-lb"
+    ]
 }

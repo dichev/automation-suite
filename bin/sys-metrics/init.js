@@ -9,15 +9,20 @@
 
 const Deployer = require('deployer2')
 const installed = require('./.installed.json')
+const fs = require('fs')
 const HOSTS = require('configurator').hosts
-let deployer = new Deployer({hosts: installed.hosts})
+
+let deployer = new Deployer()
 
 
 deployer
-    .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts })
+    .option('-h, --hosts <list>', 'The target host names')
     .loop('hosts')
+    // .save('./installed')
 
     .run(async (host) => {
+        if(installed.hosts.includes(host)) throw Error(`This host ${host} is already installed`)
+
         let ssh = await deployer.ssh(HOSTS.get(host).ip, 'root')
         
         await ssh.exec(`
@@ -38,5 +43,8 @@ deployer
         await ssh.exec('systemctl status sys-metrics | head -n 3')
         
         console.info('Sys metrics are deployed successfully and now are active!')
+
+        installed.hosts.push(host)
+        fs.writeFileSync(__dirname + '/.installed.json', JSON.stringify(installed, null, 4))
     })
 

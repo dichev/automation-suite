@@ -11,7 +11,7 @@
 const Deployer = require('deployer2')
 const installed = require('./.installed.json')
 const HOSTS = require('configurator').hosts
-let deployer = new Deployer({hosts: installed.hosts})
+let deployer = new Deployer()
 
 
 deployer
