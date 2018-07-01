@@ -9,6 +9,7 @@
 
 const Deployer = require('deployer2')
 const installed = require('./.installed.json')
+const HOSTS = require('configurator').hosts
 let deployer = new Deployer({hosts: installed.hosts})
 
 
@@ -19,7 +20,7 @@ deployer
 
     .run(async (host) => {
 
-        let ssh = await deployer.ssh(deployer.params.host, 'root')
+        let ssh = await deployer.ssh(HOSTS.get(host).ip, 'root')
         
         console.info('\n1. Fetch from the remote:')
         

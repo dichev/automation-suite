@@ -9,6 +9,7 @@
 
 const Deployer = require('deployer2')
 const installed = require('./.installed.json')
+const HOSTS = require('configurator').hosts
 let deployer = new Deployer({hosts: installed.hosts})
 
 
@@ -17,7 +18,7 @@ deployer
     .loop('hosts')
 
     .run(async (host) => {
-        let ssh = await deployer.ssh(host, 'root')
+        let ssh = await deployer.ssh(HOSTS.get(host).ip, 'root')
         
         await ssh.exec(`
             ssh-keyscan -H gitlab.dopamine.bg >> ~/.ssh/known_hosts

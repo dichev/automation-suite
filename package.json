@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "deployer2": "git+ssh://git@gitlab.dopamine.bg:tools/lab/deployer2.git"
+    "deployer2": "git+ssh://git@gitlab.dopamine.bg:tools/lab/deployer2.git",
+    "configurator": "git+ssh://git@gitlab.dopamine.bg:tools/lab/configurator.git"
   }
 }

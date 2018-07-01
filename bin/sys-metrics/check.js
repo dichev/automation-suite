@@ -4,12 +4,14 @@
 /**
  * Usage:
  * $ node bin/sys-metrics/check --hosts dev-hermes-web1,dev-hermes-web2
+ * $ node bin/sys-metrics/check --hosts dev-hermes-*
  * $ node bin/sys-metrics/check --hosts all
  */
 
 
 const Deployer = require('deployer2')
 const installed = require('./.installed.json')
+const HOSTS = require('configurator').hosts
 let deployer = new Deployer({hosts: installed.hosts})
 
 
@@ -18,7 +20,7 @@ deployer
     .loop('hosts')
 
     .run(async (host) => {
-        let ssh = await deployer.ssh(host, 'root')
+        let ssh = await deployer.ssh(HOSTS.get(host).ip, 'root')
     
         await ssh.exec('cd /opt/dopamine/sys-metrics && git describe --tags')
         await ssh.exec('systemctl status sys-metrics | grep Active')
