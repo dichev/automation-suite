@@ -1,9 +1,9 @@
 {
     "hosts": [
         "dev-hermes-lb",
-        "pokerstars-lb1",
+        "pokerstars-lb",
         "iom-lb",
-        "gib-lb1",
+        "gib-lb",
         "manila-lb",
         "tw-lb",
         "belgium-lb"
