@@ -3,13 +3,14 @@
 
 /**
  * Usage:
- * $ node bin/cloudflare/check --zones dev,gib
+ * $ node bin/cloudflare/check --zones dopamine-gaming.com
  */
 
 const Deployer = require('deployer2')
 const cfg = require('configurator')
 const CloudFlare = require('deployer2').plugins.CloudFlare
 const zones = Object.keys(cfg.cloudflare.zones)
+
 
 let deployer = new Deployer(cfg.devops)
 

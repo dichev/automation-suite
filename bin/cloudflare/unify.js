@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/cloudflare/unify --zones dev
+ * $ node bin/cloudflare/unify --zones dopamine-gaming.com
  */
 
 const Deployer = require('deployer2')
