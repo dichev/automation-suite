@@ -1,5 +1,9 @@
 {
-	"version": "7.1.19",
+	"version": "71.1.19",
+	"versions": [
+		"7.1.19",
+		"7.2.6",
+	],
 	"hosts": [
 		"git",
 		"sofia-mysql-backup-pokerstars",

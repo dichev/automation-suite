@@ -21,9 +21,10 @@ deployer
 		await ssh.exec('ssh-keyscan -H soft-build.d >> ~/.ssh/known_hosts ')
 		await ssh.exec('rsync -av soft-build.d:/opt/phpbrew /opt/');
 		/* LINKS */
-		await ssh.exec('rm /etc/alternatives/php && ln -s /opt/phpbrew/php/php/bin/php /etc/alternatives/php')
+		await ssh.exec('rm /usr/bin/php && ln -s /opt/phpbrew/php/php/bin/php /usr/bin/php')
 		await ssh.exec('rm /etc/init.d/php-fpm && ln -s /opt/servers-conf/php/php-fpm.init.d /etc/init.d/php-fpm')
+		await ssh.exec('rm /lib/systemd/system/php5-fpm.service && ln -s /opt/servers-conf/php/php-fpm.service /lib/systemd/system/php-fpm.service')
 		await ssh.exec('rm /etc/logrotate.d/php*-fpm && ln -s /opt/servers-conf/php/logrotate /etc/logrotate.d/php-fpm')
-		await ssh.exec(`rm /opt/phpbrew/php/php ln -s /opt/phpbrew/php/php-${installed.version} /opt/phpbrew/php/php`) /* kade moje se definira naj-dobre default versiqta na php */
+		await ssh.exec(`rm /opt/phpbrew/php/php ln -s /opt/phpbrew/php/php-${installed.version} /opt/phpbrew/php/php`)
     })
 

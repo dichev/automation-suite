@@ -16,8 +16,10 @@ deployer
     .option('-p --php-version NUMBER') /* ne sam siguren dali -v i --version e nau-udachnoto */
    
     .run(async () => {
+    	console.info('Switching php version to:'+deployer.params.version)
         let ssh = await deployer.ssh(deployer.params.host, 'root')
         await ssh.exec('rm /opt/phpbrew/php/php')
         await ssh.exec('ln -s /opt/phpbrew/php/php'+ deployer.params.version + ' /opt/phpbrew/php/php')
+        console.info('Done')
     })
 
