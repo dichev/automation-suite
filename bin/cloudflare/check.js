@@ -7,13 +7,15 @@
  */
 
 const Deployer = require('deployer2')
+const cfg = require('configurator')
 const CloudFlare = require('deployer2').plugins.CloudFlare
 const secret = require('./.secret') // TODO: temporary stored here
 const zones = Object.keys(secret)
 
-let deployer = new Deployer({ zones: Object.keys(secret) })
+let deployer = new Deployer(cfg.devops)
 
 deployer
+    .description('Checking current cloudflare configuration')
     .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases. Available: ${zones}`, { choices: zones })
     .loop('zones')
 

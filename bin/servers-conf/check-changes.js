@@ -7,16 +7,16 @@
  */
 
 const Deployer = require('deployer2')
-const HOSTS = require('configurator').hosts
+const cfg = require('configurator')
 const installed = require('./.installed.json')
 
-let deployer = new Deployer()
+let deployer = new Deployer(cfg.devops)
 deployer
     .option('-h, --hosts <list|all>', 'The target host name', {choices: installed.hosts})
     .loop('hosts')
     .run(async (host) => {
         
-        let ssh = await deployer.ssh(HOSTS.get(host).ip, 'root')
+        let ssh = await deployer.ssh(cfg.hosts.get(host).ip, 'root')
         await ssh.chdir('/opt/servers-conf')
         await ssh.exec('git fetch origin master --quiet')
         await ssh.exec('git log HEAD..origin/master --oneline')

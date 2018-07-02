@@ -10,12 +10,13 @@
 const Deployer = require('deployer2')
 const installed = require('./.installed.json')
 const fs = require('fs')
-const HOSTS = require('configurator').hosts
+const cfg = require('configurator')
 
-let deployer = new Deployer()
+let deployer = new Deployer(cfg.devops)
 
 
 deployer
+    .description('Installing sys-metrics')
     .option('-h, --hosts <list>', 'The target host names')
     .loop('hosts')
     // .save('./installed')
@@ -23,7 +24,7 @@ deployer
     .run(async (host) => {
         if(installed.hosts.includes(host)) throw Error(`This host ${host} is already installed`)
 
-        let ssh = await deployer.ssh(HOSTS.get(host).ip, 'root')
+        let ssh = await deployer.ssh(cfg.hosts.get(host).ip, 'root')
         
         await ssh.exec(`
             ssh-keyscan -H gitlab.dopamine.bg >> ~/.ssh/known_hosts

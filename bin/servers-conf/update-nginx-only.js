@@ -7,17 +7,16 @@
  */
 
 const Deployer = require('deployer2')
-const HOSTS = require('configurator').hosts
+const cfg = require('configurator')
 const installed = require('./.installed.json')
 
-let deployer = new Deployer()
+let deployer = new Deployer(cfg.devops)
 deployer
+    .description('Updating nginx configuration')
     .option('-h, --hosts <list|all>', 'The target host name', {choices: installed.hosts})
     .loop('hosts')
     .run(async (host) => {
     
-        let ssh = await deployer.ssh(HOSTS.get(host).ip, 'root')
-        await ssh.exec('auto-update-configs --nginx-only')
-        await ssh.disconnect()
-        
+        let ssh = await deployer.ssh(cfg.hosts.get(host).ip, 'root')
+        await ssh.exec('auto-update-configs --only-nginx')
     })
