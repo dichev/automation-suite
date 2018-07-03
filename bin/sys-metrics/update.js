@@ -9,17 +9,19 @@
 
 const Deployer = require('deployer2')
 const installed = require('./.installed.json')
-let deployer = new Deployer({hosts: installed.hosts})
+const cfg = require('configurator')
+let deployer = new Deployer(cfg.devops)
 
 
 deployer
+    .description('Updating sys-metrics version')
     .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts })
     .option('-r, --revision <tag>', 'The target version as tag name')
     .loop('hosts')
 
     .run(async (host) => {
 
-        let ssh = await deployer.ssh(deployer.params.host, 'root')
+        let ssh = await deployer.ssh(cfg.hosts.get(host).ip, 'root')
         
         console.info('\n1. Fetch from the remote:')
         

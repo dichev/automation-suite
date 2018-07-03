@@ -10,7 +10,8 @@
 
 const Deployer = require('deployer2')
 const installed = require('./.installed.json')
-let deployer = new Deployer({hosts: installed.hosts})
+const cfg = require('configurator')
+let deployer = new Deployer(cfg.devops)
 
 
 deployer
@@ -18,7 +19,7 @@ deployer
     .loop('hosts')
 
     .run(async (host) => {
-        let ssh = await deployer.ssh(deployer.params.host, 'root')
+        let ssh = await deployer.ssh(cfg.hosts.get(host).ip, 'root')
         
         await ssh.chdir('/opt/dopamine/sys-metrics')
         await ssh.exec('systemctl stop sys-metrics')

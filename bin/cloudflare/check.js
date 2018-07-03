@@ -3,25 +3,26 @@
 
 /**
  * Usage:
- * $ node bin/cloudflare/check --zones dev,gib
+ * $ node bin/cloudflare/check --zones dopamine-gaming.com
  */
 
 const Deployer = require('deployer2')
+const cfg = require('configurator')
 const CloudFlare = require('deployer2').plugins.CloudFlare
-const secret = require('./.secret') // TODO: temporary stored here
-const zones = Object.keys(secret)
+const zones = Object.keys(cfg.cloudflare.zones)
 
-let deployer = new Deployer({ zones: Object.keys(secret) })
+
+let deployer = new Deployer(cfg.devops)
 
 deployer
+    .description('Checking current cloudflare configuration')
     .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases. Available: ${zones}`, { choices: zones })
     .loop('zones')
 
     .run(async (zone) => {
         
-        const cfg = secret[zone]
-        
-        let cf = new CloudFlare(cfg.zone, cfg.email, cfg.key)
+        const z = cfg.cloudflare.zones[zone]
+        let cf = new CloudFlare(z.zone, z.email, z.key)
         
         await cf.get('custom_pages/ratelimit_block')
         await cf.get('custom_pages/ip_block')

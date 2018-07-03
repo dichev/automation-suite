@@ -3,25 +3,25 @@
 
 /**
  * Usage:
- * $ node bin/cloudflare/unify --zones dev
+ * $ node bin/cloudflare/unify --zones dopamine-gaming.com
  */
 
 const Deployer = require('deployer2')
+const cfg = require('configurator')
 const CloudFlare = require('deployer2').plugins.CloudFlare
-const secret = require('./.secret') // TODO: temporary stored here
-const zones = Object.keys(secret)
+const zones = Object.keys(cfg.cloudflare.zones)
 
-let deployer = new Deployer()
+let deployer = new Deployer(cfg.devops)
 
 deployer
+    .description('Unifying cloudflare configuration')
     .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases. Available: ${zones}`, { choices: zones })
     .loop('zones')
 
     .run(async (zone) => {
     
-        const cfg = secret[zone]
-        
-        let cf = new CloudFlare(cfg.zone, cfg.email, cfg.key)
+        const z = cfg.cloudflare.zones[zone]
+        let cf = new CloudFlare(z.zone, z.email, z.key)
     
         // Set custom pages
         // TODO: sometimes cloudflare can't fetch the html templates with error 502?

@@ -3,18 +3,20 @@
 
 /**
  * Usage:
- * $ node bin/servers-conf/update-nginx-only --host dev-hermes-lb
+ * $ node bin/servers-conf/update-nginx-only --hosts dev-hermes-lb
  */
 
 const Deployer = require('deployer2')
-let deployer = new Deployer()
+const cfg = require('configurator')
+const installed = require('./.installed.json')
+
+let deployer = new Deployer(cfg.devops)
 deployer
-    .option('-h, --host <dev-hermes-lb|belgium-lb1>', 'The target host name (all hosts are predefined in deployer configuration)')
-   
-    .run(async () => {
+    .description('Updating nginx configuration')
+    .option('-h, --hosts <list|all>', 'The target host name', {choices: installed.hosts})
+    .loop('hosts')
+    .run(async (host) => {
     
-        let ssh = await deployer.ssh(deployer.params.host, 'root')
-        await ssh.exec('auto-update-configs --nginx-only')
-        await ssh.disconnect()
-        
+        let ssh = await deployer.ssh(cfg.hosts.get(host).ip, 'root')
+        await ssh.exec('auto-update-configs --only-nginx')
     })
