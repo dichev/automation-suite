@@ -22,7 +22,7 @@ deployer
     	console.info('Switching php version to: '+deployer.params.phpversion)
 	let ssh = await deployer.ssh(cfg.hosts.get(host).ip, 'root')
         await ssh.exec('rm /opt/phpbrew/php/php')
-        await ssh.exec('ln -s /opt/phpbrew/php/php'+ deployer.params.phpversion + ' /opt/phpbrew/php/php')
+        await ssh.exec('ln -s /opt/phpbrew/php/php-'+ deployer.params.phpversion + ' /opt/phpbrew/php/php')
         console.info('Done')
 	deployer.chat.notify('php version switched to '+ deployer.params.phpversion + ' on ' + host, {color: 'green'})
     })

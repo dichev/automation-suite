@@ -6,6 +6,8 @@
     ],
     "hosts": [
       "dev-hermes-web1",
-      "dev-hermes-web2"
+      "dev-hermes-web2",
+      "belgium-web1",
+      "belgium-web2"
     ]
 }
