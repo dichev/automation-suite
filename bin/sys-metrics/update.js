@@ -21,7 +21,7 @@ deployer
 
     .run(async (host) => {
 
-        let ssh = await deployer.ssh(cfg.hosts.get(host).ip, 'root')
+        let ssh = await deployer.ssh(cfg.getHost(host).ip, 'root')
         
         console.info('\n1. Fetch from the remote:')
         

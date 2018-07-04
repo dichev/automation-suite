@@ -24,7 +24,7 @@ deployer
     .run(async (host) => {
         if(installed.hosts.includes(host)) throw Error(`This host ${host} is already installed`)
 
-        let ssh = await deployer.ssh(cfg.hosts.get(host).ip, 'root')
+        let ssh = await deployer.ssh(cfg.getHost(host).ip, 'root')
         
         await ssh.exec(`
             ssh-keyscan -H gitlab.dopamine.bg >> ~/.ssh/known_hosts

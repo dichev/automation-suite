@@ -19,7 +19,7 @@ deployer
     .loop('hosts')
 
     .run(async (host) => {
-        let ssh = await deployer.ssh(cfg.hosts.get(host).ip, 'root')
+        let ssh = await deployer.ssh(cfg.getHost(host).ip, 'root')
         
         await ssh.chdir('/opt/dopamine/sys-metrics')
         await ssh.exec('systemctl stop sys-metrics')
