@@ -16,7 +16,7 @@ deployer
     .loop('hosts')
     .run(async (host) => {
         
-        let ssh = await deployer.ssh(cfg.hosts.get(host).ip, 'root')
+        let ssh = await deployer.ssh(cfg.getHost(host).ip, 'root')
         await ssh.chdir('/opt/servers-conf')
         await ssh.exec('git fetch origin master --quiet')
         await ssh.exec('git log HEAD..origin/master --oneline')

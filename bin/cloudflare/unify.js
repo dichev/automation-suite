@@ -22,7 +22,7 @@ deployer
     
         const z = cfg.cloudflare.zones[zone]
         let cf = new CloudFlare(z.zone, z.email, z.key)
-    
+
         // Set custom pages
         // TODO: sometimes cloudflare can't fetch the html templates with error 502?
         await cf.put('custom_pages/ratelimit_block', {
@@ -45,21 +45,21 @@ deployer
             url: `https://cdn.redtiger.cash/error-pages/cf-error-not-available.html?c=` + Date.now(),
             state: 'customized'
         })
-    
-    
+
+
         // Disable ipv6
         await cf.patch('settings/ipv6', {
             value: 'off'
         })
-    
+
         // Disable security challenge
         await cf.patch('settings/security_level', {
             value: 'essentially_off'
         })
-    
-    
+
+
         // Create Page Rule
-        let pattern = `gserver-*.${cfg.domain}/`
+        let pattern = `gserver-*.${z.domain}/`
     
         // remove the same rule if exists
         let rules = await cf.get('pagerules')
@@ -70,7 +70,7 @@ deployer
                 await cf.delete(`pagerules/${rule.id}`)
             }
         }
-    
+        
         // add the rule
         await cf.post('pagerules', {
             status: 'active',
