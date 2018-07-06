@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "configurator": "git+ssh://git@gitlab.dopamine.bg:tools/lab/configurator.git",
     "deployer2": "git+ssh://git@gitlab.dopamine.bg:tools/lab/deployer2.git",
-    "nodemon": "^1.17.5"
+    "configurator": "git+ssh://git@gitlab.dopamine.bg:tools/lab/configurator.git"
   }
 }
