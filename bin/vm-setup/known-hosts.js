@@ -28,10 +28,9 @@ deployer
         `)
 
         
-        let user = host.startsWith('pokerstars') ? 'red' : dopamine // TODO: temporary until the unification is done
+        let user = host.startsWith('pokerstars') ? 'red' : 'dopamine' // TODO: temporary until the unification is done
         let file = `/home/${user}/.ssh/known_hosts`
-        let found = await ssh.exec(`[ -f ${file} ] && echo "Found" || echo "Not found"`) === "Found"
-        if(found) {
+        if(await ssh.exists(file)) {
             console.log(`Adding gitlab.dopamine.bg to ${user} user`)
             await ssh.exec(`
                 ssh-keygen -f ${file} -R gitlab.dopamine.bg
