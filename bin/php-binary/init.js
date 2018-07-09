@@ -4,7 +4,7 @@
 /**
  * Usage:
  * $ node bin/sys-metrics/init --host dev-hermes-web1
- * $ node bin/sys-metrics/init --host *-web* //TODO support this
+ * $ node bin/sys-metrics/init --host *-web*
  */
 
 
@@ -23,21 +23,12 @@ deployer
 
     	let h = cfg.hosts[host]
         let hostsList = cfg.locations[h.location].hosts
-        console.log(hostsList.lb)
         let sshlb = await deployer.ssh(hostsList.lb, 'root')
-        console.log(h.alias)
-        /*let swc =Object.keys(hostsList)
-                 	.filter(key => key.startsWith('web'))
-                 	.filter(key => key !== h.alias)
-                  	.join(",")
-	*/
-        let switcha = 'switch-webs --operators=all --exclude-webs=' + h.alias
-        console.log(switcha)
-
-        await sshlb.exec(switcha)
+        
+        await sshlb.exec('switch-webs --quiet --webs=all --operators=all --exclude-webs=' + h.alias)
         
         let ssh = await deployer.ssh(cfg.getHost(host).ip, 'root')
-		var SoftBuild = (cfg.getHost(host).network == 'office' ? "192.168.100.19" : "192.168.110.19");
+		let SoftBuild = (cfg.getHost(host).network === 'office' ? "192.168.100.19" : "192.168.110.19");
 		//await ssh.exec('ssh-keyscan -H '+SoftBuild+' >> ~/.ssh/known_hosts ')
 		await ssh.exec('ssh -o StrictHostKeyChecking=no ' +SoftBuild + ' uptime') /* da se pomisli po-elegantno */
 		await ssh.exec('mkdir -p /opt/phpbrew; rsync -av '+SoftBuild+':/opt/phpbrew/php /opt/phpbrew/')
@@ -53,6 +44,6 @@ deployer
 		await ssh.exec('sleep 10; killall -9 php-fpm')
 		await ssh.exec('systemctl restart php-fpm') //system
 		
-        await sshlb.exec('switch-webs --operators=all --webs=all')
+        await sshlb.exec('switch-webs --quiet --operators=all --webs=all')
     })
 
