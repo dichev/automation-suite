@@ -31,5 +31,6 @@ deployer
         assert.equal(await ssh.exec(`php -r "echo ini_get('error_log') . PHP_EOL;"`), '/var/log/php/error.log')
 
         console.log(`Everything is okay ;)`)
+        await deployer.chat.notify(`All tests passed! Everything is okay ;)`, {color: 'green'})
     })
 
