@@ -11,7 +11,7 @@
 const Deployer = require('deployer2')
 const installed = require('./.installed.json')
 const cfg = require('configurator')
-let deployer = new Deployer()
+let deployer = new Deployer(cfg.devops)
 
 deployer
 
