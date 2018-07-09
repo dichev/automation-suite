@@ -31,7 +31,7 @@ deployer
                  	.filter(key => key !== h.alias)
                   	.join(",")
 	*/
-        let switcha = 'switch-webs --operators=all --webs=' + h.alias
+        let switcha = 'switch-webs --operators=all --exclude-webs=' + h.alias
         console.log(switcha)
 
         await sshlb.exec(switcha)
