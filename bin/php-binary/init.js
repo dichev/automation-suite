@@ -3,15 +3,15 @@
 
 /**
  * Usage:
- * $ node bin/sys-metrics/init --host dev-hermes-web1
- * $ node bin/sys-metrics/init --host *-web*
+ * $ node bin/php-binary/init --hosts dev-hermes-web1
+ * $ node bin/php-binary/init --hosts *-web*
  */
 
 
 const Deployer = require('deployer2')
 const installed = require('./.installed.json')
 const cfg = require('configurator')
-let deployer = new Deployer(cfg.devops)
+let deployer = new Deployer()
 
 deployer
 
@@ -45,5 +45,7 @@ deployer
 		await ssh.exec('systemctl restart php-fpm') //system
 		
         await sshlb.exec('switch-webs --quiet --operators=all --webs=all')
+		
+		await deployer.exec(`node bin/php-binary/check --hosts ${host}`)
     })
 
