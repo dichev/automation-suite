@@ -44,8 +44,8 @@ deployer
 		await ssh.exec('sleep 10; killall -9 php-fpm')
 		await ssh.exec('systemctl restart php-fpm') //system
 		
-        await sshlb.exec('switch-webs --quiet --operators=all --webs=all')
-		
 		await deployer.exec(`node bin/php-binary/check --hosts ${host}`)
+    
+        await sshlb.exec('switch-webs --quiet --operators=all --webs=all')
     })
 
