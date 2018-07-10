@@ -42,7 +42,8 @@ deployer
         await ssh.exec('rm /etc/init.d/php*-fpm && ln -s /opt/servers-conf/php/php-fpm.init.d /etc/init.d/php-fpm')
         await ssh.exec('rm /lib/systemd/system/php*-fpm.service && systemctl enable /opt/servers-conf/php/php-fpm.service')
         await ssh.exec('rm /etc/logrotate.d/php*-fpm && ln -s /opt/servers-conf/php/logrotate /etc/logrotate.d/php-fpm')
-        await ssh.exec('sleep 10; killall -9 php-fpm')
+        await ssh.exec('sleep 2; killall -9 php-fpm')
+	await ssh.exec('sleep 2; killall -9 php5-fpm')
         await ssh.exec('systemctl restart php-fpm') //system
         
         await deployer.exec(`node bin/php-binary/check --hosts ${host}`)
