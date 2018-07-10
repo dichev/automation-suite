@@ -1,0 +1,1 @@
+- init: sync php banary, make links and restart fpm

@@ -1,4 +1,0 @@
-- check: check fpm conf. if errors: "Please fix your configuration file..."
-- rotate: rotate log files, full disk or debuging
-- fpm: manage fpm daemon
-- init: sync php banary and make links
