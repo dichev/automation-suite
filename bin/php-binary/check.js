@@ -29,6 +29,7 @@ deployer
         assert.equal(await ssh.exec(`php -r "echo ini_get('log_errors') . PHP_EOL;"`), '1')
         assert.equal(await ssh.exec(`php -r "echo ini_get('disable_functions') . PHP_EOL;"`), 'exec,passthru,shell_exec,system,proc_open,popen,parse_ini_file,show_source,phpinfo,pcntl_exec,pcntl_fork,pcntl_alarm,pcntl_signal,pcntl_wait,pcntl_waitpid,pcntl_setpriority')
         assert.equal(await ssh.exec(`php -r "echo ini_get('error_log') . PHP_EOL;"`), '/var/log/php/error.log')
+        assert.equal(await ssh.exec(`php -r "echo implode(',',get_loaded_extensions()).PHP_EOL;"`), 'Core,date,libxml,pcre,zlib,bcmath,ctype,curl,dom,filter,hash,json,mbstring,SPL,PDO,session,standard,readline,Reflection,Phar,SimpleXML,soap,mysqlnd,mysqli,tokenizer,xml,xmlreader,xmlwriter,xsl,pdo_mysql,Zend OPcache')
 
         console.log(`Everything is okay ;)`)
         await deployer.chat.notify(`All tests passed! Everything is okay ;)`, {color: 'green'})
