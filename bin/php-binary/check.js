@@ -22,7 +22,7 @@ deployer
     .run(async (host) => {
         let ssh = await deployer.ssh(cfg.getHost(host).ip, 'root')
         
-        assert.ok((await ssh.exec(`systemctl status php-fpm | grep Active`)).startsWith('Active: active (running) '))
+        assert.ok((await ssh.exec(`systemctl status php-fpm | grep Active`)).startsWith('Active: active (running) '), 'php-fpm process systemd is not active!')
         assert.equal(await ssh.exec(`php --ini | grep Loaded`), 'Loaded Configuration File:         /opt/phpbrew/php/php-7.1.19/etc/php.ini')
         assert.equal(await ssh.exec(`php -v | grep OPcache`), 'with Zend OPcache v7.1.19, Copyright (c) 1999-2018, by Zend Technologies')
         assert.equal(await ssh.exec(`php -r "echo ini_get('max_input_vars') . PHP_EOL;"`), '20000')
