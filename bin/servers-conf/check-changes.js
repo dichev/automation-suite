@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/servers-conf/update-nginx-and-webs --hosts belgium-lb
+ * $ node bin/servers-conf/check-changes --hosts belgium-lb
  */
 
 const Deployer = require('deployer2')
