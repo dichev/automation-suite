@@ -21,17 +21,34 @@ deployer
 
     .run(async (host) => {
         let ssh = await deployer.ssh(cfg.getHost(host).ip, 'root')
+        ssh.silent = true
     
-        assert.equal(await ssh.exec(`cat /etc/issue`), 'Debian GNU/Linux 9 \\n \\l')
-        assert.ok((await ssh.exec(`systemctl status php-fpm | grep Active`)).startsWith('Active: active (running) '), 'php-fpm process systemd is not active!')
-        assert.equal(await ssh.exec(`php --ini | grep Loaded`), 'Loaded Configuration File:         /opt/phpbrew/php/php-7.1.19/etc/php.ini')
-        assert.equal(await ssh.exec(`php -v | grep OPcache`), 'with Zend OPcache v7.1.19, Copyright (c) 1999-2018, by Zend Technologies')
-        assert.equal(await ssh.exec(`php -r "echo ini_get('max_input_vars') . PHP_EOL;"`), '20000')
-        assert.equal(await ssh.exec(`php -r "echo ini_get('log_errors') . PHP_EOL;"`), '1')
-        assert.equal(await ssh.exec(`php -r "echo ini_get('disable_functions') . PHP_EOL;"`), 'exec,passthru,shell_exec,system,proc_open,popen,parse_ini_file,show_source,phpinfo,pcntl_exec,pcntl_fork,pcntl_alarm,pcntl_signal,pcntl_wait,pcntl_waitpid,pcntl_setpriority')
-        assert.equal(await ssh.exec(`php -r "echo ini_get('error_log') . PHP_EOL;"`), '/var/log/php/error.log')
-        assert.equal(await ssh.exec(`php -r "echo implode(',',get_loaded_extensions()).PHP_EOL;"`), 'Core,date,libxml,pcre,zlib,bcmath,ctype,curl,dom,filter,hash,json,mbstring,SPL,PDO,session,standard,readline,Reflection,Phar,SimpleXML,soap,mysqlnd,mysqli,tokenizer,xml,xmlreader,xmlwriter,xsl,pdo_mysql,Zend OPcache')
+        let it = deployer.tester.it
+        
+        it('should be Debian 9', async () => {
+            assert.strictEqual(await ssh.exec(`cat /etc/issue`), 'Debian GNU/Linux 9 \\n \\l')
+        })
+        it('should have active systemd process', async () => {
+            assert.ok((await ssh.exec(`systemctl status php-fpm | grep Active`)).startsWith('Active: active (running) '), 'php-fpm process systemd is not active!')
+        })
+        it('should loaded exactly php-7.1.19', async () => {
+            assert.strictEqual(await ssh.exec(`php --ini | grep Loaded`), 'Loaded Configuration File:         /opt/phpbrew/php/php-7.1.19/etc/php.ini')
+        })
+        it('should be phpv7.1.19 with OPcache enabled', async () => {
+            assert.strictEqual(await ssh.exec(`php -v | grep OPcache`), 'with Zend OPcache v7.1.19, Copyright (c) 1999-2018, by Zend Technologies')
+        })
+        it('should use custom php settings', async () => {
+            assert.strictEqual(await ssh.exec(`php -r "echo ini_get('max_input_vars') . PHP_EOL;"`), '20000')
+            assert.strictEqual(await ssh.exec(`php -r "echo ini_get('log_errors') . PHP_EOL;"`), '1')
+            assert.strictEqual(await ssh.exec(`php -r "echo ini_get('disable_functions') . PHP_EOL;"`), 'exec,passthru,shell_exec,system,proc_open,popen,parse_ini_file,show_source,phpinfo,pcntl_exec,pcntl_fork,pcntl_alarm,pcntl_signal,pcntl_wait,pcntl_waitpid,pcntl_setpriority')
+            assert.strictEqual(await ssh.exec(`php -r "echo ini_get('error_log') . PHP_EOL;"`), '/var/log/php/error.log')
+        })
+        it('should have all required modules', async () => {
+            assert.strictEqual(await ssh.exec(`php -r "echo implode(',',get_loaded_extensions()).PHP_EOL;"`), 'Core,date,libxml,pcre,zlib,bcmath,ctype,curl,dom,filter,hash,json,mbstring,SPL,PDO,session,standard,readline,Reflection,Phar,SimpleXML,soap,mysqlnd,mysqli,tokenizer,xml,xmlreader,xmlwriter,xsl,pdo_mysql,Zend OPcache')
+        })
 
+        await deployer.tester.run()
+        
         console.log(`Everything is okay ;)`)
         await deployer.chat.notify(`All tests passed! Everything is okay ;)`, {color: 'green'})
     })
