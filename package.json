@@ -6,6 +6,7 @@
     "dev": "npm link deployer2 && npm link configurator"
   },
   "dependencies": {
+    "colors": "^1.3.0",
     "configurator": "git+ssh://git@gitlab.dopamine.bg:tools/lab/configurator.git",
     "deployer2": "git+ssh://git@gitlab.dopamine.bg:tools/lab/deployer2.git"
   }
