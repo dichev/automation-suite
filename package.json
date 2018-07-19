@@ -2,8 +2,11 @@
   "name": "deployer2-compose",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "dev": "npm link deployer2 && npm link configurator"
+  },
   "dependencies": {
-    "deployer2": "git+ssh://git@gitlab.dopamine.bg:tools/lab/deployer2.git",
-    "configurator": "git+ssh://git@gitlab.dopamine.bg:tools/lab/configurator.git"
+    "configurator": "git+ssh://git@gitlab.dopamine.bg:tools/lab/configurator.git",
+    "deployer2": "git+ssh://git@gitlab.dopamine.bg:tools/lab/deployer2.git"
   }
 }
