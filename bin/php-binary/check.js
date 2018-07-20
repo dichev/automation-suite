@@ -31,11 +31,11 @@ deployer
         it('should have active systemd process', async () => {
             assert.ok((await ssh.exec(`systemctl status php-fpm | grep Active`)).startsWith('Active: active (running) '), 'php-fpm process systemd is not active!')
         })
-        it('should loaded exactly php-7.1.19', async () => {
-            assert.strictEqual(await ssh.exec(`php --ini | grep Loaded`), 'Loaded Configuration File:         /opt/phpbrew/php/php-7.1.19/etc/php.ini')
+        it('should loaded exactly php-7.1.20', async () => {
+            assert.strictEqual(await ssh.exec(`php --ini | grep Loaded`), 'Loaded Configuration File:         /opt/phpbrew/php/php-7.1.20/etc/php.ini')
         })
-        it('should be phpv7.1.19 with OPcache enabled', async () => {
-            assert.strictEqual(await ssh.exec(`php -v | grep OPcache`), 'with Zend OPcache v7.1.19, Copyright (c) 1999-2018, by Zend Technologies')
+        it('should be phpv7.1.20 with OPcache enabled', async () => {
+            assert.strictEqual(await ssh.exec(`php -v | grep OPcache`), 'with Zend OPcache v7.1.20, Copyright (c) 1999-2018, by Zend Technologies')
         })
         it('should use custom php settings', async () => {
             assert.strictEqual(await ssh.exec(`php -r "echo ini_get('max_input_vars') . PHP_EOL;"`), '20000')
