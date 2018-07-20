@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/cloudflare/unify --zones dopamine-gaming.com
+ * $ node bin/cloudflare/unify-settings --zones dopamine-gaming.com
  */
 
 const Deployer = require('deployer2')
@@ -23,30 +23,6 @@ deployer
         const z = cfg.cloudflare.zones[zone]
         let cf = new CloudFlare(z.zone, z.email, z.key)
 
-        // Set custom pages
-        // TODO: sometimes cloudflare can't fetch the html templates with error 502?
-        await cf.put('custom_pages/ratelimit_block', {
-            url: `https://cdn.redtiger.cash/error-pages/cf-error-rate-limited.html?c=` + Date.now(),
-            state: 'customized'
-        })
-        await cf.put('custom_pages/ip_block', {
-            url: `https://cdn.redtiger.cash/error-pages/cf-error-blocked.html?c=` + Date.now(),
-            state: 'customized'
-        })
-        await cf.put('custom_pages/500_errors', {
-            url: `https://cdn.redtiger.cash/error-pages/cf-error-not-available.html?c=` + Date.now(),
-            state: 'customized'
-        })
-        await cf.put('custom_pages/1000_errors', {
-            url: `https://cdn.redtiger.cash/error-pages/cf-error-not-available.html?c=` + Date.now(),
-            state: 'customized'
-        })
-        await cf.put('custom_pages/always_online', {
-            url: `https://cdn.redtiger.cash/error-pages/cf-error-not-available.html?c=` + Date.now(),
-            state: 'customized'
-        })
-
-
         // Disable ipv6
         await cf.patch('settings/ipv6', {
             value: 'off'
@@ -57,6 +33,10 @@ deployer
             value: 'essentially_off'
         })
 
+        // Disable TLS 1.0
+        await cf.patch('settings/min_tls_version', {
+            value: '1.1'
+        })
 
         // Create Page Rule
         let pattern = `gserver-*.${z.domain}/`
