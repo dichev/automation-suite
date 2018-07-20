@@ -28,17 +28,24 @@ deployer
 
         // Disable security challenge
         await cf.patch('settings/security_level', { value: 'essentially_off' })
-
+        
         // Disable TLS 1.0
-        await cf.patch('settings/min_tls_version', { value: '1.1' })
+        if(zone === 'm-gservices.com') { // TODO: this is temporary!!
+            await cf.patch('settings/min_tls_version', {value: '1.0'})
+            console.warn('WARNING! Temporary allowing TLS1.0 for ugs only!')
+        } else {
+            await cf.patch('settings/min_tls_version', {value: '1.1'})
+        }
 
         // Disable Browser Integrity check
         await cf.patch('settings/browser_check', { value: 'off' })
-        
+    
         // Always redirect to https
-        await cf.patch('settings/always_use_https', { value: 'on' })
+        await cf.patch('settings/always_use_https', {value: 'on'})
         
         // Always redirect to https
         await cf.patch('settings/ssl', { value: 'strict' })
         
     })
+
+
