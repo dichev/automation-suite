@@ -1,98 +1,79 @@
 [
     {
         "id": "advanced_ddos",
-        "value": "on",
-        "editable": false
+        "value": "on"
     },
     {
         "id": "always_online",
-        "value": "on",
-        "editable": true
+        "value": "on"
     },
     {
         "id": "always_use_https",
-        "value": "off",
-        "editable": true
+        "value": "on"
     },
     {
         "id": "automatic_https_rewrites",
-        "value": "off",
-        "editable": true
+        "value": "off"
     },
     {
         "id": "brotli",
-        "value": "on",
-        "editable": true
+        "value": "on"
     },
     {
         "id": "browser_cache_ttl",
-        "value": 14400,
-        "editable": true
+        "value": 14400
     },
     {
         "id": "browser_check",
-        "value": "on",
-        "editable": true
+        "value": "off"
     },
     {
         "id": "cache_level",
-        "value": "aggressive",
-        "editable": true
+        "value": "aggressive"
     },
     {
         "id": "challenge_ttl",
-        "value": 1800,
-        "editable": true
+        "value": 1800
     },
     {
         "id": "cname_flattening",
-        "value": "flatten_at_root",
-        "editable": true
+        "value": "flatten_at_root"
     },
     {
         "id": "development_mode",
-        "value": "off",
-        "editable": true
+        "value": "off"
     },
     {
         "id": "edge_cache_ttl",
-        "value": 7200,
-        "editable": true
+        "value": 7200
     },
     {
         "id": "email_obfuscation",
-        "value": "on",
-        "editable": true
+        "value": "on"
     },
     {
         "id": "hotlink_protection",
-        "value": "off",
-        "editable": true
+        "value": "off"
     },
     {
         "id": "http2",
-        "value": "on",
-        "editable": true
+        "value": "on"
     },
     {
         "id": "ip_geolocation",
-        "value": "on",
-        "editable": true
+        "value": "on"
     },
     {
         "id": "ipv6",
-        "value": "off",
-        "editable": true
+        "value": "off"
     },
     {
         "id": "max_upload",
-        "value": 100,
-        "editable": true
+        "value": 100
     },
     {
         "id": "min_tls_version",
-        "value": "1.1",
-        "editable": true
+        "value": "1.1"
     },
     {
         "id": "minify",
@@ -100,13 +81,11 @@
             "css": "off",
             "html": "off",
             "js": "off"
-        },
-        "editable": true
+        }
     },
     {
         "id": "mirage",
-        "value": "off",
-        "editable": true
+        "value": "off"
     },
     {
         "id": "mobile_redirect",
@@ -114,48 +93,39 @@
             "status": "off",
             "mobile_subdomain": null,
             "strip_uri": false
-        },
-        "editable": true
+        }
     },
     {
         "id": "opportunistic_encryption",
-        "value": "on",
-        "editable": true
+        "value": "on"
     },
     {
         "id": "origin_error_page_pass_thru",
-        "value": "off",
-        "editable": false
+        "value": "off"
     },
     {
         "id": "polish",
-        "value": "off",
-        "editable": true
+        "value": "off"
     },
     {
         "id": "prefetch_preload",
-        "value": "off",
-        "editable": false
+        "value": "off"
     },
     {
         "id": "privacy_pass",
-        "value": "on",
-        "editable": true
+        "value": "on"
     },
     {
         "id": "pseudo_ipv4",
-        "value": "off",
-        "editable": true
+        "value": "off"
     },
     {
         "id": "response_buffering",
-        "value": "off",
-        "editable": false
+        "value": "off"
     },
     {
         "id": "rocket_loader",
-        "value": "off",
-        "editable": true
+        "value": "off"
     },
     {
         "id": "security_header",
@@ -167,68 +137,55 @@
                 "preload": false,
                 "nosniff": false
             }
-        },
-        "editable": true
+        }
     },
     {
         "id": "security_level",
-        "value": "essentially_off",
-        "editable": true
+        "value": "essentially_off"
     },
     {
         "id": "server_side_exclude",
-        "value": "on",
-        "editable": true
+        "value": "on"
     },
     {
         "id": "sha1_support",
-        "value": "on",
-        "editable": true
+        "value": "on"
     },
     {
         "id": "sort_query_string_for_cache",
-        "value": "off",
-        "editable": false
+        "value": "off"
     },
     {
         "id": "ssl",
-        "value": "full",
-        "certificate_status": "active",
-        "editable": true
+        "value": "strict",
+        "certificate_status": "active"
     },
     {
         "id": "tls_1_2_only",
-        "value": "off",
-        "editable": true
+        "value": "off"
     },
     {
         "id": "tls_1_3",
-        "value": "on",
-        "editable": true
+        "value": "on"
     },
     {
         "id": "tls_client_auth",
-        "value": "off",
-        "editable": true
+        "value": "off"
     },
     {
         "id": "true_client_ip_header",
-        "value": "off",
-        "editable": false
+        "value": "off"
     },
     {
         "id": "waf",
-        "value": "off",
-        "editable": true
+        "value": "off"
     },
     {
         "id": "webp",
-        "value": "off",
-        "editable": true
+        "value": "off"
     },
     {
         "id": "websockets",
-        "value": "on",
-        "editable": true
+        "value": "on"
     }
 ]

@@ -71,6 +71,8 @@ deployer
             let actual = await cf.get('settings')
             actual = actual.result.map(s => {
                 delete s.modified_on
+                delete s.time_remaining
+                delete s.editable
                 return s
             })
         

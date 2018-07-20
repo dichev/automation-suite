@@ -24,45 +24,21 @@ deployer
         let cf = new CloudFlare(z.zone, z.email, z.key)
 
         // Disable ipv6
-        await cf.patch('settings/ipv6', {
-            value: 'off'
-        })
+        await cf.patch('settings/ipv6', { value: 'off' })
 
         // Disable security challenge
-        await cf.patch('settings/security_level', {
-            value: 'essentially_off'
-        })
+        await cf.patch('settings/security_level', { value: 'essentially_off' })
 
         // Disable TLS 1.0
-        await cf.patch('settings/min_tls_version', {
-            value: '1.1'
-        })
+        await cf.patch('settings/min_tls_version', { value: '1.1' })
 
-        // Create Page Rule
-        let pattern = `gserver-*.${z.domain}/`
-    
-        // remove the same rule if exists
-        let rules = await cf.get('pagerules')
-        for (let rule of rules.result) {
-            console.log('checking rule for:', rule.targets[0].constraint)
-            if (rule.targets[0].constraint.value === pattern) {
-                console.log('deleting')
-                await cf.delete(`pagerules/${rule.id}`)
-            }
-        }
+        // Disable Browser Integrity check
+        await cf.patch('settings/browser_check', { value: 'off' })
         
-        // add the rule
-        await cf.post('pagerules', {
-            status: 'active',
-            targets: [{
-                target: 'url',
-                constraint: {operator: 'matches', value: pattern}
-            }], actions: [
-                {id: 'always_online', value: 'off'},
-                {id: 'browser_check', value: 'off'},
-                {id: 'cache_level', value: 'bypass'}
-            ]
-        })
-    
-    
+        // Always redirect to https
+        await cf.patch('settings/always_use_https', { value: 'on' })
+        
+        // Always redirect to https
+        await cf.patch('settings/ssl', { value: 'strict' })
+        
     })
