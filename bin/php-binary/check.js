@@ -44,7 +44,7 @@ deployer
             assert.strictEqual(await ssh.exec(`php -r "echo ini_get('error_log') . PHP_EOL;"`), '/var/log/php/error.log')
         })
         it('should have all required modules', async () => {
-            assert.strictEqual(await ssh.exec(`php -r "echo implode(',',get_loaded_extensions()).PHP_EOL;"`), 'Core,date,libxml,pcre,zlib,bcmath,ctype,curl,dom,filter,hash,json,mbstring,SPL,PDO,session,standard,readline,Reflection,Phar,SimpleXML,soap,mysqlnd,mysqli,tokenizer,xml,xmlreader,xmlwriter,xsl,pdo_mysql,Zend OPcache')
+            assert.strictEqual(await ssh.exec(`php -r "echo implode(',',get_loaded_extensions()).PHP_EOL;"`), 'Core,date,libxml,pcre,zlib,bcmath,ctype,curl,dom,filter,hash,json,mbstring,SPL,PDO,session,standard,readline,Reflection,Phar,SimpleXML,soap,mysqlnd,mysqli,tokenizer,xml,xmlreader,xmlwriter,xsl,zip,pdo_mysql,Zend OPcache')
         })
 
         await deployer.tester.run()
