@@ -23,7 +23,8 @@ deployer
         let ssh = await deployer.ssh(cfg.getHost(host).ip, 'root')
         ssh.silent = true
     
-        let it = deployer.tester.it
+        let tester = deployer.tester(host)
+        let it = tester.it
         
         it('should be Debian 9', async () => {
             assert.strictEqual(await ssh.exec(`cat /etc/issue`), 'Debian GNU/Linux 9 \\n \\l')
@@ -47,7 +48,7 @@ deployer
             assert.strictEqual(await ssh.exec(`php -r "echo implode(',',get_loaded_extensions()).PHP_EOL;"`), 'Core,date,libxml,pcre,zlib,bcmath,ctype,curl,dom,filter,hash,json,mbstring,SPL,PDO,session,standard,readline,Reflection,Phar,SimpleXML,soap,mysqlnd,mysqli,tokenizer,xml,xmlreader,xmlwriter,xsl,zip,pdo_mysql,Zend OPcache')
         })
 
-        await deployer.tester.run()
+        await tester.run()
         
         console.log(`Everything is okay ;)`)
         await deployer.chat.notify(`All tests passed! Everything is okay ;)`, {color: 'green'})

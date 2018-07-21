@@ -35,7 +35,8 @@ deployer
         
         
         // Checkers
-        let it = deployer.tester.it
+        let tester = deployer.tester()
+        let it = tester.it
         
         it('should have DNS records for gserver', async () => await lookup(`gserver-${OPERATOR}.${DOMAIN}`))
         it('should have DNS records for gpanel', async () => await lookup(`gpanel-${OPERATOR}.${DOMAIN}`))
@@ -45,6 +46,6 @@ deployer
         it('have heartbeat to campaigns', async () => await curl(`https://gserver-${OPERATOR}.${DOMAIN}/${OPERATOR}/campaigns/heartbeat`))
         it('have heartbeat to replay', async () => await curl(`https://gserver-${OPERATOR}.${DOMAIN}/${OPERATOR}/replay/heartbeat`))
     
-        await deployer.tester.run()
+        await tester.run()
     })
     

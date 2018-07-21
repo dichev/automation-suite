@@ -4,6 +4,7 @@
 /**
  * Usage:
  * $ node bin/hermes/check --operators all -p 10
+ * $ node bin/hermes/check -o bots,rtg
  * $ node bin/hermes/check -o bots -r r3.9.9.1
  * $ node bin/hermes/check -o bots -r r3.9.9.0..r3.9.9.1
  */
@@ -33,7 +34,8 @@ deployer
         let web1 = await deployer.ssh(location.hosts.web1, user)
         web1.silent = true
         
-        let it = deployer.tester.it
+        let tester = deployer.tester(operator)
+        let it = tester.it
         
         it(`should exists in web1`, async() => await web1.chdir(DEST))
         it(`should be able to fetch from the repository`, async() => await web1.exec(`git fetch origin --tags`))
@@ -72,6 +74,10 @@ deployer
             console.info('      ' + await web1.exec(`git diff --shortstat ${to}`))
         })
     
-        await deployer.tester.run()
+        await tester.run(false)
     })
+    .then(() => { // after all iterations
+        deployer.tester().status(true) // will throw error if any test failed
+    })
+
 

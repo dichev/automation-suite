@@ -26,8 +26,8 @@ deployer
         let cf = new CloudFlare(z.zone, z.email, z.key)
         cf.silent = true
         
-        
-        let it = deployer.tester.it
+        let tester = deployer.tester(zone)
+        let it = tester.it
 
         it('have custom error page for ratelimit_block', async () => {
             let res = await cf.get('custom_pages/ratelimit_block')
@@ -83,7 +83,6 @@ deployer
     
     
         
-        await deployer.tester.run()
-        
+        await tester.run(false)
     
     })
