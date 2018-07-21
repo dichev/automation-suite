@@ -19,7 +19,7 @@ deployer
     
     .run(async (operator) => {
         const user = operator === 'pokerstars' ? 'red' : 'dopamine' // TODO: temporary
-        const location = cfg.getLocationByOperator(operator);
+        const location = cfg.getLocationByOperator(operator)
         const DEST = 'production/' + cfg.operators[operator].dir
         
         let web1 = await deployer.ssh(location.hosts.web1, user)
