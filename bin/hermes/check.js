@@ -38,10 +38,6 @@ deployer
         it(`should exists in web1`, async() => await web1.chdir(DEST))
         it(`should be able to fetch from the repository`, async() => await web1.exec(`git fetch origin --tags`))
     
-        it('current release is:', async () => {
-            console.log('      ' + await web1.exec(`git name-rev --tags --name-only $(git rev-parse HEAD)`))
-        }, 'info')
-        
         it('should be at #master branch', async () => {
             assert.strictEqual(await web1.exec(`git rev-parse --abbrev-ref HEAD`), 'master')
         })
@@ -64,7 +60,7 @@ deployer
     
         it(`target release is greater than current release`, async () => {
             if (!to) return it.skip()
-        
+
             let current = await web1.exec(`git describe --tags`);
             let compared = compare(current, to);
             if (compared === 1)  throw Error(`The current release is NOT BEHIND the target release: ${current} => ${to}`);
