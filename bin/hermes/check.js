@@ -46,9 +46,9 @@ deployer
         it('should not have local changes', async () => {
             empty(await web1.exec(`git status --short --untracked-files=no`))
         })
-        it('may not have untracked files', async () => {
+        it.warn('may not have untracked files', async () => {
             empty(await web1.exec(`git ls-files --others --exclude-standard`))
-        }, { warning: true })
+        })
     
         it(`current release is the same as expected`, async () => { // TODO: better display as skipped
             if (!from) return it.skip()
