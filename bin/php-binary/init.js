@@ -30,9 +30,9 @@ deployer
         let ssh = await deployer.ssh(cfg.getHost(host).ip, 'root')
         let SoftBuild = (cfg.getHost(host).network === 'office' ? "192.168.100.19" : "192.168.110.19");
         //await ssh.exec('ssh-keyscan -H '+SoftBuild+' >> ~/.ssh/known_hosts ')
-		await ssh.exec('apt-get -qq update && apt-get -qq install libxslt1.1 libreadline7 -y')
+	await ssh.exec('apt-get -qq update && apt-get -qq install libxslt1.1 libreadline7 -y')
         await ssh.exec('ssh -o StrictHostKeyChecking=no ' + SoftBuild + ' uptime') /* da se pomisli po-elegantno */
-        await ssh.exec('mkdir -p /opt/phpbrew; rsync -av ' + SoftBuild + ':/opt/phpbrew/php /opt/phpbrew/')
+        await ssh.exec('mkdir -p /opt/phpbrew; rsync -av --delete ' + SoftBuild + ':/opt/phpbrew/php /opt/phpbrew/')
         await ssh.exec('cd /opt/servers-conf && git pull')
         // LINKS
         console.log("php version: " + deployer.params.phpversion)
