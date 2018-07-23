@@ -67,11 +67,9 @@ deployer
         console.info('\n2) Fetching all configurations (nginx/php-fpm)')
         console.log('nginx..')
         await lb.exec(`cd ${REPO} && git fetch --prune && git reset --hard ${REVISION}`)
-        for (let web of webs) { // TODO: parallel
-            console.log(web.name + '..')
-            await web.ssh.exec(`cd ${REPO} && git fetch --prune && git reset --hard ${REVISION}`)
-        }
-    
+        console.log(webs.map(w=>w.name).join(',') + '.. (parallel)')
+        await Promise.all(webs.map(web => web.ssh.exec(`cd ${REPO} && git fetch --prune && git reset --hard ${REVISION}`)))
+        
     
         console.info('\n3) Reload config changes')
         if (!WITH_NGINX_UPGRADE) {
@@ -83,10 +81,8 @@ deployer
         }
         if (!ONLY_NGINX) {
             if (NO_WAIT) {
-                for (let web of webs) { // TODO: parallel
-                    console.log(`\n# Reloading configuration of ${web.name}..`)
-                    await web.ssh.exec(`systemctl restart php-fpm`)
-                }
+                console.log(`\n# Reloading configuration of all webs (in parallel)`)
+                await Promise.all(webs.map(web => web.ssh.exec(`systemctl restart php-fpm`)))
             } else {
                 await deployer.sleep(INTERVAL, `Ready. Waiting between operations`)
                 for (let web of webs) {
