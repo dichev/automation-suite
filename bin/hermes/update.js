@@ -30,7 +30,6 @@ deployer
     .run(async (operator) => {
         if (operator !== 'bots') throw Error('This script is not production ready, so is allowed only for the "bots" env')
     
-        const user = operator === 'pokerstars' ? 'red' : 'dopamine' // TODO: temporary
         const location = cfg.getLocationByOperator(operator);
         const DEST = 'production/' + cfg.operators[operator].dir
         const REVS = deployer.params.revision
@@ -57,7 +56,7 @@ deployer
         // Update web1
         await chat.notify('\nPhase 1: update code on web1 (public)')
         await deployer.confirm(`Continue (yes)?`)
-        let web1 = await deployer.ssh(location.hosts.web1, user)
+        let web1 = await deployer.ssh(location.hosts.web1, 'dopamine')
         await web1.chdir(DEST)
         await web1.exec('git fetch --prune origin --quiet')
         await web1.exec(`git checkout --quiet --force -B master ${to}`)

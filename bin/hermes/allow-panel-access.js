@@ -21,12 +21,11 @@ deployer
     
     .run(async (operator) => {
         
-        const user = operator === 'pokerstars' ? 'red' : 'dopamine' // TODO: temporary
         const location = cfg.getLocationByOperator(operator)
         const DEST = 'production/' + cfg.operators[operator].dir
         
         let chat = deployer.chat
-        let web1 = await deployer.ssh(location.hosts.web1, user)
+        let web1 = await deployer.ssh(location.hosts.web1, 'dopamine')
         
         await chat.notify('GPanel access: allowing for QA..')
         await web1.chdir(DEST)

@@ -28,7 +28,7 @@ deployer
         `)
 
         
-        let user = host.startsWith('pokerstars') ? 'red' : 'dopamine' // TODO: temporary until the unification is done
+        let user = 'dopamine'
         let file = `/home/${user}/.ssh/known_hosts`
         if(await ssh.exists(file)) {
             console.log(`Adding gitlab.dopamine.bg to ${user} user`)

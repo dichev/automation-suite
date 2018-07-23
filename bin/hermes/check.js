@@ -25,13 +25,12 @@ deployer
     .loop('operators')
     
     .run(async (operator) => {
-        const user = operator === 'pokerstars' ? 'red' : 'dopamine' // TODO: temporary
         const location = cfg.getLocationByOperator(operator);
         const DEST = 'production/' + cfg.operators[operator].dir
         const REVS = deployer.params.revision
         const [from, to] = REVS && REVS.includes('..') ? REVS.split('..') : [null, REVS]
         
-        let web1 = await deployer.ssh(location.hosts.web1, user)
+        let web1 = await deployer.ssh(location.hosts.web1, 'dopamine')
         web1.silent = true
         
         let tester = deployer.tester(operator)

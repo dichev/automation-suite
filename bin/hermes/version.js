@@ -18,11 +18,10 @@ deployer
     .loop('operators')
     
     .run(async (operator) => {
-        const user = operator === 'pokerstars' ? 'red' : 'dopamine' // TODO: temporary
         const location = cfg.getLocationByOperator(operator)
         const DEST = 'production/' + cfg.operators[operator].dir
         
-        let web1 = await deployer.ssh(location.hosts.web1, user)
+        let web1 = await deployer.ssh(location.hosts.web1, 'dopamine')
         
         await web1.chdir(DEST)
         await web1.exec(`echo "$(git name-rev --tags --name-only $(git rev-parse HEAD)) -> ${operator}"`)
