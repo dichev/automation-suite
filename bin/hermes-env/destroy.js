@@ -67,9 +67,9 @@ deployer
         log("Generating sql templates..")
         await shell.chdir(TEMPLATES)
         let SQL = {
-            masterCheck:     await shell.exec(`bin/generator -t templates/sql/hermes-rollback.sql.hbs -o ${OPERATOR} -s ${SERVER} --print`, {silent: true}),
+            masterCheck:     await shell.exec(`bin/generator -t templates/sql/hermes-check.sql.hbs -o ${OPERATOR} -s ${SERVER} --print`, {silent: true}),
             masterRollback:  await shell.exec(`bin/generator -t templates/sql/hermes-rollback.sql.hbs -o ${OPERATOR} -s ${SERVER} --print`, {silent: true}),
-            archiveCheck:    await shell.exec(`bin/generator -t templates/sql/hermes-rollback-archive.sql.hbs -o ${OPERATOR} -s ${SERVER} --print`, {silent: true}),
+            archiveCheck:    await shell.exec(`bin/generator -t templates/sql/hermes-check.sql.hbs -o ${OPERATOR} -s ${SERVER} --print`, {silent: true}),
             archiveRollback: await shell.exec(`bin/generator -t templates/sql/hermes-rollback-archive.sql.hbs -o ${OPERATOR} -s ${SERVER} --print`, {silent: true}),
         }
         
