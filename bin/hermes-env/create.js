@@ -19,7 +19,7 @@ const read = (path) => fs.readFileSync(path).toString()
 const TEMPLATES = "d:/www/servers/template-generator" // TODO: temporary
 
 
-let deployer = new Deployer()
+let deployer = new Deployer(cfg.devops)
 
 deployer
     .option('-e, --env <name>', 'The target env name')
@@ -31,7 +31,6 @@ deployer
         const LOCATION = deployer.params.location
         const DEST = `/home/dopamine/production/${cfg.operators[OPERATOR].dir}`
         
-        if (LOCATION !== 'belgium') throw Error('this script is not ready for production!')
         if (!cfg.operators[OPERATOR]) throw Error(`missing configuration for this env ${OPERATOR}`)
         if (cfg.operators[OPERATOR].live !== false) throw Error(`This env ${OPERATOR} is used already on live, so for security reasons the command is disabled for it`)
         if (!/^[a-zA-Z0-9-_/]+$/g.test(DEST) || DEST.length <= '/home/dopamine/production/'.length) {
@@ -92,11 +91,10 @@ deployer
         log('\nUpdate system configurations')
         log('This could affect the other envs if the setup is incorrect.')
         await deployer.confirm('DANGER! Are you sure you want to continue (yes)? ')
-        await lb.exec(`auto-update-configs`) //TODO: on error output rollback command
-    
-    
+        await shell.exec(`node bin/servers-conf/update --locations ${LOCATION}`)
+
+        
         // Checkers & tests
         await shell.exec(`node bin/hermes-env/check --env ${OPERATOR} --location ${LOCATION}`)
-        //TODO: plamen manual actions
     
     })

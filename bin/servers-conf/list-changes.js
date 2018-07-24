@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/servers-conf/list-changes --hosts all
+ * $ node bin/servers-conf/list-changes --locations all
  */
 
 const Deployer = require('deployer2')

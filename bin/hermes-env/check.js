@@ -10,7 +10,7 @@
 const Deployer = require('deployer2')
 const cfg = require('configurator')
 
-let deployer = new Deployer()
+let deployer = new Deployer(cfg.devops)
 
 const promisify = require('util').promisify
 const lookup = promisify(require('dns').lookup)

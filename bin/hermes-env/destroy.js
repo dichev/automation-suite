@@ -19,14 +19,13 @@ const flatten = (arr) => arr.reduce((acc, val) => acc.concat(val), []);
 const TEMPLATES = "d:/www/servers/template-generator" // TODO: temporary
 
 
-let deployer = new Deployer()
+let deployer = new Deployer(cfg.devops)
 
 deployer
     .option('-e, --env <name>', 'The target env name')
     .option('-l, --location <name>', 'The target location')
 
     .run(async () => {
-        if(deployer.params.location !== 'belgium') throw Error('this script is not ready for production!')
         if(!cfg.operators[deployer.params.env]) throw Error(`missing configuration for this env ${deployer.params.env}`)
         if(cfg.operators[deployer.params.env].live !== false) throw Error(`This env ${deployer.params.env} is used already on live, so for security reasons the command is disabled for it`)
         

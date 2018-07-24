@@ -17,7 +17,7 @@ const log = console.log
 // Configuration
 const TEMPLATES = "d:/www/servers/template-generator"
 
-let deployer = new Deployer()
+let deployer = new Deployer(cfg.devops)
 
 
 deployer
@@ -25,8 +25,6 @@ deployer
     .option('-l, --location <name>', 'The target location')
 
     .run(async () => {
-        if(deployer.params.location !== 'belgium') throw Error('this script is not ready for production!')
-        
         const OPERATOR = deployer.params.env
         const SERVER = deployer.params.location
 
@@ -42,8 +40,8 @@ deployer
         await shell.exec(`cd ../servers-conf-${SERVER} && TortoiseGitProc -command commit -logmsg "[env] Add new env: ${OPERATOR}"`)
         log("\n\n===================================================\n\n")
 
-    
-    
+
+
         // Check domain DNS
         log(`\nChecking DNS records of the domains`);
         const DOMAIN = cfg.operators[OPERATOR].domain
@@ -57,7 +55,7 @@ deployer
         cf.silent = true
         
         for (let address of addresses) {
-            let records = await cf.get('dns_records')
+            let records = await cf.get(`dns_records?name=${address}`)
             let found = records.result.find(r => r.name === address)
             
             if(found) {
@@ -65,11 +63,14 @@ deployer
             } else {
                 log(`- DNS is NOT found at CloudFlare: ${address}`);
                 log(`Adding ${address} to Cloudflare at zone ${SERVER}`);
-                await cf.post('dns_records', {
+                
+                let isPanel = address.startsWith('gpanel')
+                
+                await cf.put('dns_records', {
                     type: 'A',
                     name: address,
-                    content: cfg.locations[SERVER].hosts.public,
-                    proxied: true
+                    content: isPanel ? cfg.locations[SERVER].hosts.private : cfg.locations[SERVER].hosts.public, // TODO: temporary!
+                    proxied: !isPanel //TODO: gpanel is still not behind CF
                 })
                 console.log('Done')
             }
