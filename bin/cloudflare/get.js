@@ -16,7 +16,7 @@ let program = new Program(cfg.devops)
 
 program
     .description('Checking current cloudflare configuration')
-    .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases. Available: ${zones}`, { choices: zones })
+    .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases. Available: ${zones}`, { choices: zones, required: true })
     .option('-u, --url <string>', `Cloudflare url without the zone part`, { def: 'settings/security_level' })
     .loop('zones')
 

@@ -11,7 +11,7 @@ const cfg = require('configurator')
 
 let program = new Program(cfg.devops)
 program
-    .option('-l, --locations <list|all>', 'The target host name', {choices: Object.keys(cfg.locations)})
+    .option('-l, --locations <list|all>', 'The target host name', {choices: Object.keys(cfg.locations), required: true})
     .loop('locations')
     .run(async (location) => {
         

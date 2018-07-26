@@ -13,7 +13,7 @@ let program = new Program(cfg.devops)
 
 
 program
-    .option('-h, --hosts <list|all>', 'The target host names', { choices: Object.keys(cfg.hosts) })
+    .option('-h, --hosts <list|all>', 'The target host names', { choices: Object.keys(cfg.hosts), required: true })
     .loop('hosts')
 
     .run(async (host) => {

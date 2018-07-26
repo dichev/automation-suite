@@ -17,7 +17,7 @@ let program = new Program(cfg.devops)
 
 program
     .description('Installing sys-metrics')
-    .option('-h, --hosts <list>', 'The target host names')
+    .option('-h, --hosts <list>', 'The target host names', {required: true})
     .loop('hosts')
     // .save('./installed')
 

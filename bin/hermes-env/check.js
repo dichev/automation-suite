@@ -30,8 +30,8 @@ const curl = async (url) => {
 
 
 program
-    .option('-e, --env <name>', 'The target env name')
-    .option('-l, --location <name>', 'The target location')
+    .option('-e, --env <name>', 'The target env name', { required: true })
+    .option('-l, --location <name>', 'The target location', { required: true })
     
     .run(async () => {
         

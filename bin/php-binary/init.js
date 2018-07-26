@@ -15,8 +15,8 @@ let program = new Program(cfg.devops)
 
 program
     
-    .option('-h, --hosts <list|all>', 'The target host name', {choices: installed.hosts})
-    .option('-p, --phpversion <version>', 'The php version number', {choices: installed.versions, def: installed.version})
+    .option('-h, --hosts <list|all>', 'The target host name', {choices: installed.hosts, required: true})
+    .option('-p, --phpversion <version>', 'The php version number', {choices: installed.versions, def: installed.version, required: true})
     .loop('hosts')
     
     .run(async (host) => {
@@ -30,7 +30,7 @@ program
         let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
         let SoftBuild = (cfg.getHost(host).network === 'office' ? "192.168.100.19" : "192.168.110.19");
         //await ssh.exec('ssh-keyscan -H '+SoftBuild+' >> ~/.ssh/known_hosts ')
-	await ssh.exec('apt-get -qq update && apt-get -qq install libxslt1.1 libreadline7 -y')
+        await ssh.exec('apt-get -qq update && apt-get -qq install libxslt1.1 libreadline7 -y')
         await ssh.exec('ssh -o StrictHostKeyChecking=no ' + SoftBuild + ' uptime') /* da se pomisli po-elegantno */
         await ssh.exec('mkdir -p /opt/phpbrew; rsync -av --delete ' + SoftBuild + ':/opt/phpbrew/php /opt/phpbrew/')
         await ssh.exec('cd /opt/servers-conf && git pull')

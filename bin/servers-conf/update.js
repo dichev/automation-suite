@@ -18,7 +18,7 @@ program
     // .usage('[--rev <string> --interval <int> --force --only-nginx --no-wait --with-nginx-upgrade]')
     .description('Auto update sever configurations by reloading one by one each server')
     
-    .option('-l, --locations <list|all>', 'The target host name', {choices: Object.keys(cfg.locations)})
+    .option('-l, --locations <list|all>', 'The target host name', {choices: Object.keys(cfg.locations), required: true})
     .option('-r, --rev <string>', 'Specify target git revision, very useful for rollback. Default reset to origin/master')
     .option('-i, --interval <int>', 'How many seconds to wait between each configuration switch. Default is 2')
     .option('-f, --force', 'Skip manual changes validations and proceed on your risk')

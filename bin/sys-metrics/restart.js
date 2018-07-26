@@ -15,7 +15,7 @@ let program = new Program(cfg.devops)
 
 
 program
-    .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts })
+    .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts, required: true })
     .loop('hosts')
 
     .run(async (host) => {

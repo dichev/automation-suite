@@ -15,8 +15,8 @@ let program = new Program(cfg.devops)
 
 program
     .description('Updating sys-metrics version')
-    .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts })
-    .option('-r, --revision <tag>', 'The target version as tag name')
+    .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts, required: true })
+    .option('-r, --revision <tag>', 'The target version as tag name', {required: true})
     .loop('hosts')
 
     .run(async (host) => {

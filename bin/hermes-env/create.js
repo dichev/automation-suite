@@ -22,8 +22,8 @@ const TEMPLATES = "d:/www/servers/template-generator" // TODO: temporary
 let program = new Program(cfg.devops)
 
 program
-    .option('-e, --env <name>', 'The target env name')
-    .option('-l, --location <name>', 'The target location')
+    .option('-e, --env <name>', 'The target env name', { required: true })
+    .option('-l, --location <name>', 'The target location', { required: true })
 
     .run(async () => {
         // Configuration

@@ -15,17 +15,15 @@ let program = new Program()
 
 program
     .description('Update games cdn')
-    .option('-h, --hosts <list|all>', `Comma-separated list of cdn regions. Available: ${installed.hosts}`, {choices: installed.hosts})
+    .option('-h, --hosts <list|all>', `Comma-separated list of cdn regions. Available: ${installed.hosts}`, {choices: installed.hosts, required: true})
     .option('-r, --revision <string>', `Target revision (like r.3.9.9.0)`)
-    .option('-m, --mode <blue|green>', `Which cdn to by updated`, { choices: ['blue', 'green'] })
+    .option('-m, --mode <blue|green>', `Which cdn to by updated`, { choices: ['blue', 'green'], required: true })
     .loop('hosts')
     
     .run(async (host) => {
         const REV = program.params.revision
         const MODE = program.params.mode
         const DEST = `/home/dopamine/cdn/repos/${MODE}`
-        
-        if(!MODE || !REV) throw Error('Missing required parameters: --mode --revision') // TODO: support required option
         
         let chat = program.chat
         let shell = program.shell()

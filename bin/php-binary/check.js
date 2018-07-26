@@ -16,7 +16,7 @@ const assert = require('assert')
 
 program
 
-    .option('-h, --hosts <list|all>', 'The target host name', {choices: installed.hosts})
+    .option('-h, --hosts <list|all>', 'The target host name', {choices: installed.hosts, required: true})
     .loop('hosts')
 
     .run(async (host) => {
