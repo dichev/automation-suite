@@ -87,14 +87,19 @@ deployer
         await master.query(read(`${TEMPLATES}/output/${OPERATOR}/db/seed.sql`))
     
     
+        // Crons
+        log(`\nExecuting inital crons`)
+        await web1.exec(`php platform/bin/cmd.php exchange-rates`)
+    
         // System configurations
         log('\nUpdate system configurations')
         log('This could affect the other envs if the setup is incorrect.')
         await deployer.confirm('DANGER! Are you sure you want to continue (yes)? ')
         await shell.exec(`node bin/servers-conf/update --locations ${LOCATION}`)
-
-        
+    
         // Checkers & tests
         await shell.exec(`node bin/hermes-env/check --env ${OPERATOR} --location ${LOCATION}`)
+        
+        
     
     })

@@ -18,7 +18,13 @@ const curl = async (url) => {
     let shell = await deployer.shell()
     let res = await shell.exec(`curl -s ${url}`, { silent: true })
     if (!res) throw Error('Empty response')
-    let json = JSON.parse(res)
+    let json
+    try{
+        json = JSON.parse(res)
+    } catch (e) {
+        throw Error(e.toString() + `\n${res}`)
+    }
+    
     if (!json || !json.success) console.warn('WARNING! The response is not successful\n', json)
 }
 
