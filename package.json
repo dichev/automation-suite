@@ -1,5 +1,6 @@
 {
-  "name": "deployer2-compose",
+  "name": "dopamine-deploy",
+  "description": "Store all dopamine deployment scripts, programs and commands",
   "version": "1.0.0",
   "private": true,
   "scripts": {
