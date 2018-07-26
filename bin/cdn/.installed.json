@@ -1,0 +1,8 @@
+{
+    "hosts": [
+        "dev-hermes-lb",
+        "cdn-asia",
+        "cdn-europe",
+        "cdn-backup"
+    ]
+}
