@@ -16,7 +16,7 @@ const empty = (str) => { if(str !== '') throw Error(str) }
 let program = new Program()
 
 program
-    .description('Checking current release version of games cdn')
+    .description('Test suit of games cdn')
     .option('-h, --hosts <list|all>', `Comma-separated list of cdn regions. Available: ${installed.hosts}`, {choices: installed.hosts})
     .option('-r, --revision <string>', `Target revision (like r.3.9.9.0)`)
     .option('-m, --mode <blue|green>', `Which cdn to by updated`, {choices: ['blue', 'green']})
