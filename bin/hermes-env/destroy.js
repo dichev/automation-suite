@@ -59,6 +59,7 @@ deployer
             log(`\n\n===================================================\n\n`)
         }
 
+        
 
     
         
@@ -77,19 +78,17 @@ deployer
         let dbMasterCheck = await master.query(SQL.masterCheck)
         if (flatten(dbMasterCheck).length) {
             log('WARNING! The databases/users in master already exist')
-            await deployer.confirm('DANGER! Do you want to drop users/databases. To confirm please type "drop" here: ', 'no', ['drop'])
             log(SQL.masterRollback)
-            await deployer.confirm('DANGER! The above commands will be executed, continue (yes)? ')
+            await deployer.confirm('DANGER! Do you want to drop users/databases. To confirm please type "drop" here: ', 'no', ['drop'])
             await master.query(SQL.masterRollback)
         }
-    
+
         log('Checking archive database..')
         let dbArchiveCheck = await archive.query(SQL.archiveCheck)
         if (flatten(dbArchiveCheck).length) {
             log('WARNING! The databases/users in archive already exist')
-            await deployer.confirm('DANGER! Do you want to drop users/databases. To confirm please type "drop" here: ', 'no', ['drop'])
             log(SQL.archiveRollback)
-            await deployer.confirm('DANGER! The above commands will be executed, continue (yes)? ')
+            await deployer.confirm('DANGER! Do you want to drop users/databases. To confirm please type "drop" here: ', 'no', ['drop'])
             await archive.query(SQL.archiveRollback)
         }
     
