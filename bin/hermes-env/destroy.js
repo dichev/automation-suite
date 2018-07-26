@@ -11,7 +11,6 @@ const Deployer = require('deployer2')
 const cfg = require('configurator')
 
 const log = console.log
-const fs = require('fs')
 const flatten = (arr) => arr.reduce((acc, val) => acc.concat(val), []);
 
 

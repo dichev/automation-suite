@@ -10,7 +10,6 @@ const Deployer = require('deployer2')
 const cfg = require('configurator')
 const CloudFlare = require('deployer2').plugins.CloudFlare
 const zones = Object.keys(cfg.cloudflare.zones)
-const assert = require('assert')
 
 
 let deployer = new Deployer(cfg.devops)

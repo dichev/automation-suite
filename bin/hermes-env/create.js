@@ -48,8 +48,7 @@ deployer
     
         // Prepare and check ssh connections
         let hosts = cfg.locations[LOCATION].hosts
-        let [lb, web1, master, archive] = await Promise.all([
-            deployer.ssh(hosts.lb, 'root'),
+        let [web1, master, archive] = await Promise.all([
             deployer.ssh(hosts.web1, 'dopamine'),
             deployer.mysql({user: 'root', ssh: {user: 'root', host: hosts.mysql}}),
             deployer.mysql({user: 'root', ssh: {user: 'root', host: hosts.archive}}),
@@ -88,7 +87,7 @@ deployer
     
     
         // Crons
-        log(`\nExecuting inital crons`)
+        log(`\nExecuting initial crons`)
         await web1.exec(`php platform/bin/cmd.php exchange-rates`)
     
         // System configurations
