@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev-links": "npm link deployer2 && npm link configurator"
+    "dev-links": "npm link dopamine-toolbox && npm link configurator"
   },
   "dependencies": {
-    "configurator": "git+ssh://git@gitlab.dopamine.bg:tools/lab/configurator.git",
+    "configurator": "git+ssh://git@gitlab.dopamine.bg:devops/configurator.git",
     "dopamine-toolbox": "git+ssh://git@gitlab.dopamine.bg:devops/toolbox.git",
     "node-version-compare": "^1.0.1"
   }
