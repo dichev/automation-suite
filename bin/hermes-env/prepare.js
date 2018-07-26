@@ -7,9 +7,9 @@
  */
 
 
-const Deployer = require('deployer2')
+const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
-const CloudFlare = require('deployer2').plugins.CloudFlare
+const CloudFlare = require('dopamine-toolbox').plugins.CloudFlare
 
 const log = console.log
 
@@ -17,21 +17,21 @@ const log = console.log
 // Configuration
 const TEMPLATES = "d:/www/servers/template-generator"
 
-let deployer = new Deployer(cfg.devops)
+let program = new Program(cfg.devops)
 
 
-deployer
+program
     .option('-e, --env <name>', 'The target env name')
     .option('-l, --location <name>', 'The target location')
 
     .run(async () => {
-        const OPERATOR = deployer.params.env
-        const SERVER = deployer.params.location
+        const OPERATOR = program.params.env
+        const SERVER = program.params.location
 
 
         // Templating the environment
         log("Generating configurations from templates..")
-        let shell = await deployer.shell()
+        let shell = await program.shell()
         await shell.chdir(TEMPLATES)
         await shell.exec(`bin/generator-new-operator -o ${OPERATOR} -s ${SERVER}`)
 

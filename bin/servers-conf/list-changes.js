@@ -6,16 +6,16 @@
  * $ node bin/servers-conf/list-changes --locations all
  */
 
-const Deployer = require('deployer2')
+const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 
-let deployer = new Deployer(cfg.devops)
-deployer
+let program = new Program(cfg.devops)
+program
     .option('-l, --locations <list|all>', 'The target host name', {choices: Object.keys(cfg.locations)})
     .loop('locations')
     .run(async (location) => {
         
-        let lb = await deployer.ssh(cfg.locations[location].hosts.lb, 'root')
+        let lb = await program.ssh(cfg.locations[location].hosts.lb, 'root')
         await lb.chdir('/opt/servers-conf')
         await lb.exec('git fetch origin master --quiet')
         await lb.exec('git log HEAD..origin/master --oneline')

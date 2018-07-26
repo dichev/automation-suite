@@ -7,7 +7,7 @@
  */
 
 
-const Deployer = require('deployer2')
+const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 
 const log = console.log
@@ -19,16 +19,16 @@ const read = (path) => fs.readFileSync(path).toString()
 const TEMPLATES = "d:/www/servers/template-generator" // TODO: temporary
 
 
-let deployer = new Deployer(cfg.devops)
+let program = new Program(cfg.devops)
 
-deployer
+program
     .option('-e, --env <name>', 'The target env name')
     .option('-l, --location <name>', 'The target location')
 
     .run(async () => {
         // Configuration
-        const OPERATOR = deployer.params.env
-        const LOCATION = deployer.params.location
+        const OPERATOR = program.params.env
+        const LOCATION = program.params.location
         const DEST = `/home/dopamine/production/${cfg.operators[OPERATOR].dir}`
         
         if (!cfg.operators[OPERATOR]) throw Error(`missing configuration for this env ${OPERATOR}`)
@@ -40,7 +40,7 @@ deployer
         
         // Preparations
         log(`Before the deploy you must prepare all configurations using:\n $ node bin/hermes-env/prepare --env ${OPERATOR} --location ${LOCATION}`)
-        await deployer.confirm('Have you prepared them (yes)? ')
+        await program.confirm('Have you prepared them (yes)? ')
         // TODO check if they exists
 
 
@@ -49,11 +49,11 @@ deployer
         // Prepare and check ssh connections
         let hosts = cfg.locations[LOCATION].hosts
         let [web1, master, archive] = await Promise.all([
-            deployer.ssh(hosts.web1, 'dopamine'),
-            deployer.mysql({user: 'root', ssh: {user: 'root', host: hosts.mysql}}),
-            deployer.mysql({user: 'root', ssh: {user: 'root', host: hosts.archive}}),
+            program.ssh(hosts.web1, 'dopamine'),
+            program.mysql({user: 'root', ssh: {user: 'root', host: hosts.mysql}}),
+            program.mysql({user: 'root', ssh: {user: 'root', host: hosts.archive}}),
         ])
-        let shell = deployer.shell()
+        let shell = program.shell()
     
 
     
@@ -66,7 +66,7 @@ deployer
         await web1.exec(`/home/dopamine/bin/webs-sync ${DEST}`)
         
         log("Setup chroot")
-        let web1Root = await deployer.ssh(hosts.web1, 'root') // TODO: check why requires root
+        let web1Root = await program.ssh(hosts.web1, 'root') // TODO: check why requires root
         await web1Root.exec(`/home/dopamine/bin/webs-chroot ${DEST}`)
     
     
@@ -93,7 +93,7 @@ deployer
         // System configurations
         log('\nUpdate system configurations')
         log('This could affect the other envs if the setup is incorrect.')
-        await deployer.confirm('DANGER! Are you sure you want to continue (yes)? ')
+        await program.confirm('DANGER! Are you sure you want to continue (yes)? ')
         await shell.exec(`node bin/servers-conf/update --locations ${LOCATION}`)
     
         // Checkers & tests

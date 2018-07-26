@@ -9,18 +9,18 @@
  */
 
 
-const Deployer = require('deployer2')
+const Program = require('dopamine-toolbox').Program
 const installed = require('./.installed.json')
 const cfg = require('configurator')
-let deployer = new Deployer(cfg.devops)
+let program = new Program(cfg.devops)
 
 
-deployer
+program
     .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts })
     .loop('hosts')
 
     .run(async (host) => {
-        let ssh = await deployer.ssh(cfg.getHost(host).ip, 'root')
+        let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
        
         await ssh.exec('cd /opt/dopamine/sys-metrics && git describe --tags')
         await ssh.exec('systemctl status sys-metrics | grep Active')

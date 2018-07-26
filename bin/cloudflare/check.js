@@ -6,16 +6,16 @@
  * $ node bin/cloudflare/check --zones dopamine-gaming.com
  */
 
-const Deployer = require('deployer2')
+const Program = require('dopamine-toolbox').Program
+const CloudFlare = require('dopamine-toolbox').plugins.CloudFlare
 const cfg = require('configurator')
-const CloudFlare = require('deployer2').plugins.CloudFlare
 const zones = Object.keys(cfg.cloudflare.zones)
 const assert = require('assert')
 
 
-let deployer = new Deployer(cfg.devops)
+let program = new Program(cfg.devops)
 
-deployer
+program
     .description('Checking current cloudflare configuration')
     .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases. Available: ${zones}`, { choices: zones })
     .loop('zones')
@@ -26,7 +26,7 @@ deployer
         let cf = new CloudFlare(z.zone, z.email, z.key)
         cf.silent = true
         
-        let tester = deployer.tester(zone)
+        let tester = program.tester(zone)
         let it = tester.it
 
         it('have custom error page for ratelimit_block', async () => {

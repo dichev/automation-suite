@@ -7,13 +7,13 @@
  */
 
 
-const Deployer = require('deployer2')
+const Program = require('dopamine-toolbox').Program
 const installed = require('./.installed.json')
 const cfg = require('configurator')
-let deployer = new Deployer(cfg.devops)
+let program = new Program(cfg.devops)
 
 
-deployer
+program
     .description('Updating sys-metrics version')
     .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts })
     .option('-r, --revision <tag>', 'The target version as tag name')
@@ -21,7 +21,7 @@ deployer
 
     .run(async (host) => {
 
-        let ssh = await deployer.ssh(cfg.getHost(host).ip, 'root')
+        let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
         
         console.info('\n1. Fetch from the remote:')
         
@@ -29,7 +29,7 @@ deployer
         await ssh.exec('git fetch --prune origin')
         
         console.info('\n2. Deploy')
-        await ssh.exec('git reset --hard ' + deployer.params.revision)
+        await ssh.exec('git reset --hard ' + program.params.revision)
         await ssh.exec('systemctl restart sys-metrics')
         await ssh.exec('systemctl status sys-metrics | head -n 3')
         

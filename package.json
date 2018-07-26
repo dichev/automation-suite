@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "configurator": "git+ssh://git@gitlab.dopamine.bg:tools/lab/configurator.git",
-    "deployer2": "git+ssh://git@gitlab.dopamine.bg:tools/lab/deployer2.git",
+    "dopamine-toolbox": "git+ssh://git@gitlab.dopamine.bg:devops/toolbox.git",
     "node-version-compare": "^1.0.1"
   }
 }

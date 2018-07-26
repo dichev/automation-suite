@@ -7,15 +7,15 @@
  */
 
 
-const Deployer = require('deployer2')
+const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 
-let deployer = new Deployer(cfg.devops)
+let program = new Program(cfg.devops)
 
 const promisify = require('util').promisify
 const lookup = promisify(require('dns').lookup)
 const curl = async (url) => {
-    let shell = await deployer.shell()
+    let shell = await program.shell()
     let res = await shell.exec(`curl -s ${url}`, { silent: true })
     if (!res) throw Error('Empty response')
     let json
@@ -29,19 +29,19 @@ const curl = async (url) => {
 }
 
 
-deployer
+program
     .option('-e, --env <name>', 'The target env name')
     .option('-l, --location <name>', 'The target location')
     
     .run(async () => {
         
         // Configuration
-        const OPERATOR = deployer.params.env
+        const OPERATOR = program.params.env
         const DOMAIN = cfg.operators[OPERATOR].domain
         
         
         // Checkers
-        let tester = deployer.tester()
+        let tester = program.tester()
         let it = tester.it
         
         it('should have DNS records for gserver', async () => await lookup(`gserver-${OPERATOR}.${DOMAIN}`))

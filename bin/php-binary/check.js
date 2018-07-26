@@ -7,23 +7,23 @@
  */
 
 
-const Deployer = require('deployer2')
+const Program = require('dopamine-toolbox').Program
 const installed = require('./.installed.json')
 const cfg = require('configurator')
-let deployer = new Deployer(cfg.devops)
+let program = new Program(cfg.devops)
 
 const assert = require('assert')
 
-deployer
+program
 
     .option('-h, --hosts <list|all>', 'The target host name', {choices: installed.hosts})
     .loop('hosts')
 
     .run(async (host) => {
-        let ssh = await deployer.ssh(cfg.getHost(host).ip, 'root')
+        let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
         ssh.silent = true
     
-        let tester = deployer.tester(host)
+        let tester = program.tester(host)
         let it = tester.it
         
         it('should be Debian 9', async () => {
@@ -51,6 +51,6 @@ deployer
         await tester.run()
         
         console.log(`Everything is okay ;)`)
-        await deployer.chat.notify(`All tests passed! Everything is okay ;)`, {color: 'green'})
+        await program.chat.notify(`All tests passed! Everything is okay ;)`, {color: 'green'})
     })
 

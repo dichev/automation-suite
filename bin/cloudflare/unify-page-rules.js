@@ -6,14 +6,14 @@
  * $ node bin/cloudflare/unify-page-rules --zones dopamine-gaming.com
  */
 
-const Deployer = require('deployer2')
+const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
-const CloudFlare = require('deployer2').plugins.CloudFlare
+const CloudFlare = require('dopamine-toolbox').plugins.CloudFlare
 const zones = Object.keys(cfg.cloudflare.zones)
 
-let deployer = new Deployer(cfg.devops)
+let program = new Program(cfg.devops)
 
-deployer
+program
     .description('Unifying cloudflare configuration')
     .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases. Available: ${zones}`, { choices: zones })
     .loop('zones')

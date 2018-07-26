@@ -7,17 +7,17 @@
  */
 
 
-const Deployer = require('deployer2')
+const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
-let deployer = new Deployer(cfg.devops)
+let program = new Program(cfg.devops)
 
 
-deployer
+program
     .option('-h, --hosts <list|all>', 'The target host names', { choices: Object.keys(cfg.hosts) })
     .loop('hosts')
 
     .run(async (host) => {
-        let ssh = await deployer.ssh(cfg.getHost(host).ip, 'root')
+        let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
         console.log(`Adding gitlab.dopamine.bg to root user`)
         await ssh.exec(`

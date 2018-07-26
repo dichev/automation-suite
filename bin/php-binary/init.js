@@ -8,12 +8,12 @@
  */
 
 
-const Deployer = require('deployer2')
+const Program = require('dopamine-toolbox').Program
 const installed = require('./.installed.json')
 const cfg = require('configurator')
-let deployer = new Deployer(cfg.devops)
+let program = new Program(cfg.devops)
 
-deployer
+program
     
     .option('-h, --hosts <list|all>', 'The target host name', {choices: installed.hosts})
     .option('-p, --phpversion <version>', 'The php version number', {choices: installed.versions, def: installed.version})
@@ -23,11 +23,11 @@ deployer
         
         let h = cfg.hosts[host]
         let hostsList = cfg.locations[h.location].hosts
-        let sshlb = await deployer.ssh(hostsList.lb, 'root')
+        let sshlb = await program.ssh(hostsList.lb, 'root')
         
         await sshlb.exec('switch-webs --quiet --webs=all --operators=all --exclude-webs=' + h.alias)
         
-        let ssh = await deployer.ssh(cfg.getHost(host).ip, 'root')
+        let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
         let SoftBuild = (cfg.getHost(host).network === 'office' ? "192.168.100.19" : "192.168.110.19");
         //await ssh.exec('ssh-keyscan -H '+SoftBuild+' >> ~/.ssh/known_hosts ')
 	await ssh.exec('apt-get -qq update && apt-get -qq install libxslt1.1 libreadline7 -y')
@@ -35,8 +35,8 @@ deployer
         await ssh.exec('mkdir -p /opt/phpbrew; rsync -av --delete ' + SoftBuild + ':/opt/phpbrew/php /opt/phpbrew/')
         await ssh.exec('cd /opt/servers-conf && git pull')
         // LINKS
-        console.log("php version: " + deployer.params.phpversion)
-        await ssh.exec(`rm -fv /opt/phpbrew/php/php && ln -s /opt/phpbrew/php/php-${deployer.params.phpversion} /opt/phpbrew/php/php`)
+        console.log("php version: " + program.params.phpversion)
+        await ssh.exec(`rm -fv /opt/phpbrew/php/php && ln -s /opt/phpbrew/php/php-${program.params.phpversion} /opt/phpbrew/php/php`)
         await ssh.exec('rm -fv /opt/phpbrew/php/php/etc/php.ini && ln -s /opt/servers-conf/php/php.ini /opt/phpbrew/php/php/etc/php.ini')
         await ssh.exec('rm -fv /usr/bin/php && ln -s /opt/phpbrew/php/php/bin/php /usr/bin/php')
         await ssh.exec('rm -fv /etc/init.d/php*-fpm && ln -s /opt/servers-conf/php/php-fpm.init.d /etc/init.d/php-fpm')
@@ -45,7 +45,7 @@ deployer
         await ssh.exec('sleep 2; killall -9 php-fpm || killall -9 php5-fpm || true')
         await ssh.exec('systemctl restart php-fpm') //system
         
-        await deployer.shell().exec(`node bin/php-binary/check --hosts ${host}`)
+        await program.shell().exec(`node bin/php-binary/check --hosts ${host}`)
         
         await sshlb.exec('switch-webs --quiet --operators=all --webs=all')
     })

@@ -9,12 +9,12 @@
  * $ node bin/servers-conf/update --locations=belgium --interval 10
  */
 
-const Deployer = require('deployer2')
+const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 
 
-let deployer = new Deployer(cfg.devops)
-deployer
+let program = new Program(cfg.devops)
+program
     // .usage('[--rev <string> --interval <int> --force --only-nginx --no-wait --with-nginx-upgrade]')
     .description('Auto update sever configurations by reloading one by one each server')
     
@@ -29,9 +29,9 @@ deployer
     .loop('locations')
 
 
-deployer
+program
     .run(async (location) => {
-        const params = deployer.params
+        const params = program.params
         const INTERVAL = params.interval !== undefined ? parseInt(params.interval) : 2
         const REVISION = params.rev || 'origin/master'
         const ONLY_NGINX = params.onlyNginx === true // default: false
@@ -41,16 +41,16 @@ deployer
     
         
         let hosts = cfg.locations[location].hosts
-        let lb = await deployer.ssh(hosts.lb, 'root')
+        let lb = await program.ssh(hosts.lb, 'root')
         let webs = []
         for(let name in hosts){
             if(!name.startsWith('web')) continue;
-            webs.push({ name: name, ssh: await deployer.ssh(hosts[name], 'root') })
+            webs.push({ name: name, ssh: await program.ssh(hosts[name], 'root') })
         }
         
     
         console.info('\n1) Ensure there are no manual configs')
-        if (!deployer.params.force) {
+        if (!program.params.force) {
             console.log('nginx..')
             let changes = await lb.exec(`cd ${REPO} && git status --short --untracked-files=no`)
             if (changes) throw Error(`Aborting.. Manual changes found at load balancer`)
@@ -84,14 +84,14 @@ deployer
                 console.log(`\n# Reloading configuration of all webs (in parallel)`)
                 await Promise.all(webs.map(web => web.ssh.exec(`systemctl restart php-fpm`)))
             } else {
-                await deployer.sleep(INTERVAL, `Ready. Waiting between operations`)
+                await program.sleep(INTERVAL, `Ready. Waiting between operations`)
                 for (let web of webs) {
                     console.log(`\n# Reloading configuration of ${web.name}..`)
                     await lb.exec(`switch-webs --operators=all --webs=all --exclude-webs=${web.name} --quiet`)
                     await web.ssh.exec(`systemctl restart php-fpm`)
                     console.log('Checking is php-fpm process active..')
                     await web.ssh.exec(`sleep 1 && systemctl is-active php-fpm `) // exits with 1 if the process is inactive
-                    await deployer.sleep(INTERVAL, `Ready. Waiting between operations`)
+                    await program.sleep(INTERVAL, `Ready. Waiting between operations`)
                 }
                 await lb.exec(`switch-webs --operators=all --webs=all --quiet`)
             }
