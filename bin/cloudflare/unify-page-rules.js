@@ -14,7 +14,7 @@ const zones = Object.keys(cfg.cloudflare.zones)
 let program = new Program(cfg.devops)
 
 program
-    .description('Unifying cloudflare configuration')
+    .description('Unifying cloudflare page rules')
     .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases. Available: ${zones}`, { choices: zones, required: true })
     .loop('zones')
 

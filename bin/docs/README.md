@@ -1,5 +1,6 @@
 # docs
-### generate
+### 
+Auto-generate README files with commands help
 ```
 node bin/docs/generate --help
 
@@ -14,6 +15,5 @@ Usage: generate [options]
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
-    -V, --version           output the version number
     -h, --help              output usage information
 ```

@@ -1,17 +1,18 @@
 ## Available programs:
 
 {{#each programs}}
-* [{{@key}}](#{{@key}})
+* **[{{name}}](#{{name}})**
     {{#each commands}}
-    * [{{@key}}](#cdn-{{@key}})
+    * **[{{name}}](#{{../name}}-{{name}})** {{#if shortDescription}}- {{shortDescription}}{{/if}}
     {{/each}}
 {{/each}}
 
 ## Help
 {{#each programs}}
-## <a name="{{@key}}"></a>{{@key}}
+## <a name="{{name}}"></a>{{name}}
     {{#each commands}}
-### {{@key}}
+### <a name="{{../name}}-{{name}}"></a>{{name}}
+{{description}}
 ```
 {{{usage}}}
 

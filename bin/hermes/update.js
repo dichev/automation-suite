@@ -21,7 +21,7 @@ const cfg = require('configurator')
 let program = new Program()
 
 program
-    .description('Checking current cloudflare configuration')
+    .description('Direct update of hermes release version')
     .option('-o, --operators <list|all>', `Comma-separated list of operators. Available: ${Object.keys(cfg.operators)}`, {choices: Object.keys(cfg.operators), required: true})
     .option('-r, --revision <string>', `Target revision (like r.3.9.9.0) or from..to revision (like r3.9.9.0..r3.9.9.1)`, {required: true})
     .option('-a, --allow-panel', `Allow QA access to GPanel`)

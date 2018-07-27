@@ -13,7 +13,7 @@ const cfg = require('configurator')
 let program = new Program()
 
 program
-    .description('Checking current cloudflare configuration')
+    .description('Allow QA access to gpanel')
     .option('-o, --operators <list|all>', `Comma-separated list of operators. Available: ${Object.keys(cfg.operators)}`, {choices: Object.keys(cfg.operators), required: true})
     .option('-m, --minutes <int>', 'Expire after defined minutes', { def: 15 })
     .option('-r, --role <string>', 'Define admin role', { choices: ['RT_QAPROD', 'EXT_Marketing'], def: 'RT_QAPROD' })

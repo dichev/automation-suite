@@ -16,7 +16,7 @@ const assert = require('assert')
 let program = new Program(cfg.devops)
 
 program
-    .description('Checking current cloudflare configuration')
+    .description('Check current cloudflare configuration')
     .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases. Available: ${zones}`, { choices: zones, required: true })
     .loop('zones')
 

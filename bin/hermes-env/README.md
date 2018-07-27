@@ -1,5 +1,6 @@
 # hermes-env
-### check
+### 
+
 ```
 node bin/hermes-env/check --help
 
@@ -12,12 +13,12 @@ Usage: check [options]
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
-    -V, --version           output the version number
     -e, --env <name>        [required] The target env name
     -l, --location <name>   [required] The target location
     -h, --help              output usage information
 ```
-### create
+### 
+
 ```
 node bin/hermes-env/create --help
 
@@ -30,12 +31,12 @@ Usage: create [options]
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
-    -V, --version           output the version number
     -e, --env <name>        [required] The target env name
     -l, --location <name>   [required] The target location
     -h, --help              output usage information
 ```
-### destroy
+### 
+
 ```
 node bin/hermes-env/destroy --help
 
@@ -48,12 +49,12 @@ Usage: destroy [options]
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
-    -V, --version           output the version number
     -e, --env <name>        [required] The target env name
     -l, --location <name>   [required] The target location
     -h, --help              output usage information
 ```
-### prepare
+### 
+
 ```
 node bin/hermes-env/prepare --help
 
@@ -66,7 +67,6 @@ Usage: prepare [options]
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
-    -V, --version           output the version number
     -e, --env <name>        [required] The target env name
     -l, --location <name>   [required] The target location
     -h, --help              output usage information

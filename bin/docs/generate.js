@@ -7,7 +7,7 @@
  */
 
 const Program = require('dopamine-toolbox').Program
-const promisify = require('util').promisify
+const inspect = require('util').inspect
 const fs = require('fs')
 const path = require('path')
 const Handlebars = require('handlebars')
@@ -40,10 +40,16 @@ program
             for(let command of commands[name]){
                 let cmd = `node bin/${name}/${command} --help`
                 console.log(cmd)
+                
+                let help = await shell.exec(cmd, {silent: true})
+                let [all, usage, description, options] = help.trim().match(/(Usage.+)\s([\s\S]+)(Options[\s\S]+)/).map(m => m.trim())
+                
                 data.programs[name].commands[command] = {
                     name: command,
+                    shortDescription: description.charAt(0).toLowerCase() + description.slice(1, 100),
+                    description: description,
                     usage: cmd,
-                    help: await shell.exec(cmd, {silent: true})
+                    help: help
                 }
             }
             const README = path.normalize(__dirname + `/../${name}/README.md`)
@@ -51,7 +57,7 @@ program
             console.log(`Generated: ${README}\n`)
             // break
         }
-        // console.log(data)
+        // console.log(inspect(data, {depth: 5, colors: true}))
         
         const README = path.normalize(__dirname + `/../README.md`)
         fs.writeFileSync(README, templates.main(data))

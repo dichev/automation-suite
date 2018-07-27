@@ -1,5 +1,6 @@
 # servers-conf
-### list-changes
+### 
+
 ```
 node bin/servers-conf/list-changes --help
 
@@ -12,11 +13,11 @@ Usage: list-changes [options]
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
-    -V, --version               output the version number
     -l, --locations <list|all>  [required] The target host name Available: dev,gib,manila,taiwan,pokerstars,iom,belgium
     -h, --help                  output usage information
 ```
-### update
+### 
+Auto update sever configurations by reloading one by one each server
 ```
 node bin/servers-conf/update --help
 
@@ -31,7 +32,6 @@ Usage: update [options]
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
-    -V, --version               output the version number
     -l, --locations <list|all>  [required] The target host name Available: dev,gib,manila,taiwan,pokerstars,iom,belgium
     -r, --rev <string>          Specify target git revision, very useful for rollback. Default reset to origin/master
     -i, --interval <int>        How many seconds to wait between each configuration switch. Default is 2

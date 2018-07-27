@@ -13,7 +13,7 @@ const cfg = require('configurator')
 let program = new Program()
 
 program
-    .description('Checking current cloudflare configuration')
+    .description('Check current hermes release versions')
     .option('-o, --operators <list|all>', `Comma-separated list of operators. Available: ${Object.keys(cfg.operators)}`, {choices: Object.keys(cfg.operators), required: true})
     .loop('operators')
     
