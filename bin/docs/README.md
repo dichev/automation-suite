@@ -2,14 +2,13 @@
 ### generate
 Auto-generate README files with commands help
 ```
-node bin/docs/generate --help
-
-  Usage: generate [options]
+  Usage: node bin/docs/generate [options]
 
   Auto-generate README files with commands help
 
   Options:
 
+  Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)

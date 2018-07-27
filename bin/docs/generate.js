@@ -42,14 +42,13 @@ program
                 console.log(cmd)
                 
                 let help = await shell.exec(cmd, {silent: true})
-                let [all, usage, description, options] = help.trim().match(/(Usage.+)\s([\s\S]+)(Options[\s\S]+)/).map(m => m.trim())
+                let [all, usage, description, options] = help.trim().match(/(Usage.+)\s([\s\S]+)( {2}Options[\s\S]+)/).map(m => m.trim())
                 
                 data.programs[name].commands[command] = {
                     name: command,
-                    shortDescription: description.charAt(0).toLowerCase() + description.slice(1, 100),
+                    shortDescription: description.charAt(0).toLowerCase() + description.slice(1, 100) + (description.length > 100 ? '..' : ''),
                     description: description,
-                    usage: cmd,
-                    help: '  '+help
+                    help: help.replace('Usage: node ', '  Usage: node bin/') // TODO: temporary
                 }
             }
             const README = path.normalize(__dirname + `/../${name}/README.md`)
