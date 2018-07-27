@@ -1,5 +1,5 @@
 # sys-metrics
-### 
+### check
 
 ```
 node bin/sys-metrics/check --help
@@ -16,7 +16,7 @@ node bin/sys-metrics/check --help
     -q, --quiet             Turn off chat and some logs in stdout
     -h, --help              output usage information
 ```
-### 
+### init
 Installing sys-metrics
 ```
 node bin/sys-metrics/init --help
@@ -35,7 +35,7 @@ node bin/sys-metrics/init --help
     -q, --quiet             Turn off chat and some logs in stdout
     -h, --help              output usage information
 ```
-### 
+### restart
 
 ```
 node bin/sys-metrics/restart --help
@@ -52,7 +52,7 @@ node bin/sys-metrics/restart --help
     -q, --quiet             Turn off chat and some logs in stdout
     -h, --help              output usage information
 ```
-### 
+### stop
 
 ```
 node bin/sys-metrics/stop --help
@@ -69,7 +69,7 @@ node bin/sys-metrics/stop --help
     -q, --quiet             Turn off chat and some logs in stdout
     -h, --help              output usage information
 ```
-### 
+### update
 Updating sys-metrics version
 ```
 node bin/sys-metrics/update --help

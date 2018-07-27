@@ -1,5 +1,5 @@
 # hermes-env
-### 
+### check
 
 ```
 node bin/hermes-env/check --help
@@ -17,7 +17,7 @@ node bin/hermes-env/check --help
     -q, --quiet             Turn off chat and some logs in stdout
     -h, --help              output usage information
 ```
-### 
+### create
 
 ```
 node bin/hermes-env/create --help
@@ -35,7 +35,7 @@ node bin/hermes-env/create --help
     -q, --quiet             Turn off chat and some logs in stdout
     -h, --help              output usage information
 ```
-### 
+### destroy
 
 ```
 node bin/hermes-env/destroy --help
@@ -53,7 +53,7 @@ node bin/hermes-env/destroy --help
     -q, --quiet             Turn off chat and some logs in stdout
     -h, --help              output usage information
 ```
-### 
+### prepare
 
 ```
 node bin/hermes-env/prepare --help

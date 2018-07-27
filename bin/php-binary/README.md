@@ -1,5 +1,5 @@
 # php-binary
-### 
+### check
 
 ```
 node bin/php-binary/check --help
@@ -16,7 +16,7 @@ node bin/php-binary/check --help
     -q, --quiet             Turn off chat and some logs in stdout
     -h, --help              output usage information
 ```
-### 
+### init
 
 ```
 node bin/php-binary/init --help

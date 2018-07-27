@@ -1,5 +1,5 @@
 # hermes
-### 
+### allow-panel-access
 Allow QA access to gpanel
 ```
 node bin/hermes/allow-panel-access --help
@@ -20,7 +20,7 @@ node bin/hermes/allow-panel-access --help
     -q, --quiet                 Turn off chat and some logs in stdout
     -h, --help                  output usage information
 ```
-### 
+### check
 Pre-deployment tests
 ```
 node bin/hermes/check --help
@@ -47,7 +47,7 @@ node bin/hermes/check --help
     node bin/hermes/check -o bots -r r3.9.9.1
     node bin/hermes/check -o bots -r r3.9.9.0..r3.9.9.1
 ```
-### 
+### update
 Direct update of hermes release version
 ```
 node bin/hermes/update --help
@@ -68,7 +68,7 @@ node bin/hermes/update --help
     -q, --quiet                 Turn off chat and some logs in stdout
     -h, --help                  output usage information
 ```
-### 
+### version
 Check current hermes release versions
 ```
 node bin/hermes/version --help

@@ -1,5 +1,5 @@
 # cdn
-### 
+### check
 Test suit of games cdn
 ```
 node bin/cdn/check --help
@@ -20,7 +20,7 @@ node bin/cdn/check --help
     -q, --quiet              Turn off chat and some logs in stdout
     -h, --help               output usage information
 ```
-### 
+### update
 Update games cdn
 ```
 node bin/cdn/update --help
@@ -41,7 +41,7 @@ node bin/cdn/update --help
     -q, --quiet              Turn off chat and some logs in stdout
     -h, --help               output usage information
 ```
-### 
+### version
 Checking current release version of games cdn
 ```
 node bin/cdn/version --help

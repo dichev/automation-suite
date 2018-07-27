@@ -1,5 +1,5 @@
 # docs
-### 
+### generate
 Auto-generate README files with commands help
 ```
 node bin/docs/generate --help

@@ -1,5 +1,5 @@
 # servers-conf
-### 
+### list-changes
 
 ```
 node bin/servers-conf/list-changes --help
@@ -16,7 +16,7 @@ node bin/servers-conf/list-changes --help
     -q, --quiet                 Turn off chat and some logs in stdout
     -h, --help                  output usage information
 ```
-### 
+### update
 Auto update sever configurations by reloading one by one each server
 ```
 node bin/servers-conf/update --help

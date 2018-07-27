@@ -1,5 +1,5 @@
 # cloudflare
-### 
+### check
 Check current cloudflare configuration
 ```
 node bin/cloudflare/check --help
@@ -18,7 +18,7 @@ node bin/cloudflare/check --help
     -q, --quiet             Turn off chat and some logs in stdout
     -h, --help              output usage information
 ```
-### 
+### get
 Get specific cloudflare configuration from all zones
 ```
 node bin/cloudflare/get --help
@@ -38,7 +38,7 @@ node bin/cloudflare/get --help
     -q, --quiet             Turn off chat and some logs in stdout
     -h, --help              output usage information
 ```
-### 
+### unify-page-rules
 Unifying cloudflare page rules
 ```
 node bin/cloudflare/unify-page-rules --help
@@ -57,7 +57,7 @@ node bin/cloudflare/unify-page-rules --help
     -q, --quiet             Turn off chat and some logs in stdout
     -h, --help              output usage information
 ```
-### 
+### unify-pages
 Unifying cloudflare custom pages
 ```
 node bin/cloudflare/unify-pages --help
@@ -76,7 +76,7 @@ node bin/cloudflare/unify-pages --help
     -q, --quiet             Turn off chat and some logs in stdout
     -h, --help              output usage information
 ```
-### 
+### unify-settings
 Unifying cloudflare custom settings
 ```
 node bin/cloudflare/unify-settings --help
