@@ -4,7 +4,8 @@
 ```
 node bin/php-binary/check --help
 
-Usage: check [options]
+
+  Usage: check --hosts <list|all> 
 
   Options:
 
@@ -21,7 +22,8 @@ Usage: check [options]
 ```
 node bin/php-binary/init --help
 
-Usage: init [options]
+
+  Usage: init --hosts <list|all> --phpversion <version> 
 
   Options:
 

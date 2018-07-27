@@ -4,7 +4,8 @@
 ```
 node bin/servers-conf/list-changes --help
 
-Usage: list-changes [options]
+
+  Usage: list-changes --locations <list|all> 
 
   Options:
 
@@ -21,7 +22,8 @@ Auto update sever configurations by reloading one by one each server
 ```
 node bin/servers-conf/update --help
 
-Usage: update [options]
+
+  Usage: update --locations <list|all> 
 
   Auto update sever configurations by reloading one by one each server
 

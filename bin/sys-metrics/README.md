@@ -4,7 +4,8 @@
 ```
 node bin/sys-metrics/check --help
 
-Usage: check [options]
+
+  Usage: check --hosts <list|all> 
 
   Options:
 
@@ -21,7 +22,8 @@ Installing sys-metrics
 ```
 node bin/sys-metrics/init --help
 
-Usage: init [options]
+
+  Usage: init --hosts <list> 
 
   Installing sys-metrics
 
@@ -40,7 +42,8 @@ Usage: init [options]
 ```
 node bin/sys-metrics/restart --help
 
-Usage: restart [options]
+
+  Usage: restart --hosts <list|all> 
 
   Options:
 
@@ -57,7 +60,8 @@ Usage: restart [options]
 ```
 node bin/sys-metrics/stop --help
 
-Usage: stop [options]
+
+  Usage: stop --hosts <list|all> 
 
   Options:
 
@@ -74,7 +78,8 @@ Updating sys-metrics version
 ```
 node bin/sys-metrics/update --help
 
-Usage: update [options]
+
+  Usage: update --hosts <list|all> --revision <tag> 
 
   Updating sys-metrics version
 

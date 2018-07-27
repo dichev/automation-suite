@@ -4,7 +4,8 @@
 ```
 node bin/vm-setup/known-hosts --help
 
-Usage: known-hosts [options]
+
+  Usage: known-hosts --hosts <list|all> 
 
   Options:
 

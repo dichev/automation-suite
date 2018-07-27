@@ -4,7 +4,8 @@ Auto-generate README files with commands help
 ```
 node bin/docs/generate --help
 
-Usage: generate [options]
+
+  Usage: generate [options]
 
   Auto-generate README files with commands help
 

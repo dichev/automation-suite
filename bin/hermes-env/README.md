@@ -4,7 +4,8 @@
 ```
 node bin/hermes-env/check --help
 
-Usage: check [options]
+
+  Usage: check --env <name> --location <name> 
 
   Options:
 
@@ -22,7 +23,8 @@ Usage: check [options]
 ```
 node bin/hermes-env/create --help
 
-Usage: create [options]
+
+  Usage: create --env <name> --location <name> 
 
   Options:
 
@@ -40,7 +42,8 @@ Usage: create [options]
 ```
 node bin/hermes-env/destroy --help
 
-Usage: destroy [options]
+
+  Usage: destroy --env <name> --location <name> 
 
   Options:
 
@@ -58,7 +61,8 @@ Usage: destroy [options]
 ```
 node bin/hermes-env/prepare --help
 
-Usage: prepare [options]
+
+  Usage: prepare --env <name> --location <name> 
 
   Options:
 

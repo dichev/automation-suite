@@ -44,7 +44,8 @@ Test suit of games cdn
 ```
 node bin/cdn/check --help
 
-Usage: check [options]
+
+  Usage: check --hosts <list|all> --mode <blue|green> 
 
   Test suit of games cdn
 
@@ -65,7 +66,8 @@ Update games cdn
 ```
 node bin/cdn/update --help
 
-Usage: update [options]
+
+  Usage: update --hosts <list|all> --mode <blue|green> 
 
   Update games cdn
 
@@ -86,7 +88,8 @@ Checking current release version of games cdn
 ```
 node bin/cdn/version --help
 
-Usage: version [options]
+
+  Usage: version --hosts <list|all> 
 
   Checking current release version of games cdn
 
@@ -107,7 +110,8 @@ Check current cloudflare configuration
 ```
 node bin/cloudflare/check --help
 
-Usage: check [options]
+
+  Usage: check --zones <list|all> 
 
   Check current cloudflare configuration
 
@@ -126,7 +130,8 @@ Get specific cloudflare configuration from all zones
 ```
 node bin/cloudflare/get --help
 
-Usage: get [options]
+
+  Usage: get --zones <list|all> 
 
   Get specific cloudflare configuration from all zones
 
@@ -146,7 +151,8 @@ Unifying cloudflare page rules
 ```
 node bin/cloudflare/unify-page-rules --help
 
-Usage: unify-page-rules [options]
+
+  Usage: unify-page-rules --zones <list|all> 
 
   Unifying cloudflare page rules
 
@@ -165,7 +171,8 @@ Unifying cloudflare custom pages
 ```
 node bin/cloudflare/unify-pages --help
 
-Usage: unify-pages [options]
+
+  Usage: unify-pages --zones <list|all> 
 
   Unifying cloudflare custom pages
 
@@ -184,7 +191,8 @@ Unifying cloudflare custom settings
 ```
 node bin/cloudflare/unify-settings --help
 
-Usage: unify-settings [options]
+
+  Usage: unify-settings --zones <list|all> 
 
   Unifying cloudflare custom settings
 
@@ -204,7 +212,8 @@ Auto-generate README files with commands help
 ```
 node bin/docs/generate --help
 
-Usage: generate [options]
+
+  Usage: generate [options]
 
   Auto-generate README files with commands help
 
@@ -223,7 +232,8 @@ Allow QA access to gpanel
 ```
 node bin/hermes/allow-panel-access --help
 
-Usage: allow-panel-access [options]
+
+  Usage: allow-panel-access --operators <list|all> 
 
   Allow QA access to gpanel
 
@@ -244,7 +254,8 @@ Pre-deployment tests
 ```
 node bin/hermes/check --help
 
-Usage: check [options]
+
+  Usage: check --operators <list|all> 
 
   Pre-deployment tests
 
@@ -256,15 +267,23 @@ Usage: check [options]
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
     -o, --operators <list|all>  [required] Comma-separated list of operators. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,williamhill,gvc,pop,gamesys,nektan,138global,aggfun,ugs2,ugs4,ugs3,ugs1,pokerstars Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,williamhill,gvc,pop,gamesys,nektan,138global,aggfun,ugs2,ugs4,ugs3,ugs1,pokerstars
-    -r, --revision <string>     Target revision (like r.3.9.9.0) or from..to revision (like r3.9.9.0..r3.9.9.1)
+    -r, --revision <string>     Target revision (like r.3.9.9.01) or from..to revision (like r3.9.9.0..r3.9.9.1)
     -h, --help                  output usage information
+
+  Example usage:
+
+    node bin/hermes/check --operators all -p 10
+    node bin/hermes/check -o bots,rtg
+    node bin/hermes/check -o bots -r r3.9.9.1
+    node bin/hermes/check -o bots -r r3.9.9.0..r3.9.9.1
 ```
 ### <a name="hermes-update"></a>update
 Direct update of hermes release version
 ```
 node bin/hermes/update --help
 
-Usage: update [options]
+
+  Usage: update --operators <list|all> --revision <string> 
 
   Direct update of hermes release version
 
@@ -285,7 +304,8 @@ Check current hermes release versions
 ```
 node bin/hermes/version --help
 
-Usage: version [options]
+
+  Usage: version --operators <list|all> 
 
   Check current hermes release versions
 
@@ -305,7 +325,8 @@ Usage: version [options]
 ```
 node bin/hermes-env/check --help
 
-Usage: check [options]
+
+  Usage: check --env <name> --location <name> 
 
   Options:
 
@@ -323,7 +344,8 @@ Usage: check [options]
 ```
 node bin/hermes-env/create --help
 
-Usage: create [options]
+
+  Usage: create --env <name> --location <name> 
 
   Options:
 
@@ -341,7 +363,8 @@ Usage: create [options]
 ```
 node bin/hermes-env/destroy --help
 
-Usage: destroy [options]
+
+  Usage: destroy --env <name> --location <name> 
 
   Options:
 
@@ -359,7 +382,8 @@ Usage: destroy [options]
 ```
 node bin/hermes-env/prepare --help
 
-Usage: prepare [options]
+
+  Usage: prepare --env <name> --location <name> 
 
   Options:
 
@@ -378,7 +402,8 @@ Usage: prepare [options]
 ```
 node bin/php-binary/check --help
 
-Usage: check [options]
+
+  Usage: check --hosts <list|all> 
 
   Options:
 
@@ -395,7 +420,8 @@ Usage: check [options]
 ```
 node bin/php-binary/init --help
 
-Usage: init [options]
+
+  Usage: init --hosts <list|all> --phpversion <version> 
 
   Options:
 
@@ -414,7 +440,8 @@ Usage: init [options]
 ```
 node bin/servers-conf/list-changes --help
 
-Usage: list-changes [options]
+
+  Usage: list-changes --locations <list|all> 
 
   Options:
 
@@ -431,7 +458,8 @@ Auto update sever configurations by reloading one by one each server
 ```
 node bin/servers-conf/update --help
 
-Usage: update [options]
+
+  Usage: update --locations <list|all> 
 
   Auto update sever configurations by reloading one by one each server
 
@@ -457,7 +485,8 @@ Usage: update [options]
 ```
 node bin/sys-metrics/check --help
 
-Usage: check [options]
+
+  Usage: check --hosts <list|all> 
 
   Options:
 
@@ -474,7 +503,8 @@ Installing sys-metrics
 ```
 node bin/sys-metrics/init --help
 
-Usage: init [options]
+
+  Usage: init --hosts <list> 
 
   Installing sys-metrics
 
@@ -493,7 +523,8 @@ Usage: init [options]
 ```
 node bin/sys-metrics/restart --help
 
-Usage: restart [options]
+
+  Usage: restart --hosts <list|all> 
 
   Options:
 
@@ -510,7 +541,8 @@ Usage: restart [options]
 ```
 node bin/sys-metrics/stop --help
 
-Usage: stop [options]
+
+  Usage: stop --hosts <list|all> 
 
   Options:
 
@@ -527,7 +559,8 @@ Updating sys-metrics version
 ```
 node bin/sys-metrics/update --help
 
-Usage: update [options]
+
+  Usage: update --hosts <list|all> --revision <tag> 
 
   Updating sys-metrics version
 
@@ -548,7 +581,8 @@ Usage: update [options]
 ```
 node bin/vm-setup/known-hosts --help
 
-Usage: known-hosts [options]
+
+  Usage: known-hosts --hosts <list|all> 
 
   Options:
 

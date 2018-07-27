@@ -1,14 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 
-/**
- * Usage:
- * $ node bin/hermes/check --operators all -p 10
- * $ node bin/hermes/check -o bots,rtg
- * $ node bin/hermes/check -o bots -r r3.9.9.1
- * $ node bin/hermes/check -o bots -r r3.9.9.0..r3.9.9.1
- */
-
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 const compare = require('node-version-compare');
@@ -21,7 +13,13 @@ let program = new Program()
 program
     .description('Pre-deployment tests')
     .option('-o, --operators <list|all>', `Comma-separated list of operators. Available: ${Object.keys(cfg.operators)}`, {choices: Object.keys(cfg.operators), required: true})
-    .option('-r, --revision <string>', `Target revision (like r.3.9.9.0) or from..to revision (like r3.9.9.0..r3.9.9.1)`)
+    .option('-r, --revision <string>', `Target revision (like r.3.9.9.01) or from..to revision (like r3.9.9.0..r3.9.9.1)`)
+    .example(`
+         node bin/hermes/check --operators all -p 10
+         node bin/hermes/check -o bots,rtg
+         node bin/hermes/check -o bots -r r3.9.9.1
+         node bin/hermes/check -o bots -r r3.9.9.0..r3.9.9.1
+    `)
     .loop('operators')
     
     .run(async (operator) => {

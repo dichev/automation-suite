@@ -49,7 +49,7 @@ program
                     shortDescription: description.charAt(0).toLowerCase() + description.slice(1, 100),
                     description: description,
                     usage: cmd,
-                    help: help
+                    help: '  '+help
                 }
             }
             const README = path.normalize(__dirname + `/../${name}/README.md`)
