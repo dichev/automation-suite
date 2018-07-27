@@ -41,13 +41,13 @@ program
         let cdn = await program.ssh(cfg.getHost(host).ip, 'dopamine')
         await cdn.chdir(DEST)
         await cdn.exec('git fetch --prune origin --quiet')
-        await cdn.exec(`git checkout --quiet --force -B master ${REV}`)
+        await cdn.exec(`git reset --hard --quiet ${REV}`)
         console.info(`The version is switched to ${REV}`)
 
         
         // Populate
-        await chat.notify('\nPhase 2: Populate files')
-        console.info('To populate the changes to the other webs, you should use: \n  $ deployer populate [arguments]')
+        await chat.notify('\nPhase 2: Cachebust html assets')
+        console.info(`use: \n  $ node cdn/cachebust  --hosts ${host} --mode ${mode} --revision ${REV}`)
         
 
     })
