@@ -13,8 +13,8 @@ Usage: check [options]
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
     -V, --version           output the version number
-    -e, --env &lt;name&gt;        [required] The target env name
-    -l, --location &lt;name&gt;   [required] The target location
+    -e, --env <name>        [required] The target env name
+    -l, --location <name>   [required] The target location
     -h, --help              output usage information
 ```
 ### create
@@ -31,8 +31,8 @@ Usage: create [options]
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
     -V, --version           output the version number
-    -e, --env &lt;name&gt;        [required] The target env name
-    -l, --location &lt;name&gt;   [required] The target location
+    -e, --env <name>        [required] The target env name
+    -l, --location <name>   [required] The target location
     -h, --help              output usage information
 ```
 ### destroy
@@ -49,8 +49,8 @@ Usage: destroy [options]
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
     -V, --version           output the version number
-    -e, --env &lt;name&gt;        [required] The target env name
-    -l, --location &lt;name&gt;   [required] The target location
+    -e, --env <name>        [required] The target env name
+    -l, --location <name>   [required] The target location
     -h, --help              output usage information
 ```
 ### prepare
@@ -67,7 +67,7 @@ Usage: prepare [options]
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
     -V, --version           output the version number
-    -e, --env &lt;name&gt;        [required] The target env name
-    -l, --location &lt;name&gt;   [required] The target location
+    -e, --env <name>        [required] The target env name
+    -l, --location <name>   [required] The target location
     -h, --help              output usage information
 ```

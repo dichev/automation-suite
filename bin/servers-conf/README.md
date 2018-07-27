@@ -13,7 +13,7 @@ Usage: list-changes [options]
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
     -V, --version               output the version number
-    -l, --locations &lt;list|all&gt;  [required] The target host name Available: dev,gib,manila,taiwan,pokerstars,iom,belgium
+    -l, --locations <list|all>  [required] The target host name Available: dev,gib,manila,taiwan,pokerstars,iom,belgium
     -h, --help                  output usage information
 ```
 ### update
@@ -32,9 +32,9 @@ Usage: update [options]
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
     -V, --version               output the version number
-    -l, --locations &lt;list|all&gt;  [required] The target host name Available: dev,gib,manila,taiwan,pokerstars,iom,belgium
-    -r, --rev &lt;string&gt;          Specify target git revision, very useful for rollback. Default reset to origin/master
-    -i, --interval &lt;int&gt;        How many seconds to wait between each configuration switch. Default is 2
+    -l, --locations <list|all>  [required] The target host name Available: dev,gib,manila,taiwan,pokerstars,iom,belgium
+    -r, --rev <string>          Specify target git revision, very useful for rollback. Default reset to origin/master
+    -i, --interval <int>        How many seconds to wait between each configuration switch. Default is 2
     -f, --force                 Skip manual changes validations and proceed on your risk
     --no-wait                   Skip waiting for active php processes to end and other safety delays. WARNING: this will break current php processes in the middle of their execution causing strange errors.
     --only-nginx                Update all configurations but restarts only the nginx service (so php-fpm will be not updated)
