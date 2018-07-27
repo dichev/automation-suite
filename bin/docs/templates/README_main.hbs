@@ -1,0 +1,21 @@
+## Available programs:
+
+{{#each programs}}
+* [{{@key}}](#{{@key}})
+    {{#each commands}}
+    * [{{@key}}](#cdn-{{@key}})
+    {{/each}}
+{{/each}}
+
+## Help
+{{#each programs}}
+## <a name="{{@key}}"></a>{{@key}}
+    {{#each commands}}
+### {{@key}}
+```
+{{usage}}
+
+{{help}}
+```
+    {{/each}}
+{{/each}}

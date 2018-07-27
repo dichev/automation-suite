@@ -1,0 +1,59 @@
+#!/usr/bin/env node
+'use strict';
+
+/**
+ * Usage:
+ * $ node bin/docs/generate
+ */
+
+const Program = require('dopamine-toolbox').Program
+const promisify = require('util').promisify
+const fs = require('fs')
+const path = require('path')
+const Handlebars = require('handlebars')
+
+const templates = {
+    main: Handlebars.compile(fs.readFileSync(__dirname + '/templates/README_main.hbs').toString()),
+    program: Handlebars.compile(fs.readFileSync(__dirname + '/templates/README_program.hbs').toString()),
+}
+
+let program = new Program()
+
+program
+    .description('Auto-generate README files with commands help')
+
+    .run(async () => {
+        const shell = program.shell()
+        
+        let base = path.normalize(__dirname + '/..')
+        let programs = fs.readdirSync(base).filter(file => fs.lstatSync(base + '/' + file).isDirectory())
+        let commands = {}
+        for(let name of programs){
+            commands[name] = fs.readdirSync(base + '/' + name).filter(file => file.endsWith('.js')).map(file => file.substring(0, file.length-3))
+        }
+        
+    
+        let data = { programs: {} }
+        
+        for(let name of programs){
+            data.programs[name] = { name: name, commands: {} }
+            for(let command of commands[name]){
+                let cmd = `node bin/${name}/${command} --help`
+                console.log(cmd)
+                data.programs[name].commands[command] = {
+                    name: command,
+                    usage: cmd,
+                    help: await shell.exec(cmd, {silent: true})
+                }
+            }
+            const README = path.normalize(__dirname + `/../${name}/README.md`)
+            fs.writeFileSync(README, templates.program(data.programs[name]))
+            console.log(`Generated: ${README}\n`)
+            // break
+        }
+        // console.log(data)
+        
+        const README = path.normalize(__dirname + `/../README.md`)
+        fs.writeFileSync(README, templates.main(data))
+        console.log(`Generated: ${README}\n`)
+    })

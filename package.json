@@ -4,11 +4,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev-links": "npm link dopamine-toolbox && npm link configurator"
+    "dev-links": "npm link dopamine-toolbox && npm link configurator",
+    "docs": "node bin/docs/generate"
   },
   "dependencies": {
     "configurator": "git+ssh://git@gitlab.dopamine.bg:devops/configurator.git",
     "dopamine-toolbox": "git+ssh://git@gitlab.dopamine.bg:devops/toolbox.git",
+    "handlebars": "^4.0.11",
     "node-version-compare": "^1.0.1"
   }
 }
