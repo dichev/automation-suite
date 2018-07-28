@@ -15,7 +15,7 @@ let program = new Program()
 
 program
     .description('Update games cdn')
-    .option('-h, --hosts <list|all>', `Comma-separated list of cdn regions. Available: ${installed.hosts}`, {choices: installed.hosts, required: true})
+    .option('-h, --hosts <list|all>', `Comma-separated list of cdn regions`, {choices: installed.hosts, required: true})
     .option('-r, --revision <string>', `Target revision (like r.3.9.9.0)`)
     .option('-m, --mode <blue|green>', `Which cdn to by updated`, { choices: ['blue', 'green'], required: true })
     .loop('hosts')

@@ -5,7 +5,7 @@
   Usage: node bin/servers-conf/list-changes --locations <list|all> 
 
   Options:
-    -l, --locations <list|all>  [required] The target host name Available: dev,gib,manila,taiwan,pokerstars,iom,belgium
+    -l, --locations <list|all>  [required] The target host name. Available: dev,gib,manila,taiwan,pokerstars,iom,belgium
 
   Additional Options:
     -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -23,7 +23,7 @@ Auto update sever configurations by reloading one by one each server
   Auto update sever configurations by reloading one by one each server
 
   Options:
-    -l, --locations <list|all>  [required] The target host name Available: dev,gib,manila,taiwan,pokerstars,iom,belgium
+    -l, --locations <list|all>  [required] The target host name. Available: dev,gib,manila,taiwan,pokerstars,iom,belgium
     -r, --rev <string>          Specify target git revision, very useful for rollback. Default reset to origin/master
     -i, --interval <int>        How many seconds to wait between each configuration switch. Default is 2
     -f, --force                 Skip manual changes validations and proceed on your risk

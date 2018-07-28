@@ -1,11 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 
-/**
- * Usage:
- * $
- */
-
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 
@@ -14,17 +9,17 @@ let program = new Program({chat: cfg.chat.rooms.test})
 
 program
     .description('Direct update of hermes release version')
-    .option('-o, --operators <list|all>', `Comma-separated list of operators. Available: ${Object.keys(cfg.operators)}`, {choices: Object.keys(cfg.operators), required: true})
+    .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators), required: true})
     .option('-r, --rev <string>', `Target revision (like r.3.9.9.0) or from..to revision (like r3.9.9.0..r3.9.9.1)`, {required: true})
     .option('-s, --strategy <direct|blue-green>', `Choose deployment strategy`, { def: 'blue-green', choices: ['direct', 'blue-green'] })
-    .option('-a, --allow-panel', `Allow QA access to GPanel`)
+    .option('--allow-panel', `Allow QA access to GPanel`)
     .example(`
         node bin/hermes/update --operators bots --rev r3.9.9.1 --strategy blue-green --allow-panel --force
     `)
     .loop('operators')
     
     .run(async (operator) => {
-        if (operator !== 'bots') throw Error('This script is not production ready, so is allowed only for the "bots" env')
+        if (operator !== 'bots' && operator !== 'rtg') throw Error('This script is not production ready, so is allowed only for the "bots|rtg" env')
         if (program.params.parallel) throw Error(`Currently the command doesn't support parallel mode for safety reasons`)
     
         const location = cfg.getLocationByOperator(operator);

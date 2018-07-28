@@ -15,7 +15,7 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
     .description('Unifying cloudflare custom settings')
-    .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases. Available: ${zones}`, { choices: zones, required: true })
+    .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases`, { choices: zones, required: true })
     .loop('zones')
 
     .run(async (zone) => {

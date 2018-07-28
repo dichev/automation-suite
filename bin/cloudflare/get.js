@@ -16,7 +16,7 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
     .description('Get specific cloudflare configuration from all zones')
-    .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases. Available: ${zones}`, { choices: zones, required: true })
+    .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases`, { choices: zones, required: true })
     .option('-u, --url <string>', `Cloudflare url without the zone part`, { def: 'settings/security_level' })
     .loop('zones')
 

@@ -7,9 +7,9 @@ Test suit of games cdn
   Test suit of games cdn
 
   Options:
-    -h, --hosts <list|all>   [required] Comma-separated list of cdn regions. Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup
+    -h, --hosts <list|all>   [required] Comma-separated list of cdn regions. Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup
     -r, --revision <string>  Target revision (like r.3.9.9.0)
-    -m, --mode <blue|green>  [required] Which cdn to by updated Available: blue,green
+    -m, --mode <blue|green>  [required] Which cdn to by updated. Available: blue,green
 
   Additional Options:
     -p, --parallel [limit]   When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -27,9 +27,9 @@ Update games cdn
   Update games cdn
 
   Options:
-    -h, --hosts <list|all>   [required] Comma-separated list of cdn regions. Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup
+    -h, --hosts <list|all>   [required] Comma-separated list of cdn regions. Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup
     -r, --revision <string>  Target revision (like r.3.9.9.0)
-    -m, --mode <blue|green>  [required] Which cdn to by updated Available: blue,green
+    -m, --mode <blue|green>  [required] Which cdn to by updated. Available: blue,green
 
   Additional Options:
     -p, --parallel [limit]   When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -47,8 +47,8 @@ Checking current release version of games cdn
   Checking current release version of games cdn
 
   Options:
-    -h, --hosts <list|all>   [required] Comma-separated list of cdn regions. Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup
-    -m, --mode <blue|green>  Which cdn to by checked. By default will check both Available: blue,green
+    -h, --hosts <list|all>   [required] Comma-separated list of cdn regions. Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup
+    -m, --mode <blue|green>  Which cdn to by checked. By default will check both. Available: blue,green
 
   Additional Options:
     -p, --parallel [limit]   When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
