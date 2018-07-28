@@ -19,7 +19,7 @@ const read = (path) => fs.readFileSync(path).toString()
 const TEMPLATES = "d:/www/servers/template-generator" // TODO: temporary
 
 
-let program = new Program(cfg.devops)
+let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
     .option('-e, --env <name>', 'The target env name', { required: true })

@@ -13,7 +13,7 @@ const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 
 
-let program = new Program(cfg.devops)
+let program = new Program({ chat: cfg.chat.rooms.devops })
 program
     // .usage('[--rev <string> --interval <int> --force --only-nginx --no-wait --with-nginx-upgrade]')
     .description('Auto update sever configurations by reloading one by one each server')

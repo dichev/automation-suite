@@ -12,7 +12,7 @@ const installed = require('./.installed.json')
 const fs = require('fs')
 const cfg = require('configurator')
 
-let program = new Program(cfg.devops)
+let program = new Program({ chat: cfg.chat.rooms.devops })
 
 
 program

@@ -9,7 +9,7 @@
 
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
-let program = new Program(cfg.devops)
+let program = new Program({ chat: cfg.chat.rooms.devops })
 
 
 program

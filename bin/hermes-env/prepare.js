@@ -17,7 +17,7 @@ const log = console.log
 // Configuration
 const TEMPLATES = "d:/www/servers/template-generator"
 
-let program = new Program(cfg.devops)
+let program = new Program({ chat: cfg.chat.rooms.devops })
 
 
 program

@@ -13,7 +13,7 @@ const zones = Object.keys(cfg.cloudflare.zones)
 const assert = require('assert')
 
 
-let program = new Program(cfg.devops)
+let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
     .description('Check current cloudflare configuration')

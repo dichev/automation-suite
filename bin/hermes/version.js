@@ -1,19 +1,18 @@
 #!/usr/bin/env node
 'use strict';
 
-/**
- * Usage:
- * $ node bin/hermes/version --operators all -p 10
- */
-
+const Usage = `
+    $ node bin/hermes/version --operators all -p 10
+`
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 
 
-let program = new Program()
+let program = new Program({ chat: cfg.chat.rooms.test })
 
 program
     .description('Check current hermes release versions')
+    .example(Usage)
     .option('-o, --operators <list|all>', `Comma-separated list of operators. Available: ${Object.keys(cfg.operators)}`, {choices: Object.keys(cfg.operators), required: true})
     .loop('operators')
     

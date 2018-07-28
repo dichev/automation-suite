@@ -11,7 +11,7 @@ const cfg = require('configurator')
 const CloudFlare = require('dopamine-toolbox').plugins.CloudFlare
 const zones = Object.keys(cfg.cloudflare.zones)
 
-let program = new Program(cfg.devops)
+let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
     .description('Unifying cloudflare custom pages')
