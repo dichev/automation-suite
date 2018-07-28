@@ -26,11 +26,10 @@ program
     .option('--only-nginx', 'Update all configurations but restarts only the nginx service (so php-fpm will be not updated)')
     .option('--with-nginx-upgrade', 'Update all configurations but restarts only the nginx service USING UPGRADE method (so php-fpm will be not updated)')
     
-    .loop('locations')
-
+    
 
 program
-    .run(async (location) => {
+    .iterate('locations', async (location) => {
         const params = program.params
         const INTERVAL = params.interval !== undefined ? parseInt(params.interval) : 2
         const REVISION = params.rev || 'origin/master'

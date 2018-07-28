@@ -16,9 +16,8 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 program
     .description('Unifying cloudflare custom pages')
     .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases`, { choices: zones, required: true })
-    .loop('zones')
-
-    .run(async (zone) => {
+    
+    .iterate('zones', async (zone) => {
     
         const z = cfg.cloudflare.zones[zone]
         let cf = new CloudFlare(z.zone, z.email, z.key)

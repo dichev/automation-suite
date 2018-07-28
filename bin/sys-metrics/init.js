@@ -18,10 +18,9 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 program
     .description('Installing sys-metrics')
     .option('-h, --hosts <list>', 'The target host names', {required: true})
-    .loop('hosts')
-    // .save('./installed')
+        // .save('./installed')
 
-    .run(async (host) => {
+    .iterate('hosts', async (host) => {
         if(installed.hosts.includes(host)) throw Error(`This host ${host} is already installed`)
 
         let ssh = await program.ssh(cfg.getHost(host).ip, 'root')

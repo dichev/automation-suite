@@ -14,9 +14,8 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
     .option('-h, --hosts <list|all>', 'The target host names', { choices: Object.keys(cfg.hosts), required: true })
-    .loop('hosts')
-
-    .run(async (host) => {
+    
+    .iterate('hosts', async (host) => {
         let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
         console.log(`Adding gitlab.dopamine.bg to root user`)

@@ -14,9 +14,8 @@ program
     .description('Check current hermes release versions')
     .example(Usage)
     .option('-o, --operators <list|all>', `Comma-separated list of operators}`, {choices: Object.keys(cfg.operators), required: true})
-    .loop('operators')
     
-    .run(async (operator) => {
+    .iterate('operators', async (operator) => {
         const location = cfg.getLocationByOperator(operator)
         const DEST = 'production/' + cfg.operators[operator].dir
         

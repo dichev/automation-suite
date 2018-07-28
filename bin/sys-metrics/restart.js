@@ -16,9 +16,8 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
     .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts, required: true })
-    .loop('hosts')
-
-    .run(async (host) => {
+    
+    .iterate('hosts', async (host) => {
         let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
         
         await ssh.chdir('/opt/dopamine/sys-metrics')

@@ -17,9 +17,8 @@ program
     .description('Updating sys-metrics version')
     .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts, required: true })
     .option('-r, --revision <tag>', 'The target version as tag name', {required: true})
-    .loop('hosts')
-
-    .run(async (host) => {
+    
+    .iterate('hosts', async (host) => {
 
         let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
         

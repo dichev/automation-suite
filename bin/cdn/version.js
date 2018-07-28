@@ -17,9 +17,8 @@ program
     .description('Checking current release version of games cdn')
     .option('-h, --hosts <list|all>', `Comma-separated list of cdn regions`, {choices: installed.hosts, required: true})
     .option('-m, --mode <blue|green>', `Which cdn to by checked. By default will check both`, {choices: ['blue', 'green']})
-    .loop('hosts')
     
-    .run(async (host) => {
+    .iterate('hosts', async (host) => {
         const modes = program.params.mode ? [program.params.mode] : ['blue', 'green']
         
         let cdn = await program.ssh(cfg.getHost(host).ip, 'dopamine')

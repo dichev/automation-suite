@@ -20,9 +20,8 @@ program
          node bin/hermes/check -o bots -r r3.9.9.1
          node bin/hermes/check -o bots -r r3.9.9.0..r3.9.9.1
     `)
-    .loop('operators')
     
-    .run(async (operator) => {
+    .iterate('operators', async (operator) => {
         const location = cfg.getLocationByOperator(operator);
         const DEST = 'production/' + cfg.operators[operator].dir
         const REVS = program.params.rev

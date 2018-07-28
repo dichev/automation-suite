@@ -17,9 +17,8 @@ program
     
     .option('-h, --hosts <list|all>', 'The target host name', {choices: installed.hosts, required: true})
     .option('-p, --phpversion <version>', 'The php version number', {choices: installed.versions, def: installed.version, required: true})
-    .loop('hosts')
     
-    .run(async (host) => {
+    .iterate('hosts', async (host) => {
         
         let h = cfg.hosts[host]
         let hostsList = cfg.locations[h.location].hosts

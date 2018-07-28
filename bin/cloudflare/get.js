@@ -18,9 +18,8 @@ program
     .description('Get specific cloudflare configuration from all zones')
     .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases`, { choices: zones, required: true })
     .option('-u, --url <string>', `Cloudflare url without the zone part`, { def: 'settings/security_level' })
-    .loop('zones')
-
-    .run(async (zone) => {
+    
+    .iterate('zones', async (zone) => {
         
         const z = cfg.cloudflare.zones[zone]
         let cf = new CloudFlare(z.zone, z.email, z.key)

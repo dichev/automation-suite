@@ -16,9 +16,8 @@ program
     .example(`
         node bin/hermes/update --operators bots --rev r3.9.9.1 --strategy blue-green --allow-panel --force
     `)
-    .loop('operators')
     
-    .run(async (operator) => {
+    .iterate('operators', async (operator) => {
         if (operator !== 'bots' && operator !== 'rtg') throw Error('This script is not production ready, so is allowed only for the "bots|rtg" env')
         if (program.params.parallel) throw Error(`Currently the command doesn't support parallel mode for safety reasons`)
     
@@ -55,8 +54,8 @@ program
             await web1.exec('git fetch --prune origin --quiet')
             await web1.exec(`git reset --hard --quiet ${to}`)
             console.info(`The version is switched to ${to}`)
-    
-    
+            
+            
             // Populate to the other webs
             await chat.notify(`\nPhase 2: update code to all other webs (public)`)
             await program.confirm(`Continue (yes)?`)
