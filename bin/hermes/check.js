@@ -13,7 +13,7 @@ let program = new Program({chat: cfg.chat.rooms.test})
 program
     .description('Pre-deployment tests')
     .option('-o, --operators <list|all>', `Comma-separated list of operators. Available: ${Object.keys(cfg.operators)}`, {choices: Object.keys(cfg.operators), required: true})
-    .option('-r, --revision <string>', `Target revision (like r.3.9.9.01) or from..to revision (like r3.9.9.0..r3.9.9.1)`)
+    .option('-r, --rev <string>', `Target revision (like r.3.9.9.01) or from..to revision (like r3.9.9.0..r3.9.9.1)`)
     .example(`
          node bin/hermes/check --operators all -p 10
          node bin/hermes/check -o bots,rtg
@@ -25,7 +25,7 @@ program
     .run(async (operator) => {
         const location = cfg.getLocationByOperator(operator);
         const DEST = 'production/' + cfg.operators[operator].dir
-        const REVS = program.params.revision
+        const REVS = program.params.rev
         const [from, to] = REVS && REVS.includes('..') ? REVS.split('..') : [null, REVS]
         
         let web1 = await program.ssh(location.hosts.web1, 'dopamine')
