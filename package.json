@@ -1,11 +1,11 @@
 {
-  "name": "dopamine-deploy",
+  "name": "dopamine-automation",
   "description": "Store all dopamine deployment scripts, programs and commands",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev-links": "npm link dopamine-toolbox && npm link configurator",
-    "docs": "node bin/docs/generate"
+    "docs": "node docs/generate --groups all"
   },
   "dependencies": {
     "configurator": "git+ssh://git@gitlab.dopamine.bg:devops/configurator.git",
