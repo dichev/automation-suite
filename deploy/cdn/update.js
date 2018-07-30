@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/cdn/update --hosts dev-hermes-lb --mode blue --revision r4.8.233
+ * $ node deploy/cdn/update --hosts dev-hermes-lb --mode blue --revision r4.8.233
  */
 
 const Program = require('dopamine-toolbox').Program
@@ -31,8 +31,8 @@ program
         
         // Prepare
         await chat.notify('\nPhase 0: Pre-deploy validations')
-        await shell.exec(`node bin/cdn/version --quiet --hosts ${host} --mode ${MODE}`)
-        await shell.exec(`node bin/cdn/check   --quiet --hosts ${host} --mode ${MODE} --revision ${REV}`)
+        await shell.exec(`node deploy/cdn/version --quiet --hosts ${host} --mode ${MODE}`)
+        await shell.exec(`node deploy/cdn/check   --quiet --hosts ${host} --mode ${MODE} --revision ${REV}`)
         
         
         // Update cdn files

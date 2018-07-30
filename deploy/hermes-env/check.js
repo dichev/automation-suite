@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/hermes-env/check --env rtg --location belgium
+ * $ node deploy/hermes-env/check --env rtg --location belgium
  */
 
 

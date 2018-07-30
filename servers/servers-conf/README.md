@@ -2,7 +2,7 @@
 ### list-changes
 
 ```
-  Usage: node bin/servers-conf/list-changes --locations <list|all> 
+  Usage: node servers/servers-conf/list-changes --locations <list|all> 
 
   Options:
     -l, --locations <list|all>  [required] The target host name. Available: dev,gib,manila,taiwan,pokerstars,iom,belgium
@@ -18,7 +18,7 @@
 ### update
 Auto update sever configurations by reloading one by one each server
 ```
-  Usage: node bin/servers-conf/update --locations <list|all> 
+  Usage: node servers/servers-conf/update --locations <list|all> 
 
   Auto update sever configurations by reloading one by one each server
 

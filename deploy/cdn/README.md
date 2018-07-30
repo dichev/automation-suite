@@ -2,7 +2,7 @@
 ### check
 Test suit of games cdn
 ```
-  Usage: node bin/cdn/check --hosts <list|all> --mode <blue|green> 
+  Usage: node deploy/cdn/check --hosts <list|all> --mode <blue|green> 
 
   Test suit of games cdn
 
@@ -22,7 +22,7 @@ Test suit of games cdn
 ### update
 Update games cdn
 ```
-  Usage: node bin/cdn/update --hosts <list|all> --mode <blue|green> 
+  Usage: node deploy/cdn/update --hosts <list|all> --mode <blue|green> 
 
   Update games cdn
 
@@ -42,7 +42,7 @@ Update games cdn
 ### version
 Checking current release version of games cdn
 ```
-  Usage: node bin/cdn/version --hosts <list|all> 
+  Usage: node deploy/cdn/version --hosts <list|all> 
 
   Checking current release version of games cdn
 

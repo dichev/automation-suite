@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/sys-metrics/check --hosts all --revision v3.2.5
+ * $ node deploy/sys-metrics/check --hosts all --revision v3.2.5
  */
 
 

@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/hermes/allow-panel-access --operators rtg --minutes=15 --role=RT_QAPROD
+ * $ node deploy/hermes/allow-panel-access --operators rtg --minutes=15 --role=RT_QAPROD
  */
 
 const Program = require('dopamine-toolbox').Program

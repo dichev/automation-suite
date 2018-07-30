@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/cloudflare/get --zones all --url settings/ipv6
+ * $ node servers/cloudflare/get --zones all --url settings/ipv6
  */
 
 const Program = require('dopamine-toolbox').Program

@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/hermes-env/create --env bots --location belgium
+ * $ node deploy/hermes-env/create --env bots --location belgium
  */
 
 
@@ -39,7 +39,7 @@ program
         
         
         // Preparations
-        log(`Before the deploy you must prepare all configurations using:\n $ node bin/hermes-env/prepare --env ${OPERATOR} --location ${LOCATION}`)
+        log(`Before the deploy you must prepare all configurations using:\n $ node deploy/hermes-env/prepare --env ${OPERATOR} --location ${LOCATION}`)
         await program.confirm('Have you prepared them (yes)? ')
         // TODO check if they exists
 
@@ -94,10 +94,10 @@ program
         log('\nUpdate system configurations')
         log('This could affect the other envs if the setup is incorrect.')
         await program.confirm('DANGER! Are you sure you want to continue (yes)? ')
-        await shell.exec(`node bin/servers-conf/update --locations ${LOCATION}`)
+        await shell.exec(`node deploy/servers-conf/update --locations ${LOCATION}`)
     
         // Checkers & tests
-        await shell.exec(`node bin/hermes-env/check --env ${OPERATOR} --location ${LOCATION}`)
+        await shell.exec(`node deploy/hermes-env/check --env ${OPERATOR} --location ${LOCATION}`)
         
         
     

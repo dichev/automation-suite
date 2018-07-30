@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/servers-conf/list-changes --locations all
+ * $ node servers/servers-conf/list-changes --locations all
  */
 
 const Program = require('dopamine-toolbox').Program

@@ -11,9 +11,9 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 program
     .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts, required: true })
     .example(`
-        node bin/sys-metrics/check --hosts dev-hermes-web1,dev-hermes-web2
-        node bin/sys-metrics/check --hosts dev-hermes-*
-        node bin/sys-metrics/check --hosts all
+        node deploy/sys-metrics/check --hosts dev-hermes-web1,dev-hermes-web2
+        node deploy/sys-metrics/check --hosts dev-hermes-*
+        node deploy/sys-metrics/check --hosts all
     `)
     .parse()
 

@@ -3,8 +3,8 @@
 
 /**
  * Usage:
- * $ node bin/sys-metrics/stop --hosts dev-hermes-web1,dev-hermes-web2
- * $ node bin/sys-metrics/stop --hosts all
+ * $ node deploy/sys-metrics/stop --hosts dev-hermes-web1,dev-hermes-web2
+ * $ node deploy/sys-metrics/stop --hosts all
  */
 
 

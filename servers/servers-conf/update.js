@@ -3,10 +3,10 @@
 
 /**
  * Usage:
- * $ node bin/servers-conf/update --locations=belgium
- * $ node bin/servers-conf/update --locations=belgium --only-nginx
- * $ node bin/servers-conf/update --locations=belgium --rev=426c9217
- * $ node bin/servers-conf/update --locations=belgium --interval 10
+ * $ node servers/servers-conf/update --locations=belgium
+ * $ node servers/servers-conf/update --locations=belgium --only-nginx
+ * $ node servers/servers-conf/update --locations=belgium --rev=426c9217
+ * $ node servers/servers-conf/update --locations=belgium --interval 10
  */
 
 const Program = require('dopamine-toolbox').Program

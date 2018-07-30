@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/cloudflare/check --zones dopamine-gaming.com
+ * $ node servers/cloudflare/check --zones dopamine-gaming.com
  */
 
 const Program = require('dopamine-toolbox').Program

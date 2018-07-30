@@ -2,7 +2,7 @@
 'use strict';
 
 const Usage = `
-    $ node bin/hermes/version --operators all -p 10
+    $ node deploy/hermes/version --operators all -p 10
 `
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')

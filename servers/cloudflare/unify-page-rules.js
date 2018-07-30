@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/cloudflare/unify-page-rules --zones dopamine-gaming.com
+ * $ node servers/cloudflare/unify-page-rules --zones dopamine-gaming.com
  */
 
 const Program = require('dopamine-toolbox').Program

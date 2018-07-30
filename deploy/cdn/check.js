@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/cdn/check --hosts dev-hermes-lb --mode blue --revision r4.8.233
+ * $ node deploy/cdn/check --hosts dev-hermes-lb --mode blue --revision r4.8.233
  */
 
 const Program = require('dopamine-toolbox').Program

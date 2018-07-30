@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/vm-setup/known-hosts --hosts *-web*
+ * $ node servers/vm-setup/known-hosts --hosts *-web*
  */
 
 

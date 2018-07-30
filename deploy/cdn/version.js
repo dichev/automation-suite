@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/cdn/version --hosts all --mode blue
+ * $ node deploy/cdn/version --hosts all --mode blue
  */
 
 const Program = require('dopamine-toolbox').Program

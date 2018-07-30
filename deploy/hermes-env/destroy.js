@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/hermes-env/destroy --env bots --location belgium -v
+ * $ node deploy/hermes-env/destroy --env bots --location belgium -v
  */
 
 

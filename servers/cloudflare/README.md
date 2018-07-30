@@ -2,7 +2,7 @@
 ### check
 Check current cloudflare configuration
 ```
-  Usage: node bin/cloudflare/check --zones <list|all> 
+  Usage: node servers/cloudflare/check --zones <list|all> 
 
   Check current cloudflare configuration
 
@@ -20,7 +20,7 @@ Check current cloudflare configuration
 ### get
 Get specific cloudflare configuration from all zones
 ```
-  Usage: node bin/cloudflare/get --zones <list|all> 
+  Usage: node servers/cloudflare/get --zones <list|all> 
 
   Get specific cloudflare configuration from all zones
 
@@ -39,7 +39,7 @@ Get specific cloudflare configuration from all zones
 ### unify-page-rules
 Unifying cloudflare page rules
 ```
-  Usage: node bin/cloudflare/unify-page-rules --zones <list|all> 
+  Usage: node servers/cloudflare/unify-page-rules --zones <list|all> 
 
   Unifying cloudflare page rules
 
@@ -57,7 +57,7 @@ Unifying cloudflare page rules
 ### unify-pages
 Unifying cloudflare custom pages
 ```
-  Usage: node bin/cloudflare/unify-pages --zones <list|all> 
+  Usage: node servers/cloudflare/unify-pages --zones <list|all> 
 
   Unifying cloudflare custom pages
 
@@ -75,7 +75,7 @@ Unifying cloudflare custom pages
 ### unify-settings
 Unifying cloudflare custom settings
 ```
-  Usage: node bin/cloudflare/unify-settings --zones <list|all> 
+  Usage: node servers/cloudflare/unify-settings --zones <list|all> 
 
   Unifying cloudflare custom settings
 

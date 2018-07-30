@@ -17,15 +17,18 @@ const templates = {
     program: Handlebars.compile(fs.readFileSync(__dirname + '/templates/README_program.hbs').toString()),
 }
 
+const GROUPS = ['deploy', 'servers']
+
 let program = new Program()
 
 program
     .description('Auto-generate README files with commands help')
+    .option('-g, --groups <list|all>', 'The target commands groups', { choices: GROUPS, required: true })
 
-    .run(async () => {
+    .iterate('groups', async (group) => {
         const shell = program.shell()
         
-        let base = path.normalize(__dirname + '/..')
+        let base = path.normalize(__dirname + '/../' + group)
         let programs = fs.readdirSync(base).filter(file => fs.lstatSync(base + '/' + file).isDirectory())
         let commands = {}
         for(let name of programs){
@@ -38,7 +41,7 @@ program
         for(let name of programs){
             data.programs[name] = { name: name, commands: {} }
             for(let command of commands[name]){
-                let cmd = `node bin/${name}/${command} --help`
+                let cmd = `node ${group}/${name}/${command} --help`
                 console.log(cmd)
                 
                 let help = await shell.exec(cmd, {silent: true})
@@ -48,17 +51,17 @@ program
                     name: command,
                     shortDescription: description.charAt(0).toLowerCase() + description.slice(1, 100) + (description.length > 100 ? '..' : ''),
                     description: description,
-                    help: help.replace('Usage: node ', '  Usage: node bin/') // TODO: temporary
+                    help: help.replace('Usage: node ', `  Usage: node ${group}/`) // TODO: temporary
                 }
             }
-            const README = path.normalize(__dirname + `/../${name}/README.md`)
+            const README = path.normalize(`${base}/${name}/README.md`)
             fs.writeFileSync(README, templates.program(data.programs[name]))
             console.log(`Generated: ${README}\n`)
             // break
         }
         // console.log(inspect(data, {depth: 5, colors: true}))
         
-        const README = path.normalize(__dirname + `/../README.md`)
+        const README = path.normalize(`${base}/README.md`)
         fs.writeFileSync(README, templates.main(data))
         console.log(`Generated: ${README}\n`)
     })

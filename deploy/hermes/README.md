@@ -2,7 +2,7 @@
 ### allow-panel-access
 Allow QA access to gpanel
 ```
-  Usage: node bin/hermes/allow-panel-access --operators <list|all> 
+  Usage: node deploy/hermes/allow-panel-access --operators <list|all> 
 
   Allow QA access to gpanel
 
@@ -22,7 +22,7 @@ Allow QA access to gpanel
 ### check
 Pre-deployment tests
 ```
-  Usage: node bin/hermes/check --operators <list|all> 
+  Usage: node deploy/hermes/check --operators <list|all> 
 
   Pre-deployment tests
 
@@ -39,15 +39,15 @@ Pre-deployment tests
     -h, --help                  output usage information
 
   Example usage:
-    node bin/hermes/check --operators all -p 10
-    node bin/hermes/check -o bots,rtg
-    node bin/hermes/check -o bots -r r3.9.9.1
-    node bin/hermes/check -o bots -r r3.9.9.0..r3.9.9.1
+    node deploy/hermes/check --operators all -p 10
+    node deploy/hermes/check -o bots,rtg
+    node deploy/hermes/check -o bots -r r3.9.9.1
+    node deploy/hermes/check -o bots -r r3.9.9.0..r3.9.9.1
 ```
 ### update
 Direct update of hermes release version
 ```
-  Usage: node bin/hermes/update --operators <list|all> --rev <string> 
+  Usage: node deploy/hermes/update --operators <list|all> --rev <string> 
 
   Direct update of hermes release version
 
@@ -66,12 +66,12 @@ Direct update of hermes release version
     -h, --help                          output usage information
 
   Example usage:
-    node bin/hermes/update --operators bots --rev r3.9.9.1 --strategy blue-green --allow-panel --force
+    node deploy/hermes/update --operators bots --rev r3.9.9.1 --strategy blue-green --allow-panel --force
 ```
 ### version
 Check current hermes release versions
 ```
-  Usage: node bin/hermes/version --operators <list|all> 
+  Usage: node deploy/hermes/version --operators <list|all> 
 
   Check current hermes release versions
 
@@ -87,5 +87,5 @@ Check current hermes release versions
     -h, --help                  output usage information
 
   Example usage:
-    $ node bin/hermes/version --operators all -p 10
+    $ node deploy/hermes/version --operators all -p 10
 ```

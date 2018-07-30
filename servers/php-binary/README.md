@@ -2,7 +2,7 @@
 ### check
 
 ```
-  Usage: node bin/php-binary/check --hosts <list|all> 
+  Usage: node servers/php-binary/check --hosts <list|all> 
 
   Options:
     -h, --hosts <list|all>  [required] The target host name. Available: dev-hermes-web1,dev-hermes-web2,belgium-web1,belgium-web2,manila-web1,manila-web2,manila-web3,manila-web4,manila-web5,iom-web1,iom-web2,iom-web3,iom-web4,iom-web5,tw-web1,tw-web2,tw-web3,tw-web4,tw-web5,gib-web1,gib-web2,gib-web3,gib-web4,gib-web5,pokerstars-web1,pokerstars-web2,pokerstars-web3,pokerstars-web4,pokerstars-web5
@@ -18,7 +18,7 @@
 ### init
 
 ```
-  Usage: node bin/php-binary/init --hosts <list|all> --phpversion <version> 
+  Usage: node servers/php-binary/init --hosts <list|all> --phpversion <version> 
 
   Options:
     -h, --hosts <list|all>      [required] The target host name. Available: dev-hermes-web1,dev-hermes-web2,belgium-web1,belgium-web2,manila-web1,manila-web2,manila-web3,manila-web4,manila-web5,iom-web1,iom-web2,iom-web3,iom-web4,iom-web5,tw-web1,tw-web2,tw-web3,tw-web4,tw-web5,gib-web1,gib-web2,gib-web3,gib-web4,gib-web5,pokerstars-web1,pokerstars-web2,pokerstars-web3,pokerstars-web4,pokerstars-web5

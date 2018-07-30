@@ -2,7 +2,7 @@
 ### check
 
 ```
-  Usage: node bin/hermes-env/check --env <name> --location <name> 
+  Usage: node deploy/hermes-env/check --env <name> --location <name> 
 
   Options:
     -e, --env <name>        [required] The target env name
@@ -19,7 +19,7 @@
 ### create
 
 ```
-  Usage: node bin/hermes-env/create --env <name> --location <name> 
+  Usage: node deploy/hermes-env/create --env <name> --location <name> 
 
   Options:
     -e, --env <name>        [required] The target env name
@@ -36,7 +36,7 @@
 ### destroy
 
 ```
-  Usage: node bin/hermes-env/destroy --env <name> --location <name> 
+  Usage: node deploy/hermes-env/destroy --env <name> --location <name> 
 
   Options:
     -e, --env <name>        [required] The target env name
@@ -53,7 +53,7 @@
 ### prepare
 
 ```
-  Usage: node bin/hermes-env/prepare --env <name> --location <name> 
+  Usage: node deploy/hermes-env/prepare --env <name> --location <name> 
 
   Options:
     -e, --env <name>        [required] The target env name

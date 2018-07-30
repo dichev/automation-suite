@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node bin/php-binary/check --hosts dev-hermes-web1
+ * $ node servers/php-binary/check --hosts dev-hermes-web1
  */
 
 

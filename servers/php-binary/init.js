@@ -3,8 +3,8 @@
 
 /**
  * Usage:
- * $ node bin/php-binary/init --hosts dev-hermes-web1
- * $ node bin/php-binary/init --hosts *-web*
+ * $ node servers/php-binary/init --hosts dev-hermes-web1
+ * $ node servers/php-binary/init --hosts *-web*
  */
 
 
@@ -44,7 +44,7 @@ program
         await ssh.exec('sleep 2; killall -9 php-fpm || killall -9 php5-fpm || true')
         await ssh.exec('systemctl restart php-fpm') //system
         
-        await program.shell().exec(`node bin/php-binary/check --hosts ${host}`)
+        await program.shell().exec(`node servers/php-binary/check --hosts ${host}`)
         
         await sshlb.exec('switch-webs --quiet --operators=all --webs=all')
     })

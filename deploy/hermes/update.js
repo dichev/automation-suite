@@ -14,7 +14,7 @@ program
     .option('-s, --strategy <direct|blue-green>', `Choose deployment strategy`, { def: 'blue-green', choices: ['direct', 'blue-green'] })
     .option('--allow-panel', `Allow QA access to GPanel`)
     .example(`
-        node bin/hermes/update --operators bots --rev r3.9.9.1 --strategy blue-green --allow-panel --force
+        node deploy/hermes/update --operators bots --rev r3.9.9.1 --strategy blue-green --allow-panel --force
     `)
     
     .iterate('operators', async (operator) => {
@@ -33,20 +33,20 @@ program
     
         // Prepare
         await chat.notify('\nPhase 0: Pre-deploy validations')
-        let currentRev = await shell.exec(`node bin/hermes/version --quiet -o ${operator}`)
+        let currentRev = await shell.exec(`node deploy/hermes/version --quiet -o ${operator}`)
         if(currentRev === to){
             let answer = await program.ask(`WARNING! Current release (${currentRev}) is the same as target release (${to})\nDo you want to skip the update?`, ['yes', 'no'], 'yes')
             if(answer === 'yes') return
         }
 
         try {
-            await shell.exec(`node bin/hermes/check --quiet -o ${operator} ` + (REVS ? `-r ${REVS}` : ''))
+            await shell.exec(`node deploy/hermes/check --quiet -o ${operator} ` + (REVS ? `-r ${REVS}` : ''))
         } catch (e) {
             await program.ask('WARNING! Some test failed! Are you sure you want to continue?', ['yes', 'no'], 'yes')
             // throw e
         }
         if (program.params.allowPanel) {
-            await shell.exec(`node bin/hermes/allow-panel-access -o ${operator}`)
+            await shell.exec(`node deploy/hermes/allow-panel-access -o ${operator}`)
         }
     
         if(STRATEGY === 'direct') {
