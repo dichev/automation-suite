@@ -33,7 +33,12 @@ program
     
         // Prepare
         await chat.notify('\nPhase 0: Pre-deploy validations')
-        await shell.exec(`node bin/hermes/version --quiet -o ${operator}`)
+        let currentRev = await shell.exec(`node bin/hermes/version --quiet -o ${operator}`)
+        if(currentRev === to){
+            let answer = await program.ask(`WARNING! Current release (${currentRev}) is the same as target release (${to})\nDo you want to skip the update?`, ['yes', 'no'], 'yes')
+            if(answer === 'yes') return
+        }
+
         try {
             await shell.exec(`node bin/hermes/check --quiet -o ${operator} ` + (REVS ? `-r ${REVS}` : ''))
         } catch (e) {

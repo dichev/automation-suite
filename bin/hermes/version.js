@@ -22,5 +22,5 @@ program
         let web1 = await program.ssh(location.hosts.web1, 'dopamine')
         
         await web1.chdir(DEST)
-        await web1.exec(`echo "$(git name-rev --tags --name-only $(git rev-parse HEAD)) -> ${operator}"`)
+        await web1.exec(`git name-rev --tags --name-only $(git rev-parse HEAD)`)
     })
