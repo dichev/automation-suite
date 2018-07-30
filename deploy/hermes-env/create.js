@@ -82,7 +82,7 @@ program
         await master.query(read(`${TEMPLATES}/output/${OPERATOR}/db/schema.sql`))
         log('Importing archive schema..')
         await archive.query(read(`${TEMPLATES}/output/${OPERATOR}/db/schema-archive.sql`))
-        log('Importing master seed..') // TODO: too much seeds making peaks
+        log('Importing master seed..')
         await master.query(read(`${TEMPLATES}/output/${OPERATOR}/db/seed.sql`))
     
     
@@ -99,6 +99,5 @@ program
         // Checkers & tests
         await shell.exec(`node deploy/hermes-env/check --env ${OPERATOR} --location ${LOCATION}`)
         
-        
-    
+        console.warn(`Manual steps: \ - Add cron tab configuration`) // TODO: automate
     })
