@@ -8,7 +8,7 @@ const fs = require('fs')
 const STORAGE = `d:/www/_releases/hermes.seed/crontab`
 const LOCATIONS = Object.values(cfg.locations).filter(l => l.live).map(l => l.name)
 
-let program = new Program()
+let program = new Program({chat: cfg.chat.rooms.devops})
 
 program
     .description('Check crons for manual changes and diffs')
