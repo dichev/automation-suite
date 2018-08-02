@@ -83,6 +83,7 @@
         "belgium-mysql",
         "belgium-web1",
         "belgium-web2",
-        "data-warehouse"
+        "data-warehouse",
+        "tw-mysql2"
     ]
 }

@@ -13,7 +13,7 @@ let program = new Program({chat: cfg.chat.rooms.test})
 program
     .description('Pre-deployment tests')
     .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators), required: true})
-    .option('-r, --rev <string>', `Target revision (like r.3.9.9.01) or from..to revision (like r3.9.9.0..r3.9.9.1)`)
+    .option('-r, --rev <string>', `Target revision (like r3.9.9.01) or from..to revision (like r3.9.9.0..r3.9.9.1)`)
     .example(`
          node deploy/hermes/check --operators all -p 10
          node deploy/hermes/check -o bots,rtg

@@ -10,7 +10,7 @@ let program = new Program({chat: cfg.chat.rooms.test})
 program
     .description('Direct update of hermes release version')
     .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators), required: true})
-    .option('-r, --rev <string>', `Target revision (like r.3.9.9.0) or from..to revision (like r3.9.9.0..r3.9.9.1)`, {required: true})
+    .option('-r, --rev <string>', `Target revision (like r3.9.9.0) or from..to revision (like r3.9.9.0..r3.9.9.1)`, {required: true})
     .option('-s, --strategy <direct|blue-green>', `Choose deployment strategy`, { def: 'blue-green', choices: ['direct', 'blue-green'] })
     .option('--allow-panel', `Allow QA access to GPanel`)
     .example(`

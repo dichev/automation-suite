@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node deploy/sys-metrics/check --hosts all --revision v3.2.5
+ * $ node deploy/sys-metrics/check --hosts all --rev v3.2.5
  */
 
 
@@ -16,7 +16,7 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 program
     .description('Updating sys-metrics version')
     .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts, required: true })
-    .option('-r, --revision <tag>', 'The target version as tag name', {required: true})
+    .option('-r, --rev <tag>', 'The target version as tag name', {required: true})
     
     .iterate('hosts', async (host) => {
 
@@ -28,7 +28,7 @@ program
         await ssh.exec('git fetch --prune origin')
         
         console.info('\n2. Deploy')
-        await ssh.exec('git reset --hard ' + program.params.revision)
+        await ssh.exec('git reset --hard ' + program.params.rev)
         await ssh.exec('systemctl restart sys-metrics')
         await ssh.exec('systemctl status sys-metrics | head -n 3')
         

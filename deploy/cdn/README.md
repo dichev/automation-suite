@@ -8,7 +8,7 @@ Test suit of games cdn
 
   Options:
     -h, --hosts <list|all>   [required] Comma-separated list of cdn regions. Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup
-    -r, --revision <string>  Target revision (like r.3.9.9.0)
+    -r, --revision <string>  Target revision (like r3.9.9.0)
     -m, --mode <blue|green>  [required] Which cdn to by updated. Available: blue,green
 
   Additional Options:
@@ -28,7 +28,7 @@ Update games cdn
 
   Options:
     -h, --hosts <list|all>   [required] Comma-separated list of cdn regions. Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup
-    -r, --revision <string>  Target revision (like r.3.9.9.0)
+    -r, --revision <string>  Target revision (like r3.9.9.0)
     -m, --mode <blue|green>  [required] Which cdn to by updated. Available: blue,green
 
   Additional Options:
