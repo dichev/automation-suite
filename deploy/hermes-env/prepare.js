@@ -66,7 +66,7 @@ program
                 
                 let isPanel = address.startsWith('gpanel')
                 
-                await cf.put('dns_records', {
+                await cf.post('dns_records', {
                     type: 'A',
                     name: address,
                     content: isPanel ? cfg.locations[SERVER].hosts.private : cfg.locations[SERVER].hosts.public, // TODO: temporary!
