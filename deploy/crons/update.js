@@ -9,7 +9,7 @@ const LOCATIONS = Object.values(cfg.locations).filter(l => l.live).map(l => l.na
 let program = new Program()
 
 program
-    .description('Check current crons release versions')
+    .description('Update crons to match the seed repo')
     .example(`
         node deploy/crons/update --locations belgium
         node deploy/crons/update --locations belgium --rev r3.9.9.0

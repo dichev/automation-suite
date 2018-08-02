@@ -11,7 +11,7 @@ const LOCATIONS = Object.values(cfg.locations).filter(l => l.live).map(l => l.na
 let program = new Program()
 
 program
-    .description('Check current crons release versions')
+    .description('Check crons for manual changes and diffs')
     .example(`
         node deploy/crons/fetch --locations all -p
     `)

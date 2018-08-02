@@ -1,10 +1,10 @@
 # crons
 ### fetch
-Check current crons release versions
+Check crons for manual changes and diffs
 ```
   Usage: node deploy/crons/fetch --locations <list|all> 
 
-  Check current crons release versions
+  Check crons for manual changes and diffs
 
   Options:
     -l, --locations <list|all>  [required] Comma-separated list of locations. Available: gib,manila,taiwan,pokerstars,iom,belgium
@@ -21,11 +21,11 @@ Check current crons release versions
     node deploy/crons/fetch --locations all -p
 ```
 ### update
-Check current crons release versions
+Update crons to match the seed repo
 ```
   Usage: node deploy/crons/update --locations <list|all> 
 
-  Check current crons release versions
+  Update crons to match the seed repo
 
   Options:
     -l, --locations <list|all>  [required] Comma-separated list of locations. Available: gib,manila,taiwan,pokerstars,iom,belgium

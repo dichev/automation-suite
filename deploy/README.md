@@ -5,8 +5,8 @@
     * **[update](#cdn-update)** - update games cdn
     * **[version](#cdn-version)** - checking current release version of games cdn
 * **[crons](#crons)**
-    * **[fetch](#crons-fetch)** - check current crons release versions
-    * **[update](#crons-update)** - check current crons release versions
+    * **[fetch](#crons-fetch)** - check crons for manual changes and diffs
+    * **[update](#crons-update)** - update crons to match the seed repo
 * **[hermes](#hermes)**
     * **[allow-panel-access](#hermes-allow-panel-access)** - allow QA access to gpanel
     * **[check](#hermes-check)** - pre-deployment tests
@@ -87,11 +87,11 @@ Checking current release version of games cdn
 ```
 ## <a name="crons"></a>crons
 ### <a name="crons-fetch"></a>fetch
-Check current crons release versions
+Check crons for manual changes and diffs
 ```
   Usage: node deploy/crons/fetch --locations <list|all> 
 
-  Check current crons release versions
+  Check crons for manual changes and diffs
 
   Options:
     -l, --locations <list|all>  [required] Comma-separated list of locations. Available: gib,manila,taiwan,pokerstars,iom,belgium
@@ -108,11 +108,11 @@ Check current crons release versions
     node deploy/crons/fetch --locations all -p
 ```
 ### <a name="crons-update"></a>update
-Check current crons release versions
+Update crons to match the seed repo
 ```
   Usage: node deploy/crons/update --locations <list|all> 
 
-  Check current crons release versions
+  Update crons to match the seed repo
 
   Options:
     -l, --locations <list|all>  [required] Comma-separated list of locations. Available: gib,manila,taiwan,pokerstars,iom,belgium
