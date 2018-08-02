@@ -56,27 +56,27 @@ program
         let shell = program.shell()
     
 
-    
+
         // Creating the environment
         log("Adding code on webs..")
         await web1.exec(`git clone git@gitlab.dopamine.bg:releases/hermes.git ${DEST}`)
-        
+
         await web1.exec(`chmod 777 ${DEST}/wallet/logs && chmod 777 ${DEST}/gpanel/exports`)
         await shell.exec(`scp -r ${TEMPLATES}/output/${OPERATOR}/hermes/* dopamine@${hosts.web1}:${DEST}`)
         await web1.exec(`/home/dopamine/bin/webs-sync ${DEST}`)
-        
+
         log("Setup chroot")
         let web1Root = await program.ssh(hosts.web1, 'root') // TODO: check why requires root
         await web1Root.exec(`/home/dopamine/bin/webs-chroot ${DEST}`)
-    
-    
+
+
         // Creating databases & users
         log('\nCreating master databases/users')
         await master.query(read(`${TEMPLATES}/output/${OPERATOR}/db/master.sql`))
         log('\nCreating archive databases/users')
         await archive.query(read(`${TEMPLATES}/output/${OPERATOR}/db/archive.sql`))
-    
-    
+
+
         // Seed databases
         log('Importing master schema..')
         await master.query(read(`${TEMPLATES}/output/${OPERATOR}/db/schema.sql`))
@@ -84,17 +84,17 @@ program
         await archive.query(read(`${TEMPLATES}/output/${OPERATOR}/db/schema-archive.sql`))
         log('Importing master seed..')
         await master.query(read(`${TEMPLATES}/output/${OPERATOR}/db/seed.sql`))
-    
+
     
         // Crons
         log(`\nExecuting initial crons`)
-        await web1.exec(`php platform/bin/cmd.php exchange-rates`)
+        await web1.exec(`php ${DEST}/platform/bin/cmd.php exchange-rates`)
     
         // System configurations
         log('\nUpdate system configurations')
         log('This could affect the other envs if the setup is incorrect.')
         await program.confirm('DANGER! Are you sure you want to continue (yes)? ')
-        await shell.exec(`node deploy/servers-conf/update --locations ${LOCATION}`)
+        await shell.exec(`node servers/servers-conf/update --locations ${LOCATION}`)
     
         // Checkers & tests
         await shell.exec(`node deploy/hermes-env/check --env ${OPERATOR} --location ${LOCATION}`)

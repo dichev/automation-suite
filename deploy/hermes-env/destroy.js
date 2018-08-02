@@ -91,6 +91,6 @@ program
             await archive.query(SQL.archiveRollback)
         }
     
-    
+        log(`Destroyed successfully`)
     })
 
