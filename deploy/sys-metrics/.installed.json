@@ -84,6 +84,7 @@
         "belgium-web1",
         "belgium-web2",
         "data-warehouse",
-        "tw-mysql2"
+        "tw-mysql2",
+        "tw-mysql-archive2"
     ]
 }
