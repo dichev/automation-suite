@@ -15,66 +15,70 @@ const fetch = require('node-fetch')
 let program = new Program()
 
 const errors = {
-	INVALID_JSON_ERROR: 'Request body is not valid json',
-	UNEXPECTED_ERROR: 'Unexpected error',
-	CONNECTION_ERROR: 'Connection error',
+    INVALID_JSON_ERROR: 'Request body is not valid json',
+    UNEXPECTED_ERROR: 'Unexpected error',
+    CONNECTION_ERROR: 'Connection error',
 }
 
 const cachebust = async (url, apiKey) => {
-	let response = await fetch(url, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			'Authorization': 'Basic ' + apiKey,
-		}
-	})
-	let body = await response.json()
-	let error = {}
+    let response, body, error
 
-	try {
-		body = JSON.parse(body)
-	} catch (err) {
-		error = { msg: errors.INVALID_JSON_ERROR }
-	}
-	if (body && (body.error || body.success === false)) error = body.error && body.error.msg || { msg: errors.UNEXPECTED_ERROR }
-	else if (response && (response.statusCode !== 200)) error = response.responseText || response.statusText || { msg: errors.CONNECTION_ERROR }
+    try {
+        response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Basic ' + apiKey,
+            }
+        })
+        body = await response.json();
 
-	if(error) console.warn(`Could not clear cache for [${url}] : [${response && response.statusCode}] ${JSON.stringify(error)}`)
+        if (body.error || body.success === false) {
+            throw body.error && body.error.msg || { msg: errors.UNEXPECTED_ERROR }
+        } else if (response.status !== 200) {
+            throw response.statusText || { msg: errors.CONNECTION_ERROR }
+        }
 
-	return {error, response, body}
+        console.log(`Success! Cleared cache for ${url}`);
+    } catch(err) {
+        error = err
+        console.warn(`Could not clear cache for [${url}] : [${response && response.status}] ${JSON.stringify(error)}`)
+    }
+
+    return {error, response, body}
 }
 
 
 program
-  .description('Cachebusting html assets')
-  .option('-h, --hosts <list|all>', `Comma-separated list of cdn regions`, {choices: installed.hosts, required: true})
+    .description('Cachebusting html assets')
+    .option('-h, --hosts <list|all>', `Comma-separated list of cdn regions`, {choices: installed.hosts, required: true})
 
-  .iterate('hosts', async (host) => {
+    .iterate('hosts', async (host) => {
 
-	  const chat = program.chat
+        const chat = program.chat
+        await chat.notify(`\nStarting cachebust for ${host}`)
 
-	  await chat.notify(`\nStarting cachebust for ${host}`)
+        const DEST = `/home/dopamine/bin/config`
+        const cdn = await program.ssh(cfg.getHost(host).ip, 'dopamine')
+        await cdn.chdir(DEST)
 
-	  const DEST = `/home/dopamine/bin/config`
-	  const cdn = await program.ssh(cfg.getHost(host).ip, 'dopamine')
-	  await cdn.chdir(DEST)
-	  const config = JSON.parse(await cdn.exec('cat .config.json', { secret: true }))
-	  const apiKey = config.platform.launcherApiKey
+        const config = JSON.parse(await cdn.exec('cat .config.json', { secret: true }))
+        const apiKey = config.platform.launcherApiKey
 
 
-	  let operators = cfg.operators.filter(operator => operator.cdn === host)
-	  let requests = []
-	  if(!operators.length) return console.warn(`No operators found for host: ${host}`)
+        let operators = Object.keys(cfg.operators).filter(key => cfg.operators[key].cdn === host && cfg.operators[key].live === true).map(key => cfg.operators[key]);
+        let requests = []
+        if(!operators.length) return console.warn(`No operators found for host: ${host}`)
 
-	  for (const operator in operators) {
-		  let url = `https://gserver-${operator.dir}.${operator.domain}/${operator.dir}/launcher/cachebust`
-		  requests.push(await cachebust(url, apiKey))
-	  }
+        for (let i = 0; i < operators.length; i++) {
+            let url = `https://gserver-${operators[i].dir}.${operators[i].domain}/${operators[i].dir}/launcher/cachebust`
+            requests.push(await cachebust(url, apiKey))
+        }
 
-	  //TODO This will exit when a cachebust fails for a single host
-	  if(requests && requests.find((request) => request.error !== null)){
-		  await chat.notify(`\nThere was a problem with the cachebust. Please investigate!`)
-		  throw Error('There was a problem with the cachebust. Please investigate!')
-	  }
+        //TODO This will exit when a cachebust fails for a single host
+        if(requests && requests.find((request) => request.error)){
+            await chat.notify(`\nThere was a problem with the cachebust. Please investigate!`)
+            throw Error('There was a problem with the cachebust. Please investigate!')
+        }
 
-  })
+    })
