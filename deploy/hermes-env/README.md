@@ -2,11 +2,10 @@
 ### check
 
 ```
-  Usage: node deploy/hermes-env/check --env <name> --location <name> 
+  Usage: node deploy/hermes-env/check --env <name> 
 
   Options:
     -e, --env <name>        [required] The target env name
-    -l, --location <name>   [required] The target location
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -19,11 +18,10 @@
 ### create
 
 ```
-  Usage: node deploy/hermes-env/create --env <name> --location <name> 
+  Usage: node deploy/hermes-env/create --env <name> 
 
   Options:
     -e, --env <name>        [required] The target env name
-    -l, --location <name>   [required] The target location
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -36,11 +34,10 @@
 ### destroy
 
 ```
-  Usage: node deploy/hermes-env/destroy --env <name> --location <name> 
+  Usage: node deploy/hermes-env/destroy --env <name> 
 
   Options:
     -e, --env <name>        [required] The target env name
-    -l, --location <name>   [required] The target location
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially

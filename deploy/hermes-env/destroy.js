@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node deploy/hermes-env/destroy --env bots --location belgium -v
+ * $ node deploy/hermes-env/destroy --env bots -v
  */
 
 
@@ -22,14 +22,13 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
     .option('-e, --env <name>', 'The target env name', { required: true })
-    .option('-l, --location <name>', 'The target location', { required: true })
 
     .run(async () => {
         if(!cfg.operators[program.params.env]) throw Error(`missing configuration for this env ${program.params.env}`)
         if(cfg.operators[program.params.env].live !== false) throw Error(`This env ${program.params.env} is used already on live, so for security reasons the command is disabled for it`)
         
         const OPERATOR = program.params.env
-        const SERVER = program.params.location
+        const LOCATION = cfg.operators[OPERATOR].location
         const DEST = `/home/dopamine/production/${cfg.operators[OPERATOR].dir}`
         if(!/^[a-zA-Z0-9-_/]+$/g.test(DEST) || DEST.length <= '/home/dopamine/production/'.length) {
             throw Error(`The destination (${DEST}) is invalid and this could be VERY dangerous!`)
@@ -67,10 +66,10 @@ program
         log("Generating sql templates..")
         await shell.chdir(TEMPLATES)
         let SQL = {
-            masterCheck:     await shell.exec(`bin/generator -t templates/sql/hermes-check.sql.hbs -o ${OPERATOR} -s ${SERVER} --print`, {silent: true}),
-            masterRollback:  await shell.exec(`bin/generator -t templates/sql/hermes-rollback.sql.hbs -o ${OPERATOR} -s ${SERVER} --print`, {silent: true}),
-            archiveCheck:    await shell.exec(`bin/generator -t templates/sql/hermes-check.sql.hbs -o ${OPERATOR} -s ${SERVER} --print`, {silent: true}),
-            archiveRollback: await shell.exec(`bin/generator -t templates/sql/hermes-rollback-archive.sql.hbs -o ${OPERATOR} -s ${SERVER} --print`, {silent: true}),
+            masterCheck:     await shell.exec(`bin/generator -t templates/sql/hermes-check.sql.hbs -o ${OPERATOR} -s ${LOCATION} --print`, {silent: true}),
+            masterRollback:  await shell.exec(`bin/generator -t templates/sql/hermes-rollback.sql.hbs -o ${OPERATOR} -s ${LOCATION} --print`, {silent: true}),
+            archiveCheck:    await shell.exec(`bin/generator -t templates/sql/hermes-check.sql.hbs -o ${OPERATOR} -s ${LOCATION} --print`, {silent: true}),
+            archiveRollback: await shell.exec(`bin/generator -t templates/sql/hermes-rollback-archive.sql.hbs -o ${OPERATOR} -s ${LOCATION} --print`, {silent: true}),
         }
         
         log('Checking master database..')

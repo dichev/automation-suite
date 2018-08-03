@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node deploy/hermes-env/create --env bots --location belgium
+ * $ node deploy/hermes-env/create --env bots
  */
 
 
@@ -23,12 +23,10 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
     .option('-e, --env <name>', 'The target env name', { required: true })
-    .option('-l, --location <name>', 'The target location', { required: true })
 
     .run(async () => {
         // Configuration
         const OPERATOR = program.params.env
-        const LOCATION = program.params.location
         const DEST = `/home/dopamine/production/${cfg.operators[OPERATOR].dir}`
         
         if (!cfg.operators[OPERATOR]) throw Error(`missing configuration for this env ${OPERATOR}`)
@@ -36,6 +34,8 @@ program
         if (!/^[a-zA-Z0-9-_/]+$/g.test(DEST) || DEST.length <= '/home/dopamine/production/'.length) {
             throw Error(`The destination (${DEST}) is invalid and this could be VERY dangerous!`)
         }
+    
+        const LOCATION = cfg.operators[OPERATOR].location
         
         
         // Preparations
