@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+'use strict';
+
+const Program = require('dopamine-toolbox').Program
+const cfg = require('configurator')
+const empty = (str) => { if(str !== '') throw Error(str) }
+const assert = require('assert')
+
+let program = new Program({chat: cfg.chat.rooms.test})
+
+program
+    .description('Pre-deployment tests for Grafana-Sensors')
+    .example(`
+         node deploy/monitoring/check
+    `)
+    .run(async () => {
+        const DEST = '/home/dopamine/grafana-sensors/'
+        
+        let web1 = await program.ssh(cfg.locations.monitoring.hosts.web1, 'dopamine')
+        web1.silent = true
+        
+        let tester = program.tester()
+        let it = tester.it
+        
+        it(`should exists in web1`, async() => await web1.chdir(DEST))
+        it(`should be able to fetch from the repository`, async() => await web1.exec(`git fetch origin --tags`))
+        
+        it('should be at #master branch', async () => {
+            assert.strictEqual(await web1.exec(`git rev-parse --abbrev-ref HEAD`), 'master')
+        })
+        it('should not have local changes', async () => {
+            empty(await web1.exec(`git status --short --untracked-files=no`))
+        })
+        
+        it.info(`diffs between releases:`, async () => {
+            console.info('      ' + await web1.exec(`git diff`))
+        })
+        
+        await tester.run(false)
+    })
+    .then(() => { // after all iterations
+        program.tester().status(true) // will throw error if any test failed
+    })
