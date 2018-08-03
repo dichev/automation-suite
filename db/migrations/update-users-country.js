@@ -5,7 +5,7 @@
 
 // 0. Analyze
 const SQL_ANALYZE = `
-    select count(*) as expected from users where country is null or country = '--'
+    select count(*) as expected from users where (country is NULL or country = '--')
 `
 // 1. Select values (saves slaves query execution)
 const SQL_SELECT = `
@@ -13,12 +13,12 @@ const SQL_SELECT = `
         id,
         (SELECT if(countryCode = '--', 'XX', countryCode) FROM ipguard_ranges WHERE ipTo >= u.ip LIMIT 1) as country
     from users u
-    where id > ? and country is NULL
+    where id > ? and (country is NULL or country = '--')
     order by id asc limit 1
 `
 // 2. Update data
 const SQL_UPDATE = `
-    UPDATE users SET country = ? WHERE country IS NULL AND id = ?;
+    UPDATE users SET country = ? WHERE (country is NULL or country = '--') AND id = ?;
 `
 
 
@@ -60,6 +60,8 @@ program
             let res = await master.query(SQL_UPDATE, [country, id])
             console.log(`${++i}/${expected}: Update user #${id} to ${country} (${res.info})`)
             lastId = id
+            
+            if(i === 10 || i === 1000 || i % 10000 === 0) program.chat.notify(`${operator} | Updated ${i}/${expected} users`)
         }
         
     })
