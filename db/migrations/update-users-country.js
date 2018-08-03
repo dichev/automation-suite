@@ -29,7 +29,7 @@ const cfg = require('configurator')
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
-    .description(`Update users country using ip geolocation. This is very expensive migrations, that's why is executed in loop user by user`)
+    .description(`Update users country using ip geolocation. This is very expensive migration, that's why is executed in a loop user by user`)
     .option('-o, --operators <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
 
     .iterate('operators', async (operator) => {
@@ -58,10 +58,10 @@ program
             if(!country || !id) throw Error(`Unexpected values` + {id, country})
             
             let res = await master.query(SQL_UPDATE, [country, id])
-            console.log(`${++i}/${expected}: Update user #${id} to ${country} (${res.info})`)
+            console.log(`${operator} | ${++i} / ${expected}: Update user #${id} to ${country} (${res.info})`)
             lastId = id
             
-            if(i === 10 || i === 1000 || i % 10000 === 0) program.chat.notify(`${operator} | Updated ${i}/${expected} users`)
+            if(i === 10 || i % 1000 === 0) program.chat.notify(`${operator} | Updated ${i} / ${expected} users`)
         }
         
     })
