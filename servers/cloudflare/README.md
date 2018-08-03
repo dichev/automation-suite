@@ -15,6 +15,7 @@ Check current cloudflare configuration
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ### get
@@ -34,6 +35,7 @@ Get specific cloudflare configuration from all zones
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ### unify-page-rules
@@ -52,6 +54,7 @@ Unifying cloudflare page rules
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ### unify-pages
@@ -70,6 +73,7 @@ Unifying cloudflare custom pages
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ### unify-settings
@@ -88,5 +92,6 @@ Unifying cloudflare custom settings
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```

@@ -17,6 +17,7 @@ Allow QA access to gpanel
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 ```
 ### check
@@ -36,6 +37,7 @@ Pre-deployment tests
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 
   Example usage:
@@ -63,6 +65,7 @@ Direct update of hermes release version
     -f, --force                         Suppress confirm messages (used for automation)
     -n, --dry-run                       Dry run mode will do everything as usual except commands execution
     -q, --quiet                         Turn off chat and some logs in stdout
+    --no-chat                           Disable chat notification if they are activated
     -h, --help                          output usage information
 
   Example usage:
@@ -84,6 +87,7 @@ Check current hermes release versions
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 
   Example usage:

@@ -7,6 +7,7 @@
 * **[crons](#crons)**
     * **[fetch](#crons-fetch)** - check crons for manual changes and diffs
     * **[update](#crons-update)** - update crons to match the seed repo
+* **[db](#db)**
 * **[hermes](#hermes)**
     * **[allow-panel-access](#hermes-allow-panel-access)** - allow QA access to gpanel
     * **[check](#hermes-check)** - pre-deployment tests
@@ -44,6 +45,7 @@ Test suit of games cdn
     -f, --force              Suppress confirm messages (used for automation)
     -n, --dry-run            Dry run mode will do everything as usual except commands execution
     -q, --quiet              Turn off chat and some logs in stdout
+    --no-chat                Disable chat notification if they are activated
     -h, --help               output usage information
 ```
 ### <a name="cdn-update"></a>update
@@ -64,6 +66,7 @@ Update games cdn
     -f, --force              Suppress confirm messages (used for automation)
     -n, --dry-run            Dry run mode will do everything as usual except commands execution
     -q, --quiet              Turn off chat and some logs in stdout
+    --no-chat                Disable chat notification if they are activated
     -h, --help               output usage information
 ```
 ### <a name="cdn-version"></a>version
@@ -83,6 +86,7 @@ Checking current release version of games cdn
     -f, --force              Suppress confirm messages (used for automation)
     -n, --dry-run            Dry run mode will do everything as usual except commands execution
     -q, --quiet              Turn off chat and some logs in stdout
+    --no-chat                Disable chat notification if they are activated
     -h, --help               output usage information
 ```
 ## <a name="crons"></a>crons
@@ -102,6 +106,7 @@ Check crons for manual changes and diffs
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 
   Example usage:
@@ -124,12 +129,14 @@ Update crons to match the seed repo
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 
   Example usage:
     node deploy/crons/update --locations belgium
     node deploy/crons/update --locations belgium --rev r3.9.9.0
 ```
+## <a name="db"></a>db
 ## <a name="hermes"></a>hermes
 ### <a name="hermes-allow-panel-access"></a>allow-panel-access
 Allow QA access to gpanel
@@ -149,6 +156,7 @@ Allow QA access to gpanel
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 ```
 ### <a name="hermes-check"></a>check
@@ -168,6 +176,7 @@ Pre-deployment tests
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 
   Example usage:
@@ -195,6 +204,7 @@ Direct update of hermes release version
     -f, --force                         Suppress confirm messages (used for automation)
     -n, --dry-run                       Dry run mode will do everything as usual except commands execution
     -q, --quiet                         Turn off chat and some logs in stdout
+    --no-chat                           Disable chat notification if they are activated
     -h, --help                          output usage information
 
   Example usage:
@@ -216,6 +226,7 @@ Check current hermes release versions
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 
   Example usage:
@@ -236,6 +247,7 @@ Check current hermes release versions
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ### <a name="hermes-env-create"></a>create
@@ -252,6 +264,7 @@ Check current hermes release versions
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ### <a name="hermes-env-destroy"></a>destroy
@@ -268,6 +281,7 @@ Check current hermes release versions
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ### <a name="hermes-env-prepare"></a>prepare
@@ -285,6 +299,7 @@ Check current hermes release versions
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ## <a name="sys-metrics"></a>sys-metrics
@@ -294,7 +309,7 @@ Check current hermes release versions
   Usage: node deploy/sys-metrics/check --hosts <list|all> 
 
   Options:
-    -h, --hosts <list|all>  [required] The target host names. Available: git,sofia-mysql-backup-pokerstars,sofia-mysql-backup-manila,sofia-mysql-backup-iom,sofia-mysql-backup-manial-taiwan,sofia-mysql-mirror-pokerstars,sofia-mysql-mirror-manila-taiwan,sofia-mysql-mirror-manila,sofia-mysql-mirror-iom,sofia-mysql-mirror-gib,sofia-mysql-backup-pokerstars-archive,sofia-mysql-backup-manila-archive,sofia-mysql-backup-iom-archive,sofia-mysql-backup-gib-archive,sofia-mysql-backup-gib,sofia-logserver,sofia-syslog,dev-hermes-lb,dev-hermes-sql,dev-hermes-web1,dev-hermes-web2,france-srv1,cdn-europe,cdn-asia,cdn-backup,pokerstars-web1,pokerstars-web2,pokerstars-web3,pokerstars-web4,pokerstars-web5,pokerstars-lb1,pokerstars-lb2,pokerstars-system,pokerstars-sql1,pokerstars-sql2,pokerstars-sql3,pokerstars-mysql-archive,iom-lb,iom-mysql-new,iom-mysql-archive,iom-slave,iom-web1,iom-web2,iom-web3,iom-web4,iom-web5,iom-system,iom-3thparty-web1,iom-3thparty-web2,gib-lb1,gib-web1,gib-web2,gib-web3,gib-web4,gib-web5,gib-mysql,gib-mysql-slave,gib-mysql-archive,manila-lb,manila-mysql,manila-mysql-archive,manila-slave,manila-system,manila-web1,manila-web2,manila-web3,manila-web4,manila-web5,manila-tw-mysql,manila-tw-mysql-archive,tw-lb,tw-mysql,tw-mysql-archive,tw-mysql-slave,tw-web1,tw-web2,tw-web3,tw-web4,tw-web5,belgium-lb,belgium-mysql,belgium-web1,belgium-web2,data-warehouse,tw-mysql2
+    -h, --hosts <list|all>  [required] The target host names. Available: git,sofia-mysql-backup-pokerstars,sofia-mysql-backup-manila,sofia-mysql-backup-iom,sofia-mysql-backup-manial-taiwan,sofia-mysql-mirror-pokerstars,sofia-mysql-mirror-manila-taiwan,sofia-mysql-mirror-manila,sofia-mysql-mirror-iom,sofia-mysql-mirror-gib,sofia-mysql-backup-pokerstars-archive,sofia-mysql-backup-manila-archive,sofia-mysql-backup-iom-archive,sofia-mysql-backup-gib-archive,sofia-mysql-backup-gib,sofia-logserver,sofia-syslog,dev-hermes-lb,dev-hermes-sql,dev-hermes-web1,dev-hermes-web2,france-srv1,cdn-europe,cdn-asia,cdn-backup,pokerstars-web1,pokerstars-web2,pokerstars-web3,pokerstars-web4,pokerstars-web5,pokerstars-lb1,pokerstars-lb2,pokerstars-system,pokerstars-sql1,pokerstars-sql2,pokerstars-sql3,pokerstars-mysql-archive,iom-lb,iom-mysql-new,iom-mysql-archive,iom-slave,iom-web1,iom-web2,iom-web3,iom-web4,iom-web5,iom-system,iom-3thparty-web1,iom-3thparty-web2,gib-lb1,gib-web1,gib-web2,gib-web3,gib-web4,gib-web5,gib-mysql,gib-mysql-slave,gib-mysql-archive,manila-lb,manila-mysql,manila-mysql-archive,manila-slave,manila-system,manila-web1,manila-web2,manila-web3,manila-web4,manila-web5,manila-tw-mysql,manila-tw-mysql-archive,tw-lb,tw-mysql,tw-mysql-archive,tw-mysql-slave,tw-web1,tw-web2,tw-web3,tw-web4,tw-web5,belgium-lb,belgium-mysql,belgium-web1,belgium-web2,data-warehouse,tw-mysql2,tw-mysql-archive2
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -302,6 +317,7 @@ Check current hermes release versions
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 
   Example usage:
@@ -325,6 +341,7 @@ Installing sys-metrics
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ### <a name="sys-metrics-restart"></a>restart
@@ -333,7 +350,7 @@ Installing sys-metrics
   Usage: node deploy/sys-metrics/restart --hosts <list|all> 
 
   Options:
-    -h, --hosts <list|all>  [required] The target host names. Available: git,sofia-mysql-backup-pokerstars,sofia-mysql-backup-manila,sofia-mysql-backup-iom,sofia-mysql-backup-manial-taiwan,sofia-mysql-mirror-pokerstars,sofia-mysql-mirror-manila-taiwan,sofia-mysql-mirror-manila,sofia-mysql-mirror-iom,sofia-mysql-mirror-gib,sofia-mysql-backup-pokerstars-archive,sofia-mysql-backup-manila-archive,sofia-mysql-backup-iom-archive,sofia-mysql-backup-gib-archive,sofia-mysql-backup-gib,sofia-logserver,sofia-syslog,dev-hermes-lb,dev-hermes-sql,dev-hermes-web1,dev-hermes-web2,france-srv1,cdn-europe,cdn-asia,cdn-backup,pokerstars-web1,pokerstars-web2,pokerstars-web3,pokerstars-web4,pokerstars-web5,pokerstars-lb1,pokerstars-lb2,pokerstars-system,pokerstars-sql1,pokerstars-sql2,pokerstars-sql3,pokerstars-mysql-archive,iom-lb,iom-mysql-new,iom-mysql-archive,iom-slave,iom-web1,iom-web2,iom-web3,iom-web4,iom-web5,iom-system,iom-3thparty-web1,iom-3thparty-web2,gib-lb1,gib-web1,gib-web2,gib-web3,gib-web4,gib-web5,gib-mysql,gib-mysql-slave,gib-mysql-archive,manila-lb,manila-mysql,manila-mysql-archive,manila-slave,manila-system,manila-web1,manila-web2,manila-web3,manila-web4,manila-web5,manila-tw-mysql,manila-tw-mysql-archive,tw-lb,tw-mysql,tw-mysql-archive,tw-mysql-slave,tw-web1,tw-web2,tw-web3,tw-web4,tw-web5,belgium-lb,belgium-mysql,belgium-web1,belgium-web2,data-warehouse,tw-mysql2
+    -h, --hosts <list|all>  [required] The target host names. Available: git,sofia-mysql-backup-pokerstars,sofia-mysql-backup-manila,sofia-mysql-backup-iom,sofia-mysql-backup-manial-taiwan,sofia-mysql-mirror-pokerstars,sofia-mysql-mirror-manila-taiwan,sofia-mysql-mirror-manila,sofia-mysql-mirror-iom,sofia-mysql-mirror-gib,sofia-mysql-backup-pokerstars-archive,sofia-mysql-backup-manila-archive,sofia-mysql-backup-iom-archive,sofia-mysql-backup-gib-archive,sofia-mysql-backup-gib,sofia-logserver,sofia-syslog,dev-hermes-lb,dev-hermes-sql,dev-hermes-web1,dev-hermes-web2,france-srv1,cdn-europe,cdn-asia,cdn-backup,pokerstars-web1,pokerstars-web2,pokerstars-web3,pokerstars-web4,pokerstars-web5,pokerstars-lb1,pokerstars-lb2,pokerstars-system,pokerstars-sql1,pokerstars-sql2,pokerstars-sql3,pokerstars-mysql-archive,iom-lb,iom-mysql-new,iom-mysql-archive,iom-slave,iom-web1,iom-web2,iom-web3,iom-web4,iom-web5,iom-system,iom-3thparty-web1,iom-3thparty-web2,gib-lb1,gib-web1,gib-web2,gib-web3,gib-web4,gib-web5,gib-mysql,gib-mysql-slave,gib-mysql-archive,manila-lb,manila-mysql,manila-mysql-archive,manila-slave,manila-system,manila-web1,manila-web2,manila-web3,manila-web4,manila-web5,manila-tw-mysql,manila-tw-mysql-archive,tw-lb,tw-mysql,tw-mysql-archive,tw-mysql-slave,tw-web1,tw-web2,tw-web3,tw-web4,tw-web5,belgium-lb,belgium-mysql,belgium-web1,belgium-web2,data-warehouse,tw-mysql2,tw-mysql-archive2
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -341,6 +358,7 @@ Installing sys-metrics
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ### <a name="sys-metrics-stop"></a>stop
@@ -349,7 +367,7 @@ Installing sys-metrics
   Usage: node deploy/sys-metrics/stop --hosts <list|all> 
 
   Options:
-    -h, --hosts <list|all>  [required] The target host names. Available: git,sofia-mysql-backup-pokerstars,sofia-mysql-backup-manila,sofia-mysql-backup-iom,sofia-mysql-backup-manial-taiwan,sofia-mysql-mirror-pokerstars,sofia-mysql-mirror-manila-taiwan,sofia-mysql-mirror-manila,sofia-mysql-mirror-iom,sofia-mysql-mirror-gib,sofia-mysql-backup-pokerstars-archive,sofia-mysql-backup-manila-archive,sofia-mysql-backup-iom-archive,sofia-mysql-backup-gib-archive,sofia-mysql-backup-gib,sofia-logserver,sofia-syslog,dev-hermes-lb,dev-hermes-sql,dev-hermes-web1,dev-hermes-web2,france-srv1,cdn-europe,cdn-asia,cdn-backup,pokerstars-web1,pokerstars-web2,pokerstars-web3,pokerstars-web4,pokerstars-web5,pokerstars-lb1,pokerstars-lb2,pokerstars-system,pokerstars-sql1,pokerstars-sql2,pokerstars-sql3,pokerstars-mysql-archive,iom-lb,iom-mysql-new,iom-mysql-archive,iom-slave,iom-web1,iom-web2,iom-web3,iom-web4,iom-web5,iom-system,iom-3thparty-web1,iom-3thparty-web2,gib-lb1,gib-web1,gib-web2,gib-web3,gib-web4,gib-web5,gib-mysql,gib-mysql-slave,gib-mysql-archive,manila-lb,manila-mysql,manila-mysql-archive,manila-slave,manila-system,manila-web1,manila-web2,manila-web3,manila-web4,manila-web5,manila-tw-mysql,manila-tw-mysql-archive,tw-lb,tw-mysql,tw-mysql-archive,tw-mysql-slave,tw-web1,tw-web2,tw-web3,tw-web4,tw-web5,belgium-lb,belgium-mysql,belgium-web1,belgium-web2,data-warehouse,tw-mysql2
+    -h, --hosts <list|all>  [required] The target host names. Available: git,sofia-mysql-backup-pokerstars,sofia-mysql-backup-manila,sofia-mysql-backup-iom,sofia-mysql-backup-manial-taiwan,sofia-mysql-mirror-pokerstars,sofia-mysql-mirror-manila-taiwan,sofia-mysql-mirror-manila,sofia-mysql-mirror-iom,sofia-mysql-mirror-gib,sofia-mysql-backup-pokerstars-archive,sofia-mysql-backup-manila-archive,sofia-mysql-backup-iom-archive,sofia-mysql-backup-gib-archive,sofia-mysql-backup-gib,sofia-logserver,sofia-syslog,dev-hermes-lb,dev-hermes-sql,dev-hermes-web1,dev-hermes-web2,france-srv1,cdn-europe,cdn-asia,cdn-backup,pokerstars-web1,pokerstars-web2,pokerstars-web3,pokerstars-web4,pokerstars-web5,pokerstars-lb1,pokerstars-lb2,pokerstars-system,pokerstars-sql1,pokerstars-sql2,pokerstars-sql3,pokerstars-mysql-archive,iom-lb,iom-mysql-new,iom-mysql-archive,iom-slave,iom-web1,iom-web2,iom-web3,iom-web4,iom-web5,iom-system,iom-3thparty-web1,iom-3thparty-web2,gib-lb1,gib-web1,gib-web2,gib-web3,gib-web4,gib-web5,gib-mysql,gib-mysql-slave,gib-mysql-archive,manila-lb,manila-mysql,manila-mysql-archive,manila-slave,manila-system,manila-web1,manila-web2,manila-web3,manila-web4,manila-web5,manila-tw-mysql,manila-tw-mysql-archive,tw-lb,tw-mysql,tw-mysql-archive,tw-mysql-slave,tw-web1,tw-web2,tw-web3,tw-web4,tw-web5,belgium-lb,belgium-mysql,belgium-web1,belgium-web2,data-warehouse,tw-mysql2,tw-mysql-archive2
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -357,6 +375,7 @@ Installing sys-metrics
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ### <a name="sys-metrics-update"></a>update
@@ -367,7 +386,7 @@ Updating sys-metrics version
   Updating sys-metrics version
 
   Options:
-    -h, --hosts <list|all>  [required] The target host names. Available: git,sofia-mysql-backup-pokerstars,sofia-mysql-backup-manila,sofia-mysql-backup-iom,sofia-mysql-backup-manial-taiwan,sofia-mysql-mirror-pokerstars,sofia-mysql-mirror-manila-taiwan,sofia-mysql-mirror-manila,sofia-mysql-mirror-iom,sofia-mysql-mirror-gib,sofia-mysql-backup-pokerstars-archive,sofia-mysql-backup-manila-archive,sofia-mysql-backup-iom-archive,sofia-mysql-backup-gib-archive,sofia-mysql-backup-gib,sofia-logserver,sofia-syslog,dev-hermes-lb,dev-hermes-sql,dev-hermes-web1,dev-hermes-web2,france-srv1,cdn-europe,cdn-asia,cdn-backup,pokerstars-web1,pokerstars-web2,pokerstars-web3,pokerstars-web4,pokerstars-web5,pokerstars-lb1,pokerstars-lb2,pokerstars-system,pokerstars-sql1,pokerstars-sql2,pokerstars-sql3,pokerstars-mysql-archive,iom-lb,iom-mysql-new,iom-mysql-archive,iom-slave,iom-web1,iom-web2,iom-web3,iom-web4,iom-web5,iom-system,iom-3thparty-web1,iom-3thparty-web2,gib-lb1,gib-web1,gib-web2,gib-web3,gib-web4,gib-web5,gib-mysql,gib-mysql-slave,gib-mysql-archive,manila-lb,manila-mysql,manila-mysql-archive,manila-slave,manila-system,manila-web1,manila-web2,manila-web3,manila-web4,manila-web5,manila-tw-mysql,manila-tw-mysql-archive,tw-lb,tw-mysql,tw-mysql-archive,tw-mysql-slave,tw-web1,tw-web2,tw-web3,tw-web4,tw-web5,belgium-lb,belgium-mysql,belgium-web1,belgium-web2,data-warehouse,tw-mysql2
+    -h, --hosts <list|all>  [required] The target host names. Available: git,sofia-mysql-backup-pokerstars,sofia-mysql-backup-manila,sofia-mysql-backup-iom,sofia-mysql-backup-manial-taiwan,sofia-mysql-mirror-pokerstars,sofia-mysql-mirror-manila-taiwan,sofia-mysql-mirror-manila,sofia-mysql-mirror-iom,sofia-mysql-mirror-gib,sofia-mysql-backup-pokerstars-archive,sofia-mysql-backup-manila-archive,sofia-mysql-backup-iom-archive,sofia-mysql-backup-gib-archive,sofia-mysql-backup-gib,sofia-logserver,sofia-syslog,dev-hermes-lb,dev-hermes-sql,dev-hermes-web1,dev-hermes-web2,france-srv1,cdn-europe,cdn-asia,cdn-backup,pokerstars-web1,pokerstars-web2,pokerstars-web3,pokerstars-web4,pokerstars-web5,pokerstars-lb1,pokerstars-lb2,pokerstars-system,pokerstars-sql1,pokerstars-sql2,pokerstars-sql3,pokerstars-mysql-archive,iom-lb,iom-mysql-new,iom-mysql-archive,iom-slave,iom-web1,iom-web2,iom-web3,iom-web4,iom-web5,iom-system,iom-3thparty-web1,iom-3thparty-web2,gib-lb1,gib-web1,gib-web2,gib-web3,gib-web4,gib-web5,gib-mysql,gib-mysql-slave,gib-mysql-archive,manila-lb,manila-mysql,manila-mysql-archive,manila-slave,manila-system,manila-web1,manila-web2,manila-web3,manila-web4,manila-web5,manila-tw-mysql,manila-tw-mysql-archive,tw-lb,tw-mysql,tw-mysql-archive,tw-mysql-slave,tw-web1,tw-web2,tw-web3,tw-web4,tw-web5,belgium-lb,belgium-mysql,belgium-web1,belgium-web2,data-warehouse,tw-mysql2,tw-mysql-archive2
     -r, --rev <tag>         [required] The target version as tag name
 
   Additional Options:
@@ -376,5 +395,6 @@ Updating sys-metrics version
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```

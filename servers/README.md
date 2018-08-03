@@ -33,6 +33,7 @@ Check current cloudflare configuration
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ### <a name="cloudflare-get"></a>get
@@ -52,6 +53,7 @@ Get specific cloudflare configuration from all zones
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ### <a name="cloudflare-unify-page-rules"></a>unify-page-rules
@@ -70,6 +72,7 @@ Unifying cloudflare page rules
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ### <a name="cloudflare-unify-pages"></a>unify-pages
@@ -88,6 +91,7 @@ Unifying cloudflare custom pages
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ### <a name="cloudflare-unify-settings"></a>unify-settings
@@ -106,6 +110,7 @@ Unifying cloudflare custom settings
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ## <a name="php-binary"></a>php-binary
@@ -123,6 +128,7 @@ Unifying cloudflare custom settings
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
 ### <a name="php-binary-init"></a>init
@@ -140,6 +146,7 @@ Unifying cloudflare custom settings
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 ```
 ## <a name="servers-conf"></a>servers-conf
@@ -157,6 +164,7 @@ Unifying cloudflare custom settings
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 ```
 ### <a name="servers-conf-update"></a>update
@@ -181,6 +189,7 @@ Auto update sever configurations by reloading one by one each server
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 ```
 ## <a name="vm-setup"></a>vm-setup
@@ -198,5 +207,6 @@ Auto update sever configurations by reloading one by one each server
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
