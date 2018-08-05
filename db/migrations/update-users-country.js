@@ -39,14 +39,15 @@ program
         let master = await program.mysql({user: 'root', ssh: {user: 'root', host: hosts.mysql}})
         let DB = cfg.operators[operator].dbPrefix + 'platform'
         await master.query(`USE ${DB};`)
-        
+    
+        master.highLoadProtection({connections: 300})
         
         // Analyze
         console.log(`Analyzing ${DB}`)
         let [row] = await master.query(SQL_ANALYZE)
         let expected = parseInt(row.expected)
         console.log(`Found ${expected} users without country`)
-    
+        
         
         // Select & update
         let lastId = 0
