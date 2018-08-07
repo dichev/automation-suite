@@ -36,11 +36,12 @@ program
 
 
         // Prepare and check ssh connections
-        let hosts = cfg.locations[program.params.location].hosts
+        let hosts = cfg.locations[LOCATION].hosts
+        let dbs = cfg.databases[cfg.operators[OPERATOR].databases]
         let [web1, master, archive] = await Promise.all([
             program.ssh(hosts.web1, 'dopamine'),
-            program.mysql({user: 'root', ssh: {user: 'root', host: hosts.mysql}}),
-            program.mysql({user: 'root', ssh: {user: 'root', host: hosts.archive}}),
+            program.mysql({user: 'root', ssh: {user: 'root', host: dbs.master}}),
+            program.mysql({user: 'root', ssh: {user: 'root', host: dbs.archive}}),
         ])
 
 

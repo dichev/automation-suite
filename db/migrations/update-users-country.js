@@ -34,11 +34,10 @@ program
     .option('--chunk-size <int>', 'How many user to be calculated together', { def: 20 })
 
     .iterate('operators', async (operator) => {
-        const LOCATION = cfg.operators[operator].location
         const CHUNK_SIZE = parseInt(program.params.chunkSize) || 10
         
-        let hosts = cfg.locations[LOCATION].hosts
-        let master = await program.mysql({user: 'root', ssh: {user: 'root', host: hosts.mysql}})
+        let dbs = cfg.databases[cfg.operators[operator].databases]
+        let master = await program.mysql({user: 'root', ssh: {user: 'root', host: dbs.master}})
         let DB = cfg.operators[operator].dbPrefix + 'platform'
         await master.query(`USE ${DB};`)
     
