@@ -8,7 +8,7 @@
     "docs": "node docs/generate --groups all"
   },
   "dependencies": {
-    "configurator": "git+ssh://git@gitlab.dopamine.bg:devops/configurator.git#DEVOPS-574",
+    "configurator": "git+ssh://git@gitlab.dopamine.bg:devops/configurator.git",
     "deepmerge": "^2.1.1",
     "dopamine-toolbox": "git+ssh://git@gitlab.dopamine.bg:devops/toolbox.git",
     "handlebars": "^4.0.11",

@@ -14,10 +14,10 @@ program
     .run(async () => {
         await program.confirm(`Warning! You're going to update to the last revision.\nDo you want to continue?`)
         
-        let ssh = await program.ssh(cfg.locations.monitoring.hosts.web1, 'dopamine')
-        let sshRoot = await program.ssh(cfg.locations.monitoring.hosts.web1, 'root')
+        let ssh     = await program.ssh(cfg.hosts.monitoring.ip, 'dopamine')
+        let sshRoot = await program.ssh(cfg.hosts.monitoring.ip, 'root')
     
-        let chat = program.chat
+        let chat  = program.chat
         let shell = program.shell()
     
         try {
@@ -28,19 +28,16 @@ program
     
         // Update repo
         await ssh.chdir('/home/dopamine/grafana-sensors')
-        program.chat.notify('Updating repo to last revision')
+        await chat.notify('Updating repo to last revision')
         await ssh.exec(`git fetch --prune && git pull`)
 
         // Restart
-        chat.notify('Restart grafana-sensors.service')
-        sshRoot.exec(`systemctl restart grafana-sensors.service`)
+        await chat.notify('Restart grafana-sensors.service')
+        await sshRoot.exec(`systemctl restart grafana-sensors.service`)
 
-        program.sleep(2)
+        await program.sleep(2)
 
         // Check
-        chat.notify('Check grafana-sensors.service status')
-        sshRoot.exec(`systemctl status grafana-sensors.service`)
-        
-        await ssh.exec('exit')
-        await sshRoot.exec('exit')
+        await chat.notify('Check grafana-sensors.service status')
+        await sshRoot.exec(`systemctl status grafana-sensors.service`)
     })

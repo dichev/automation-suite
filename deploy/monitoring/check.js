@@ -5,7 +5,7 @@ const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 const empty = (str) => { if(str !== '') throw Error(str) }
 const assert = require('assert')
-
+const contains = (str, search) => { if(!str.includes(search)) throw Error(str) }
 let program = new Program({chat: cfg.chat.rooms.test})
 
 program
@@ -16,7 +16,7 @@ program
     .run(async () => {
         const DEST = '/home/dopamine/grafana-sensors/'
         
-        let web1 = await program.ssh(cfg.locations.monitoring.hosts.web1, 'dopamine')
+        let web1 = await program.ssh(cfg.hosts.monitoring.ip, 'dopamine')
         web1.silent = true
         
         let tester = program.tester()
@@ -30,6 +30,12 @@ program
         })
         it('should not have local changes', async () => {
             empty(await web1.exec(`git status --short --untracked-files=no`))
+        })
+        it('should be with Status of the service -> Active: active(running)', async () => {
+            contains(await web1.exec(`systemctl status grafana-sensors.service | grep "Active: active (running)"`), "Active: active (running)")
+        })
+        it('should be able to call a single sensor and return success', async () => {
+            contains(await web1.exec(`node test.js sensors/availability-heartbeat.js rtg`), "heartbeat.api.status")
         })
         
         it.info(`diffs between releases:`, async () => {
