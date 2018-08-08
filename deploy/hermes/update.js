@@ -5,7 +5,7 @@ const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 
 
-let program = new Program({chat: cfg.chat.rooms.test})
+let program = new Program({chat: cfg.chat.rooms.devops})
 
 program
     .description('Direct update of hermes release version')
@@ -18,7 +18,6 @@ program
     `)
     
     .iterate('operators', async (operator) => {
-        if (operator !== 'bots' && operator !== 'rtg') throw Error('This script is not production ready, so is allowed only for the "bots|rtg" env')
         if (program.params.parallel) throw Error(`Currently the command doesn't support parallel mode for safety reasons`)
     
         const location = cfg.getLocationByOperator(operator);
@@ -33,14 +32,14 @@ program
     
         // Prepare
         await chat.notify('\nPhase 0: Pre-deploy validations')
-        let currentRev = await shell.exec(`node deploy/hermes/version --quiet -o ${operator}`)
+        let currentRev = await shell.exec(`node deploy/hermes/version --no-chat --quiet -o ${operator}`)
         if(currentRev === to){
             let answer = await program.ask(`WARNING! Current release (${currentRev}) is the same as target release (${to})\nDo you want to skip the update?`, ['yes', 'no'], 'yes')
             if(answer === 'yes') return
         }
 
         try {
-            await shell.exec(`node deploy/hermes/check --quiet -o ${operator} ` + (REVS ? `-r ${REVS}` : ''))
+            await shell.exec(`node deploy/hermes/check --quiet --no-chat -o ${operator} ` + (REVS ? `-r ${REVS}` : ''))
         } catch (e) {
             await program.ask('WARNING! Some test failed! Are you sure you want to continue?', ['yes', 'no'], 'yes')
             // throw e
@@ -67,10 +66,6 @@ program
             await web1.exec(`$HOME/bin/webs-sync .`, {silent: true})
             await chat.notify(`${to} deployed to ${operator}`, {color: 'green'})
     
-
-            // Validations
-            await chat.notify(`\nPhase 3: QA validation`)
-            await chat.notify(`Please validate and let me know when you are ready`, {color: `yellow`})
         }
         
         else if( STRATEGY === 'blue-green'){
@@ -138,4 +133,7 @@ program
         }
         
     
+    })
+    .then(async() => {
+        await program.chat.notify(`# QA validation\nPlease validate and let me know when you are ready`, {color: `yellow`})
     })

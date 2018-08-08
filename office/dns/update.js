@@ -23,5 +23,5 @@ program
         
         console.log('Done')
         await program.shell().exec(`node office/dns/check`)
-        console.log('Note usually it takes 5 minutes to be clear the DNS cache ')
+        console.log('Note usually it takes 5 minutes to clear the DNS cache ')
     })

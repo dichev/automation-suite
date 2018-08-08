@@ -14,7 +14,7 @@ program
         let tester = program.tester()
         let it = tester.it
     
-        for(let host of Object.keys(cfg.hosts)){
+        for(let host of Object.keys(cfg.hosts).sort()){
             let domain = `${host}.out`
             it(`resolve ${domain}`, async () => await lookup(domain))
         }
