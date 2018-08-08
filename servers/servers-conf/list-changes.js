@@ -12,7 +12,7 @@ const cfg = require('configurator')
 let program = new Program({ chat: cfg.chat.rooms.devops })
 program
     .option('-l, --locations <list|all>', 'The target host name', {choices: Object.keys(cfg.locations), required: true})
-        .iterate('locations', async (location) => {
+    .iterate('locations', async (location) => {
         
         let lb = await program.ssh(cfg.locations[location].hosts.lb, 'root')
         await lb.chdir('/opt/servers-conf')
