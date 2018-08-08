@@ -7,7 +7,7 @@ Allow QA access to gpanel
   Allow QA access to gpanel
 
   Options:
-    -o, --operators <list|all>  [required] Comma-separated list of operators. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,soft2bet,williamhill,gvc,pop,gamesys,nektan,138global,aggfun,ugs2,ugs4,ugs3,ugs1,pokerstars
+    -o, --operators <list|all>  [required] Comma-separated list of operators. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,soft2bet,williamhill,gvc,pop,gamesys,nektan,138global,pokerstars,aggfun,ugs2,ugs4,ugs3,ugs1
     -m, --minutes <int>         Expire after defined minutes (default: 15)
     -r, --role <string>         Define admin role. Available: RT_QAPROD,EXT_Marketing (default: RT_QAPROD)
 
@@ -28,7 +28,7 @@ Pre-deployment tests
   Pre-deployment tests
 
   Options:
-    -o, --operators <list|all>  [required] Comma-separated list of operators. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,soft2bet,williamhill,gvc,pop,gamesys,nektan,138global,aggfun,ugs2,ugs4,ugs3,ugs1,pokerstars
+    -o, --operators <list|all>  [required] Comma-separated list of operators. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,soft2bet,williamhill,gvc,pop,gamesys,nektan,138global,pokerstars,aggfun,ugs2,ugs4,ugs3,ugs1
     -r, --rev <string>          Target revision (like r3.9.9.01) or from..to revision (like r3.9.9.0..r3.9.9.1)
 
   Additional Options:
@@ -54,7 +54,7 @@ Direct update of hermes release version
   Direct update of hermes release version
 
   Options:
-    -o, --operators <list|all>          [required] Comma-separated list of operators. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,soft2bet,williamhill,gvc,pop,gamesys,nektan,138global,aggfun,ugs2,ugs4,ugs3,ugs1,pokerstars
+    -o, --operators <list|all>          [required] Comma-separated list of operators. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,soft2bet,williamhill,gvc,pop,gamesys,nektan,138global,pokerstars,aggfun,ugs2,ugs4,ugs3,ugs1
     -r, --rev <string>                  [required] Target revision (like r3.9.9.0) or from..to revision (like r3.9.9.0..r3.9.9.1)
     -s, --strategy <direct|blue-green>  Choose deployment strategy. Available: direct,blue-green (default: blue-green)
     --allow-panel                       Allow QA access to GPanel
@@ -79,7 +79,7 @@ Check current hermes release versions
   Check current hermes release versions
 
   Options:
-    -o, --operators <list|all>  [required] Comma-separated list of operators. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,soft2bet,williamhill,gvc,pop,gamesys,nektan,138global,aggfun,ugs2,ugs4,ugs3,ugs1,pokerstars
+    -o, --operators <list|all>  [required] Comma-separated list of operators. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,soft2bet,williamhill,gvc,pop,gamesys,nektan,138global,pokerstars,aggfun,ugs2,ugs4,ugs3,ugs1
 
   Additional Options:
     -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially

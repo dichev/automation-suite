@@ -7,7 +7,7 @@ Check crons for manual changes and diffs
   Check crons for manual changes and diffs
 
   Options:
-    -l, --locations <list|all>  [required] Comma-separated list of locations. Available: gib,manila,taiwan,pokerstars,iom,belgium
+    -l, --locations <list|all>  [required] Comma-separated list of locations. Available: gib,taiwan,pokerstars,iom,belgium
 
   Additional Options:
     -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -29,7 +29,7 @@ Update crons to match the seed repo
   Update crons to match the seed repo
 
   Options:
-    -l, --locations <list|all>  [required] Comma-separated list of locations. Available: gib,manila,taiwan,pokerstars,iom,belgium
+    -l, --locations <list|all>  [required] Comma-separated list of locations. Available: gib,taiwan,pokerstars,iom,belgium
     -r, --rev <string>          Target revision (like r3.9.9.0)
 
   Additional Options:

@@ -7,7 +7,8 @@ Update users country using ip geolocation. This is very expensive migration, tha
   Update users country using ip geolocation. This is very expensive migration, that's why is executed in a loop user by user
 
   Options:
-    -o, --operators <name>  [required] The target operator name. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,soft2bet,williamhill,gvc,pop,gamesys,nektan,138global,aggfun,ugs2,ugs4,ugs3,ugs1,pokerstars
+    -o, --operators <name>  [required] The target operator name. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,soft2bet,williamhill,gvc,pop,gamesys,nektan,138global,pokerstars,aggfun,ugs2,ugs4,ugs3,ugs1
+    --chunk-size <int>      How many user to be calculated together (default: 20)
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
