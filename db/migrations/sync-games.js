@@ -33,6 +33,7 @@ Promise.resolve().then(async() => {
         let master = await program.mysql({user: 'root', ssh: {user: 'root', host: dbs.master}})
         let dbname = cfg.operators[operator].dbPrefix + 'platform'
         
+        console.log(`Syncing games seed of ${operator}..`)
         await master.query(`USE ${dbname};`)
         await master.query(seed)
 

@@ -7,7 +7,6 @@
 * **[crons](#crons)**
     * **[fetch](#crons-fetch)** - check crons for manual changes and diffs
     * **[update](#crons-update)** - update crons to match the seed repo
-* **[db](#db)**
 * **[hermes](#hermes)**
     * **[allow-panel-access](#hermes-allow-panel-access)** - allow QA access to gpanel
     * **[check](#hermes-check)** - pre-deployment tests
@@ -136,7 +135,6 @@ Update crons to match the seed repo
     node deploy/crons/update --locations belgium
     node deploy/crons/update --locations belgium --rev r3.9.9.0
 ```
-## <a name="db"></a>db
 ## <a name="hermes"></a>hermes
 ### <a name="hermes-allow-panel-access"></a>allow-panel-access
 Allow QA access to gpanel
