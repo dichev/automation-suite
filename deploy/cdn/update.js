@@ -46,7 +46,7 @@ program
         
         // Populate
         await chat.notify('\nPhase 2: Cachebust html assets')
-        console.info(`use: \n  $ node cdn/cachebust  --hosts ${host} --mode ${mode} --revision ${REV}`)
+        console.info(`use: \n  $ node cdn/cachebust  --hosts ${host}`)
         
 
     })
