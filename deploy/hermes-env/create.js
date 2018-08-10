@@ -100,4 +100,7 @@ program
         await shell.exec(`node deploy/hermes-env/check --env ${OPERATOR} --location ${LOCATION}`)
         
         console.warn(`Manual steps: \ - Add cron tab configuration`) // TODO: automate
+        
+        // Update monitoring
+        await shell.exec(`node deploy/monitoring/update --force`)
     })

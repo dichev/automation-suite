@@ -17,7 +17,7 @@ const log = console.log
 //---------------------
 const emptyTarget = value => Array.isArray(value) ? [] : {}
 const clone = (value, options) => deepMerge(emptyTarget(value), value, options)
-function combineMerge(target, source, options) {
+function combineMerge(target, source, options) { //@ why this is snecessary?
     const destination = target.slice()
     
     source.forEach(function(e, i) {
@@ -96,34 +96,27 @@ program
                 })
             }
     
-            
-            
-            // Templating the Monitoring System
-            log("Generating monitoring configurations from templates..")
-            let shell = await program.shell()
-            await shell.chdir(TEMPLATES)
-            await shell.exec(`bin/generator -t templates/monitoring/monitoring.json.hbs -s ${SERVER} -o ${OPERATOR} -d ${SERVER}/${OPERATOR}/monitoring/${OPERATOR}.json`)
-            await shell.exec(`bin/generator -t templates/monitoring/sensors.json.hbs    -s ${SERVER} -o ${OPERATOR} -d ${SERVER}/${OPERATOR}/monitoring/${OPERATOR}-sensors.json`)
-    
-            // Append new config to sensors.json
-            let sensors         = JSON.parse(fs.readFileSync(`${GRAFANA}/config/sensors.json`, 'utf8'));
-            let operatorSensors = JSON.parse(fs.readFileSync(`${TEMPLATES}/output/${SERVER}/${OPERATOR}/monitoring/${OPERATOR}-sensors.json`, 'utf8'));
-    
-            // Merge objects
-            const result = deepMerge(sensors, operatorSensors,{arrayMerge: combineMerge});
-    
-            // Save to sensors.json
-            fs.writeFileSync(`${GRAFANA}/config/sensors.json`, JSON.stringify(result, null, 4));
-    
-            log("Coping operator config file to GRAFANA")
-            await shell.exec(`cp ${TEMPLATES}/output/${SERVER}/${OPERATOR}/monitoring/${OPERATOR}.json ${GRAFANA}/config/operators/${OPERATOR}.json`);
-    
-            log("Please review and commit the changes")
-            await shell.exec(`cd ${GRAFANA} && TortoiseGitProc -command commit -logmsg "[env] Add new env: ${OPERATOR}"`)
-            
-            
-            log('Done')
         }
+
+
+        // Templating the Monitoring System
+        log("Generating monitoring configurations from templates..")
+        let sensors = JSON.parse(fs.readFileSync(`${GRAFANA}/config/sensors.json`, 'utf8'));
+        let operatorSensors = JSON.parse(fs.readFileSync(`${TEMPLATES}/output/${OPERATOR}/monitoring/${OPERATOR}-sensors.json`, 'utf8'));
+    
+        // Merge objects
+        // const result = deepMerge(sensors, operatorSensors, {arrayMerge: combineMerge});
+        const result = deepMerge(sensors, operatorSensors);
+    
+        // Save to sensors.json
+        fs.writeFileSync(`${GRAFANA}/config/sensors.json`, JSON.stringify(result, null, 4));
+        await shell.exec(`cp ${TEMPLATES}/output/${OPERATOR}/monitoring/${OPERATOR}.json ${GRAFANA}/config/operators/${OPERATOR}.json`);
+    
+        log("Please review and commit the changes")
+        await shell.exec(`cd ${GRAFANA} && git add . && TortoiseGitProc -command commit -logmsg "[env] Add new env: ${OPERATOR}"`)
+    
+        log('Done')
+    
     })
 
 

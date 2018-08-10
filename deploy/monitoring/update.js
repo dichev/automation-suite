@@ -39,5 +39,5 @@ program
 
         // Check
         await chat.notify('Check grafana-sensors.service status')
-        await sshRoot.exec(`systemctl status grafana-sensors.service`)
+        await sshRoot.exec(`systemctl status grafana-sensors.service | head -n 3`)
     })
