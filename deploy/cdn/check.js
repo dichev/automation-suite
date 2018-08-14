@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-'use strict';
+'use strict'
 
 /**
  * Usage:
@@ -9,7 +9,7 @@
 const Program = require('dopamine-toolbox').Program
 const installed = require('./.installed')
 const cfg = require('configurator')
-const compare = require('node-version-compare');
+const compare = require('node-version-compare')
 const assert = require('assert')
 const empty = (str) => { if(str !== '') throw Error(str) }
 
@@ -52,16 +52,16 @@ program
     
         it(`target release is not behind than current release`, async () => {
             if (!REV) return it.skip()
-            let current = await cdn.exec(`git describe --tags`);
-            let compared = compare(current, REV);
-            if (compared === 1) throw Error(`The current release is NOT BEHIND the target release: ${current} => ${REV}`);
+            let current = await cdn.exec(`git describe --tags`)
+            let compared = compare(current, REV)
+            if (compared === 1) throw Error(`The current release is NOT BEHIND the target release: ${current} => ${REV}`)
             
         })
         
         it.warn(`target release is not the same as current release`, async() => {
             if (!REV) return it.skip()
-            let current = await cdn.exec(`git describe --tags`);
-            let compared = compare(current, REV);
+            let current = await cdn.exec(`git describe --tags`)
+            let compared = compare(current, REV)
             if (compared === 0) throw Error(`The current release is THE SAME as the target release: ${current} => ${REV}`)
         })
     
