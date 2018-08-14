@@ -8,7 +8,7 @@ const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 
 
-let program = new Program({ chat: cfg.chat.rooms.devops })
+let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 
 program
     .description('Check current hermes release versions')

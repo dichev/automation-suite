@@ -8,7 +8,7 @@ const assert = require('assert')
 const empty = (str) => { if(str !== '') throw Error(str) }
 
 
-let program = new Program({chat: cfg.chat.rooms.devops})
+let program = new Program({chat: cfg.chat.rooms.deployBackend})
 
 program
     .description('Pre-deployment tests')

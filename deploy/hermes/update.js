@@ -5,7 +5,7 @@ const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 
 
-let program = new Program({chat: cfg.chat.rooms.devops})
+let program = new Program({chat: cfg.chat.rooms.deployBackend})
 
 program
     .description('Direct update of hermes release version')
@@ -17,10 +17,13 @@ program
         node deploy/hermes/update --operators bots --rev r3.9.9.1 --strategy blue-green --allow-panel --force
     `)
     
+    // TODO: show the release plan
+    
     .iterate('operators', async (operator) => {
         if (program.params.parallel) throw Error(`Currently the command doesn't support parallel mode for safety reasons`)
     
         const location = cfg.getLocationByOperator(operator);
+        const OPERATOR_DIR = cfg.operators[operator].dir // TODO: temporary - still used for switch webs
         const DEST = 'production/' + cfg.operators[operator].dir
         const REVS = program.params.rev
         const STRATEGY = program.params.strategy
@@ -77,7 +80,7 @@ program
     
             // Switch to green
             await chat.notify('Phase 1: Switch to green (web4,web5)')
-            await lb.exec(`switch-webs --webs=${location.green} --operators=${operator}`)
+            await lb.exec(`switch-webs --webs=${location.green} --operators=${OPERATOR_DIR}`)
     
     
             // Update web1
@@ -100,7 +103,7 @@ program
             // Switch to blue
             await program.confirm(`\nDo you want to switch to blue?`)
             await chat.notify('Phase 3: Switch to blue')
-            await lb.exec(`switch-webs --webs=${location.blue} --operators=${operator}`)
+            await lb.exec(`switch-webs --webs=${location.blue} --operators=${OPERATOR_DIR}`)
     
     
             // QA time
@@ -109,10 +112,10 @@ program
     
             
             // Rollback?
-            let answer = await program.ask('Do you need to ROLLBACK?', ['rollback', ''], '')
+            let answer = program.params.force ? '' : await program.ask('Do you need to ROLLBACK?', ['rollback', ''], '')
             if (answer === 'rollback') {
                 await chat.notify('Something is wrong, we will rollback by switching to green', { color: 'red' })
-                await lb.exec(`switch-webs --webs=${location.green} --operators=${operator}`)
+                await lb.exec(`switch-webs --webs=${location.green} --operators=${OPERATOR_DIR}`)
                 await chat.notify('Switched to green, please confirm everything is fine', { color: 'yellow' })
                 throw Error('Aborting')
             }
@@ -125,7 +128,7 @@ program
             // Switch to all webs (green & blue)
             let allWebs = [].concat(location.blue, location.green)
             await chat.notify(`Phase 6: Switch to blue & green: ${allWebs}`)
-            await lb.exec(`switch-webs --webs=${allWebs} --operators=${operator}`)
+            await lb.exec(`switch-webs --webs=${allWebs} --operators=${OPERATOR_DIR}`)
             await chat.notify(`${to} deployed to ${operator}`, {color: 'green'})
         }
         else {
@@ -135,5 +138,5 @@ program
     
     })
     .then(async() => {
-        await program.chat.notify(`# QA validation\nPlease validate and let me know when you are ready`, {color: `yellow`})
+        if(program.params.strategy === 'direct') await program.chat.notify(`# QA validation\nPlease validate and let me know when you are ready`, {color: `yellow`})
     })
