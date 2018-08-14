@@ -14,27 +14,6 @@ const deepMerge = require('deepmerge')
 const fs = require('fs')
 const log = console.log
 
-//---------------------
-const emptyTarget = value => Array.isArray(value) ? [] : {}
-const clone = (value, options) => deepMerge(emptyTarget(value), value, options)
-function combineMerge(target, source, options) { //@ why this is snecessary?
-    const destination = target.slice()
-    
-    source.forEach(function(e, i) {
-        if (typeof destination[i] === 'undefined') {
-            const cloneRequested = options.clone !== false
-            const shouldClone = cloneRequested && options.isMergeableObject(e)
-            destination[i] = shouldClone ? clone(e, options) : e
-        } else if (options.isMergeableObject(e)) {
-            destination[i] = deepMerge(target[i], e, options)
-        } else if (target.indexOf(e) === -1) {
-            destination.push(e)
-        }
-    })
-    return destination
-}
-//---------------------
-
 // Configuration
 const TEMPLATES = "d:/www/servers/template-generator"
 const GRAFANA   = "d:/www/servers/grafana-sensors";
@@ -105,7 +84,6 @@ program
         let operatorSensors = JSON.parse(fs.readFileSync(`${TEMPLATES}/output/${OPERATOR}/monitoring/${OPERATOR}-sensors.json`, 'utf8'));
     
         // Merge objects
-        // const result = deepMerge(sensors, operatorSensors, {arrayMerge: combineMerge});
         const result = deepMerge(sensors, operatorSensors);
     
         // Save to sensors.json
