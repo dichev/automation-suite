@@ -67,7 +67,7 @@ program
             await chat.notify(`\nPhase 2: update code to all other webs (public)`)
             await program.confirm(`Continue (yes)?`)
             await web1.exec(`$HOME/bin/webs-sync .`, {silent: true})
-            await chat.notify(`${to} deployed to ${operator}`, {color: 'green'})
+            await chat.notify(`${to} deployed to ${operator}`, {color: 'green', popup: true})
     
         }
         
@@ -138,5 +138,5 @@ program
     
     })
     .then(async() => {
-        if(program.params.strategy === 'direct') await program.chat.notify(`# QA validation\nPlease validate and let me know when you are ready`, {color: `yellow`})
+        if(program.params.strategy === 'direct') await program.chat.notify(`# QA validation\nPlease validate and let me know when you are ready`, {color: `yellow`, popup: true})
     })
