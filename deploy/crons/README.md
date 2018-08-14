@@ -18,6 +18,7 @@ Check crons for manual changes and diffs
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 
+
   Example usage:
     node deploy/crons/fetch --locations all -p
 ```
@@ -40,6 +41,7 @@ Update crons to match the seed repo
     -q, --quiet                 Turn off chat and some logs in stdout
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
+
 
   Example usage:
     node deploy/crons/update --locations belgium

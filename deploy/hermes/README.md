@@ -40,6 +40,7 @@ Pre-deployment tests
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 
+
   Example usage:
     node deploy/hermes/check --operators all -p 10
     node deploy/hermes/check -o bots,rtg
@@ -68,6 +69,7 @@ Direct update of hermes release version
     --no-chat                           Disable chat notification if they are activated
     -h, --help                          output usage information
 
+
   Example usage:
     node deploy/hermes/update --operators bots --rev r3.9.9.1 --strategy blue-green --allow-panel --force
 ```
@@ -89,6 +91,7 @@ Check current hermes release versions
     -q, --quiet                 Turn off chat and some logs in stdout
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
+
 
   Example usage:
     $ node deploy/hermes/version --operators all -p 10

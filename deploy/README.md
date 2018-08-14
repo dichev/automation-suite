@@ -132,6 +132,7 @@ Check crons for manual changes and diffs
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 
+
   Example usage:
     node deploy/crons/fetch --locations all -p
 ```
@@ -154,6 +155,7 @@ Update crons to match the seed repo
     -q, --quiet                 Turn off chat and some logs in stdout
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
+
 
   Example usage:
     node deploy/crons/update --locations belgium
@@ -201,6 +203,7 @@ Pre-deployment tests
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 
+
   Example usage:
     node deploy/hermes/check --operators all -p 10
     node deploy/hermes/check -o bots,rtg
@@ -229,6 +232,7 @@ Direct update of hermes release version
     --no-chat                           Disable chat notification if they are activated
     -h, --help                          output usage information
 
+
   Example usage:
     node deploy/hermes/update --operators bots --rev r3.9.9.1 --strategy blue-green --allow-panel --force
 ```
@@ -250,6 +254,7 @@ Check current hermes release versions
     -q, --quiet                 Turn off chat and some logs in stdout
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
+
 
   Example usage:
     $ node deploy/hermes/version --operators all -p 10
@@ -407,6 +412,7 @@ Update Grafana-Sensors repo
     -q, --quiet             Turn off chat and some logs in stdout
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
+
 
   Example usage:
     node deploy/sys-metrics/check --hosts dev-hermes-web1,dev-hermes-web2

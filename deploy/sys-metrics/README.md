@@ -16,6 +16,7 @@
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 
+
   Example usage:
     node deploy/sys-metrics/check --hosts dev-hermes-web1,dev-hermes-web2
     node deploy/sys-metrics/check --hosts dev-hermes-*
