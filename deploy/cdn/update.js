@@ -17,8 +17,8 @@ program
     .description('Update games cdn')
     .option('-h, --hosts <list|all>', `Comma-separated list of cdn regions`, {choices: installed.hosts, required: true})
     .option('-r, --revision <string>', `Target revision (like r3.9.9.0)`)
-    .option('-m, --mode <blue|green>', `Which cdn to by updated`, { choices: ['blue', 'green'], required: true })
-    
+    .option('-m, --mode <blue|green>', `Which cdn to be updated`, { choices: ['blue', 'green'], required: true })
+
     .iterate('hosts', async (host) => {
         const REV = program.params.revision
         const MODE = program.params.mode
@@ -46,7 +46,7 @@ program
         
         // Populate
         await chat.notify('\nPhase 2: Cachebust html assets')
-        console.info(`use: \n  $ node cdn/cachebust  --hosts ${host} --mode ${mode} --revision ${REV}`)
+        console.info(`use: \n  $ node cdn/cachebust  --hosts ${host}`)
         
 
     })

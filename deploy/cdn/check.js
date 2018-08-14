@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-'use strict';
+'use strict'
 
 /**
  * Usage:
@@ -9,7 +9,7 @@
 const Program = require('dopamine-toolbox').Program
 const installed = require('./.installed')
 const cfg = require('configurator')
-const compare = require('node-version-compare');
+const compare = require('node-version-compare')
 const assert = require('assert')
 const empty = (str) => { if(str !== '') throw Error(str) }
 
@@ -19,8 +19,8 @@ program
     .description('Test suit of games cdn')
     .option('-h, --hosts <list|all>', `Comma-separated list of cdn regions`, {choices: installed.hosts, required: true})
     .option('-r, --revision <string>', `Target revision (like r3.9.9.0)`)
-    .option('-m, --mode <blue|green>', `Which cdn to by updated`, {choices: ['blue', 'green'], required: true })
-    
+    .option('-m, --mode <blue|green>', `Which cdn to be updated`, {choices: ['blue', 'green'], required: true })
+
     .iterate('hosts', async (host) => {
         const REV = program.params.revision
         const MODE = program.params.mode
@@ -52,16 +52,16 @@ program
     
         it(`target release is not behind than current release`, async () => {
             if (!REV) return it.skip()
-            let current = await cdn.exec(`git describe --tags`);
-            let compared = compare(current, REV);
-            if (compared === 1) throw Error(`The current release is NOT BEHIND the target release: ${current} => ${REV}`);
+            let current = await cdn.exec(`git describe --tags`)
+            let compared = compare(current, REV)
+            if (compared === 1) throw Error(`The current release is NOT BEHIND the target release: ${current} => ${REV}`)
             
         })
         
         it.warn(`target release is not the same as current release`, async() => {
             if (!REV) return it.skip()
-            let current = await cdn.exec(`git describe --tags`);
-            let compared = compare(current, REV);
+            let current = await cdn.exec(`git describe --tags`)
+            let compared = compare(current, REV)
             if (compared === 0) throw Error(`The current release is THE SAME as the target release: ${current} => ${REV}`)
         })
     
