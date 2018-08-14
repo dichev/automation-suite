@@ -54,9 +54,11 @@ program
                     help: help.replace('Usage: node ', `  Usage: node ${group}/`) // TODO: temporary
                 }
             }
-            const README = path.normalize(`${base}/${name}/README.md`)
-            fs.writeFileSync(README, templates.program(data.programs[name]))
-            console.log(`Generated: ${README}\n`)
+            
+            // const README = path.normalize(`${base}/${name}/README.md`)
+            // fs.writeFileSync(README, templates.program(data.programs[name]))
+            // console.log(`Generated: ${README}\n`)
+            
             // break
         }
         // console.log(inspect(data, {depth: 5, colors: true}))
