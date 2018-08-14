@@ -1,6 +1,7 @@
 ## Available programs:
 
 * **[cdn](#cdn)**
+    * **[cachebust](#cdn-cachebust)** - cachebusting html assets
     * **[check](#cdn-check)** - test suit of games cdn
     * **[update](#cdn-update)** - update games cdn
     * **[version](#cdn-version)** - checking current release version of games cdn
@@ -26,6 +27,25 @@
 
 ## Help
 ## <a name="cdn"></a>cdn
+### <a name="cdn-cachebust"></a>cachebust
+Cachebusting html assets
+```
+  Usage: node deploy/cdn/cachebust --hosts <list|all> 
+
+  Cachebusting html assets
+
+  Options:
+    -h, --hosts <list|all>  [required] Comma-separated list of cdn regions. Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup
+
+  Additional Options:
+    -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+    -v, --verbose           Turn ON log details of whats happening
+    -f, --force             Suppress confirm messages (used for automation)
+    -n, --dry-run           Dry run mode will do everything as usual except commands execution
+    -q, --quiet             Turn off chat and some logs in stdout
+    --no-chat               Disable chat notification if they are activated
+    -h, --help              output usage information
+```
 ### <a name="cdn-check"></a>check
 Test suit of games cdn
 ```
@@ -36,7 +56,7 @@ Test suit of games cdn
   Options:
     -h, --hosts <list|all>   [required] Comma-separated list of cdn regions. Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup
     -r, --revision <string>  Target revision (like r3.9.9.0)
-    -m, --mode <blue|green>  [required] Which cdn to by updated. Available: blue,green
+    -m, --mode <blue|green>  [required] Which cdn to be updated. Available: blue,green
 
   Additional Options:
     -p, --parallel [limit]   When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -57,7 +77,7 @@ Update games cdn
   Options:
     -h, --hosts <list|all>   [required] Comma-separated list of cdn regions. Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup
     -r, --revision <string>  Target revision (like r3.9.9.0)
-    -m, --mode <blue|green>  [required] Which cdn to by updated. Available: blue,green
+    -m, --mode <blue|green>  [required] Which cdn to be updated. Available: blue,green
 
   Additional Options:
     -p, --parallel [limit]   When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
