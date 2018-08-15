@@ -10,7 +10,7 @@ const fs = require('fs')
 
 const REPO = "d:/www/hermes/master/platform"
 
-let program = new Program({ chat: cfg.chat.rooms.devops })
+let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 
 program
     .description(`Sync games and maths seeds`)
@@ -33,7 +33,7 @@ Promise.resolve().then(async() => {
         let master = await program.mysql({user: 'root', ssh: {user: 'root', host: dbs.master}})
         let dbname = cfg.operators[operator].dbPrefix + 'platform'
         
-        console.log(`Syncing games seed of ${operator}..`)
+        await program.chat.notify(`Syncing games-certified seed to #${REV}`)
         await master.query(`USE ${dbname};`)
         await master.query(seed)
 
