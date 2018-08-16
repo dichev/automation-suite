@@ -3,6 +3,7 @@
         "dev-hermes-lb",
         "cdn-asia",
         "cdn-europe",
-        "cdn-backup"
+        "cdn-backup",
+        "cdn-staging"
     ]
 }
