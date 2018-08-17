@@ -62,7 +62,7 @@ program
         log("Adding code on webs..")
         await web1.exec(`git clone git@gitlab.dopamine.bg:releases/hermes.git ${DEST}`)
 
-        await web1.exec(`chmod 777 ${DEST}/wallet/logs ${DEST}/gpanel/exports ${DEST}/gpanel/cache`)
+        await web1.exec(`chmod 777 ${DEST}/platform/logs ${DEST}/wallet/logs ${DEST}/gpanel/exports ${DEST}/gpanel/cache`)
         await shell.exec(`scp -r ${TEMPLATES}/output/${OPERATOR}/hermes/* dopamine@${hosts.web1}:${DEST}`)
         await web1.exec(`/home/dopamine/bin/webs-sync ${DEST}`)
 
