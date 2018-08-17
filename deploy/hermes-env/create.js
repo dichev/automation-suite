@@ -19,7 +19,7 @@ const read = (path) => fs.readFileSync(path).toString()
 const TEMPLATES = "d:/www/servers/template-generator" // TODO: temporary
 
 
-let program = new Program({ chat: cfg.chat.rooms.devops })
+let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 
 program
     .option('-e, --env <name>', 'The target env name', { required: true })
@@ -57,9 +57,8 @@ program
         let shell = program.shell()
     
 
-
         // Creating the environment
-        log("Adding code on webs..")
+        await program.chat.notify(`\nAdding code on webs`)
         await web1.exec(`git clone git@gitlab.dopamine.bg:releases/hermes.git ${DEST}`)
 
         await web1.exec(`chmod 777 ${DEST}/platform/logs ${DEST}/wallet/logs ${DEST}/gpanel/exports ${DEST}/gpanel/cache`)
@@ -72,6 +71,7 @@ program
 
 
         // Creating databases & users
+        await program.chat.notify(`\nPreparing databases`)
         log('\nCreating master databases/users')
         await master.query(read(`${TEMPLATES}/output/${OPERATOR}/db/master.sql`))
         log('\nCreating archive databases/users')
@@ -84,24 +84,27 @@ program
         log('Importing archive schema..')
         await archive.query(read(`${TEMPLATES}/output/${OPERATOR}/db/schema-archive.sql`))
         log('Importing master seed..')
-        await master.query(read(`${TEMPLATES}/output/${OPERATOR}/db/seed.sql`))
+        await master.query(read(`${TEMPLATES}/output/${OPERATOR}/db/seed.sql`)) //@ TODO: lag 5 secs response time
 
     
         // Crons
-        log(`\nExecuting initial crons`)
+        await program.chat.notify(`\nExecuting initial crons`)
         await web1.exec(`php ${DEST}/platform/bin/cmd.php exchange-rates`)
     
         // System configurations
-        log('\nUpdate system configurations')
+        await program.chat.notify('\nUpdate system configurations (danger: could affect the other operators on failure)')
         log('This could affect the other envs if the setup is incorrect.')
         await program.confirm('DANGER! Are you sure you want to continue (yes)? ')
         await shell.exec(`node servers/servers-conf/update --locations ${LOCATION}`)
+        // TODO: rollback
     
         // Checkers & tests
-        await shell.exec(`node deploy/hermes-env/check --env ${OPERATOR} --location ${LOCATION}`)
+        await program.chat.notify('\nChecking test suite')
+        await shell.exec(`node deploy/hermes-env/check --env ${OPERATOR}`)
         
         console.warn(`Manual steps: \ - Add cron tab configuration`) // TODO: automate
         
         // Update monitoring
+        await program.chat.notify('\nUpdate monitoring configuration')
         await shell.exec(`node deploy/monitoring/update --force`)
     })
