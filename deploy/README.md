@@ -6,6 +6,7 @@
     * **[update](#cdn-update)** - update games cdn
     * **[version](#cdn-version)** - checking current release version of games cdn
 * **[crons](#crons)**
+    * **[execute](#crons-execute)** - execute cron for list of operators
     * **[fetch](#crons-fetch)** - check crons for manual changes and diffs
     * **[update](#crons-update)** - update crons to match the seed repo
 * **[hermes](#hermes)**
@@ -113,6 +114,27 @@ Checking current release version of games cdn
     -h, --help               output usage information
 ```
 ## <a name="crons"></a>crons
+### <a name="crons-execute"></a>execute
+Execute cron for list of operators
+```
+  Usage: node deploy/crons/execute --operators <list|all> --cron <string> --project <string> 
+
+  Execute cron for list of operators
+
+  Options:
+    -o, --operators <list|all>  [required] Comma-separated list of operators. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,soft2bet,williamhill,gvc,pop,gamesys,nektan,138global,pokerstars,aggfun,ugs2,ugs4,ugs3,ugs1
+    -c, --cron <string>         [required] Cron name
+    -p, --project <string>      [required] Project folder name
+
+  Additional Options:
+    -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+    -v, --verbose               Turn ON log details of whats happening
+    -f, --force                 Suppress confirm messages (used for automation)
+    -n, --dry-run               Dry run mode will do everything as usual except commands execution
+    -q, --quiet                 Turn off chat and some logs in stdout
+    --no-chat                   Disable chat notification if they are activated
+    -h, --help                  output usage information
+```
 ### <a name="crons-fetch"></a>fetch
 Check crons for manual changes and diffs
 ```
@@ -131,7 +153,6 @@ Check crons for manual changes and diffs
     -q, --quiet                 Turn off chat and some logs in stdout
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
-
 
   Example usage:
     node deploy/crons/fetch --locations all -p
@@ -155,7 +176,6 @@ Update crons to match the seed repo
     -q, --quiet                 Turn off chat and some logs in stdout
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
-
 
   Example usage:
     node deploy/crons/update --locations belgium
@@ -203,7 +223,6 @@ Pre-deployment tests
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 
-
   Example usage:
     node deploy/hermes/check --operators all -p 10
     node deploy/hermes/check -o bots,rtg
@@ -232,7 +251,6 @@ Direct update of hermes release version
     --no-chat                           Disable chat notification if they are activated
     -h, --help                          output usage information
 
-
   Example usage:
     node deploy/hermes/update --operators bots --rev r3.9.9.1 --strategy blue-green --allow-panel --force
 ```
@@ -254,7 +272,6 @@ Check current hermes release versions
     -q, --quiet                 Turn off chat and some logs in stdout
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
-
 
   Example usage:
     $ node deploy/hermes/version --operators all -p 10
@@ -412,7 +429,6 @@ Update Grafana-Sensors repo
     -q, --quiet             Turn off chat and some logs in stdout
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
-
 
   Example usage:
     node deploy/sys-metrics/check --hosts dev-hermes-web1,dev-hermes-web2
