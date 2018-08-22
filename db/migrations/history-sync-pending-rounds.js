@@ -43,7 +43,6 @@ const cfg = require('configurator')
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
-    .description(`Update users country using ip geolocation. This is very expensive migration, that's why is executed in a loop user by user`)
     .option('-o, --operators <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
 
     .iterate('operators', async (operator) => {
@@ -57,6 +56,7 @@ program
         let period = 12
         if(operator === 'pokerstars') period = 90
         if(operator === 'ugs2') period = 60
+        if(operator === 'ugs1' || operator === 'ugs3' || operator === 'ugs4') period = 14
         
         // Analyze
         console.log(`Analyzing ${DB}`)
