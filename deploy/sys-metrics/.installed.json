@@ -85,6 +85,11 @@
         "belgium-web2",
         "data-warehouse",
         "tw-mysql2",
-        "tw-mysql-archive2"
+        "tw-mysql-archive2",
+        "sofia-mysql-mirror-iom-new",
+        "sofia-mysql-mirror-gib-new",
+        "sofia-mysql-mirror-pokerstars-new",
+        "sofia-mysql-mirror-tw-new",
+        "sofia-mysql-mirror-manila-new"
     ]
 }
