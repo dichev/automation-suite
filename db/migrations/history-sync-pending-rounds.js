@@ -25,13 +25,13 @@ from
     
         where h.roundId in (
             select roundId from (
-                SELECT roundId FROM users_games_states WHERE state IS NOT NULL AND updatedAt < DATE_SUB(CURDATE(), INTERVAL 11 DAY)
-                UNION SELECT roundInstanceId FROM transactions_real_recon WHERE endTime < DATE_SUB(CURDATE(), INTERVAL 12 DAY) AND statusCode IN (600,601,602)
-                UNION SELECT roundInstanceId FROM transactions_real WHERE statusCode=100 AND endTime < DATE_SUB(CURDATE(), INTERVAL 12 DAY)
+                SELECT roundId FROM users_games_states WHERE state IS NOT NULL AND updatedAt < DATE_SUB(CURDATE(), INTERVAL ? DAY)
+                UNION SELECT roundInstanceId FROM transactions_real_recon WHERE endTime < DATE_SUB(CURDATE(), INTERVAL ? DAY) AND statusCode IN (600,601,602)
+                UNION SELECT roundInstanceId FROM transactions_real WHERE statusCode=100 AND endTime < DATE_SUB(CURDATE(), INTERVAL ? DAY)
             ) b
         )
         
-        having roundId2 is null
+       having roundId2 is null
         
 ) c
 left join transactions_round_instance r on (r.id = roundId)
@@ -54,14 +54,18 @@ program
     
         master.highLoadProtection({connections: 300})
         
+        let period = 12
+        if(operator === 'pokerstars') period = 90
+        if(operator === 'ugs2') period = 60
+        
         // Analyze
         console.log(`Analyzing ${DB}`)
-        let rows = await master.query(SQL_SELECT)
+        let rows = await master.query(SQL_SELECT, [period, period, period])
         if(!rows.length) return console.log('no records founds')
         await program.chat.notify(`Found ${rows.length} history records for sync`)
         
         await program.confirm('Proceed?')
-        await master.query(SQL_SYNC)
+        await master.query(SQL_SYNC, [period, period, period])
         await program.chat.notify('Synced')
         
     })
