@@ -90,6 +90,7 @@
         "sofia-mysql-mirror-gib-new",
         "sofia-mysql-mirror-pokerstars-new",
         "sofia-mysql-mirror-tw-new",
-        "sofia-mysql-mirror-manila-new"
+        "sofia-mysql-mirror-manila-new",
+        "malta-mysql-belgium-replication"
     ]
 }
