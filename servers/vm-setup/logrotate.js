@@ -23,6 +23,9 @@ program
                 break
     
             case 'mysql':
+            case 'mysql-archive':
+            case 'mysql-slave':
+            case 'mysql-master':
                 await ssh.exec('ln -svf /opt/servers-conf/logrotate/mysql /etc/logrotate.d/mysql')
                 await ssh.exec('ln -svf /opt/servers-conf/logrotate/rsyslog /etc/logrotate.d/rsyslog')
                 break
