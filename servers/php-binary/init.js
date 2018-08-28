@@ -40,7 +40,6 @@ program
         await ssh.exec('rm -fv /usr/bin/php && ln -s /opt/phpbrew/php/php/bin/php /usr/bin/php')
         await ssh.exec('rm -fv /etc/init.d/php*-fpm && ln -s /opt/servers-conf/php/php-fpm.init.d /etc/init.d/php-fpm')
         await ssh.exec('rm -fv /etc/systemd/system/php*-fpm.service && systemctl enable /opt/servers-conf/php/php-fpm.service')
-        await ssh.exec('rm -fv /etc/logrotate.d/php*-fpm && ln -s /opt/servers-conf/php/logrotate /etc/logrotate.d/php-fpm')
         await ssh.exec('sleep 2; killall -9 php-fpm || killall -9 php5-fpm || true')
         await ssh.exec('systemctl restart php-fpm && sleep 1') //system
 
