@@ -128,7 +128,7 @@ program
             // Switch to all webs (green & blue)
             let allWebs = [].concat(location.blue, location.green)
             await chat.notify(`Phase 6: Switch to blue & green: ${allWebs}`)
-            await lb.exec(`switch-webs --webs=${allWebs} --operators=${OPERATOR_DIR}`)
+            await lb.exec(`switch-webs --webs=all --operators=${OPERATOR_DIR}`)
             await chat.notify(`${to} deployed to ${operator}`, {color: 'green'})
         }
         else {
