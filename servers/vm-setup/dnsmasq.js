@@ -12,6 +12,8 @@ program
     .option('-h, --hosts <list|all>', 'The target host names', { choices: Object.keys(cfg.hosts), required: true })
     
     .iterate('hosts', async (host) => {
+        if (!host.startsWith('gib') && !host.startsWith('iom')) throw Error('dnsmasq should be enabled only over iom and gib locations')
+        
         let root = await program.ssh(cfg.getHost(host).ip, 'root')
         let location = cfg.getHost(host).location
 
