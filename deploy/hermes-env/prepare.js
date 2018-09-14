@@ -28,11 +28,11 @@ program
     .run(async () => {
         const OPERATOR = program.params.env
         const SERVER = program.params.location
+        let shell = await program.shell()
 
 
         // Templating the environment
         log("Generating configurations from templates..")
-        let shell = await program.shell()
         await shell.chdir(TEMPLATES)
         await shell.exec(`bin/generator-new-operator -o ${OPERATOR} -s ${SERVER}`)
 
@@ -50,11 +50,11 @@ program
             `gserver-${OPERATOR}.${DOMAIN}`,
             `gpanel-${OPERATOR}.${DOMAIN}`
         ]
-    
+
         const z = cfg.cloudflare.zones[DOMAIN]
         let cf = new CloudFlare(z.zone, z.email, z.key)
         cf.silent = true
-        
+
         for (let address of addresses) {
             let records = await cf.get(`dns_records?name=${address}`)
             let found = records.result.find(r => r.name === address)
@@ -74,7 +74,7 @@ program
                     proxied: !isPanel //TODO: gpanel is still not behind CF
                 })
             }
-    
+
         }
 
 
@@ -84,10 +84,10 @@ program
         let operatorSensors = JSON.parse(fs.readFileSync(`${TEMPLATES}/output/${OPERATOR}/monitoring/${OPERATOR}-sensors.json`, 'utf8'))
         fs.writeFileSync(`${GRAFANA}/config/sensors.json`, JSON.stringify(deepMerge(sensors, operatorSensors), null, 4))
         await shell.exec(`cp ${TEMPLATES}/output/${OPERATOR}/monitoring/${OPERATOR}.json ${GRAFANA}/config/operators/${OPERATOR}.json`)
-    
+
         log("Please review and commit the changes")
         await shell.exec(`cd ${GRAFANA} && git add . && TortoiseGitProc -command commit -logmsg "[env] Add new env: ${OPERATOR}"`)
-    
+
         log('Done')
     
     })

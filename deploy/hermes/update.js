@@ -23,7 +23,7 @@ program
         if (program.params.parallel) throw Error(`Currently the command doesn't support parallel mode for safety reasons`)
         if (operator === 'aggfun') {
             console.log('skipping aggfun, see branch #aggfun to update')
-            await program.chat('Skipping..')
+            await program.chat.notify('Skipping aggfun (it is freezed)..')
             return
         }
     
@@ -124,6 +124,7 @@ program
                 await chat.notify('Switched to green, please confirm everything is fine', { color: 'yellow' })
                 throw Error('Aborting')
             }
+            if(program.params.force) await program.sleep(10, 'Waiting a bit just in case'); // TODO: add here some checks
             
     
             // Update green webs

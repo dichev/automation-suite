@@ -18,7 +18,7 @@ program
 .option('-p, --project <string>', `Project folder name`, {required: true})
 
 .iterate('operators', async (operator) => {
-
+    
     const location = cfg.getLocationByOperator(operator)
     const DEST = 'production/' + cfg.operators[operator].dir
 
@@ -31,4 +31,5 @@ program
         throw Error(`Cron not found: ${program.params.cron} in project: ${program.params.project}`);
     }
     await web1.exec(`php ${program.params.project}/bin/cmd.php ${program.params.cron}`)
+    await program.sleep(2, 'Waiting between iterations')
 })

@@ -90,6 +90,7 @@ program
         // Crons
         await program.chat.notify(`\nExecuting initial crons`)
         await web1.exec(`php ${DEST}/platform/bin/cmd.php exchange-rates`)
+        await web1.exec(`php ${DEST}/platform/bin/cmd.php history-partitions`)
     
         // System configurations
         await program.chat.notify('\nUpdate system configurations (danger: could affect the other operators on failure)')
