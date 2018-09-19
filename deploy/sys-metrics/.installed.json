@@ -91,6 +91,9 @@
         "sofia-mysql-mirror-pokerstars-new",
         "sofia-mysql-mirror-tw-new",
         "sofia-mysql-mirror-manila-new",
-        "malta-mysql-belgium-replication"
+        "malta-mysql-belgium-replication",
+        "belgium-mysql-archive",
+        "sofia-mysql-backup-belgium-archive",
+        "belgium-mysql-slave"
     ]
 }

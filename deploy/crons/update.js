@@ -6,7 +6,7 @@ const cfg = require('configurator')
 
 const LOCATIONS = Object.values(cfg.locations).filter(l => l.live).map(l => l.name)
 
-let program = new Program({chat: cfg.chat.rooms.devops})
+let program = new Program({chat: cfg.chat.rooms.deployBackend})
 
 program
     .description('Update crons to match the seed repo')
@@ -19,7 +19,7 @@ program
     
     .iterate('locations', async (location) => {
         const REV = program.params.rev
-        if(!REV) await program.ask(`Warning! You did't define revision and that could be dangerous because the crons will be updated to the current working tree.\nDo you want to continue?`)
+        if(!REV) await program.confirm(`Warning! You did't define revision and that could be dangerous because the crons will be updated to the current working tree.\nDo you want to continue?`)
     
         let web1 = await program.ssh(cfg.locations[location].hosts.web1, 'dopamine')
         

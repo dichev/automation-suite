@@ -9,7 +9,7 @@
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 
-let program = new Program({chat: cfg.chat.rooms.test})
+let program = new Program({chat: cfg.chat.rooms.devops})
 
 program
 .description('Execute cron for list of operators')
