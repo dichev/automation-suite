@@ -9,7 +9,7 @@ const fs = require('fs')
 
 const REPO = "d:/www/_releases/hermes.seed"
 
-let program = new Program({ chat: cfg.chat.rooms.test })
+let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 
 program
     .description(`Sync operator bet limits without betlimits downtime`)
@@ -43,7 +43,13 @@ Promise.resolve().then(async() => {
         
         // prepare
         console.log('Preparing the new betlimits in separate table (safer)')
-        const seed = fs.readFileSync(`${REPO}/betlimits/${operator}.sql`).toString()
+    
+        let SEED_NAME = `${operator}a.sql`
+        if(['ugs1', 'ugs2', 'ugs3', 'ugs4'].includes(operator)){ // only ugs has multiple instances on same seed
+            SEED_NAME = 'ugs.sql'
+        }
+        const seed = fs.readFileSync(`${REPO}/betlimits/${SEED_NAME}`).toString()
+        
         await master.query(`
             DROP TABLE IF EXISTS __sync_users_bet_limits_default_next;
             CREATE TABLE __sync_users_bet_limits_default_next LIKE users_bet_limits_default;
@@ -54,7 +60,7 @@ Promise.resolve().then(async() => {
         
         // validate
         let [row] = await master.query(`SELECT COUNT(*) as total FROM __sync_users_bet_limits_default_next`)
-        if(parseInt(row.total) <= 0) throw Error('There are no records in the new betlimits table. Please check __sync_users_bet_limits_default_next table. \nAborting for investigation..')
+        if(!row || parseInt(row.total) <= 0) throw Error('There are no records in the new betlimits table. Please check __sync_users_bet_limits_default_next table. \nAborting for investigation..')
         console.log(`Found ${row.total} bet limits records`)
         
         
