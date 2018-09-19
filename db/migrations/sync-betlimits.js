@@ -44,7 +44,7 @@ Promise.resolve().then(async() => {
         // prepare
         console.log('Preparing the new betlimits in separate table (safer)')
     
-        let SEED_NAME = `${operator}a.sql`
+        let SEED_NAME = `${operator}.sql`
         if(['ugs1', 'ugs2', 'ugs3', 'ugs4'].includes(operator)){ // only ugs has multiple instances on same seed
             SEED_NAME = 'ugs.sql'
         }
