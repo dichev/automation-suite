@@ -29,19 +29,25 @@ Promise.resolve().then(async() => {
     await program.confirm(`\nAre you sure you want to sync production games to this revision?`)
     
     await program.iterate('operators', async (operator) => {
-        
-        if(operator === 'paddymars' || operator === 'betfairmars'){
-            await program.chat.notify(`Skipping ${operator} (they have custom seed temporary)`)
-            return;
+        if (operator === 'aggfun') {
+            await program.chat.notify('Skipping aggfun (it is freezed)..')
+            return
         }
-
+        
         let dbs = cfg.databases[cfg.operators[operator].databases]
         let master = await program.mysql({user: 'root', ssh: {user: 'root', host: dbs.master}})
         let dbname = cfg.operators[operator].dbPrefix + 'platform'
 
         await program.chat.notify(`Syncing games-certified seed to #${REV}`)
         await master.query(`USE ${dbname};`)
-        await master.query(seed)
+        
+        if(operator === 'paddymars' || operator === 'betfairmars'){ // TODO: temporary
+            await program.chat.notify(`WARNING! Custom seed for ${operator}`)
+            let custom = seed.replace(/PaddyPowerGoldHaxe/g, 'PaddyPowerGold')
+            await master.query(custom)
+        } else {
+            await master.query(seed)
+        }
 
     })
 })
