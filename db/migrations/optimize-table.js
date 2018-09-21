@@ -25,7 +25,7 @@ program
         for(let table of TABLES) {
             await program.chat.notify(`Optimizing ${table}`)
             await master.query('ALTER TABLE `' + table + '` FORCE')
-            await program.chat.notify(`Done.. waiting 10 secs`)
+            await program.chat.notify(`Done.. waiting ${program.params.wait} secs`)
             await program.sleep(program.params.wait)
         }
     })
