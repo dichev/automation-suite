@@ -29,10 +29,6 @@ Promise.resolve().then(async() => {
     await program.confirm(`\nAre you sure you want to sync production games to this revision?`)
     
     await program.iterate('operators', async (operator) => {
-        if (operator === 'aggfun') {
-            await program.chat.notify('Skipping aggfun (it is freezed)..')
-            return
-        }
         
         let dbs = cfg.databases[cfg.operators[operator].databases]
         let master = await program.mysql({user: 'root', ssh: {user: 'root', host: dbs.master}})

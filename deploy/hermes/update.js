@@ -21,12 +21,7 @@ program
     
     .iterate('operators', async (operator) => {
         if (program.params.parallel) throw Error(`Currently the command doesn't support parallel mode for safety reasons`)
-        if (operator === 'aggfun') {
-            console.log('skipping aggfun, see branch #aggfun to update')
-            await program.chat.notify('Skipping aggfun (it is freezed)..')
-            return
-        }
-    
+
         const location = cfg.getLocationByOperator(operator);
         const OPERATOR_DIR = cfg.operators[operator].dir // TODO: temporary - still used for switch webs
         const DEST = 'production/' + cfg.operators[operator].dir
