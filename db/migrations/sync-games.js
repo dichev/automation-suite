@@ -8,23 +8,23 @@ const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 const fs = require('fs')
 
-const REPO = "d:/www/hermes/master/platform"
+const REPO = "d:/www/_releases/hermes.seed"
 
 let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 
 program
     .description(`Sync games and maths seeds`)
     .option('-o, --operators <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
-    .option('-r, --rev <name>', 'The target revision or tag name (like games-10) from platform project', { required: true })
+    .option('-r, --rev <name>', 'The target revision or tag name. Useful for rollback')
     .parse()
 
 
 
 Promise.resolve().then(async() => {
-    const REV = program.params.rev
+    const REV = program.params.rev || 'origin/master'
     console.log(`Ensure the migration is at the expected revision: ${REV}`)
     await program.shell().exec(`cd ${REPO} && git fetch --quiet --tags && git reset --hard ${REV}`)
-    const seed = fs.readFileSync(`${REPO}/.migrator/seed/games/games-certified.sql`).toString()
+    const seed = fs.readFileSync(`${REPO}/games/games-certified.sql`).toString()
     
     await program.confirm(`\nAre you sure you want to sync production games to this revision?`)
     
