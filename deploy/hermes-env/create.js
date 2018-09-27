@@ -92,6 +92,8 @@ program
         await web1.exec(`php ${DEST}/platform/bin/cmd.php exchange-rates`)
         await web1.exec(`php ${DEST}/platform/bin/cmd.php history-partitions`)
     
+        await program.confirm('Continue?')
+        
         // System configurations
         await program.chat.notify('\nUpdate system configurations (danger: could affect the other operators on failure)')
         log('This could affect the other envs if the setup is incorrect.')

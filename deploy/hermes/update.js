@@ -106,20 +106,24 @@ program
             await lb.exec(`switch-webs --webs=${location.blue} --operators=${OPERATOR_DIR}`)
     
     
-            // QA time
-            await chat.notify('Phase 4: QA validation')
-            await chat.notify('Please validate and let me know when you are ready', { color: 'yellow', popup: true })
-    
             
-            // Rollback?
-            let answer = program.params.force ? '' : await program.ask('Do you need to ROLLBACK?', ['rollback', ''], '')
-            if (answer === 'rollback') {
-                await chat.notify('Something is wrong, we will rollback by switching to green', { color: 'red' })
-                await lb.exec(`switch-webs --webs=${location.green} --operators=${OPERATOR_DIR}`)
-                await chat.notify('Switched to green, please confirm everything is fine', { color: 'yellow' })
-                throw Error('Aborting')
+            if(!program.params.force) {
+                // QA time
+                await chat.notify('Phase 4: QA validation')
+                await chat.notify('Please validate and let me know when you are ready', {color: 'yellow', popup: true})
+    
+                // Rollback?
+                let answer = program.params.force ? '' : await program.ask('Do you need to ROLLBACK?', ['rollback', ''], '')
+                if (answer === 'rollback') {
+                    await chat.notify('Something is wrong, we will rollback by switching to green', {color: 'red'})
+                    await lb.exec(`switch-webs --webs=${location.green} --operators=${OPERATOR_DIR}`)
+                    await chat.notify('Switched to green, please confirm everything is fine', {color: 'yellow'})
+                    throw Error('Aborting')
+                }
+            } else {
+                await program.sleep(10, 'Waiting a bit just in case'); // TODO: add here some checks
             }
-            if(program.params.force) await program.sleep(10, 'Waiting a bit just in case'); // TODO: add here some checks
+            
             
     
             // Update green webs
