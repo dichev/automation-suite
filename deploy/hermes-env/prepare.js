@@ -86,7 +86,7 @@ program
         await shell.exec(`cp ${TEMPLATES}/output/${OPERATOR}/monitoring/${OPERATOR}.json ${GRAFANA}/config/operators/${OPERATOR}.json`)
 
         log("Please review and commit the changes")
-        await shell.exec(`cd ${GRAFANA} && git add . && TortoiseGitProc -command commit -logmsg "[env] Add new env: ${OPERATOR}"`)
+        await shell.exec(`cd ${GRAFANA} && git reset --hard && git pull --prune && git add . && TortoiseGitProc -command commit -logmsg "[env] Add new env: ${OPERATOR}"`)
 
         log('Done')
     
