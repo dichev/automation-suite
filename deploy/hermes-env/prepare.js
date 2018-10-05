@@ -80,13 +80,14 @@ program
 
         // Templating the Monitoring System
         log("Generating monitoring configurations from templates..")
+        await shell.exec(`cd ${GRAFANA} && git reset --quiet --hard && git pull --quiet --prune`)
         let sensors = JSON.parse(fs.readFileSync(`${GRAFANA}/config/sensors.json`, 'utf8'))
         let operatorSensors = JSON.parse(fs.readFileSync(`${TEMPLATES}/output/${OPERATOR}/monitoring/${OPERATOR}-sensors.json`, 'utf8'))
         fs.writeFileSync(`${GRAFANA}/config/sensors.json`, JSON.stringify(deepMerge(sensors, operatorSensors), null, 4))
         await shell.exec(`cp ${TEMPLATES}/output/${OPERATOR}/monitoring/${OPERATOR}.json ${GRAFANA}/config/operators/${OPERATOR}.json`)
 
         log("Please review and commit the changes")
-        await shell.exec(`cd ${GRAFANA} && git reset --hard && git pull --prune && git add . && TortoiseGitProc -command commit -logmsg "[env] Add new env: ${OPERATOR}"`)
+        await shell.exec(`cd ${GRAFANA} && git add . && TortoiseGitProc -command commit -logmsg "[env] Add new env: ${OPERATOR}"`)
 
         log('Done')
     
