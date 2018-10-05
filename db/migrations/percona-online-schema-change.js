@@ -4,7 +4,7 @@
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 const fs = require('fs')
-let program = new Program({ chat: cfg.chat.rooms.test })
+let program = new Program({ chat: cfg.chat.rooms.devops })
 
 const usage = `
     $  node db/migrations/percona-online-schema-change -o rtg --db platform --table __version --alter 'CHANGE COLUMN version version INT(10) UNSIGNED NOT NULL AFTER id' --dry-run
@@ -46,8 +46,8 @@ Promise.resolve().then(async() => {
         let cmd = `
             pt-online-schema-change D=${dbname},t=${table} \\
               --alter '${alter}' \\
-              --statistics --progress time,10 --recursion-method none \\
-              --chunk-time 10.00 --max-load Threads_running=300 --critical-load Threads_running=1000 \\
+              --statistics --progress time,2 --recursion-method none \\
+              --chunk-time 2 --max-load Threads_running=300 --critical-load Threads_running=1000 \\
               ${program.params.dryRun ? '--dry-run' : '--execute'}
         `
         
