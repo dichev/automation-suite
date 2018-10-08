@@ -9,20 +9,20 @@ program
     .description('Optimize table fragmentation by rebuilding it online')
     .option('-o, --operators <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
     .option('-t, --tables <name>', 'The table names (comma separated)', { required: true })
-    .option('--db <type>', 'The target database type', { required: true, choices: ['platform', 'panel', 'bonus'], def: 'platform' })
+    .option('--db <type>', 'The target database type', { required: true, choices: ['platform', 'panel', 'bonus'] })
 
     .iterate('operators', async (operator) => {
         if(program.params.wait === undefined) program.params.wait = 10
         
         let dbs = cfg.databases[cfg.operators[operator].databases]
         let master = await program.mysql({user: 'root', ssh: {user: 'root', host: dbs.master}})
-        let DB = cfg.operators[operator].dbPrefix + program.params.db
-        const TABLES = program.params.tables.split(',')
-        await master.query(`USE ${DB};`)
+        let dbname = cfg.operators[operator].dbPrefix + program.params.db
+        let tables = program.params.tables.split(',')
+        await master.query(`USE ${dbname};`)
     
         master.highLoadProtection({connections: 300})
         
-        for(let table of TABLES) {
+        for(let table of tables) {
             await program.chat.notify(`Optimizing ${table}`)
             await master.query('ALTER TABLE `' + table + '` FORCE')
         }
