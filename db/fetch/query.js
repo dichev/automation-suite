@@ -6,7 +6,7 @@ const cfg = require('configurator')
 let program = new Program()
 
 program
-    .description('Optimize table fragmentation by rebuilding it online')
+    .description('Fetch anything from operator database replications')
     .option('-q, --query <sql>', 'Read-only SQL query', { required: true }) // TODO as arg param?
     .option('-o, --operators <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
     .option('--db <type>', 'The target database type', { choices: ['platform', 'panel', 'bonus', 'archive'], def: 'platform' })

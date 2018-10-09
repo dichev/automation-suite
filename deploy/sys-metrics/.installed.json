@@ -94,6 +94,7 @@
         "malta-mysql-belgium-replication",
         "belgium-mysql-archive",
         "sofia-mysql-backup-belgium-archive",
-        "belgium-mysql-slave"
+        "belgium-mysql-slave",
+        "belgium-mysql-mariadb-test"
     ]
 }
