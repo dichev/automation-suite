@@ -18,7 +18,7 @@ const SERVER_CONF_REPOS = `d:/www/servers`
 
 let program = new Program()
 program
-    .description('Generate anything from handlebars templates')
+    .description('Generate all configurations for new operator deployment')
     .option('-o, --operator <name>', 'The operator name, stored in conifg file', { choices: Object.keys(cfg.operators), required: true })
     .option('-d, --dest <path>', 'Output generated data to destination path (could be handlebars template)')
     .option('--no-refresh-masters', 'Skip ensuring the masters are at expected revision')

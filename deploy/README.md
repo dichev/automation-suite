@@ -12,6 +12,7 @@
 * **[hermes](#hermes)**
     * **[allow-panel-access](#hermes-allow-panel-access)** - allow QA access to gpanel
     * **[check](#hermes-check)** - pre-deployment tests
+    * **[migration](#hermes-migration)** - [IN DEV] Auto execute SQL migrations to production
     * **[update](#hermes-update)** - direct update of hermes release version
     * **[version](#hermes-version)** - check current hermes release versions
 * **[hermes-env](#hermes-env)**
@@ -40,7 +41,7 @@ Cachebusting html assets
   Cachebusting html assets
 
   Options:
-    -h, --hosts <list|all>  [required] Comma-separated list of cdn regions. Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup
+    -h, --hosts <list|all>  [required] Comma-separated list of cdn regions
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -48,6 +49,8 @@ Cachebusting html assets
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --wait <int>            Pause between iterations in seconds
+    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
@@ -59,9 +62,9 @@ Test suit of games cdn
   Test suit of games cdn
 
   Options:
-    -h, --hosts <list|all>   [required] Comma-separated list of cdn regions. Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup
+    -h, --hosts <list|all>   [required] Comma-separated list of cdn regions
     -r, --revision <string>  Target revision (like r3.9.9.0)
-    -m, --mode <blue|green>  [required] Which cdn to be updated. Available: blue,green
+    -m, --mode <blue|green>  [required] Which cdn to be updated
 
   Additional Options:
     -p, --parallel [limit]   When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -69,6 +72,8 @@ Test suit of games cdn
     -f, --force              Suppress confirm messages (used for automation)
     -n, --dry-run            Dry run mode will do everything as usual except commands execution
     -q, --quiet              Turn off chat and some logs in stdout
+    --wait <int>             Pause between iterations in seconds
+    --announce               Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                Disable chat notification if they are activated
     -h, --help               output usage information
 ```
@@ -80,9 +85,9 @@ Update games cdn
   Update games cdn
 
   Options:
-    -h, --hosts <list|all>   [required] Comma-separated list of cdn regions. Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup
+    -h, --hosts <list|all>   [required] Comma-separated list of cdn regions
     -r, --revision <string>  Target revision (like r3.9.9.0)
-    -m, --mode <blue|green>  [required] Which cdn to be updated. Available: blue,green
+    -m, --mode <blue|green>  [required] Which cdn to be updated
 
   Additional Options:
     -p, --parallel [limit]   When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -90,6 +95,8 @@ Update games cdn
     -f, --force              Suppress confirm messages (used for automation)
     -n, --dry-run            Dry run mode will do everything as usual except commands execution
     -q, --quiet              Turn off chat and some logs in stdout
+    --wait <int>             Pause between iterations in seconds
+    --announce               Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                Disable chat notification if they are activated
     -h, --help               output usage information
 ```
@@ -101,8 +108,8 @@ Checking current release version of games cdn
   Checking current release version of games cdn
 
   Options:
-    -h, --hosts <list|all>   [required] Comma-separated list of cdn regions. Available: dev-hermes-lb,cdn-asia,cdn-europe,cdn-backup
-    -m, --mode <blue|green>  Which cdn to by checked. By default will check both. Available: blue,green
+    -h, --hosts <list|all>   [required] Comma-separated list of cdn regions
+    -m, --mode <blue|green>  Which cdn to by checked. By default will check both
 
   Additional Options:
     -p, --parallel [limit]   When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -110,6 +117,8 @@ Checking current release version of games cdn
     -f, --force              Suppress confirm messages (used for automation)
     -n, --dry-run            Dry run mode will do everything as usual except commands execution
     -q, --quiet              Turn off chat and some logs in stdout
+    --wait <int>             Pause between iterations in seconds
+    --announce               Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                Disable chat notification if they are activated
     -h, --help               output usage information
 ```
@@ -122,7 +131,7 @@ Execute cron for list of operators
   Execute cron for list of operators
 
   Options:
-    -o, --operators <list|all>  [required] Comma-separated list of operators. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,soft2bet,williamhill,gvc,pop,gamesys,nektan,138global,pokerstars,aggfun,ugs2,ugs4,ugs3,ugs1
+    -o, --operators <list|all>  [required] Comma-separated list of operators
     -c, --cron <string>         [required] Cron name
     -p, --project <string>      [required] Project folder name
 
@@ -132,6 +141,8 @@ Execute cron for list of operators
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --wait <int>                Pause between iterations in seconds
+    --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 ```
@@ -151,6 +162,8 @@ Check crons for manual changes and diffs
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --wait <int>                Pause between iterations in seconds
+    --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 
@@ -174,6 +187,8 @@ Update crons to match the seed repo
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --wait <int>                Pause between iterations in seconds
+    --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 
@@ -190,9 +205,9 @@ Allow QA access to gpanel
   Allow QA access to gpanel
 
   Options:
-    -o, --operators <list|all>  [required] Comma-separated list of operators. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,soft2bet,williamhill,gvc,pop,gamesys,nektan,138global,pokerstars,aggfun,ugs2,ugs4,ugs3,ugs1
+    -o, --operators <list|all>  [required] Comma-separated list of operators
     -m, --minutes <int>         Expire after defined minutes (default: 15)
-    -r, --role <string>         Define admin role. Available: RT_QAPROD,EXT_Marketing (default: RT_QAPROD)
+    -r, --role <string>         Define admin role
 
   Additional Options:
     -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -200,6 +215,8 @@ Allow QA access to gpanel
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --wait <int>                Pause between iterations in seconds
+    --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 ```
@@ -211,7 +228,7 @@ Pre-deployment tests
   Pre-deployment tests
 
   Options:
-    -o, --operators <list|all>  [required] Comma-separated list of operators. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,soft2bet,williamhill,gvc,pop,gamesys,nektan,138global,pokerstars,aggfun,ugs2,ugs4,ugs3,ugs1
+    -o, --operators <list|all>  [required] Comma-separated list of operators
     -r, --rev <string>          Target revision (like r3.9.9.01) or from..to revision (like r3.9.9.0..r3.9.9.1)
 
   Additional Options:
@@ -220,6 +237,8 @@ Pre-deployment tests
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --wait <int>                Pause between iterations in seconds
+    --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 
@@ -229,6 +248,29 @@ Pre-deployment tests
     node deploy/hermes/check -o bots -r r3.9.9.1
     node deploy/hermes/check -o bots -r r3.9.9.0..r3.9.9.1
 ```
+### <a name="hermes-migration"></a>migration
+[IN DEV] Auto execute SQL migrations to production
+```
+  Usage: node deploy/hermes/migration --operators <name> --migration-path <name> --db <type> 
+
+  [IN DEV] Auto execute SQL migrations to production
+
+  Options:
+    -o, --operators <name>       [required] The target operator name
+    -m, --migration-path <name>  [required] The path to migration sql file (like /d/www/_releases/hermes/.migrations/r3.9.16.9/gpanel-r3.9.16.9.sql
+    --db <type>                  [required] The target database type
+
+  Additional Options:
+    -p, --parallel [limit]       When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+    -v, --verbose                Turn ON log details of whats happening
+    -f, --force                  Suppress confirm messages (used for automation)
+    -n, --dry-run                Dry run mode will do everything as usual except commands execution
+    -q, --quiet                  Turn off chat and some logs in stdout
+    --wait <int>                 Pause between iterations in seconds
+    --announce                   Announce what and why is happening and delay the execution to give time to all to prepare
+    --no-chat                    Disable chat notification if they are activated
+    -h, --help                   output usage information
+```
 ### <a name="hermes-update"></a>update
 Direct update of hermes release version
 ```
@@ -237,9 +279,9 @@ Direct update of hermes release version
   Direct update of hermes release version
 
   Options:
-    -o, --operators <list|all>          [required] Comma-separated list of operators. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,soft2bet,williamhill,gvc,pop,gamesys,nektan,138global,pokerstars,aggfun,ugs2,ugs4,ugs3,ugs1
+    -o, --operators <list|all>          [required] Comma-separated list of operators
     -r, --rev <string>                  [required] Target revision (like r3.9.9.0) or from..to revision (like r3.9.9.0..r3.9.9.1)
-    -s, --strategy <direct|blue-green>  Choose deployment strategy. Available: direct,blue-green (default: blue-green)
+    -s, --strategy <direct|blue-green>  Choose deployment strategy
     --allow-panel                       Allow QA access to GPanel
 
   Additional Options:
@@ -248,6 +290,8 @@ Direct update of hermes release version
     -f, --force                         Suppress confirm messages (used for automation)
     -n, --dry-run                       Dry run mode will do everything as usual except commands execution
     -q, --quiet                         Turn off chat and some logs in stdout
+    --wait <int>                        Pause between iterations in seconds
+    --announce                          Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                           Disable chat notification if they are activated
     -h, --help                          output usage information
 
@@ -262,7 +306,7 @@ Check current hermes release versions
   Check current hermes release versions
 
   Options:
-    -o, --operators <list|all>  [required] Comma-separated list of operators. Available: rtg,bots,approv,betconstruct,bede,betfairmars,igc,kindred,matchbook,plaingaming,paddymars,rank,techsson,ugseu,videoslots,leovegas,mrgreen,sunbingo,pomadorro,pinnacle,marketing15,coingaming,soft2bet,williamhill,gvc,pop,gamesys,nektan,138global,pokerstars,aggfun,ugs2,ugs4,ugs3,ugs1
+    -o, --operators <list|all>  [required] Comma-separated list of operators
 
   Additional Options:
     -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -270,6 +314,8 @@ Check current hermes release versions
     -f, --force                 Suppress confirm messages (used for automation)
     -n, --dry-run               Dry run mode will do everything as usual except commands execution
     -q, --quiet                 Turn off chat and some logs in stdout
+    --wait <int>                Pause between iterations in seconds
+    --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                   Disable chat notification if they are activated
     -h, --help                  output usage information
 
@@ -291,6 +337,8 @@ Check current hermes release versions
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --wait <int>            Pause between iterations in seconds
+    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
@@ -308,6 +356,8 @@ Check current hermes release versions
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --wait <int>            Pause between iterations in seconds
+    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
@@ -325,6 +375,8 @@ Check current hermes release versions
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --wait <int>            Pause between iterations in seconds
+    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
@@ -343,6 +395,8 @@ Check current hermes release versions
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --wait <int>            Pause between iterations in seconds
+    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
@@ -362,6 +416,8 @@ Pre-deployment tests for Grafana-Sensors
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --wait <int>            Pause between iterations in seconds
+    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 
@@ -406,6 +462,8 @@ Update Grafana-Sensors repo
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --wait <int>            Pause between iterations in seconds
+    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 
@@ -419,7 +477,7 @@ Update Grafana-Sensors repo
   Usage: node deploy/sys-metrics/check --hosts <list|all> 
 
   Options:
-    -h, --hosts <list|all>  [required] The target host names. Available: git,sofia-mysql-backup-pokerstars,sofia-mysql-backup-manila,sofia-mysql-backup-iom,sofia-mysql-backup-manial-taiwan,sofia-mysql-mirror-pokerstars,sofia-mysql-mirror-manila-taiwan,sofia-mysql-mirror-manila,sofia-mysql-mirror-iom,sofia-mysql-mirror-gib,sofia-mysql-backup-pokerstars-archive,sofia-mysql-backup-manila-archive,sofia-mysql-backup-iom-archive,sofia-mysql-backup-gib-archive,sofia-mysql-backup-gib,sofia-logserver,sofia-syslog,dev-hermes-lb,dev-hermes-sql,dev-hermes-web1,dev-hermes-web2,france-srv1,cdn-europe,cdn-asia,cdn-backup,pokerstars-web1,pokerstars-web2,pokerstars-web3,pokerstars-web4,pokerstars-web5,pokerstars-lb1,pokerstars-lb2,pokerstars-system,pokerstars-sql1,pokerstars-sql2,pokerstars-sql3,pokerstars-mysql-archive,iom-lb,iom-mysql-new,iom-mysql-archive,iom-slave,iom-web1,iom-web2,iom-web3,iom-web4,iom-web5,iom-system,iom-3thparty-web1,iom-3thparty-web2,gib-lb1,gib-web1,gib-web2,gib-web3,gib-web4,gib-web5,gib-mysql,gib-mysql-slave,gib-mysql-archive,manila-lb,manila-mysql,manila-mysql-archive,manila-slave,manila-system,manila-web1,manila-web2,manila-web3,manila-web4,manila-web5,manila-tw-mysql,manila-tw-mysql-archive,tw-lb,tw-mysql,tw-mysql-archive,tw-mysql-slave,tw-web1,tw-web2,tw-web3,tw-web4,tw-web5,belgium-lb,belgium-mysql,belgium-web1,belgium-web2,data-warehouse,tw-mysql2,tw-mysql-archive2
+    -h, --hosts <list|all>  [required] The target host names
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -427,6 +485,8 @@ Update Grafana-Sensors repo
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --wait <int>            Pause between iterations in seconds
+    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 
@@ -451,6 +511,8 @@ Installing sys-metrics
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --wait <int>            Pause between iterations in seconds
+    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
@@ -460,7 +522,7 @@ Installing sys-metrics
   Usage: node deploy/sys-metrics/restart --hosts <list|all> 
 
   Options:
-    -h, --hosts <list|all>  [required] The target host names. Available: git,sofia-mysql-backup-pokerstars,sofia-mysql-backup-manila,sofia-mysql-backup-iom,sofia-mysql-backup-manial-taiwan,sofia-mysql-mirror-pokerstars,sofia-mysql-mirror-manila-taiwan,sofia-mysql-mirror-manila,sofia-mysql-mirror-iom,sofia-mysql-mirror-gib,sofia-mysql-backup-pokerstars-archive,sofia-mysql-backup-manila-archive,sofia-mysql-backup-iom-archive,sofia-mysql-backup-gib-archive,sofia-mysql-backup-gib,sofia-logserver,sofia-syslog,dev-hermes-lb,dev-hermes-sql,dev-hermes-web1,dev-hermes-web2,france-srv1,cdn-europe,cdn-asia,cdn-backup,pokerstars-web1,pokerstars-web2,pokerstars-web3,pokerstars-web4,pokerstars-web5,pokerstars-lb1,pokerstars-lb2,pokerstars-system,pokerstars-sql1,pokerstars-sql2,pokerstars-sql3,pokerstars-mysql-archive,iom-lb,iom-mysql-new,iom-mysql-archive,iom-slave,iom-web1,iom-web2,iom-web3,iom-web4,iom-web5,iom-system,iom-3thparty-web1,iom-3thparty-web2,gib-lb1,gib-web1,gib-web2,gib-web3,gib-web4,gib-web5,gib-mysql,gib-mysql-slave,gib-mysql-archive,manila-lb,manila-mysql,manila-mysql-archive,manila-slave,manila-system,manila-web1,manila-web2,manila-web3,manila-web4,manila-web5,manila-tw-mysql,manila-tw-mysql-archive,tw-lb,tw-mysql,tw-mysql-archive,tw-mysql-slave,tw-web1,tw-web2,tw-web3,tw-web4,tw-web5,belgium-lb,belgium-mysql,belgium-web1,belgium-web2,data-warehouse,tw-mysql2,tw-mysql-archive2
+    -h, --hosts <list|all>  [required] The target host names
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -468,6 +530,8 @@ Installing sys-metrics
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --wait <int>            Pause between iterations in seconds
+    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
@@ -477,7 +541,7 @@ Installing sys-metrics
   Usage: node deploy/sys-metrics/stop --hosts <list|all> 
 
   Options:
-    -h, --hosts <list|all>  [required] The target host names. Available: git,sofia-mysql-backup-pokerstars,sofia-mysql-backup-manila,sofia-mysql-backup-iom,sofia-mysql-backup-manial-taiwan,sofia-mysql-mirror-pokerstars,sofia-mysql-mirror-manila-taiwan,sofia-mysql-mirror-manila,sofia-mysql-mirror-iom,sofia-mysql-mirror-gib,sofia-mysql-backup-pokerstars-archive,sofia-mysql-backup-manila-archive,sofia-mysql-backup-iom-archive,sofia-mysql-backup-gib-archive,sofia-mysql-backup-gib,sofia-logserver,sofia-syslog,dev-hermes-lb,dev-hermes-sql,dev-hermes-web1,dev-hermes-web2,france-srv1,cdn-europe,cdn-asia,cdn-backup,pokerstars-web1,pokerstars-web2,pokerstars-web3,pokerstars-web4,pokerstars-web5,pokerstars-lb1,pokerstars-lb2,pokerstars-system,pokerstars-sql1,pokerstars-sql2,pokerstars-sql3,pokerstars-mysql-archive,iom-lb,iom-mysql-new,iom-mysql-archive,iom-slave,iom-web1,iom-web2,iom-web3,iom-web4,iom-web5,iom-system,iom-3thparty-web1,iom-3thparty-web2,gib-lb1,gib-web1,gib-web2,gib-web3,gib-web4,gib-web5,gib-mysql,gib-mysql-slave,gib-mysql-archive,manila-lb,manila-mysql,manila-mysql-archive,manila-slave,manila-system,manila-web1,manila-web2,manila-web3,manila-web4,manila-web5,manila-tw-mysql,manila-tw-mysql-archive,tw-lb,tw-mysql,tw-mysql-archive,tw-mysql-slave,tw-web1,tw-web2,tw-web3,tw-web4,tw-web5,belgium-lb,belgium-mysql,belgium-web1,belgium-web2,data-warehouse,tw-mysql2,tw-mysql-archive2
+    -h, --hosts <list|all>  [required] The target host names
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -485,6 +549,8 @@ Installing sys-metrics
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --wait <int>            Pause between iterations in seconds
+    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
@@ -496,7 +562,7 @@ Updating sys-metrics version
   Updating sys-metrics version
 
   Options:
-    -h, --hosts <list|all>  [required] The target host names. Available: git,sofia-mysql-backup-pokerstars,sofia-mysql-backup-manila,sofia-mysql-backup-iom,sofia-mysql-backup-manial-taiwan,sofia-mysql-mirror-pokerstars,sofia-mysql-mirror-manila-taiwan,sofia-mysql-mirror-manila,sofia-mysql-mirror-iom,sofia-mysql-mirror-gib,sofia-mysql-backup-pokerstars-archive,sofia-mysql-backup-manila-archive,sofia-mysql-backup-iom-archive,sofia-mysql-backup-gib-archive,sofia-mysql-backup-gib,sofia-logserver,sofia-syslog,dev-hermes-lb,dev-hermes-sql,dev-hermes-web1,dev-hermes-web2,france-srv1,cdn-europe,cdn-asia,cdn-backup,pokerstars-web1,pokerstars-web2,pokerstars-web3,pokerstars-web4,pokerstars-web5,pokerstars-lb1,pokerstars-lb2,pokerstars-system,pokerstars-sql1,pokerstars-sql2,pokerstars-sql3,pokerstars-mysql-archive,iom-lb,iom-mysql-new,iom-mysql-archive,iom-slave,iom-web1,iom-web2,iom-web3,iom-web4,iom-web5,iom-system,iom-3thparty-web1,iom-3thparty-web2,gib-lb1,gib-web1,gib-web2,gib-web3,gib-web4,gib-web5,gib-mysql,gib-mysql-slave,gib-mysql-archive,manila-lb,manila-mysql,manila-mysql-archive,manila-slave,manila-system,manila-web1,manila-web2,manila-web3,manila-web4,manila-web5,manila-tw-mysql,manila-tw-mysql-archive,tw-lb,tw-mysql,tw-mysql-archive,tw-mysql-slave,tw-web1,tw-web2,tw-web3,tw-web4,tw-web5,belgium-lb,belgium-mysql,belgium-web1,belgium-web2,data-warehouse,tw-mysql2,tw-mysql-archive2
+    -h, --hosts <list|all>  [required] The target host names
     -r, --rev <tag>         [required] The target version as tag name
 
   Additional Options:
@@ -505,6 +571,8 @@ Updating sys-metrics version
     -f, --force             Suppress confirm messages (used for automation)
     -n, --dry-run           Dry run mode will do everything as usual except commands execution
     -q, --quiet             Turn off chat and some logs in stdout
+    --wait <int>            Pause between iterations in seconds
+    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```

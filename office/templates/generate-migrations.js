@@ -15,7 +15,7 @@ const DEST = __dirname + '/output'
 
 let program = new Program()
 program
-    .description('Generate anything from handlebars templates')
+    .description('Generate SQL migrations by location')
     .option('-t, --template <path>', 'Path to handlebars template', { def: MIGRATION })
     .option('-d, --dest <path>', 'Output generated data to destination path (could be handlebars template)')
     .parse()

@@ -14,7 +14,7 @@ const DEST = `d:/www/servers`
 
 let program = new Program()
 program
-    .description('Generate anything from handlebars templates')
+    .description('Generate server-conf for specific location')
     .option('-l, --locations <list|all>', 'The target host name', {choices: Object.keys(cfg.locations), required: true})
     .option('-d, --dest <path>', 'Output generated data to destination path (could be handlebars template)')
     .parse()
