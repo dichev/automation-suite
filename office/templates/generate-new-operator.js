@@ -28,7 +28,7 @@ program
 const generate = async (source, dest, vars) => {
     console.log(dest)
     let dir = path.dirname(dest).replace(/\\/g, '/')
-    if (!fs.existsSync(dir)) await program.shell().exec(`mkdir -pv ${dir}`)
+    if (!fs.existsSync(dir)) await program.shell().exec(`mkdir -p ${dir}`)
     
     const template = Handlebars.compile(fs.readFileSync(source).toString(), {noEscape: true})
     const content = template(vars) + NEW_LINE + NEW_LINE // TODO remove these new lines
@@ -42,6 +42,8 @@ program.run(async () => {
     const location = cfg.operators[operator].location
     const dest = (program.params.dest || DEST).replace(/\\/g, '/') + '/' + operator
     const shell = program.shell()
+    
+    await shell.exec(`mkdir -pv ${dest}`)
     
     const SECRET_FILE = `${dest}.secret.json`
     if(!fs.existsSync(SECRET_FILE)){

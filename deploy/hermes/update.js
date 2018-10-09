@@ -21,6 +21,7 @@ program
     
     .iterate('operators', async (operator) => {
         if (program.params.parallel) throw Error(`Currently the command doesn't support parallel mode for safety reasons`)
+        if(operator === 'bots') return
 
         const location = cfg.getLocationByOperator(operator);
         const OPERATOR_DIR = cfg.operators[operator].dir // TODO: temporary - still used for switch webs

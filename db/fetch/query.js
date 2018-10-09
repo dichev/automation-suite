@@ -3,7 +3,6 @@
 
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
-const fs = require('fs')
 let program = new Program()
 
 program
