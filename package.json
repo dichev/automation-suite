@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev-links": "npm link dopamine-toolbox && npm link configurator",
+    "dev-links": "npm link dopamine-toolbox configurator",
     "docs": "node docs/generate --groups all"
   },
   "dependencies": {

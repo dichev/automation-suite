@@ -1,7 +1,7 @@
 ## Available programs:
 
 * **[fetch](#fetch)**
-    * **[query](#fetch-query)** - optimize table fragmentation by rebuilding it online
+    * **[query](#fetch-query)** - fetch anything from operator database replications
 * **[migrations](#migrations)**
     * **[history-sync-pending-rounds](#migrations-history-sync-pending-rounds)** 
     * **[optimize-table](#migrations-optimize-table)** - optimize table fragmentation by rebuilding it online
@@ -13,11 +13,11 @@
 ## Help
 ## <a name="fetch"></a>fetch
 ### <a name="fetch-query"></a>query
-Optimize table fragmentation by rebuilding it online
+Fetch anything from operator database replications
 ```
   Usage: node db/fetch/query --query <sql> --operators <name> 
 
-  Optimize table fragmentation by rebuilding it online
+  Fetch anything from operator database replications
 
   Options:
     -q, --query <sql>       [required] Read-only SQL query
