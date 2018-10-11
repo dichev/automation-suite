@@ -26,14 +26,17 @@ program.run(async () => {
     console.log(`Generating SQL migrations..`)
     const template =  Handlebars.compile(fs.readFileSync(program.params.template).toString(), {noEscape: true})
     const dest = program.params.dest || DEST
+    const dbtype = path.basename(program.params.template).split('-')[0] || 'UNKNOWN'
     
     for(let location of Object.keys(cfg.locations)){
         let content = ''
         let file = `${dest}/${location}.sql`
         
         for (let operator of Object.values(cfg.operators).filter(o => o.location === location)) {
-            const vars = {operator: cfg.operators[operator]}
-            content += template(vars) + NEW_LINE + NEW_LINE
+            const vars = { operator }
+            content += `USE ` + operator.dbPrefix + dbtype + ';' + NEW_LINE
+            content += template(vars)
+            content += NEW_LINE + NEW_LINE + NEW_LINE
         }
     
         fs.writeFileSync(file, content.replace(/\r?\n/g, NEW_LINE)) // unify new lines

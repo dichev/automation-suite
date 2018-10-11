@@ -12,7 +12,7 @@
 * **[hermes](#hermes)**
     * **[allow-panel-access](#hermes-allow-panel-access)** - allow QA access to gpanel
     * **[check](#hermes-check)** - pre-deployment tests
-    * **[migration](#hermes-migration)** - [IN DEV] Auto execute SQL migrations to production
+    * **[migration](#hermes-migration)** - auto execute SQL migrations to production
     * **[update](#hermes-update)** - direct update of hermes release version
     * **[version](#hermes-version)** - check current hermes release versions
 * **[hermes-env](#hermes-env)**
@@ -249,11 +249,11 @@ Pre-deployment tests
     node deploy/hermes/check -o bots -r r3.9.9.0..r3.9.9.1
 ```
 ### <a name="hermes-migration"></a>migration
-[IN DEV] Auto execute SQL migrations to production
+Auto execute SQL migrations to production
 ```
   Usage: node deploy/hermes/migration --operators <name> --migration-path <name> --db <type> 
 
-  [IN DEV] Auto execute SQL migrations to production
+  Auto execute SQL migrations to production
 
   Options:
     -o, --operators <name>       [required] The target operator name

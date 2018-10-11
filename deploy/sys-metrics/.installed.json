@@ -95,6 +95,7 @@
         "belgium-mysql-archive",
         "sofia-mysql-backup-belgium-archive",
         "belgium-mysql-slave",
-        "belgium-mysql-mariadb-test"
+        "belgium-mysql-mariadb-test",
+        "belgium-mysql-mysql8-test"
     ]
 }
