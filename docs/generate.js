@@ -17,7 +17,7 @@ const templates = {
     program: Handlebars.compile(fs.readFileSync(__dirname + '/templates/README_program.hbs').toString()),
 }
 
-const GROUPS = ['deploy', 'servers', 'office', 'db']
+const GROUPS = ['deploy', 'servers', 'office', 'dba']
 
 let program = new Program()
 

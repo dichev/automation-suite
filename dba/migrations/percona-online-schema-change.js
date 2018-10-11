@@ -7,8 +7,8 @@ const fs = require('fs')
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
 const usage = `
-    $  node db/migrations/percona-online-schema-change -o rtg --db platform --table __version --alter 'CHANGE COLUMN version version INT(10) UNSIGNED NOT NULL AFTER id' --dry-run
-    $  node db/migrations/percona-online-schema-change -o rtg --db platform --table __version --alter-file single-alter-migration.sql
+    $  node dba/migrations/percona-online-schema-change -o rtg --db platform --table __version --alter 'CHANGE COLUMN version version INT(10) UNSIGNED NOT NULL AFTER id' --dry-run
+    $  node dba/migrations/percona-online-schema-change -o rtg --db platform --table __version --alter-file single-alter-migration.sql
 `
 
 program

@@ -15,7 +15,7 @@
 ### <a name="fetch-query"></a>query
 Fetch anything from operator database replications
 ```
-  Usage: node db/fetch/query --query <sql> --operators <name> 
+  Usage: node dba/fetch/query --query <sql> --operators <name> 
 
   Fetch anything from operator database replications
 
@@ -39,7 +39,7 @@ Fetch anything from operator database replications
 ### <a name="migrations-history-sync-pending-rounds"></a>history-sync-pending-rounds
 
 ```
-  Usage: node db/migrations/history-sync-pending-rounds --operators <name> 
+  Usage: node dba/migrations/history-sync-pending-rounds --operators <name> 
 
   Options:
     -o, --operators <name>  [required] The target operator name
@@ -58,7 +58,7 @@ Fetch anything from operator database replications
 ### <a name="migrations-optimize-table"></a>optimize-table
 Optimize table fragmentation by rebuilding it online
 ```
-  Usage: node db/migrations/optimize-table --operators <name> --tables <name> --db <type> 
+  Usage: node dba/migrations/optimize-table --operators <name> --tables <name> --db <type> 
 
   Optimize table fragmentation by rebuilding it online
 
@@ -81,7 +81,7 @@ Optimize table fragmentation by rebuilding it online
 ### <a name="migrations-percona-online-schema-change"></a>percona-online-schema-change
 Alters a table&#x27;s structure without blocking reads or writes (will copy all rows)
 ```
-  Usage: node db/migrations/percona-online-schema-change --operators <name> --table <name> --db <type> 
+  Usage: node dba/migrations/percona-online-schema-change --operators <name> --table <name> --db <type> 
 
   Alters a table's structure without blocking reads or writes (will copy all rows)
 
@@ -104,13 +104,13 @@ Alters a table&#x27;s structure without blocking reads or writes (will copy all 
     -h, --help              output usage information
 
   Example usage:
-    $  node db/migrations/percona-online-schema-change -o rtg --db platform --table __version --alter 'CHANGE COLUMN version version INT(10) UNSIGNED NOT NULL AFTER id' --dry-run
-    $  node db/migrations/percona-online-schema-change -o rtg --db platform --table __version --alter-file single-alter-migration.sql
+    $  node dba/migrations/percona-online-schema-change -o rtg --db platform --table __version --alter 'CHANGE COLUMN version version INT(10) UNSIGNED NOT NULL AFTER id' --dry-run
+    $  node dba/migrations/percona-online-schema-change -o rtg --db platform --table __version --alter-file single-alter-migration.sql
 ```
 ### <a name="migrations-sync-betlimits"></a>sync-betlimits
 Sync operator bet limits without betlimits downtime
 ```
-  Usage: node db/migrations/sync-betlimits --operators <name> 
+  Usage: node dba/migrations/sync-betlimits --operators <name> 
 
   Sync operator bet limits without betlimits downtime
 
@@ -132,7 +132,7 @@ Sync operator bet limits without betlimits downtime
 ### <a name="migrations-sync-games"></a>sync-games
 Sync games and maths seeds
 ```
-  Usage: node db/migrations/sync-games --operators <name> 
+  Usage: node dba/migrations/sync-games --operators <name> 
 
   Sync games and maths seeds
 
@@ -154,7 +154,7 @@ Sync games and maths seeds
 ### <a name="migrations-update-users-country"></a>update-users-country
 Update users country using ip geolocation. This is very expensive migration, that&#x27;s why is executed in a loop user by user
 ```
-  Usage: node db/migrations/update-users-country --operators <name> 
+  Usage: node dba/migrations/update-users-country --operators <name> 
 
   Update users country using ip geolocation. This is very expensive migration, that's why is executed in a loop user by user
 

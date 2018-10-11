@@ -11,7 +11,7 @@ node PATH/COMMAND [OPTIONS
 
 # examples
 node docs/generate --groups all
-node db/migrations/optmize-table --operators all --table table1,table2,table3
+node dba/migrations/optmize-table --operators all --table table1,table2,table3
 node servers/cloudflare/check --zones all --parallel
 
 ```
