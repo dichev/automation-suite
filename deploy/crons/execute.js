@@ -23,7 +23,7 @@ program
     const location = cfg.getLocationByOperator(operator)
     const DEST = 'production/' + cfg.operators[operator].dir
 
-    let web1 = new SSHClient(program.params.dryRun)
+    let web1 = new SSHClient()
     await web1.connect({host: location.hosts.web1, username: 'dopamine'})
     await web1.chdir(DEST)
 

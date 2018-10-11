@@ -3,4 +3,4 @@ node_modules/
 .secret.json
 lab/
 test/
-templates/output
+office/templates/output

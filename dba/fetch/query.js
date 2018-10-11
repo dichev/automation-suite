@@ -15,11 +15,11 @@ program
 
     .iterate('operators', async (operator) => {
         let dbs = cfg.databases[cfg.operators[operator].databases]
-        let ssh = new SSHClient(program.params.dryRun)
+        let ssh = new SSHClient()
         await ssh.connect({ host: program.params.db === 'archive' ? dbs.backups.archive : dbs.backups.master, username: 'dopamine' })
     
         let ronly = cfg.access.mysql.readOnly
-        let db = new MySQL(program.params.dryRun)
+        let db = new MySQL()
         await db.connect({user: ronly.user, password: ronly.password}, ssh)
         let dbname = cfg.operators[operator].dbPrefix + program.params.db
         

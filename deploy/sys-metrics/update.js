@@ -20,7 +20,7 @@ program
     .option('-r, --rev <tag>', 'The target version as tag name', {required: true})
     
     .iterate('hosts', async (host) => {
-        let ssh = new SSHClient(program.params.dryRun)
+        let ssh = new SSHClient()
         await ssh.connect({host: cfg.getHost(host).ip, username: 'root'})
         
         console.info('\n1. Fetch from the remote:')

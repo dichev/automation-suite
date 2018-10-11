@@ -39,7 +39,7 @@ program
         
         // Update cdn files
         await chat.notify('\nPhase 1: Update cdn files')
-        let cdn = new SSHClient(program.params.dryRun)
+        let cdn = new SSHClient()
         await cdn.connect({host: cfg.getHost(host).ip, username: 'dopamine'})
         await cdn.chdir(DEST)
         await cdn.exec('git fetch --prune origin --quiet')

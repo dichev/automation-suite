@@ -47,8 +47,8 @@ Cachebusting html assets
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -70,8 +70,8 @@ Test suit of games cdn
     -p, --parallel [limit]   When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose            Turn ON log details of whats happening
     -f, --force              Suppress confirm messages (used for automation)
-    -n, --dry-run            Dry run mode will do everything as usual except commands execution
-    -q, --quiet              Turn off chat and some logs in stdout
+    --dry-run                Dry run mode will do everything as usual except commands execution
+    --quiet                  Turn off chat and some logs in stdout
     --wait <int>             Pause between iterations in seconds
     --announce               Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                Disable chat notification if they are activated
@@ -93,8 +93,8 @@ Update games cdn
     -p, --parallel [limit]   When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose            Turn ON log details of whats happening
     -f, --force              Suppress confirm messages (used for automation)
-    -n, --dry-run            Dry run mode will do everything as usual except commands execution
-    -q, --quiet              Turn off chat and some logs in stdout
+    --dry-run                Dry run mode will do everything as usual except commands execution
+    --quiet                  Turn off chat and some logs in stdout
     --wait <int>             Pause between iterations in seconds
     --announce               Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                Disable chat notification if they are activated
@@ -115,8 +115,8 @@ Checking current release version of games cdn
     -p, --parallel [limit]   When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose            Turn ON log details of whats happening
     -f, --force              Suppress confirm messages (used for automation)
-    -n, --dry-run            Dry run mode will do everything as usual except commands execution
-    -q, --quiet              Turn off chat and some logs in stdout
+    --dry-run                Dry run mode will do everything as usual except commands execution
+    --quiet                  Turn off chat and some logs in stdout
     --wait <int>             Pause between iterations in seconds
     --announce               Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                Disable chat notification if they are activated
@@ -139,8 +139,8 @@ Execute cron for list of operators
     -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose               Turn ON log details of whats happening
     -f, --force                 Suppress confirm messages (used for automation)
-    -n, --dry-run               Dry run mode will do everything as usual except commands execution
-    -q, --quiet                 Turn off chat and some logs in stdout
+    --dry-run                   Dry run mode will do everything as usual except commands execution
+    --quiet                     Turn off chat and some logs in stdout
     --wait <int>                Pause between iterations in seconds
     --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                   Disable chat notification if they are activated
@@ -160,8 +160,8 @@ Check crons for manual changes and diffs
     -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose               Turn ON log details of whats happening
     -f, --force                 Suppress confirm messages (used for automation)
-    -n, --dry-run               Dry run mode will do everything as usual except commands execution
-    -q, --quiet                 Turn off chat and some logs in stdout
+    --dry-run                   Dry run mode will do everything as usual except commands execution
+    --quiet                     Turn off chat and some logs in stdout
     --wait <int>                Pause between iterations in seconds
     --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                   Disable chat notification if they are activated
@@ -185,8 +185,8 @@ Update crons to match the seed repo
     -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose               Turn ON log details of whats happening
     -f, --force                 Suppress confirm messages (used for automation)
-    -n, --dry-run               Dry run mode will do everything as usual except commands execution
-    -q, --quiet                 Turn off chat and some logs in stdout
+    --dry-run                   Dry run mode will do everything as usual except commands execution
+    --quiet                     Turn off chat and some logs in stdout
     --wait <int>                Pause between iterations in seconds
     --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                   Disable chat notification if they are activated
@@ -213,8 +213,8 @@ Allow QA access to gpanel
     -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose               Turn ON log details of whats happening
     -f, --force                 Suppress confirm messages (used for automation)
-    -n, --dry-run               Dry run mode will do everything as usual except commands execution
-    -q, --quiet                 Turn off chat and some logs in stdout
+    --dry-run                   Dry run mode will do everything as usual except commands execution
+    --quiet                     Turn off chat and some logs in stdout
     --wait <int>                Pause between iterations in seconds
     --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                   Disable chat notification if they are activated
@@ -235,8 +235,8 @@ Pre-deployment tests
     -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose               Turn ON log details of whats happening
     -f, --force                 Suppress confirm messages (used for automation)
-    -n, --dry-run               Dry run mode will do everything as usual except commands execution
-    -q, --quiet                 Turn off chat and some logs in stdout
+    --dry-run                   Dry run mode will do everything as usual except commands execution
+    --quiet                     Turn off chat and some logs in stdout
     --wait <int>                Pause between iterations in seconds
     --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                   Disable chat notification if they are activated
@@ -264,8 +264,8 @@ Auto execute SQL migrations to production
     -p, --parallel [limit]       When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose                Turn ON log details of whats happening
     -f, --force                  Suppress confirm messages (used for automation)
-    -n, --dry-run                Dry run mode will do everything as usual except commands execution
-    -q, --quiet                  Turn off chat and some logs in stdout
+    --dry-run                    Dry run mode will do everything as usual except commands execution
+    --quiet                      Turn off chat and some logs in stdout
     --wait <int>                 Pause between iterations in seconds
     --announce                   Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                    Disable chat notification if they are activated
@@ -288,8 +288,8 @@ Direct update of hermes release version
     -p, --parallel [limit]              When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose                       Turn ON log details of whats happening
     -f, --force                         Suppress confirm messages (used for automation)
-    -n, --dry-run                       Dry run mode will do everything as usual except commands execution
-    -q, --quiet                         Turn off chat and some logs in stdout
+    --dry-run                           Dry run mode will do everything as usual except commands execution
+    --quiet                             Turn off chat and some logs in stdout
     --wait <int>                        Pause between iterations in seconds
     --announce                          Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                           Disable chat notification if they are activated
@@ -312,8 +312,8 @@ Check current hermes release versions
     -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose               Turn ON log details of whats happening
     -f, --force                 Suppress confirm messages (used for automation)
-    -n, --dry-run               Dry run mode will do everything as usual except commands execution
-    -q, --quiet                 Turn off chat and some logs in stdout
+    --dry-run                   Dry run mode will do everything as usual except commands execution
+    --quiet                     Turn off chat and some logs in stdout
     --wait <int>                Pause between iterations in seconds
     --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                   Disable chat notification if they are activated
@@ -335,8 +335,8 @@ Check current hermes release versions
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -354,8 +354,8 @@ Check current hermes release versions
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -373,8 +373,8 @@ Check current hermes release versions
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -393,8 +393,8 @@ Check current hermes release versions
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -414,8 +414,8 @@ Pre-deployment tests for Grafana-Sensors
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -460,8 +460,8 @@ Update Grafana-Sensors repo
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -483,8 +483,8 @@ Update Grafana-Sensors repo
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -509,8 +509,8 @@ Installing sys-metrics
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -528,8 +528,8 @@ Installing sys-metrics
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -547,8 +547,8 @@ Installing sys-metrics
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -569,8 +569,8 @@ Updating sys-metrics version
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated

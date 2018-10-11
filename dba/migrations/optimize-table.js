@@ -18,8 +18,8 @@ program
         
         let dbs = cfg.databases[cfg.operators[operator].databases]
     
-        let ssh = new SSHClient(program.params.dryRun)
-        let master = new MySQL(program.params.dryRun)
+        let ssh = new SSHClient()
+        let master = new MySQL()
         await ssh.connect({ host: dbs.backups.master, username: 'root' })
         await master.connect({user: 'root'}, ssh)
     

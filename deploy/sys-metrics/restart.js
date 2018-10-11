@@ -19,7 +19,7 @@ program
     .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts, required: true })
     
     .iterate('hosts', async (host) => {
-        let ssh = new SSHClient(program.params.dryRun)
+        let ssh = new SSHClient()
         await ssh.connect({host: cfg.getHost(host).ip, username: 'root'})
         
         await ssh.chdir('/opt/dopamine/sys-metrics')

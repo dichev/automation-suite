@@ -19,7 +19,7 @@ program
     .parse()
 
 program.iterate('hosts', async (host) => {
-    let ssh = new SSHClient(program.params.dryRun)
+    let ssh = new SSHClient()
     await ssh.connect({host: cfg.getHost(host).ip, username: 'root' })
     
     await ssh.exec('cd /opt/dopamine/sys-metrics && git describe --tags')

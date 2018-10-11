@@ -38,7 +38,7 @@ Promise.resolve().then(async() => {
     
     await program.iterate('operators', async (operator) => {
         let dbs = cfg.databases[cfg.operators[operator].databases]
-        let ssh = new SSHClient(program.params.dryRun)
+        let ssh = new SSHClient()
         await ssh.connect({ host: dbs.master, username: 'root' })
     
         
@@ -60,10 +60,10 @@ Promise.resolve().then(async() => {
        
         const LOG_DIR = `/var/log/percona`
         const LOG_FILE = LOG_DIR + `/${operator}.log`
-        await ssh.exec(`mkdir -p ${LOG_DIR}`, { allowInDryMode: true })
+        await ssh.exec(`mkdir -p ${LOG_DIR}`, { allowInDryRun: true })
         
         await program.chat.notify(`Executing long running alter in background (see log here ${LOG_FILE})..`)
-        await ssh.execBackground(cmd, {allowInDryMode: true, remoteLogFile: LOG_FILE})
+        await ssh.execBackground(cmd, {allowInDryRun: true, remoteLogFile: LOG_FILE})
         await program.chat.notify('Ready')
         
         await ssh.disconnect()

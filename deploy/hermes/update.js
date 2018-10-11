@@ -52,6 +52,10 @@ program
             await shell.exec(`node deploy/hermes/allow-panel-access -o ${operator}`)
         }
     
+        // if (to === 'r3.10.9.2') {
+        //    await shell.exec(`node deploy/hermes/migration -m /d/www/_releases/hermes/.migrations/r3.10.9.0/platform-r3.10.9.0.sql -o ${operator} --db platform --force`)
+        // }
+        
         if(STRATEGY === 'direct') {
     
             // Update web1
@@ -69,7 +73,7 @@ program
             await program.confirm(`Continue (yes)?`)
             await web1.exec(`$HOME/bin/webs-sync .`, {silent: true})
             await chat.notify(`${to} deployed to ${operator}`, {color: 'green', popup: true})
-    
+            
         }
         
         else if( STRATEGY === 'blue-green'){

@@ -33,8 +33,8 @@ Check current cloudflare configuration
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -55,8 +55,8 @@ Get specific cloudflare configuration from all zones
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -76,8 +76,8 @@ Unifying cloudflare page rules
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -97,8 +97,8 @@ Unifying cloudflare custom pages
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -118,8 +118,8 @@ Unifying cloudflare custom settings
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -138,8 +138,8 @@ Unifying cloudflare custom settings
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -158,8 +158,8 @@ Unifying cloudflare custom settings
     -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose               Turn ON log details of whats happening
     -f, --force                 Suppress confirm messages (used for automation)
-    -n, --dry-run               Dry run mode will do everything as usual except commands execution
-    -q, --quiet                 Turn off chat and some logs in stdout
+    --dry-run                   Dry run mode will do everything as usual except commands execution
+    --quiet                     Turn off chat and some logs in stdout
     --wait <int>                Pause between iterations in seconds
     --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                   Disable chat notification if they are activated
@@ -178,8 +178,8 @@ Unifying cloudflare custom settings
     -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose               Turn ON log details of whats happening
     -f, --force                 Suppress confirm messages (used for automation)
-    -n, --dry-run               Dry run mode will do everything as usual except commands execution
-    -q, --quiet                 Turn off chat and some logs in stdout
+    --dry-run                   Dry run mode will do everything as usual except commands execution
+    --quiet                     Turn off chat and some logs in stdout
     --wait <int>                Pause between iterations in seconds
     --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                   Disable chat notification if they are activated
@@ -205,8 +205,8 @@ Auto update sever configurations by reloading one by one each server
     -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose               Turn ON log details of whats happening
     -f, --force                 Suppress confirm messages (used for automation)
-    -n, --dry-run               Dry run mode will do everything as usual except commands execution
-    -q, --quiet                 Turn off chat and some logs in stdout
+    --dry-run                   Dry run mode will do everything as usual except commands execution
+    --quiet                     Turn off chat and some logs in stdout
     --wait <int>                Pause between iterations in seconds
     --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                   Disable chat notification if they are activated
@@ -227,8 +227,8 @@ Setup dnsmasq configuration of the webs
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -246,8 +246,8 @@ Setup dnsmasq configuration of the webs
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated
@@ -268,8 +268,8 @@ Setup logrotate configurations
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
     -v, --verbose           Turn ON log details of whats happening
     -f, --force             Suppress confirm messages (used for automation)
-    -n, --dry-run           Dry run mode will do everything as usual except commands execution
-    -q, --quiet             Turn off chat and some logs in stdout
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
     --wait <int>            Pause between iterations in seconds
     --announce              Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat               Disable chat notification if they are activated

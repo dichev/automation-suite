@@ -24,7 +24,7 @@ program
     .iterate('hosts', async (host) => {
         if(installed.hosts.includes(host)) throw Error(`This host ${host} is already installed`)
 
-        let ssh = new SSHClient(program.params.dryRun)
+        let ssh = new SSHClient()
         await ssh.connect({ host: cfg.getHost(host).ip, username: 'root' })
         
         await ssh.exec(`

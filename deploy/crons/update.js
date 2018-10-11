@@ -22,7 +22,7 @@ program
         const REV = program.params.rev
         if(!REV) await program.confirm(`Warning! You did't define revision and that could be dangerous because the crons will be updated to the current working tree.\nDo you want to continue?`)
     
-        let web1 = new SSHClient(program.params.dryRun)
+        let web1 = new SSHClient()
         await web1.connect({host: cfg.locations[location].hosts.web1, username: 'dopamine'})
         
         if(!await web1.exists('seed')) {

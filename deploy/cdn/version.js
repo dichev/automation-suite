@@ -22,7 +22,7 @@ program
     .iterate('hosts', async (host) => {
         const modes = program.params.mode ? [program.params.mode] : ['blue', 'green']
         
-        let cdn = new SSHClient(program.params.dryRun)
+        let cdn = new SSHClient()
         await cdn.connect({host: cfg.getHost(host).ip, username: 'dopamine'})
         for(let mode of modes) {
             await cdn.chdir(`/home/dopamine/cdn/repos/${mode}`)

@@ -60,7 +60,7 @@ program
         await chat.notify(`\nStarting cachebust for ${host}`)
 
         const DEST = `/home/dopamine/bin/config`
-        let cdn = new SSHClient(program.params.dryRun)
+        let cdn = new SSHClient()
         await cdn.connect({host: cfg.getHost(host).ip, username: 'dopamine'})
         await cdn.chdir(DEST)
 

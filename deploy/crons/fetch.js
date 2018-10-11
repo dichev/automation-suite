@@ -20,7 +20,7 @@ program
     
     .iterate('locations', async (location) => {
         console.log(`${location} | Fetching crons..`)
-        let web1 = new SSHClient(program.params.dryRun)
+        let web1 = new SSHClient()
         await web1.connect({host: cfg.locations[location].hosts.web1, username: 'dopamine'})
         let crons = await web1.exec('crontab -l', { silent: true, trim: false })
         fs.writeFileSync(STORAGE + `/crontab-${location}.txt`, crons.replace(/\r?\n/g, '\r\n'))
