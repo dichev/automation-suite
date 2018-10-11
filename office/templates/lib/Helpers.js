@@ -6,8 +6,10 @@ const fs = require('fs')
 
 let BASE_DIR = ''
 
-Handlebars.registerHelper('generatePassword', () => {
-    return Calc.generatePassword(20, 25)
+Handlebars.registerHelper('generatePassword', (min, max, opts) => {
+    min = Number.isInteger(min) ? min : 20
+    max = Number.isInteger(max) ? max : 25
+    return Calc.generatePassword(min, max)
 })
 
 Handlebars.registerHelper('toUpperCase', function(str) {

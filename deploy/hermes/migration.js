@@ -15,7 +15,7 @@ program
     .description(`Auto execute SQL migrations to production`)
     .option('-o, --operators <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
     .option('-m, --migration-path <name>', 'The path to migration sql file (like /d/www/_releases/hermes/.migrations/r3.9.16.9/gpanel-r3.9.16.9.sql', { required: true })
-    .option('--db <type>', 'The target database type', { required: true, choices: ['platform', 'panel', 'bonus', 'segments', 'stats', 'jackpot', 'archive'] })
+    .option('--db <type>', 'The target database type', { required: true, choices: ['platform', 'panel', 'bonus', 'segments', 'stats', 'jackpot', 'tournaments', 'archive'] })
     .parse()
 
 

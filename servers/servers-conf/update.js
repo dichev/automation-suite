@@ -43,7 +43,7 @@ program
         let lb = await program.ssh(hosts.lb, 'root')
         let webs = []
         for(let name in hosts){
-            if(!name.startsWith('web')) continue;
+            if(!name.startsWith('web') || typeof hosts[name] !== 'string') continue;
             webs.push({ name: name, ssh: await program.ssh(hosts[name], 'root') })
         }
         

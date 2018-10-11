@@ -76,6 +76,9 @@ cd configurator && npm link && cd ..
 cd automation   && npm link dopamine-toolbox configurator
 ``` 
 
+
+verbose
+
 ### Responsibility delegation
 All commands could be run on any machine by any developer however the best way is to be stored and executed on jump machines like:
 - Office Machine
