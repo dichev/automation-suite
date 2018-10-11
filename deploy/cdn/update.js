@@ -7,6 +7,8 @@
  */
 
 const Program = require('dopamine-toolbox').Program
+const Shell = require('dopamine-toolbox').Shell
+const SSHClient = require('dopamine-toolbox').SSHClient
 const installed = require('./.installed')
 const cfg = require('configurator')
 
@@ -25,7 +27,7 @@ program
         const DEST = `/home/dopamine/cdn/repos/${MODE}`
         
         let chat = program.chat
-        let shell = program.shell()
+        let shell = new Shell()
     
         await chat.notify(`\nUpdating ${host} ${MODE} to ${REV}`)
         
@@ -37,12 +39,13 @@ program
         
         // Update cdn files
         await chat.notify('\nPhase 1: Update cdn files')
-        let cdn = await program.ssh(cfg.getHost(host).ip, 'dopamine')
+        let cdn = new SSHClient(program.params.dryRun)
+        await cdn.connect({host: cfg.getHost(host).ip, username: 'dopamine'})
         await cdn.chdir(DEST)
         await cdn.exec('git fetch --prune origin --quiet')
         await cdn.exec(`git reset --hard --quiet ${REV}`)
         console.info(`The version is switched to ${REV}`)
-
+        await cdn.disconnect()
         
         // Populate
         await chat.notify('\nPhase 2: Cachebust html assets')

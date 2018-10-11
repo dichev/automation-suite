@@ -8,6 +8,7 @@
 
 
 const Program = require('dopamine-toolbox').Program
+const SSHClient = require('dopamine-toolbox').SSHClient
 const installed = require('./.installed.json')
 const cfg = require('configurator')
 let program = new Program({ chat: cfg.chat.rooms.devops })
@@ -19,8 +20,8 @@ program
     .option('-r, --rev <tag>', 'The target version as tag name', {required: true})
     
     .iterate('hosts', async (host) => {
-
-        let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
+        let ssh = new SSHClient(program.params.dryRun)
+        await ssh.connect({host: cfg.getHost(host).ip, username: 'root'})
         
         console.info('\n1. Fetch from the remote:')
         
@@ -33,6 +34,6 @@ program
         await ssh.exec('systemctl status sys-metrics | head -n 3')
         
         console.info('The version is updated to latest revision')
-        
+        await ssh.disconnect()
     })
 

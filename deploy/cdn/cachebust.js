@@ -7,6 +7,7 @@
  */
 
 const Program = require('dopamine-toolbox').Program
+const SSHClient = require('dopamine-toolbox').SSHClient
 const installed = require('./.installed')
 const cfg = require('configurator')
 const fetch = require('node-fetch')
@@ -59,7 +60,8 @@ program
         await chat.notify(`\nStarting cachebust for ${host}`)
 
         const DEST = `/home/dopamine/bin/config`
-        const cdn = await program.ssh(cfg.getHost(host).ip, 'dopamine')
+        let cdn = new SSHClient(program.params.dryRun)
+        await cdn.connect({host: cfg.getHost(host).ip, username: 'dopamine'})
         await cdn.chdir(DEST)
 
         const config = JSON.parse(await cdn.exec('cat .config.json', { secret: true }))
@@ -80,5 +82,7 @@ program
             await chat.notify(`\nThere was a problem with the cachebust. Please investigate!`)
             throw Error('There was a problem with the cachebust. Please investigate!')
         }
+    
+        await cdn.disconnect()
 
     })

@@ -2,6 +2,7 @@
 'use strict';
 
 const Program = require('dopamine-toolbox').Program
+const SSHClient = require('dopamine-toolbox').SSHClient
 const cfg = require('configurator')
 
 const LOCATIONS = Object.values(cfg.locations).filter(l => l.live).map(l => l.name)
@@ -21,7 +22,8 @@ program
         const REV = program.params.rev
         if(!REV) await program.confirm(`Warning! You did't define revision and that could be dangerous because the crons will be updated to the current working tree.\nDo you want to continue?`)
     
-        let web1 = await program.ssh(cfg.locations[location].hosts.web1, 'dopamine')
+        let web1 = new SSHClient(program.params.dryRun)
+        await web1.connect({host: cfg.locations[location].hosts.web1, username: 'dopamine'})
         
         if(!await web1.exists('seed')) {
             await web1.exec(`git clone git@gitlab.dopamine.bg:releases/hermes.seed.git seed`)
@@ -40,5 +42,7 @@ program
         let updateFile = `crontab/crontab-${location}.txt`
         console.log(`Update crons with ${updateFile}`)
         await web1.exec(`crontab < ${updateFile}`)
+    
+        await web1.disconnect()
     })
 

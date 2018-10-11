@@ -2,6 +2,7 @@
 'use strict';
 
 const Program = require('dopamine-toolbox').Program
+const SSHClient = require('dopamine-toolbox').SSHClient
 const cfg = require('configurator')
 const fs = require('fs')
 let program = new Program({ chat: cfg.chat.rooms.devops })
@@ -37,7 +38,9 @@ Promise.resolve().then(async() => {
     
     await program.iterate('operators', async (operator) => {
         let dbs = cfg.databases[cfg.operators[operator].databases]
-        let ssh = await program.ssh(dbs.master, 'root')
+        let ssh = new SSHClient(program.params.dryRun)
+        await ssh.connect({ host: dbs.master, username: 'root' })
+    
         
         let dbname = cfg.operators[operator].dbPrefix + program.params.db
         let table = program.params.table
@@ -62,6 +65,8 @@ Promise.resolve().then(async() => {
         await program.chat.notify(`Executing long running alter in background (see log here ${LOG_FILE})..`)
         await ssh.execBackground(cmd, {allowInDryMode: true, remoteLogFile: LOG_FILE})
         await program.chat.notify('Ready')
+        
+        await ssh.disconnect()
     })
     
 })

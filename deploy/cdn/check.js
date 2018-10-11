@@ -7,6 +7,7 @@
  */
 
 const Program = require('dopamine-toolbox').Program
+const SSHClient = require('dopamine-toolbox').SSHClient
 const installed = require('./.installed')
 const cfg = require('configurator')
 const compare = require('node-version-compare')
@@ -26,7 +27,8 @@ program
         const MODE = program.params.mode
         const DEST = `/home/dopamine/cdn/repos/${MODE}`
     
-        let cdn = await program.ssh(cfg.getHost(host).ip, 'dopamine')
+        let cdn = new SSHClient(program.params.dryRun)
+        await cdn.connect({host: cfg.getHost(host).ip, username: 'dopamine'})
         cdn.silent = true
         
         let tester = program.tester(host)
@@ -71,6 +73,7 @@ program
         })
     
         await tester.run(false)
+        await cdn.disconnect()
     })
     .then(() => { // after all iterations
         program.tester().status(true) // will throw error if any test failed

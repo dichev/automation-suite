@@ -8,6 +8,7 @@
 
 
 const Program = require('dopamine-toolbox').Program
+const SSHClient = require('dopamine-toolbox').SSHClient
 const installed = require('./.installed.json')
 const fs = require('fs')
 const cfg = require('configurator')
@@ -23,7 +24,8 @@ program
     .iterate('hosts', async (host) => {
         if(installed.hosts.includes(host)) throw Error(`This host ${host} is already installed`)
 
-        let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
+        let ssh = new SSHClient(program.params.dryRun)
+        await ssh.connect({ host: cfg.getHost(host).ip, username: 'root' })
         
         await ssh.exec(`
             ssh-keyscan -H gitlab.dopamine.bg >> ~/.ssh/known_hosts
@@ -46,5 +48,7 @@ program
 
         installed.hosts.push(host)
         fs.writeFileSync(__dirname + '/.installed.json', JSON.stringify(installed, null, 4))
+    
+        await ssh.disconnect()
     })
 

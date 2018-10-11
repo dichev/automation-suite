@@ -7,6 +7,7 @@
  */
 
 const Program = require('dopamine-toolbox').Program
+const SSHClient = require('dopamine-toolbox').SSHClien
 const cfg = require('configurator')
 
 let program = new Program({chat: cfg.chat.rooms.devops})
@@ -22,7 +23,8 @@ program
     const location = cfg.getLocationByOperator(operator)
     const DEST = 'production/' + cfg.operators[operator].dir
 
-    let web1 = await program.ssh(location.hosts.web1, 'dopamine')
+    let web1 = new SSHClient(program.params.dryRun)
+    await web1.connect({host: location.hosts.web1, username: 'dopamine'})
     await web1.chdir(DEST)
 
     let availableCommands = await web1.exec(`php ${program.params.project}/bin/cmd.php list`)

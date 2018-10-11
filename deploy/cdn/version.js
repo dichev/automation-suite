@@ -7,6 +7,7 @@
  */
 
 const Program = require('dopamine-toolbox').Program
+const SSHClient = require('dopamine-toolbox').SSHClient
 const installed = require('./.installed')
 const cfg = require('configurator')
 
@@ -21,9 +22,11 @@ program
     .iterate('hosts', async (host) => {
         const modes = program.params.mode ? [program.params.mode] : ['blue', 'green']
         
-        let cdn = await program.ssh(cfg.getHost(host).ip, 'dopamine')
+        let cdn = new SSHClient(program.params.dryRun)
+        await cdn.connect({host: cfg.getHost(host).ip, username: 'dopamine'})
         for(let mode of modes) {
             await cdn.chdir(`/home/dopamine/cdn/repos/${mode}`)
             await cdn.exec(`echo $(git describe --tags) ${mode}`)
         }
+        await cdn.disconnect()
     })

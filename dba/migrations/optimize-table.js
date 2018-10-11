@@ -2,6 +2,8 @@
 'use strict';
 
 const Program = require('dopamine-toolbox').Program
+const SSHClient = require('dopamine-toolbox').SSHClient
+const MySQL = require('dopamine-toolbox').MySQL
 const cfg = require('configurator')
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
@@ -15,7 +17,12 @@ program
         if(program.params.wait === undefined) program.params.wait = 10
         
         let dbs = cfg.databases[cfg.operators[operator].databases]
-        let master = await program.mysql({user: 'root', ssh: {user: 'root', host: dbs.master}})
+    
+        let ssh = new SSHClient(program.params.dryRun)
+        let master = new MySQL(program.params.dryRun)
+        await ssh.connect({ host: dbs.backups.master, username: 'root' })
+        await master.connect({user: 'root'}, ssh)
+    
         let dbname = cfg.operators[operator].dbPrefix + program.params.db
         let tables = program.params.tables.split(',')
         await master.query(`USE ${dbname};`)
@@ -26,4 +33,6 @@ program
             await program.chat.notify(`Optimizing ${table}`)
             await master.query('ALTER TABLE `' + table + '` FORCE')
         }
+        await master.disconnect()
+        await ssh.disconnect()
     })
