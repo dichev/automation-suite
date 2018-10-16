@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node deploy/hermes-env/prepare --env bots --location belgium -v
+ * $ node deploy/hermes-env/prepare --operator bots --location belgium -v
  */
 
 
@@ -22,23 +22,23 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 
 
 program
-    .option('-e, --env <name>', 'The target env name', { required: true })
+    .option('-e, --operator <name>', 'The target operator name', { required: true })
     .option('-l, --location <name>', 'The target location', { required: true })
 
     .run(async () => {
-        const OPERATOR = program.params.env
-        const SERVER = program.params.location
+        const OPERATOR = program.params.operator
+        const LOCATION = cfg.operators[OPERATOR].location
         let shell = await program.shell()
 
 
         // Templating the environment
         log("Generating configurations from templates..")
         await shell.chdir(TEMPLATES)
-        await shell.exec(`bin/generator-new-operator -o ${OPERATOR} -s ${SERVER}`)
+        await shell.exec(`bin/generator-new-operator -o ${OPERATOR} -s ${LOCATION}`)
 
 
         log("Please review and commit the server configurations")
-        await shell.exec(`cd ../servers-conf-${SERVER} && TortoiseGitProc -command commit -logmsg "[env] Add new env: ${OPERATOR}"`)
+        await shell.exec(`cd ../servers-conf-${LOCATION} && TortoiseGitProc -command commit -logmsg "[env] Add new operator: ${OPERATOR}"`)
         log("\n\n===================================================\n\n")
 
 
@@ -63,14 +63,14 @@ program
                 log(`- DNS is found at CloudFlare: ${address}`)
             } else {
                 log(`- DNS is NOT found at CloudFlare: ${address}`)
-                log(`Adding ${address} to Cloudflare at zone ${SERVER}`)
+                log(`Adding ${address} to Cloudflare at zone ${LOCATION}`)
 
                 let isPanel = address.startsWith('gpanel')
 
                 await cf.post('dns_records', {
                     type: 'A',
                     name: address,
-                    content: isPanel ? cfg.locations[SERVER].hosts.private : cfg.locations[SERVER].hosts.public, // TODO: temporary!
+                    content: isPanel ? cfg.locations[LOCATION].hosts.private : cfg.locations[LOCATION].hosts.public, // TODO: temporary!
                     proxied: !isPanel //TODO: gpanel is still not behind CF
                 })
             }
@@ -87,7 +87,7 @@ program
         await shell.exec(`cp ${TEMPLATES}/output/${OPERATOR}/monitoring/${OPERATOR}.json ${GRAFANA}/config/operators/${OPERATOR}.json`)
 
         log("Please review and commit the changes")
-        await shell.exec(`cd ${GRAFANA} && git add . && TortoiseGitProc -command commit -logmsg "[env] Add new env: ${OPERATOR}"`)
+        await shell.exec(`cd ${GRAFANA} && git add . && TortoiseGitProc -command commit -logmsg "[env] Add new operator: ${OPERATOR}"`)
 
         log('Done')
     

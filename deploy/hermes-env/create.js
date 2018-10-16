@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node deploy/hermes-env/create --env bots
+ * $ node deploy/hermes-env/create --operator bots
  */
 
 
@@ -22,11 +22,11 @@ const TEMPLATES = "d:/www/servers/template-generator" // TODO: temporary
 let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 
 program
-    .option('-e, --env <name>', 'The target env name', { required: true })
+    .option('-o, --operator <name>', 'The target operator name', { required: true })
 
     .run(async () => {
         // Configuration
-        const OPERATOR = program.params.env
+        const OPERATOR = program.params.operator
         const DEST = `/home/dopamine/production/${cfg.operators[OPERATOR].dir}`
         
         if (!cfg.operators[OPERATOR]) throw Error(`missing configuration for this env ${OPERATOR}`)
@@ -39,7 +39,7 @@ program
         
         
         // Preparations
-        log(`Before the deploy you must prepare all configurations using:\n $ node deploy/hermes-env/prepare --env ${OPERATOR} --location ${LOCATION}`)
+        log(`Before the deploy you must prepare all configurations using:\n $ node deploy/hermes-env/prepare --operator ${OPERATOR} --location ${LOCATION}`)
         await program.confirm('Have you prepared them (yes)? ')
         // TODO check if they exists
 
@@ -103,7 +103,7 @@ program
     
         // Checkers & tests
         await program.chat.notify('\nChecking test suite')
-        await shell.exec(`node deploy/hermes-env/check --env ${OPERATOR}`)
+        await shell.exec(`node deploy/hermes-env/check --operator ${OPERATOR}`)
         
         console.warn(`Manual steps: \ - Add cron tab configuration`) // TODO: automate
         

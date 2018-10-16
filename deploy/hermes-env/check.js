@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node deploy/hermes-env/check --env rtg --location belgium
+ * $ node deploy/hermes-env/check --operator rtg --location belgium
  */
 
 
@@ -30,12 +30,12 @@ const curl = async (url) => {
 
 
 program
-    .option('-e, --env <name>', 'The target env name', { required: true })
+    .option('-e, --operator <name>', 'The target operator name', { required: true })
     
     .run(async () => {
         
         // Configuration
-        const OPERATOR = program.params.env
+        const OPERATOR = program.params.operator
         const DOMAIN = cfg.operators[OPERATOR].domain
         
         

@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node deploy/hermes-env/destroy --env bots -v
+ * $ node deploy/hermes-env/destroy --operator bots -v
  */
 
 
@@ -21,13 +21,13 @@ const TEMPLATES = "d:/www/servers/template-generator" // TODO: temporary
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
-    .option('-e, --env <name>', 'The target env name', { required: true })
+    .option('-o, --operator <name>', 'The target operator name', {required: true})
 
     .run(async () => {
-        if(!cfg.operators[program.params.env]) throw Error(`missing configuration for this env ${program.params.env}`)
-        if(cfg.operators[program.params.env].live !== false) throw Error(`This env ${program.params.env} is used already on live, so for security reasons the command is disabled for it`)
+        if(!cfg.operators[program.params.operator]) throw Error(`missing configuration for this operator ${program.params.operator}`)
+        if(cfg.operators[program.params.operator].live !== false) throw Error(`This operator ${program.params.operator} is used already on live, so for security reasons the command is disabled for it`)
         
-        const OPERATOR = program.params.env
+        const OPERATOR = program.params.operator
         const LOCATION = cfg.operators[OPERATOR].location
         const DEST = `/home/dopamine/production/${cfg.operators[OPERATOR].dir}`
         if(!/^[a-zA-Z0-9-_/]+$/g.test(DEST) || DEST.length <= '/home/dopamine/production/'.length) {
@@ -46,7 +46,7 @@ program
 
 
     
-        // Check if env already exist
+        // Check if operator already exist
         log('Checking files on web1..')
         if(await web1.exists(DEST)){
             log(`DANGER! dopamine@${hosts.web1}:${DEST} exists!`)
