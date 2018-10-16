@@ -18,11 +18,9 @@ program
         
         let dbs = cfg.databases[cfg.operators[operator].databases]
     
-        let ssh = new SSHClient()
-        let master = new MySQL()
-        await ssh.connect({ host: dbs.backups.master, username: 'root' })
-        await master.connect({user: 'root'}, ssh)
-    
+        let ssh = await new SSHClient().connect({host: dbs.backups.master, username: 'root'})
+        let master = await new MySQL().connect({user: 'root' }, ssh)
+        
         let dbname = cfg.operators[operator].dbPrefix + program.params.db
         let tables = program.params.tables.split(',')
         await master.query(`USE ${dbname};`)
