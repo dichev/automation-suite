@@ -7,7 +7,7 @@
  */
 
 const Program = require('dopamine-toolbox').Program
-const SSHClient = require('dopamine-toolbox').SSHClien
+const SSHClient = require('dopamine-toolbox').SSHClient
 const cfg = require('configurator')
 
 let program = new Program({chat: cfg.chat.rooms.devops})
