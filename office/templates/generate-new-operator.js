@@ -2,6 +2,7 @@
 'use strict';
 
 const Program = require('dopamine-toolbox').Program
+const Shell = require('dopamine-toolbox').Shell
 const cfg = require('configurator')
 const fs = require('fs')
 const path = require('path')
@@ -11,7 +12,6 @@ const Helpers = require('./lib/Helpers')
 
 const NEW_LINE = '\r\n'; //require('os').EOL
 
-const MIGRATION = `/d/www/locations/template-generator/migrations/migration.sql.hbs`
 const DEST = __dirname + '/output'
 const TEMPLATES = `d:/www/servers/template-generator/templates`
 const SERVER_CONF_REPOS = `d:/www/servers`
@@ -41,7 +41,7 @@ program.run(async () => {
     const operator = program.params.operator
     const location = cfg.operators[operator].location
     const dest = (program.params.dest || DEST).replace(/\\/g, '/') + '/' + operator
-    const shell = program.shell()
+    const shell = new Shell()
     
     await shell.exec(`mkdir -pv ${dest}`)
     
@@ -129,7 +129,5 @@ program.run(async () => {
     
 
     // Generate server configurations
-    await program.confirm('\nDo you want to generate servers-conf files?')
-    await shell.exec(`cd ${SERVER_CONF_REPOS}/servers-conf-${location} && git reset --hard && git checkout -q master && git pull -q --ff-only origin master`)
-    await shell.exec(`node office/templates/generate-servers-conf -l ${location}`)
+    console.log('Ready!\n Do not forget to generate server configs')
 })

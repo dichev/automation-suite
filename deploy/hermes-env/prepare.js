@@ -16,14 +16,14 @@ const log = console.log
 
 // Configuration
 const TEMPLATES = "d:/www/servers/template-generator"
+const OUTPUT = __dirname.replace(/\\/g, '/') + '/output'
 const GRAFANA   = "d:/www/servers/grafana-sensors"
 
-let program = new Program({ chat: cfg.chat.rooms.devops })
+let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 
 
 program
-    .option('-e, --operator <name>', 'The target operator name', { required: true })
-    .option('-l, --location <name>', 'The target location', { required: true })
+    .option('-o, --operator <name>', 'The target operator name', { required: true })
 
     .run(async () => {
         const OPERATOR = program.params.operator
@@ -32,13 +32,12 @@ program
 
 
         // Templating the environment
-        log("Generating configurations from templates..")
-        await shell.chdir(TEMPLATES)
-        await shell.exec(`bin/generator-new-operator -o ${OPERATOR} -s ${LOCATION}`)
-
-
+        log("Generating operators configurations from templates..")
+        await shell.exec(`node office/templates/generate-new-operator -o ${OPERATOR} --dest ${OUTPUT}`)
+    
+        log("Generating servers configurations from templates..")
         log("Please review and commit the server configurations")
-        await shell.exec(`cd ../servers-conf-${LOCATION} && TortoiseGitProc -command commit -logmsg "[env] Add new operator: ${OPERATOR}"`)
+        await shell.exec(`node office/templates/generate-servers-conf -l ${LOCATION} --commit "[env] Add new operator: ${OPERATOR}"`)
         log("\n\n===================================================\n\n")
 
 
@@ -82,9 +81,9 @@ program
         log("Generating monitoring configurations from templates..")
         await shell.exec(`cd ${GRAFANA} && git reset --quiet --hard && git pull --quiet --prune`)
         let sensors = JSON.parse(fs.readFileSync(`${GRAFANA}/config/sensors.json`, 'utf8'))
-        let operatorSensors = JSON.parse(fs.readFileSync(`${TEMPLATES}/output/${OPERATOR}/monitoring/${OPERATOR}-sensors.json`, 'utf8'))
+        let operatorSensors = JSON.parse(fs.readFileSync(`${OUTPUT}/${OPERATOR}/monitoring/${OPERATOR}-sensors.json`, 'utf8'))
         fs.writeFileSync(`${GRAFANA}/config/sensors.json`, JSON.stringify(deepMerge(sensors, operatorSensors), null, 4))
-        await shell.exec(`cp ${TEMPLATES}/output/${OPERATOR}/monitoring/${OPERATOR}.json ${GRAFANA}/config/operators/${OPERATOR}.json`)
+        await shell.exec(`cp ${OUTPUT}/${OPERATOR}/monitoring/${OPERATOR}.json ${GRAFANA}/config/operators/${OPERATOR}.json`)
 
         log("Please review and commit the changes")
         await shell.exec(`cd ${GRAFANA} && git add . && TortoiseGitProc -command commit -logmsg "[env] Add new operator: ${OPERATOR}"`)

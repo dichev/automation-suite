@@ -80,12 +80,12 @@ program
         }
         if (!ONLY_NGINX) {
             if (NO_WAIT) {
-                console.log(`\n# Reloading configuration of all webs (in parallel)`)
+                console.log(`\n\n# Reloading configuration of all webs (in parallel)`)
                 await Promise.all(webs.map(web => web.ssh.exec(`systemctl restart php-fpm`)))
             } else {
                 await program.sleep(INTERVAL, `Ready. Waiting between operations`)
                 for (let web of webs) {
-                    console.log(`\n# Reloading configuration of ${web.name}..`)
+                    console.log(`\n\n# Reloading configuration of ${web.name}..`)
                     await lb.exec(`switch-webs --operators=all --webs=all --exclude-webs=${web.name} --quiet`)
                     await web.ssh.exec(`systemctl restart php-fpm`)
                     console.log('Checking is php-fpm process active..')

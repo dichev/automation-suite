@@ -16,8 +16,7 @@ const read = (path) => fs.readFileSync(path).toString()
 
 
 // Configuration
-const TEMPLATES = "d:/www/servers/template-generator" // TODO: temporary
-
+const TEMPLATES = __dirname.replace(/\\/g, '/') + '/output' // TODO: temporary
 
 let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 
@@ -62,7 +61,7 @@ program
         await web1.exec(`git clone git@gitlab.dopamine.bg:releases/hermes.git ${DEST}`)
 
         await web1.exec(`chmod 777 ${DEST}/platform/logs ${DEST}/wallet/logs ${DEST}/gpanel/exports ${DEST}/gpanel/cache`)
-        await shell.exec(`scp -r ${TEMPLATES}/output/${OPERATOR}/hermes/* dopamine@${hosts.web1}:${DEST}`)
+        await shell.exec(`scp -r ${TEMPLATES}/${OPERATOR}/hermes/* dopamine@${hosts.web1}:${DEST}`)
         await web1.exec(`/home/dopamine/bin/webs-sync ${DEST}`)
 
         log("Setup chroot")
@@ -73,18 +72,18 @@ program
         // Creating databases & users
         await program.chat.notify(`\nPreparing databases`)
         log('\nCreating master databases/users')
-        await master.query(read(`${TEMPLATES}/output/${OPERATOR}/db/master.sql`))
+        await master.query(read(`${TEMPLATES}/${OPERATOR}/db/master.sql`))
         log('\nCreating archive databases/users')
-        await archive.query(read(`${TEMPLATES}/output/${OPERATOR}/db/archive.sql`))
+        await archive.query(read(`${TEMPLATES}/${OPERATOR}/db/archive.sql`))
 
 
         // Seed databases
         log('Importing master schema..')
-        await master.query(read(`${TEMPLATES}/output/${OPERATOR}/db/schema.sql`))
+        await master.query(read(`${TEMPLATES}/${OPERATOR}/db/schema.sql`))
         log('Importing archive schema..')
-        await archive.query(read(`${TEMPLATES}/output/${OPERATOR}/db/schema-archive.sql`))
+        await archive.query(read(`${TEMPLATES}/${OPERATOR}/db/schema-archive.sql`))
         log('Importing master seed..')
-        await master.query(read(`${TEMPLATES}/output/${OPERATOR}/db/seed.sql`)) //@ TODO: lag 5 secs response time
+        await master.query(read(`${TEMPLATES}/${OPERATOR}/db/seed.sql`)) //@ TODO: lag 5 secs response time
 
     
         // Crons

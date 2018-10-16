@@ -3,6 +3,7 @@
 
 // TODO: support dev
 const Program = require('dopamine-toolbox').Program
+const Shell = require('dopamine-toolbox').Shell
 const cfg = require('configurator')
 const fs = require('fs')
 const path = require('path')
@@ -17,6 +18,7 @@ program
     .description('Generate server-conf for specific location')
     .option('-l, --locations <list|all>', 'The target host name', {choices: Object.keys(cfg.locations), required: true})
     .option('-d, --dest <path>', 'Output generated data to destination path (could be handlebars template)')
+    .option('--commit <msg>', 'Attempt to commit generate files')
     .parse()
 
 
@@ -55,6 +57,11 @@ program.iterate('locations', async (location) => {
     console.log(`Generating server-conf..`)
     const dest = (program.params.dest || DEST).replace(/\\/g, '/') + `/servers-conf-${location}`
     
+    if (program.params.commit) {
+        console.log('Resetting servers conf repo')
+        await new Shell().exec(`cd ${dest} && git reset --hard && git checkout -q master && git pull -q --ff-only origin master`)
+    }
+    
     let templates = (await program.shell().exec(`cd ${TEMPLATES} && find -type f`, { silent: true })).split('\n').map(t => t.trim().slice(2))
     
     for(let file of templates){
@@ -92,6 +99,10 @@ program.iterate('locations', async (location) => {
             await save(name, content)
         }
     
+    }
+    
+    if(program.params.commit){
+        await new Shell().exec(`cd ${dest} && TortoiseGitProc -command commit -logmsg "${program.params.commit}"`)
     }
 })
 

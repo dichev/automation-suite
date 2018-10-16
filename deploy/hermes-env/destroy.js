@@ -9,14 +9,14 @@
 
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
+const fs = require('fs')
 
 const log = console.log
 const flatten = (arr) => arr.reduce((acc, val) => acc.concat(val), []);
 
 
 // Configuration
-const TEMPLATES = "d:/www/servers/template-generator" // TODO: temporary
-
+const TEMPLATES = __dirname.replace(/\\/g, '/') + '/output' // TODO: temporary
 
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
@@ -67,10 +67,10 @@ program
         log("Generating sql templates..")
         await shell.chdir(TEMPLATES)
         let SQL = {
-            masterCheck:     await shell.exec(`bin/generator -t templates/sql/hermes-check.sql.hbs -o ${OPERATOR} -s ${LOCATION} --print`, {silent: true}),
-            masterRollback:  await shell.exec(`bin/generator -t templates/sql/hermes-rollback.sql.hbs -o ${OPERATOR} -s ${LOCATION} --print`, {silent: true}),
-            archiveCheck:    await shell.exec(`bin/generator -t templates/sql/hermes-check.sql.hbs -o ${OPERATOR} -s ${LOCATION} --print`, {silent: true}),
-            archiveRollback: await shell.exec(`bin/generator -t templates/sql/hermes-rollback-archive.sql.hbs -o ${OPERATOR} -s ${LOCATION} --print`, {silent: true}),
+            masterCheck:     fs.readFileSync(`${TEMPLATES}/${OPERATOR}/db/check.sql`),
+            masterRollback:  fs.readFileSync(`${TEMPLATES}/${OPERATOR}/db/master-rollback.sql`),
+            archiveCheck:    fs.readFileSync(`${TEMPLATES}/${OPERATOR}/db/check.sql`),
+            archiveRollback: fs.readFileSync(`${TEMPLATES}/${OPERATOR}/db/archive-rollback-archive.sql`),
         }
         
         log('Checking master database..')
