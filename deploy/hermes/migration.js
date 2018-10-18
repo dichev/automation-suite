@@ -28,9 +28,6 @@ Promise.resolve().then(async() => {
         // if(['rtg', 'betconstruct'].includes(operator)) return program.chat.notify(`[${operator}] skipped`)
     
         
-        
-        
-        
         let dbs = cfg.databases[cfg.operators[operator].databases]
         let db = await program.mysql({user: 'root', ssh: {user: 'root', host: program.params.db === 'archive' ? dbs.archive : dbs.master}})
         let dbname = cfg.operators[operator].dbPrefix + program.params.db

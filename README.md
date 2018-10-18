@@ -88,3 +88,12 @@ All commands could be run on any machine by any developer however the best way i
 By this way will be eliminated the risks of differences in local envs and local changes. Also the access control and logging will be simplified.
 
 
+
+### Known Issues
+
+- Colors in shell are displayed as ANSI codes in Windows MinGW64
+```bash
+?[32m hey, I am green ?[39m
+```
+This happens when child process have colors and it's stdio is attached to the parent process. It seems to be limititation of the terminal emulator, so the best way to fix it is to switch to [ConEmu](https://conemu.github.io/)
+
