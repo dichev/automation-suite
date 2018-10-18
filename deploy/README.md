@@ -326,10 +326,10 @@ Check current hermes release versions
 ### <a name="hermes-env-check"></a>check
 
 ```
-  Usage: node deploy/hermes-env/check --env <name> 
+  Usage: node deploy/hermes-env/check --operator <name> 
 
   Options:
-    -e, --env <name>        [required] The target env name
+    -o, --operator <name>   [required] The target operator name
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -345,10 +345,10 @@ Check current hermes release versions
 ### <a name="hermes-env-create"></a>create
 
 ```
-  Usage: node deploy/hermes-env/create --env <name> 
+  Usage: node deploy/hermes-env/create --operator <name> 
 
   Options:
-    -e, --env <name>        [required] The target env name
+    -o, --operator <name>   [required] The target operator name
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -364,10 +364,10 @@ Check current hermes release versions
 ### <a name="hermes-env-destroy"></a>destroy
 
 ```
-  Usage: node deploy/hermes-env/destroy --env <name> 
+  Usage: node deploy/hermes-env/destroy --operator <name> 
 
   Options:
-    -e, --env <name>        [required] The target env name
+    -o, --operator <name>   [required] The target operator name
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -383,11 +383,10 @@ Check current hermes release versions
 ### <a name="hermes-env-prepare"></a>prepare
 
 ```
-  Usage: node deploy/hermes-env/prepare --env <name> --location <name> 
+  Usage: node deploy/hermes-env/prepare --operator <name> 
 
   Options:
-    -e, --env <name>        [required] The target env name
-    -l, --location <name>   [required] The target location
+    -o, --operator <name>   [required] The target operator name
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially

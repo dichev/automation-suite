@@ -97,7 +97,7 @@ program
         await program.chat.notify('\nUpdate system configurations (danger: could affect the other operators on failure)')
         log('This could affect the other envs if the setup is incorrect.')
         await program.confirm('DANGER! Are you sure you want to continue (yes)? ')
-        await shell.exec(`node servers/servers-conf/update --locations ${LOCATION}`)
+        await shell.exec(`node servers/servers-conf/update --locations ${LOCATION} --reload webs`)
         // TODO: rollback
     
         // Checkers & tests

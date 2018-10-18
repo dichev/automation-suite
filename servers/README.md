@@ -16,6 +16,7 @@
     * **[dnsmasq](#vm-setup-dnsmasq)** - setup dnsmasq configuration of the webs
     * **[known-hosts](#vm-setup-known-hosts)** 
     * **[logrotate](#vm-setup-logrotate)** - setup logrotate configurations
+    * **[rsyslog](#vm-setup-rsyslog)** - setup logrotate configurations
 
 ## Help
 ## <a name="cloudflare"></a>cloudflare
@@ -193,24 +194,23 @@ Auto update sever configurations by reloading one by one each server
   Auto update sever configurations by reloading one by one each server
 
   Options:
-    -l, --locations <list|all>  [required] The target host name
-    -r, --rev <string>          Specify target git revision, very useful for rollback. Default reset to origin/master
-    -i, --interval <int>        How many seconds to wait between each configuration switch. Default is 2
-    -f, --force                 Skip manual changes validations and proceed on your risk
-    --no-wait                   Skip waiting for active php processes to end and other safety delays. WARNING: this will break current php processes in the middle of their execution causing strange errors.
-    --only-nginx                Update all configurations but restarts only the nginx service (so php-fpm will be not updated)
-    --with-nginx-upgrade        Update all configurations but restarts only the nginx service USING UPGRADE method (so php-fpm will be not updated)
+    -l, --locations <list|all>                [required] The target host name
+    -r, --rev <string>                        Specify target git revision, very useful for rollback. Default reset to origin/master
+    -i, --interval <int>                      How many seconds to wait between each configuration switch. Default is 2
+    -f, --force                               Skip manual changes validations and proceed on your risk
+    --no-wait-webs                            Skip waiting for active php processes to end and other safety delays. WARNING: this will break current php processes in the middle of their execution causing strange errors.
+    --reload <nginx|webs|nginx-with-upgrade>  Reload nginx service or webs php-fpm
 
   Additional Options:
-    -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-    -v, --verbose               Turn ON log details of whats happening
-    -f, --force                 Suppress confirm messages (used for automation)
-    --dry-run                   Dry run mode will do everything as usual except commands execution
-    --quiet                     Turn off chat and some logs in stdout
-    --wait <int>                Pause between iterations in seconds
-    --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
-    --no-chat                   Disable chat notification if they are activated
-    -h, --help                  output usage information
+    -p, --parallel [limit]                    When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+    -v, --verbose                             Turn ON log details of whats happening
+    -f, --force                               Suppress confirm messages (used for automation)
+    --dry-run                                 Dry run mode will do everything as usual except commands execution
+    --quiet                                   Turn off chat and some logs in stdout
+    --wait <int>                              Pause between iterations in seconds
+    --announce                                Announce what and why is happening and delay the execution to give time to all to prepare
+    --no-chat                                 Disable chat notification if they are activated
+    -h, --help                                output usage information
 ```
 ## <a name="vm-setup"></a>vm-setup
 ### <a name="vm-setup-dnsmasq"></a>dnsmasq
@@ -257,6 +257,28 @@ Setup dnsmasq configuration of the webs
 Setup logrotate configurations
 ```
   Usage: node servers/vm-setup/logrotate --hosts <list> 
+
+  Setup logrotate configurations
+
+  Options:
+    -h, --hosts <list>      [required] The target host names
+    --only-validate         Perform just validation of the current logrotate configuration
+
+  Additional Options:
+    -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+    -v, --verbose           Turn ON log details of whats happening
+    -f, --force             Suppress confirm messages (used for automation)
+    --dry-run               Dry run mode will do everything as usual except commands execution
+    --quiet                 Turn off chat and some logs in stdout
+    --wait <int>            Pause between iterations in seconds
+    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+    --no-chat               Disable chat notification if they are activated
+    -h, --help              output usage information
+```
+### <a name="vm-setup-rsyslog"></a>rsyslog
+Setup logrotate configurations
+```
+  Usage: node servers/vm-setup/rsyslog --hosts <list> 
 
   Setup logrotate configurations
 

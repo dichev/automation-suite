@@ -107,6 +107,7 @@ Generate server-conf for specific location
   Options:
     -l, --locations <list|all>  [required] The target host name
     -d, --dest <path>           Output generated data to destination path (could be handlebars template)
+    --commit <msg>              Attempt to commit generate files
 
   Additional Options:
     -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
