@@ -21,25 +21,25 @@ program
             
             switch (type) {
                 case 'web':
-                    await ssh.exec('ln -svf /opt/servers-conf/rsyslog/12-php.conf /etc/rsyslog.d/12-php.conf')
+                    await ssh.exec('ln -svf /opt/servers-conf/rsyslog/12-php.conf /etc/rsyslog.d/12-php.conf && [ -f /etc/rsyslog.d/12-php.conf ]')
                     break
         
                 case 'mysql':
                 case 'mysql-archive':
                 case 'mysql-slave':
                 case 'mysql-master':
-                    await ssh.exec('ln -svf /opt/servers-conf/rsyslog/10-mysql.conf /etc/rsyslog.d/10-mysql.conf')
+                    await ssh.exec('ln -svf /opt/servers-conf/rsyslog/10-mysql.conf /etc/rsyslog.d/10-mysql.conf && [ -f /etc/rsyslog.d/10-mysql.conf ]')
                     break
         
                 case 'lb':
-                    await ssh.exec('ln -svf /opt/servers-conf/rsyslog/11-nginx.conf /etc/rsyslog.d/11-nginx.conf')
+                    await ssh.exec('ln -svf /opt/servers-conf/rsyslog/11-nginx.conf /etc/rsyslog.d/11-nginx.conf && [ -f /etc/rsyslog.d/11-nginx.conf ]')
                     break
         
                 default:
                     throw Error('Unexpected host type:' + type)
             }
     
-            await ssh.exec('ln -svf /opt/servers-conf/rsyslog/common.conf /etc/rsyslog.d/common.conf')
+            await ssh.exec('ln -svf /opt/servers-conf/rsyslog/common.conf /etc/rsyslog.d/common.conf && [ -f /etc/rsyslog.d/common.conf ]')
         }
         
         let tester = new Tester()
