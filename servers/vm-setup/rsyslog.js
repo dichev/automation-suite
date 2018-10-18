@@ -19,10 +19,6 @@ program
         
         if(!program.params.onlyValidate) {
             
-            if(ssh.exists(`/etc/rsyslog.d/dope.conf`)){
-                await ssh.exec(`mv /etc/rsyslog.d/dope.conf /tmp/rsyslog-dope.conf`)
-            }
-            
             switch (type) {
                 case 'web':
                     await ssh.exec('ln -svf /opt/servers-conf/rsyslog/12-php.conf /etc/rsyslog.d/12-php.conf')
@@ -48,11 +44,13 @@ program
         
         let tester = new Tester()
         tester.it(`validate rsyslog configuration`, async () => await ssh.exec(`rsyslogd -N1`, {silent: true}))
-        await tester.run()
+        await tester.run(true)
     
-        await program.confirm('Do you want to load the configurations')
-        await ssh.exec('systemctl restart rsyslog')
-        await ssh.exec('sleep 1 && systemctl status rsyslog')
+        if (!program.params.onlyValidate) {
+            await program.confirm('Do you want to load the configurations?')
+            await ssh.exec('systemctl restart rsyslog')
+            await ssh.exec('sleep 1 && systemctl status rsyslog | head -n 3')
+        }
         
         console.log('Success')
     })
