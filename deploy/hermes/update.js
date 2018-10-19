@@ -2,12 +2,13 @@
 'use strict';
 
 const Program = require('dopamine-toolbox').Program
+const GoogleChat = require('dopamine-toolbox').plugins.GoogleChat
 const cfg = require('configurator')
-
 
 let program = new Program({chat: cfg.chat.rooms.deployBackend})
 
 program
+    .icon(GoogleChat.icons.DEPLOY)
     .description('Direct update of hermes release version')
     .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators), required: true})
     .option('-r, --rev <string>', `Target revision (like r3.9.9.0) or from..to revision (like r3.9.9.0..r3.9.9.1)`, {required: true})
@@ -16,9 +17,11 @@ program
     .example(`
         node deploy/hermes/update --operators bots --rev r3.9.9.1 --strategy blue-green --allow-panel --force
     `)
-    
-    // TODO: show the release plan
-    
+    .parse()
+
+program.chat.thread = program.params.rev
+
+program
     .iterate('operators', async (operator) => {
         if (program.params.parallel) throw Error(`Currently the command doesn't support parallel mode for safety reasons`)
         if(operator === 'bots') return
@@ -35,7 +38,7 @@ program
     
     
         // Prepare
-        await chat.notify('\nPhase 0: Pre-deploy validations')
+        await chat.message('\n• Pre-deploy validations')
         let currentRev = await shell.exec(`node deploy/hermes/version --no-chat --quiet -o ${operator}`)
         if(currentRev === to){
             let answer = await program.ask(`WARNING! Current release (${currentRev}) is the same as target release (${to})\nDo you want to skip the update?`, ['yes', 'no'], 'yes')
@@ -59,7 +62,7 @@ program
         if(STRATEGY === 'direct') {
     
             // Update web1
-            await chat.notify('\nPhase 1: update code on web1 (public)')
+            await chat.message('\n• Update code on web1 (public)')
             await program.confirm(`Continue (yes)?`)
             let web1 = await program.ssh(location.hosts.web1, 'dopamine')
             await web1.chdir(DEST)
@@ -69,10 +72,10 @@ program
             
             
             // Populate to the other webs
-            await chat.notify(`\nPhase 2: update code to all other webs (public)`)
+            await chat.message(`\n• Update code to all other webs (public)`)
             await program.confirm(`Continue (yes)?`)
             await web1.exec(`$HOME/bin/webs-sync .`, {silent: true})
-            await chat.notify(`${to} deployed to ${operator}`, {color: 'green', popup: true})
+            await chat.message(`✓ ${to} deployed to ${operator}`)
             
         }
         
@@ -84,12 +87,12 @@ program
             ])
     
             // Switch to green
-            await chat.notify('Phase 1: Switch to green (web4,web5)')
+            await chat.message('• Switch to green (web4,web5)')
             await lb.exec(`switch-webs --webs=${location.green} --operators=${OPERATOR_DIR}`)
     
     
             // Update web1
-            await chat.notify('Phase 2a: Update blue (web1)')
+            await chat.message('• Update blue (web1)')
             await web1.chdir(DEST)
             await web1.exec('git fetch --prune origin --quiet')
             await web1.exec(`git reset --hard --quiet ${to}`)
@@ -101,28 +104,28 @@ program
             if (!otherBlueWebs.length) {
                 console.log('No other webs, skipping..')
             } else {
-                await chat.notify(`Phase 2b: Update blue (${otherBlueWebs})`)
+                await chat.message(`• Update blue (${otherBlueWebs})`)
                 await web1.exec(`$HOME/bin/webs-sync . --webs=${otherBlueWebs}`, {silent: true})
             }
     
             // Switch to blue
             await program.confirm(`\nDo you want to switch to blue?`)
-            await chat.notify('Phase 3: Switch to blue')
+            await chat.message('• Switch to blue')
             await lb.exec(`switch-webs --webs=${location.blue} --operators=${OPERATOR_DIR}`)
     
     
             
             if(!program.params.force) {
                 // QA time
-                await chat.notify('Phase 4: QA validation')
-                await chat.notify('Please validate and let me know when you are ready', {color: 'yellow', popup: true})
+                await chat.message('• QA validation')
+                await chat.message('Please validate and let me know when you are ready', {popup: true})
     
                 // Rollback?
                 let answer = program.params.force ? '' : await program.ask('Do you need to ROLLBACK?', ['rollback', ''], '')
                 if (answer === 'rollback') {
-                    await chat.notify('Something is wrong, we will rollback by switching to green', {color: 'red'})
+                    await chat.warn('Aborting', 'Something is wrong, we will rollback by switching to green')
                     await lb.exec(`switch-webs --webs=${location.green} --operators=${OPERATOR_DIR}`)
-                    await chat.notify('Switched to green, please confirm everything is fine', {color: 'yellow'})
+                    await chat.message('Switched to green, please confirm everything is fine', {popup: true})
                     throw Error('Aborting')
                 }
             } else {
@@ -132,14 +135,14 @@ program
             
     
             // Update green webs
-            await chat.notify(`Phase 5: Update green (${location.green})`)
+            await chat.message(`• Update green (${location.green})`)
             await web1.exec(`$HOME/bin/webs-sync . --webs=${location.green}`, {silent: true})
     
             // Switch to all webs (green & blue)
             let allWebs = [].concat(location.blue, location.green)
-            await chat.notify(`Phase 6: Switch to blue & green: ${allWebs}`)
+            await chat.message(`• Switch to blue & green: ${allWebs}`)
             await lb.exec(`switch-webs --webs=all --operators=${OPERATOR_DIR}`)
-            await chat.notify(`${to} deployed to ${operator}`, {color: 'green'})
+            await chat.message(`✓ ${to} deployed to ${operator}`)
         }
         else {
             throw Error(`There is no such strategy: ${STRATEGY}`)
@@ -148,5 +151,5 @@ program
     
     })
     .then(async() => {
-        if(program.params.strategy === 'direct') await program.chat.notify(`# QA validation\nPlease validate and let me know when you are ready`, {color: `yellow`, popup: true})
+        if(program.params.strategy === 'direct') await program.chat.message(`QA validation: Please validate and let me know when you are ready`, {popup: true})
     })
