@@ -9,7 +9,7 @@ let program = new Program({chat: cfg.chat.rooms.deployBackend})
 
 program
     .icon(GoogleChat.icons.DEPLOY)
-    .description('Direct update of hermes release version')
+    .description('Deploy hermes release repository without down time')
     .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators), required: true})
     .option('-r, --rev <string>', `Target revision (like r3.9.9.0) or from..to revision (like r3.9.9.0..r3.9.9.1)`, {required: true})
     .option('-s, --strategy <direct|blue-green>', `Choose deployment strategy`, { def: 'blue-green', choices: ['direct', 'blue-green'] })
@@ -52,11 +52,13 @@ program
             // throw e
         }
         if (program.params.allowPanel) {
-            await shell.exec(`node deploy/hermes/allow-panel-access -o ${operator}`)
+            await chat.message('• Allowing QA panel access')
+            await shell.exec(`node deploy/hermes/allow-panel-access -o ${operator} --no-chat`)
         }
     
         // if (to === 'r3.10.9.2') {
-        //    await shell.exec(`node deploy/hermes/migration -m /d/www/_releases/hermes/.migrations/r3.10.9.0/platform-r3.10.9.0.sql -o ${operator} --db platform --force`)
+        //     await chat.message('• Executing SQL migrations')
+        //     await shell.exec(`node deploy/hermes/migration -m /d/www/_releases/hermes/.migrations/r3.10.9.0/platform-r3.10.9.0.sql --db platform -o ${operator} --force --no-chat`)
         // }
         
         if(STRATEGY === 'direct') {
