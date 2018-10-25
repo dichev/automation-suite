@@ -45,7 +45,7 @@ program
                 console.log(cmd)
                 
                 let help = await shell.exec(cmd, {silent: true})
-                let [all, usage, description, options] = help.trim().match(/(Usage.+)\s([\s\S]+)( {2}Options[\s\S]+)/).map(m => m.trim())
+                let [all, usage, description, options, additional] = help.trim().match(/(Usage.+)\s([\s\S]+)(Options[\s\S]+)(Additional Options[\s\S]+)/).map(m => m.trim())
                 
                 data.programs[name].commands[command] = {
                     name: command,

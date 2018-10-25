@@ -13,7 +13,7 @@
     * **[allow-panel-access](#hermes-allow-panel-access)** - allow QA access to gpanel
     * **[check](#hermes-check)** - pre-deployment tests
     * **[migration](#hermes-migration)** - auto execute SQL migrations to production
-    * **[update](#hermes-update)** - direct update of hermes release version
+    * **[update](#hermes-update)** - deploy hermes release repository without down time
     * **[version](#hermes-version)** - check current hermes release versions
 * **[hermes-env](#hermes-env)**
     * **[check](#hermes-env-check)** 
@@ -272,11 +272,11 @@ Auto execute SQL migrations to production
     -h, --help                   output usage information
 ```
 ### <a name="hermes-update"></a>update
-Direct update of hermes release version
+Deploy hermes release repository without down time
 ```
   Usage: node deploy/hermes/update --operators <list|all> --rev <string> 
 
-  Direct update of hermes release version
+Deploy hermes release repository without down time
 
   Options:
     -o, --operators <list|all>          [required] Comma-separated list of operators

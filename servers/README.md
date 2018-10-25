@@ -6,6 +6,8 @@
     * **[unify-page-rules](#cloudflare-unify-page-rules)** - unifying cloudflare page rules
     * **[unify-pages](#cloudflare-unify-pages)** - unifying cloudflare custom pages
     * **[unify-settings](#cloudflare-unify-settings)** - unifying cloudflare custom settings
+* **[executor](#executor)**
+    * **[exec](#executor-exec)** - execute any command on any host
 * **[php-binary](#php-binary)**
     * **[check](#php-binary-check)** 
     * **[init](#php-binary-init)** 
@@ -25,106 +27,131 @@ Check current cloudflare configuration
 ```
   Usage: node servers/cloudflare/check --zones <list|all> 
 
-  Check current cloudflare configuration
+Check current cloudflare configuration
 
-  Options:
-    -z, --zones <list|all>  [required] Comma-separated list of cloudflare zone aliases
+Options:
+  -z, --zones <list|all>  [required] Comma-separated list of cloudflare zone aliases
 
-  Additional Options:
-    -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-    -v, --verbose           Turn ON log details of whats happening
-    -f, --force             Suppress confirm messages (used for automation)
-    --dry-run               Dry run mode will do everything as usual except commands execution
-    --quiet                 Turn off chat and some logs in stdout
-    --wait <int>            Pause between iterations in seconds
-    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
-    --no-chat               Disable chat notification if they are activated
-    -h, --help              output usage information
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
 ```
 ### <a name="cloudflare-get"></a>get
 Get specific cloudflare configuration from all zones
 ```
   Usage: node servers/cloudflare/get --zones <list|all> 
 
-  Get specific cloudflare configuration from all zones
+Get specific cloudflare configuration from all zones
 
-  Options:
-    -z, --zones <list|all>  [required] Comma-separated list of cloudflare zone aliases
-    -u, --url <string>      Cloudflare url without the zone part (default: settings/security_level)
+Options:
+  -z, --zones <list|all>  [required] Comma-separated list of cloudflare zone aliases
+  -u, --url <string>      Cloudflare url without the zone part (default: "settings/security_level")
 
-  Additional Options:
-    -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-    -v, --verbose           Turn ON log details of whats happening
-    -f, --force             Suppress confirm messages (used for automation)
-    --dry-run               Dry run mode will do everything as usual except commands execution
-    --quiet                 Turn off chat and some logs in stdout
-    --wait <int>            Pause between iterations in seconds
-    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
-    --no-chat               Disable chat notification if they are activated
-    -h, --help              output usage information
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
 ```
 ### <a name="cloudflare-unify-page-rules"></a>unify-page-rules
 Unifying cloudflare page rules
 ```
   Usage: node servers/cloudflare/unify-page-rules --zones <list|all> 
 
-  Unifying cloudflare page rules
+Unifying cloudflare page rules
 
-  Options:
-    -z, --zones <list|all>  [required] Comma-separated list of cloudflare zone aliases
+Options:
+  -z, --zones <list|all>  [required] Comma-separated list of cloudflare zone aliases
 
-  Additional Options:
-    -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-    -v, --verbose           Turn ON log details of whats happening
-    -f, --force             Suppress confirm messages (used for automation)
-    --dry-run               Dry run mode will do everything as usual except commands execution
-    --quiet                 Turn off chat and some logs in stdout
-    --wait <int>            Pause between iterations in seconds
-    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
-    --no-chat               Disable chat notification if they are activated
-    -h, --help              output usage information
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
 ```
 ### <a name="cloudflare-unify-pages"></a>unify-pages
 Unifying cloudflare custom pages
 ```
   Usage: node servers/cloudflare/unify-pages --zones <list|all> 
 
-  Unifying cloudflare custom pages
+Unifying cloudflare custom pages
 
-  Options:
-    -z, --zones <list|all>  [required] Comma-separated list of cloudflare zone aliases
+Options:
+  -z, --zones <list|all>  [required] Comma-separated list of cloudflare zone aliases
 
-  Additional Options:
-    -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-    -v, --verbose           Turn ON log details of whats happening
-    -f, --force             Suppress confirm messages (used for automation)
-    --dry-run               Dry run mode will do everything as usual except commands execution
-    --quiet                 Turn off chat and some logs in stdout
-    --wait <int>            Pause between iterations in seconds
-    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
-    --no-chat               Disable chat notification if they are activated
-    -h, --help              output usage information
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
 ```
 ### <a name="cloudflare-unify-settings"></a>unify-settings
 Unifying cloudflare custom settings
 ```
   Usage: node servers/cloudflare/unify-settings --zones <list|all> 
 
-  Unifying cloudflare custom settings
+Unifying cloudflare custom settings
 
-  Options:
-    -z, --zones <list|all>  [required] Comma-separated list of cloudflare zone aliases
+Options:
+  -z, --zones <list|all>  [required] Comma-separated list of cloudflare zone aliases
 
-  Additional Options:
-    -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-    -v, --verbose           Turn ON log details of whats happening
-    -f, --force             Suppress confirm messages (used for automation)
-    --dry-run               Dry run mode will do everything as usual except commands execution
-    --quiet                 Turn off chat and some logs in stdout
-    --wait <int>            Pause between iterations in seconds
-    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
-    --no-chat               Disable chat notification if they are activated
-    -h, --help              output usage information
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
+```
+## <a name="executor"></a>executor
+### <a name="executor-exec"></a>exec
+Execute any command on any host
+```
+  Usage: node servers/executor/exec --hosts <list> 
+
+Execute any command on any host
+
+Options:
+  -h, --hosts <list>      [required] The target host names
+  -u, --user <name>       Choose ssh user (default: "root")
+  -e, --exec <cmd>        Command to be executed
+  -E, --exec-file <file>  Read remote commands from file
+
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
 ```
 ## <a name="php-binary"></a>php-binary
 ### <a name="php-binary-check"></a>check
@@ -132,39 +159,39 @@ Unifying cloudflare custom settings
 ```
   Usage: node servers/php-binary/check --hosts <list|all> 
 
-  Options:
-    -h, --hosts <list|all>  [required] The target host name
+Options:
+  -h, --hosts <list|all>  [required] The target host name
 
-  Additional Options:
-    -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-    -v, --verbose           Turn ON log details of whats happening
-    -f, --force             Suppress confirm messages (used for automation)
-    --dry-run               Dry run mode will do everything as usual except commands execution
-    --quiet                 Turn off chat and some logs in stdout
-    --wait <int>            Pause between iterations in seconds
-    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
-    --no-chat               Disable chat notification if they are activated
-    -h, --help              output usage information
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
 ```
 ### <a name="php-binary-init"></a>init
 
 ```
   Usage: node servers/php-binary/init --hosts <list|all> --phpversion <version> 
 
-  Options:
-    -h, --hosts <list|all>      [required] The target host name
-    -p, --phpversion <version>  [required] The php version number
+Options:
+  -h, --hosts <list|all>      [required] The target host name
+  -p, --phpversion <version>  [required] The php version number
 
-  Additional Options:
-    -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-    -v, --verbose               Turn ON log details of whats happening
-    -f, --force                 Suppress confirm messages (used for automation)
-    --dry-run                   Dry run mode will do everything as usual except commands execution
-    --quiet                     Turn off chat and some logs in stdout
-    --wait <int>                Pause between iterations in seconds
-    --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
-    --no-chat                   Disable chat notification if they are activated
-    -h, --help                  output usage information
+Additional Options:
+  -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose               Turn ON log details of whats happening
+  -f, --force                 Suppress confirm messages (used for automation)
+  --dry-run                   Dry run mode will do everything as usual except commands execution
+  --quiet                     Turn off chat and some logs in stdout
+  --wait <int>                Pause between iterations in seconds
+  --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                   Disable chat notification if they are activated
+  -h, --help                  output usage information
 ```
 ## <a name="servers-conf"></a>servers-conf
 ### <a name="servers-conf-list-changes"></a>list-changes
@@ -172,45 +199,45 @@ Unifying cloudflare custom settings
 ```
   Usage: node servers/servers-conf/list-changes --locations <list|all> 
 
-  Options:
-    -l, --locations <list|all>  [required] The target host name
+Options:
+  -l, --locations <list|all>  [required] The target host name
 
-  Additional Options:
-    -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-    -v, --verbose               Turn ON log details of whats happening
-    -f, --force                 Suppress confirm messages (used for automation)
-    --dry-run                   Dry run mode will do everything as usual except commands execution
-    --quiet                     Turn off chat and some logs in stdout
-    --wait <int>                Pause between iterations in seconds
-    --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
-    --no-chat                   Disable chat notification if they are activated
-    -h, --help                  output usage information
+Additional Options:
+  -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose               Turn ON log details of whats happening
+  -f, --force                 Suppress confirm messages (used for automation)
+  --dry-run                   Dry run mode will do everything as usual except commands execution
+  --quiet                     Turn off chat and some logs in stdout
+  --wait <int>                Pause between iterations in seconds
+  --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                   Disable chat notification if they are activated
+  -h, --help                  output usage information
 ```
 ### <a name="servers-conf-update"></a>update
 Auto update sever configurations by reloading one by one each server
 ```
   Usage: node servers/servers-conf/update --locations <list|all> 
 
-  Auto update sever configurations by reloading one by one each server
+Auto update sever configurations by reloading one by one each server
 
-  Options:
-    -l, --locations <list|all>                [required] The target host name
-    -r, --rev <string>                        Specify target git revision, very useful for rollback. Default reset to origin/master
-    -i, --interval <int>                      How many seconds to wait between each configuration switch. Default is 2
-    -f, --force                               Skip manual changes validations and proceed on your risk
-    --no-wait-webs                            Skip waiting for active php processes to end and other safety delays. WARNING: this will break current php processes in the middle of their execution causing strange errors.
-    --reload <nginx|webs|nginx-with-upgrade>  Reload nginx service or webs php-fpm
+Options:
+  -l, --locations <list|all>                [required] The target host name
+  -r, --rev <string>                        Specify target git revision, very useful for rollback. Default reset to origin/master
+  -i, --interval <int>                      How many seconds to wait between each configuration switch. Default is 2
+  -f, --force                               Skip manual changes validations and proceed on your risk
+  --no-wait-webs                            Skip waiting for active php processes to end and other safety delays. WARNING: this will break current php processes in the middle of their execution causing strange errors.
+  --reload <nginx|webs|nginx-with-upgrade>  Reload nginx service or webs php-fpm
 
-  Additional Options:
-    -p, --parallel [limit]                    When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-    -v, --verbose                             Turn ON log details of whats happening
-    -f, --force                               Suppress confirm messages (used for automation)
-    --dry-run                                 Dry run mode will do everything as usual except commands execution
-    --quiet                                   Turn off chat and some logs in stdout
-    --wait <int>                              Pause between iterations in seconds
-    --announce                                Announce what and why is happening and delay the execution to give time to all to prepare
-    --no-chat                                 Disable chat notification if they are activated
-    -h, --help                                output usage information
+Additional Options:
+  -p, --parallel [limit]                    When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose                             Turn ON log details of whats happening
+  -f, --force                               Suppress confirm messages (used for automation)
+  --dry-run                                 Dry run mode will do everything as usual except commands execution
+  --quiet                                   Turn off chat and some logs in stdout
+  --wait <int>                              Pause between iterations in seconds
+  --announce                                Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                                 Disable chat notification if they are activated
+  -h, --help                                output usage information
 ```
 ## <a name="vm-setup"></a>vm-setup
 ### <a name="vm-setup-dnsmasq"></a>dnsmasq
@@ -218,82 +245,82 @@ Setup dnsmasq configuration of the webs
 ```
   Usage: node servers/vm-setup/dnsmasq --hosts <list|all> 
 
-  Setup dnsmasq configuration of the webs
+Setup dnsmasq configuration of the webs
 
-  Options:
-    -h, --hosts <list|all>  [required] The target host names
+Options:
+  -h, --hosts <list|all>  [required] The target host names
 
-  Additional Options:
-    -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-    -v, --verbose           Turn ON log details of whats happening
-    -f, --force             Suppress confirm messages (used for automation)
-    --dry-run               Dry run mode will do everything as usual except commands execution
-    --quiet                 Turn off chat and some logs in stdout
-    --wait <int>            Pause between iterations in seconds
-    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
-    --no-chat               Disable chat notification if they are activated
-    -h, --help              output usage information
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
 ```
 ### <a name="vm-setup-known-hosts"></a>known-hosts
 
 ```
   Usage: node servers/vm-setup/known-hosts --hosts <list|all> 
 
-  Options:
-    -h, --hosts <list|all>  [required] The target host names
+Options:
+  -h, --hosts <list|all>  [required] The target host names
 
-  Additional Options:
-    -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-    -v, --verbose           Turn ON log details of whats happening
-    -f, --force             Suppress confirm messages (used for automation)
-    --dry-run               Dry run mode will do everything as usual except commands execution
-    --quiet                 Turn off chat and some logs in stdout
-    --wait <int>            Pause between iterations in seconds
-    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
-    --no-chat               Disable chat notification if they are activated
-    -h, --help              output usage information
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
 ```
 ### <a name="vm-setup-logrotate"></a>logrotate
 Setup logrotate configurations
 ```
   Usage: node servers/vm-setup/logrotate --hosts <list> 
 
-  Setup logrotate configurations
+Setup logrotate configurations
 
-  Options:
-    -h, --hosts <list>      [required] The target host names
-    --only-validate         Perform just validation of the current logrotate configuration
+Options:
+  -h, --hosts <list>      [required] The target host names
+  --only-validate         Perform just validation of the current logrotate configuration
 
-  Additional Options:
-    -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-    -v, --verbose           Turn ON log details of whats happening
-    -f, --force             Suppress confirm messages (used for automation)
-    --dry-run               Dry run mode will do everything as usual except commands execution
-    --quiet                 Turn off chat and some logs in stdout
-    --wait <int>            Pause between iterations in seconds
-    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
-    --no-chat               Disable chat notification if they are activated
-    -h, --help              output usage information
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
 ```
 ### <a name="vm-setup-rsyslog"></a>rsyslog
 Setup logrotate configurations
 ```
   Usage: node servers/vm-setup/rsyslog --hosts <list> 
 
-  Setup logrotate configurations
+Setup logrotate configurations
 
-  Options:
-    -h, --hosts <list>      [required] The target host names
-    --only-validate         Perform just validation of the current logrotate configuration
+Options:
+  -h, --hosts <list>      [required] The target host names
+  --only-validate         Perform just validation of the current logrotate configuration
 
-  Additional Options:
-    -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-    -v, --verbose           Turn ON log details of whats happening
-    -f, --force             Suppress confirm messages (used for automation)
-    --dry-run               Dry run mode will do everything as usual except commands execution
-    --quiet                 Turn off chat and some logs in stdout
-    --wait <int>            Pause between iterations in seconds
-    --announce              Announce what and why is happening and delay the execution to give time to all to prepare
-    --no-chat               Disable chat notification if they are activated
-    -h, --help              output usage information
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
 ```
