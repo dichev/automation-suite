@@ -26,7 +26,7 @@ program
         if (program.params.parallel) throw Error(`Currently the command doesn't support parallel mode for safety reasons`)
         if(operator === 'bots') return
 
-        const location = cfg.getLocationByOperator(operator);
+        const LOCATION = cfg.getLocationByOperator(operator);
         const OPERATOR_DIR = cfg.operators[operator].dir // TODO: temporary - still used for switch webs
         const DEST = 'production/' + cfg.operators[operator].dir
         const REVS = program.params.rev
@@ -66,7 +66,7 @@ program
             // Update web1
             await chat.message('\n• Update code on web1 (public)')
             await program.confirm(`Continue (yes)?`)
-            let web1 = await program.ssh(location.hosts.web1, 'dopamine')
+            let web1 = await program.ssh(LOCATION.hosts.web1, 'dopamine')
             await web1.chdir(DEST)
             await web1.exec('git fetch --prune origin --quiet')
             await web1.exec(`git reset --hard --quiet ${to}`)
@@ -84,13 +84,13 @@ program
         else if( STRATEGY === 'blue-green'){
             
             let [web1, lb] = await Promise.all([
-                program.ssh(location.hosts.web1, 'dopamine'),
-                program.ssh(location.hosts.lb, 'root')
+                program.ssh(LOCATION.hosts.web1, 'dopamine'),
+                program.ssh(LOCATION.hosts.lb, 'root')
             ])
     
             // Switch to green
             await chat.message('• Switch to green (web4,web5)')
-            await lb.exec(`switch-webs --webs=${location.green} --operators=${OPERATOR_DIR}`)
+            await lb.exec(`switch-webs --webs=${LOCATION.green} --operators=${OPERATOR_DIR}`)
     
     
             // Update web1
@@ -102,7 +102,7 @@ program
     
             // Update web2,web3
             await program.confirm(`\nDo you want to populate changes to blue?`)
-            let otherBlueWebs = location.blue.filter(w => w !== 'web1')
+            let otherBlueWebs = LOCATION.blue.filter(w => w !== 'web1')
             if (!otherBlueWebs.length) {
                 console.log('No other webs, skipping..')
             } else {
@@ -113,7 +113,7 @@ program
             // Switch to blue
             await program.confirm(`\nDo you want to switch to blue?`)
             await chat.message('• Switch to blue')
-            await lb.exec(`switch-webs --webs=${location.blue} --operators=${OPERATOR_DIR}`)
+            await lb.exec(`switch-webs --webs=${LOCATION.blue} --operators=${OPERATOR_DIR}`)
     
     
             
@@ -126,7 +126,7 @@ program
                 let answer = program.params.force ? '' : await program.ask('Do you need to ROLLBACK?', ['rollback', ''], '')
                 if (answer === 'rollback') {
                     await chat.warn('Aborting', 'Something is wrong, we will rollback by switching to green')
-                    await lb.exec(`switch-webs --webs=${location.green} --operators=${OPERATOR_DIR}`)
+                    await lb.exec(`switch-webs --webs=${LOCATION.green} --operators=${OPERATOR_DIR}`)
                     await chat.message('Switched to green, please confirm everything is fine', {popup: true})
                     throw Error('Aborting')
                 }
@@ -137,11 +137,11 @@ program
             
     
             // Update green webs
-            await chat.message(`• Update green (${location.green})`)
-            await web1.exec(`$HOME/bin/webs-sync . --webs=${location.green}`, {silent: true})
+            await chat.message(`• Update green (${LOCATION.green})`)
+            await web1.exec(`$HOME/bin/webs-sync . --webs=${LOCATION.green}`, {silent: true})
     
             // Switch to all webs (green & blue)
-            let allWebs = [].concat(location.blue, location.green)
+            let allWebs = [].concat(LOCATION.blue, LOCATION.green)
             await chat.message(`• Switch to blue & green: ${allWebs}`)
             await lb.exec(`switch-webs --webs=all --operators=${OPERATOR_DIR}`)
             await chat.message(`✓ ${to} deployed to ${operator}`)

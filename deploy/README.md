@@ -13,6 +13,7 @@
     * **[allow-panel-access](#hermes-allow-panel-access)** - allow QA access to gpanel
     * **[check](#hermes-check)** - pre-deployment tests
     * **[migration](#hermes-migration)** - auto execute SQL migrations to production
+    * **[update-by-location](#hermes-update-by-location)** - fast simultaneous deploy to all operators on the same location without down time
     * **[update](#hermes-update)** - deploy hermes release repository without down time
     * **[version](#hermes-version)** - check current hermes release versions
 * **[hermes-env](#hermes-env)**
@@ -270,6 +271,32 @@ Auto execute SQL migrations to production
     --announce                   Announce what and why is happening and delay the execution to give time to all to prepare
     --no-chat                    Disable chat notification if they are activated
     -h, --help                   output usage information
+```
+### <a name="hermes-update-by-location"></a>update-by-location
+Fast simultaneous deploy to all operators on the same location without down time
+```
+  Usage: node deploy/hermes/update-by-location --rev <string> 
+
+Fast simultaneous deploy to all operators on the same location without down time
+
+Options:
+  -o, --operators <list|all>          Comma-separated list of operators
+  -r, --rev <string>                  [required] Target revision (like r3.9.9.0) or from..to revision (like r3.9.9.0..r3.9.9.1)
+  -s, --strategy <direct|blue-green>  Choose deployment strategy
+
+Additional Options:
+  -p, --parallel [limit]              When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose                       Turn ON log details of whats happening
+  -f, --force                         Suppress confirm messages (used for automation)
+  --dry-run                           Dry run mode will do everything as usual except commands execution
+  --quiet                             Turn off chat and some logs in stdout
+  --wait <int>                        Pause between iterations in seconds
+  --announce                          Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                           Disable chat notification if they are activated
+  -h, --help                          output usage information
+
+  Example usage:
+    node deploy/hermes/update-by-location --operators bots --rev r3.9.9.1 --strategy blue-green --force
 ```
 ### <a name="hermes-update"></a>update
 Deploy hermes release repository without down time
