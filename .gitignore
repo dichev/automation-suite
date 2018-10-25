@@ -4,3 +4,4 @@ node_modules/
 lab/
 test/
 **/output/*
+.history
