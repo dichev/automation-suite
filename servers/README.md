@@ -25,7 +25,7 @@
 ### <a name="cloudflare-check"></a>check
 Check current cloudflare configuration
 ```
-  Usage: node servers/cloudflare/check --zones <list|all> 
+Usage: node servers/cloudflare/check --zones <list|all> 
 
 Check current cloudflare configuration
 
@@ -46,7 +46,7 @@ Additional Options:
 ### <a name="cloudflare-get"></a>get
 Get specific cloudflare configuration from all zones
 ```
-  Usage: node servers/cloudflare/get --zones <list|all> 
+Usage: node servers/cloudflare/get --zones <list|all> 
 
 Get specific cloudflare configuration from all zones
 
@@ -68,7 +68,7 @@ Additional Options:
 ### <a name="cloudflare-unify-page-rules"></a>unify-page-rules
 Unifying cloudflare page rules
 ```
-  Usage: node servers/cloudflare/unify-page-rules --zones <list|all> 
+Usage: node servers/cloudflare/unify-page-rules --zones <list|all> 
 
 Unifying cloudflare page rules
 
@@ -89,7 +89,7 @@ Additional Options:
 ### <a name="cloudflare-unify-pages"></a>unify-pages
 Unifying cloudflare custom pages
 ```
-  Usage: node servers/cloudflare/unify-pages --zones <list|all> 
+Usage: node servers/cloudflare/unify-pages --zones <list|all> 
 
 Unifying cloudflare custom pages
 
@@ -110,7 +110,7 @@ Additional Options:
 ### <a name="cloudflare-unify-settings"></a>unify-settings
 Unifying cloudflare custom settings
 ```
-  Usage: node servers/cloudflare/unify-settings --zones <list|all> 
+Usage: node servers/cloudflare/unify-settings --zones <list|all> 
 
 Unifying cloudflare custom settings
 
@@ -132,7 +132,7 @@ Additional Options:
 ### <a name="executor-exec"></a>exec
 Execute any command on any host
 ```
-  Usage: node servers/executor/exec --hosts <list> 
+Usage: node servers/executor/exec --hosts <list> 
 
 Execute any command on any host
 
@@ -157,7 +157,7 @@ Additional Options:
 ### <a name="php-binary-check"></a>check
 
 ```
-  Usage: node servers/php-binary/check --hosts <list|all> 
+Usage: node servers/php-binary/check --hosts <list|all> 
 
 Options:
   -h, --hosts <list|all>  [required] The target host name
@@ -176,7 +176,7 @@ Additional Options:
 ### <a name="php-binary-init"></a>init
 
 ```
-  Usage: node servers/php-binary/init --hosts <list|all> --phpversion <version> 
+Usage: node servers/php-binary/init --hosts <list|all> --phpversion <version> 
 
 Options:
   -h, --hosts <list|all>      [required] The target host name
@@ -197,7 +197,7 @@ Additional Options:
 ### <a name="servers-conf-list-changes"></a>list-changes
 
 ```
-  Usage: node servers/servers-conf/list-changes --locations <list|all> 
+Usage: node servers/servers-conf/list-changes --locations <list|all> 
 
 Options:
   -l, --locations <list|all>  [required] The target host name
@@ -216,7 +216,7 @@ Additional Options:
 ### <a name="servers-conf-update"></a>update
 Auto update sever configurations by reloading one by one each server
 ```
-  Usage: node servers/servers-conf/update --locations <list|all> 
+Usage: node servers/servers-conf/update --locations <list|all> 
 
 Auto update sever configurations by reloading one by one each server
 
@@ -243,7 +243,7 @@ Additional Options:
 ### <a name="vm-setup-dnsmasq"></a>dnsmasq
 Setup dnsmasq configuration of the webs
 ```
-  Usage: node servers/vm-setup/dnsmasq --hosts <list|all> 
+Usage: node servers/vm-setup/dnsmasq --hosts <list|all> 
 
 Setup dnsmasq configuration of the webs
 
@@ -264,7 +264,7 @@ Additional Options:
 ### <a name="vm-setup-known-hosts"></a>known-hosts
 
 ```
-  Usage: node servers/vm-setup/known-hosts --hosts <list|all> 
+Usage: node servers/vm-setup/known-hosts --hosts <list|all> 
 
 Options:
   -h, --hosts <list|all>  [required] The target host names
@@ -283,7 +283,7 @@ Additional Options:
 ### <a name="vm-setup-logrotate"></a>logrotate
 Setup logrotate configurations
 ```
-  Usage: node servers/vm-setup/logrotate --hosts <list> 
+Usage: node servers/vm-setup/logrotate --hosts <list> 
 
 Setup logrotate configurations
 
@@ -305,7 +305,7 @@ Additional Options:
 ### <a name="vm-setup-rsyslog"></a>rsyslog
 Setup logrotate configurations
 ```
-  Usage: node servers/vm-setup/rsyslog --hosts <list> 
+Usage: node servers/vm-setup/rsyslog --hosts <list> 
 
 Setup logrotate configurations
 

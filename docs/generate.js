@@ -51,7 +51,7 @@ program
                     name: command,
                     shortDescription: description.charAt(0).toLowerCase() + description.slice(1, 100) + (description.length > 100 ? '..' : ''),
                     description: description,
-                    help: help.replace('Usage: node ', `  Usage: node ${group}/`) // TODO: temporary
+                    help: help.replace('Usage: node ', `Usage: node ${group}/`) // TODO: temporary
                               .replace(/. Available: .+/g, '')
                 }
             }

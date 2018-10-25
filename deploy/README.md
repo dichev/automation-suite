@@ -37,7 +37,7 @@
 ### <a name="cdn-cachebust"></a>cachebust
 Cachebusting html assets
 ```
-  Usage: node deploy/cdn/cachebust --hosts <list|all> 
+Usage: node deploy/cdn/cachebust --hosts <list|all> 
 
   Cachebusting html assets
 
@@ -58,7 +58,7 @@ Cachebusting html assets
 ### <a name="cdn-check"></a>check
 Test suit of games cdn
 ```
-  Usage: node deploy/cdn/check --hosts <list|all> --mode <blue|green> 
+Usage: node deploy/cdn/check --hosts <list|all> --mode <blue|green> 
 
   Test suit of games cdn
 
@@ -81,7 +81,7 @@ Test suit of games cdn
 ### <a name="cdn-update"></a>update
 Update games cdn
 ```
-  Usage: node deploy/cdn/update --hosts <list|all> --mode <blue|green> 
+Usage: node deploy/cdn/update --hosts <list|all> --mode <blue|green> 
 
   Update games cdn
 
@@ -104,7 +104,7 @@ Update games cdn
 ### <a name="cdn-version"></a>version
 Checking current release version of games cdn
 ```
-  Usage: node deploy/cdn/version --hosts <list|all> 
+Usage: node deploy/cdn/version --hosts <list|all> 
 
   Checking current release version of games cdn
 
@@ -127,7 +127,7 @@ Checking current release version of games cdn
 ### <a name="crons-execute"></a>execute
 Execute cron for list of operators
 ```
-  Usage: node deploy/crons/execute --operators <list|all> --cron <string> --project <string> 
+Usage: node deploy/crons/execute --operators <list|all> --cron <string> --project <string> 
 
   Execute cron for list of operators
 
@@ -150,7 +150,7 @@ Execute cron for list of operators
 ### <a name="crons-fetch"></a>fetch
 Check crons for manual changes and diffs
 ```
-  Usage: node deploy/crons/fetch --locations <list|all> 
+Usage: node deploy/crons/fetch --locations <list|all> 
 
   Check crons for manual changes and diffs
 
@@ -174,7 +174,7 @@ Check crons for manual changes and diffs
 ### <a name="crons-update"></a>update
 Update crons to match the seed repo
 ```
-  Usage: node deploy/crons/update --locations <list|all> 
+Usage: node deploy/crons/update --locations <list|all> 
 
   Update crons to match the seed repo
 
@@ -201,7 +201,7 @@ Update crons to match the seed repo
 ### <a name="hermes-allow-panel-access"></a>allow-panel-access
 Allow QA access to gpanel
 ```
-  Usage: node deploy/hermes/allow-panel-access --operators <list|all> 
+Usage: node deploy/hermes/allow-panel-access --operators <list|all> 
 
   Allow QA access to gpanel
 
@@ -224,7 +224,7 @@ Allow QA access to gpanel
 ### <a name="hermes-check"></a>check
 Pre-deployment tests
 ```
-  Usage: node deploy/hermes/check --operators <list|all> 
+Usage: node deploy/hermes/check --operators <list|all> 
 
   Pre-deployment tests
 
@@ -252,7 +252,7 @@ Pre-deployment tests
 ### <a name="hermes-migration"></a>migration
 Auto execute SQL migrations to production
 ```
-  Usage: node deploy/hermes/migration --operators <name> --migration-path <name> --db <type> 
+Usage: node deploy/hermes/migration --operators <name> --migration-path <name> --db <type> 
 
   Auto execute SQL migrations to production
 
@@ -275,7 +275,7 @@ Auto execute SQL migrations to production
 ### <a name="hermes-update-by-location"></a>update-by-location
 Fast simultaneous deploy to all operators on the same location without down time
 ```
-  Usage: node deploy/hermes/update-by-location --rev <string> 
+Usage: node deploy/hermes/update-by-location --rev <string> 
 
 Fast simultaneous deploy to all operators on the same location without down time
 
@@ -301,7 +301,7 @@ Additional Options:
 ### <a name="hermes-update"></a>update
 Deploy hermes release repository without down time
 ```
-  Usage: node deploy/hermes/update --operators <list|all> --rev <string> 
+Usage: node deploy/hermes/update --operators <list|all> --rev <string> 
 
 Deploy hermes release repository without down time
 
@@ -328,7 +328,7 @@ Deploy hermes release repository without down time
 ### <a name="hermes-version"></a>version
 Check current hermes release versions
 ```
-  Usage: node deploy/hermes/version --operators <list|all> 
+Usage: node deploy/hermes/version --operators <list|all> 
 
   Check current hermes release versions
 
@@ -353,7 +353,7 @@ Check current hermes release versions
 ### <a name="hermes-env-check"></a>check
 
 ```
-  Usage: node deploy/hermes-env/check --operator <name> 
+Usage: node deploy/hermes-env/check --operator <name> 
 
   Options:
     -o, --operator <name>   [required] The target operator name
@@ -372,7 +372,7 @@ Check current hermes release versions
 ### <a name="hermes-env-create"></a>create
 
 ```
-  Usage: node deploy/hermes-env/create --operator <name> 
+Usage: node deploy/hermes-env/create --operator <name> 
 
   Options:
     -o, --operator <name>   [required] The target operator name
@@ -391,7 +391,7 @@ Check current hermes release versions
 ### <a name="hermes-env-destroy"></a>destroy
 
 ```
-  Usage: node deploy/hermes-env/destroy --operator <name> 
+Usage: node deploy/hermes-env/destroy --operator <name> 
 
   Options:
     -o, --operator <name>   [required] The target operator name
@@ -410,7 +410,7 @@ Check current hermes release versions
 ### <a name="hermes-env-prepare"></a>prepare
 
 ```
-  Usage: node deploy/hermes-env/prepare --operator <name> 
+Usage: node deploy/hermes-env/prepare --operator <name> 
 
   Options:
     -o, --operator <name>   [required] The target operator name
@@ -430,7 +430,7 @@ Check current hermes release versions
 ### <a name="monitoring-check"></a>check
 Pre-deployment tests for Grafana-Sensors
 ```
-  Usage: node deploy/monitoring/check [options]
+Usage: node deploy/monitoring/check [options]
 
   Pre-deployment tests for Grafana-Sensors
 
@@ -476,7 +476,7 @@ Add new operator configuration in Grafana-Sensors
 ### <a name="monitoring-update"></a>update
 Update Grafana-Sensors repo
 ```
-  Usage: node deploy/monitoring/update [options]
+Usage: node deploy/monitoring/update [options]
 
   Update Grafana-Sensors repo
 
@@ -500,7 +500,7 @@ Update Grafana-Sensors repo
 ### <a name="sys-metrics-check"></a>check
 
 ```
-  Usage: node deploy/sys-metrics/check --hosts <list|all> 
+Usage: node deploy/sys-metrics/check --hosts <list|all> 
 
   Options:
     -h, --hosts <list|all>  [required] The target host names
@@ -524,7 +524,7 @@ Update Grafana-Sensors repo
 ### <a name="sys-metrics-init"></a>init
 Installing sys-metrics
 ```
-  Usage: node deploy/sys-metrics/init --hosts <list> 
+Usage: node deploy/sys-metrics/init --hosts <list> 
 
   Installing sys-metrics
 
@@ -545,7 +545,7 @@ Installing sys-metrics
 ### <a name="sys-metrics-restart"></a>restart
 
 ```
-  Usage: node deploy/sys-metrics/restart --hosts <list|all> 
+Usage: node deploy/sys-metrics/restart --hosts <list|all> 
 
   Options:
     -h, --hosts <list|all>  [required] The target host names
@@ -564,7 +564,7 @@ Installing sys-metrics
 ### <a name="sys-metrics-stop"></a>stop
 
 ```
-  Usage: node deploy/sys-metrics/stop --hosts <list|all> 
+Usage: node deploy/sys-metrics/stop --hosts <list|all> 
 
   Options:
     -h, --hosts <list|all>  [required] The target host names
@@ -583,7 +583,7 @@ Installing sys-metrics
 ### <a name="sys-metrics-update"></a>update
 Updating sys-metrics version
 ```
-  Usage: node deploy/sys-metrics/update --hosts <list|all> --rev <tag> 
+Usage: node deploy/sys-metrics/update --hosts <list|all> --rev <tag> 
 
   Updating sys-metrics version
 

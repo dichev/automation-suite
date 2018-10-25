@@ -14,7 +14,7 @@
 ### <a name="dns-check"></a>check
 Check are all host names resolved from current machine
 ```
-  Usage: node office/dns/check [options]
+Usage: node office/dns/check [options]
 
 Check are all host names resolved from current machine
 
@@ -34,7 +34,7 @@ Additional Options:
 ### <a name="dns-update"></a>update
 Auto sync dns records for all host names in to the office DNS server.
 ```
-  Usage: node office/dns/update [options]
+Usage: node office/dns/update [options]
 
 Auto sync dns records for all host names in to the office DNS server.
 
@@ -55,7 +55,7 @@ Additional Options:
 ### <a name="templates-generate-hermes-config"></a>generate-hermes-config
 Generate SQL migrations by location
 ```
-  Usage: node office/templates/generate-hermes-config [options]
+Usage: node office/templates/generate-hermes-config [options]
 
 Generate SQL migrations by location
 
@@ -76,7 +76,7 @@ Additional Options:
 ### <a name="templates-generate-migrations"></a>generate-migrations
 Generate SQL migrations by location
 ```
-  Usage: node office/templates/generate-migrations [options]
+Usage: node office/templates/generate-migrations [options]
 
 Generate SQL migrations by location
 
@@ -98,7 +98,7 @@ Additional Options:
 ### <a name="templates-generate-new-operator"></a>generate-new-operator
 Generate all configurations for new operator deployment
 ```
-  Usage: node office/templates/generate-new-operator --operator <name> 
+Usage: node office/templates/generate-new-operator --operator <name> 
 
 Generate all configurations for new operator deployment
 
@@ -121,7 +121,7 @@ Additional Options:
 ### <a name="templates-generate-servers-conf"></a>generate-servers-conf
 Generate server-conf for specific location
 ```
-  Usage: node office/templates/generate-servers-conf --locations <list|all> 
+Usage: node office/templates/generate-servers-conf --locations <list|all> 
 
 Generate server-conf for specific location
 
