@@ -5,11 +5,11 @@ const Program = require('dopamine-toolbox').Program
 const GoogleChat = require('dopamine-toolbox').plugins.GoogleChat
 const cfg = require('configurator')
 
-let program = new Program({chat: cfg.chat.rooms.test})
+let program = new Program({chat: cfg.chat.rooms.deployBackend})
 
 program
     .icon(GoogleChat.icons.DEPLOY)
-    .description('Fast simultaneous deploy to all operators on the same location without down time')
+    .description('Fast simultaneous deploy to all operators per location without down time')
     .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators)})
     .option('-r, --rev <string>', `Target revision (like r3.9.9.0) or from..to revision (like r3.9.9.0..r3.9.9.1)`, {required: true})
     .option('-s, --strategy <direct|blue-green>', `Choose deployment strategy`, { def: 'blue-green', choices: ['direct', 'blue-green'] })
@@ -39,8 +39,6 @@ program.run(async () => {
         await chat.message(`*Executing over ${location}*`)
         await program.confirm('Continue?')
         
-        // if(operator !== 'bots' && operator !== 'rtg' ) throw Error('aborting, command not ready for production')
-        if(location !== 'belgium') throw Error('aborting, command not ready for production')
 
         const REVS = program.params.rev
         const STRATEGY = program.params.strategy
