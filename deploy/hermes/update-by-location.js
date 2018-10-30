@@ -5,7 +5,7 @@ const Program = require('dopamine-toolbox').Program
 const GoogleChat = require('dopamine-toolbox').plugins.GoogleChat
 const cfg = require('configurator')
 
-let program = new Program({chat: cfg.chat.rooms.deployBackend})
+let program = new Program({chat: cfg.chat.rooms.deployBackend, smartForce: true})
 
 program
     .icon(GoogleChat.icons.DEPLOY)
@@ -31,7 +31,7 @@ program.run(async () => {
         operatorsByLocation[operator.location].push(operator)
     }
     
-    const locations = Object.keys(operatorsByLocation)
+    const locations = Object.keys(operatorsByLocation).sort()
    
     
     for(let location of locations){
@@ -57,7 +57,7 @@ program.run(async () => {
         // Prepare
         await chat.message('\n• Pre-deploy validations')
         try {
-            await shell.exec(`node deploy/hermes/check -p 5 --quiet --no-chat -o ${OPERATORS.map(o => o.name)} ` + (REVS ? `-r ${REVS}` : ''))
+            await shell.exec(`node deploy/hermes/check -p 5 --quiet --force --no-chat -o ${OPERATORS.map(o => o.name)} ` + (REVS ? `-r ${REVS}` : '')) //TODO
         } catch (e) {
             let answer = await program.ask('WARNING! Some test failed! Are you sure you want to continue?', ['yes', 'no'], 'no')
             if(answer === 'no') throw e
@@ -71,7 +71,10 @@ program.run(async () => {
             }))
         }
     
-        
+        // if (to === 'r3.10.13.0') {
+        //     await chat.message('\n• Executing SQL migrations')
+        //     await shell.exec(`node deploy/hermes/migration -m /d/www/_releases/hermes/.migrations/r3.10.13.0/gpanel-r3.10.13.0.sql --db panel -o ${OPERATORS.map(o => o.name)} --force --no-chat`)
+        // }
      
         if(STRATEGY === 'direct') {
             

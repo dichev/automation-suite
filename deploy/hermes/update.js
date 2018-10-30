@@ -5,7 +5,7 @@ const Program = require('dopamine-toolbox').Program
 const GoogleChat = require('dopamine-toolbox').plugins.GoogleChat
 const cfg = require('configurator')
 
-let program = new Program({chat: cfg.chat.rooms.deployBackend})
+let program = new Program({chat: cfg.chat.rooms.deployBackend, smartForce: true})
 
 program
     .icon(GoogleChat.icons.DEPLOY)
@@ -56,9 +56,9 @@ program
             await shell.exec(`node deploy/hermes/allow-panel-access -o ${operator} --no-chat`)
         }
     
-        // if (to === 'r3.10.9.2') {
+        // if (to === 'r3.10.13.0') {
         //     await chat.message('• Executing SQL migrations')
-        //     await shell.exec(`node deploy/hermes/migration -m /d/www/_releases/hermes/.migrations/r3.10.9.0/platform-r3.10.9.0.sql --db platform -o ${operator} --force --no-chat`)
+        //     await shell.exec(`node deploy/hermes/migration -m /d/www/_releases/hermes/.migrations/r3.10.13.0/gpanel-r3.10.13.0.sql --db panel -o ${operator} --force --no-chat`)
         // }
         
         if(STRATEGY === 'direct') {

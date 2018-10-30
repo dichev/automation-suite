@@ -5,7 +5,7 @@
 const Program = require('dopamine-toolbox').Program
 const Tester = require('dopamine-toolbox').Tester
 const cfg = require('configurator')
-let program = new Program({ chat: cfg.chat.rooms.devops })
+let program = new Program({ chat: cfg.chat.rooms.devops, smartForce: true })
 let tester = new Tester()
 
 
