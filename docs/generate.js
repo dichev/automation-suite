@@ -32,7 +32,7 @@ program
         let programs = fs.readdirSync(base).filter(file => fs.lstatSync(base + '/' + file).isDirectory())
         let commands = {}
         for(let name of programs){
-            commands[name] = fs.readdirSync(base + '/' + name).filter(file => file.endsWith('.js')).map(file => file.substring(0, file.length-3))
+            commands[name] = fs.readdirSync(base + '/' + name).filter(file => file.endsWith('.js') && !file.startsWith('.')).map(file => file.substring(0, file.length-3))
         }
         
     

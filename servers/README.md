@@ -7,6 +7,7 @@
     * **[unify-pages](#cloudflare-unify-pages)** - unifying cloudflare custom pages
     * **[unify-settings](#cloudflare-unify-settings)** - unifying cloudflare custom settings
 * **[executor](#executor)**
+    * **[exec-by-operator](#executor-exec-by-operator)** - execute any command on over the base directory of any operator
     * **[exec](#executor-exec)** - execute any command on any host
 * **[php-binary](#php-binary)**
     * **[check](#php-binary-check)** 
@@ -129,6 +130,29 @@ Additional Options:
   -h, --help              output usage information
 ```
 ## <a name="executor"></a>executor
+### <a name="executor-exec-by-operator"></a>exec-by-operator
+Execute any command on over the base directory of any operator
+```
+Usage: node servers/executor/exec-by-operator --operators <list|all> 
+
+Execute any command on over the base directory of any operator
+
+Options:
+  -o, --operators <list|all>  [required] Comma-separated list of operators
+  -e, --exec <cmd>            Command to be executed
+  -E, --exec-file <file>      Read remote commands from file
+
+Additional Options:
+  -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose               Turn ON log details of whats happening
+  -f, --force                 Suppress confirm messages (used for automation)
+  --dry-run                   Dry run mode will do everything as usual except commands execution
+  --quiet                     Turn off chat and some logs in stdout
+  --wait <int>                Pause between iterations in seconds
+  --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                   Disable chat notification if they are activated
+  -h, --help                  output usage information
+```
 ### <a name="executor-exec"></a>exec
 Execute any command on any host
 ```
