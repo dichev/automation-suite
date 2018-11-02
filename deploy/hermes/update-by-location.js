@@ -66,7 +66,7 @@ program.run(async () => {
     
         const parallelOperators = async (fn) => {
             await Promise.all(OPERATORS.map(async (operator, i) => {
-                await program.sleep(i, operator.name)
+                await program.sleep(i * 0.5, operator.name)
                 await fn(operator)
             }))
         }

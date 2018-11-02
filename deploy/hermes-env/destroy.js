@@ -18,7 +18,7 @@ const flatten = (arr) => arr.reduce((acc, val) => acc.concat(val), []);
 // Configuration
 const TEMPLATES = __dirname.replace(/\\/g, '/') + '/output' // TODO: temporary
 
-let program = new Program({ chat: cfg.chat.rooms.devops })
+let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 
 program
     .option('-o, --operator <name>', 'The target operator name', {required: true})
