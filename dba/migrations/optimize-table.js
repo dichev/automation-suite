@@ -18,7 +18,7 @@ program
         
         let dbs = cfg.databases[cfg.operators[operator].databases]
     
-        let ssh = await new SSHClient().connect({host: dbs.backups.master, username: 'root'})
+        let ssh = await new SSHClient().connect({host: dbs.master, username: 'root'})
         let master = await new MySQL().connect({user: 'root' }, ssh)
         
         let dbname = cfg.operators[operator].dbPrefix + program.params.db
@@ -28,7 +28,7 @@ program
         master.highLoadProtection({connections: 300})
         
         for(let table of tables) {
-            await program.chat.notify(`Optimizing ${table}`)
+            await program.chat.message(`Optimizing ${table}`)
             await master.query('ALTER TABLE `' + table + '` FORCE')
         }
         await master.disconnect()
