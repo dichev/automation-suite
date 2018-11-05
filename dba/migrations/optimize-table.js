@@ -11,7 +11,7 @@ program
     .description('Optimize table fragmentation by rebuilding it online')
     .option('-o, --operators <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
     .option('-t, --tables <name>', 'The table names (comma separated)', { required: true })
-    .option('--db <type>', 'The target database type', { required: true, choices: ['platform', 'panel', 'bonus'] })
+    .option('--db <type>', 'The target database type', { required: true, choices: ['platform', 'panel', 'bonus', 'segments', 'stats', 'jackpot', 'tournaments'] })
 
     .iterate('operators', async (operator) => {
         if(program.params.wait === undefined) program.params.wait = 10
