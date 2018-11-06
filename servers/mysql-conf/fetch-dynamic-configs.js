@@ -8,18 +8,18 @@ const DEST = `d:/www/servers/servers-conf-mysql/current`
 
 const SQL = `
 SHOW VARIABLES WHERE variable_name IN(
-    'server_id',
-    'expire_logs_days',
-    'innodb_buffer_pool_size',
-    'innodb_buffer_pool_instances',
-    'log_bin',
     'bind_address',
+    'expire_logs_days',
+    'gtid_mode',
+    'innodb_buffer_pool_instances',
+    'innodb_buffer_pool_size',
+    'log_bin',
+    'log_slave_updates',
+    'server_id',
     'slave_parallel_type',
     'slave_parallel_workers',
-    'gtid_mode',
     'table_definition_cache',
-    'table_open_cache',
-    'log_slave_updates'
+    'table_open_cache'
 )`
 
 let program = new Program()
