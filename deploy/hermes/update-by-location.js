@@ -13,6 +13,7 @@ program
     .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators)})
     .option('-r, --rev <string>', `Target revision (like r3.9.9.0) or from..to revision (like r3.9.9.0..r3.9.9.1)`, {required: true})
     .option('-s, --strategy <direct|blue-green>', `Choose deployment strategy`, { def: 'blue-green', choices: ['direct', 'blue-green'] })
+    .option('--allow-panel', `Allow QA access to GPanel`)
     .example(`
         node deploy/hermes/update-by-location --operators bots --rev r3.9.9.1 --strategy blue-green --force
     `)
@@ -69,6 +70,11 @@ program.run(async () => {
                 await program.sleep(i * 0.5, operator.name)
                 await fn(operator)
             }))
+        }
+
+        if (program.params.allowPanel) {
+            await chat.message('• Allowing QA panel access')
+            await shell.exec(`node deploy/hermes/allow-panel-access -o ${OPERATORS.map(o => o.name)} -p 10 --no-chat`)
         }
     
         // if (to === 'r3.10.13.0') {
