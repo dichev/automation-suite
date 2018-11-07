@@ -12,7 +12,7 @@ const REPO = "d:/www/_releases/hermes.seed"
 let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 
 program
-    .description(`Sync operator bet limits without betlimits downtime`)
+    .description(`Sync operator bet limits without downtime`)
     .option('-o, --operators <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
     .option('--rollback', 'Will restore the previous state of the bet limits. In case of production errors this is the fastest route')
     .parse()
