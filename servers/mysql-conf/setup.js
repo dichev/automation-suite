@@ -4,20 +4,13 @@
 const Program = require('dopamine-toolbox').Program
 const SSHClient = require('dopamine-toolbox').SSHClient
 const cfg = require('configurator')
-const fs = require('fs')
-const path = require('path')
 
-const NEW_LINE = '\r\n'; //require('os').EOL
-const DEST = `d:/www/servers/servers-conf-mysql/current`
 
 let program = new Program({ chat: cfg.chat.rooms.devops })
 program
     .description('Setup unified mysql configuration')
     .option('-h, --hosts <list|all>', 'The target host name', {choices: Object.keys(cfg.hosts).filter(h => h.includes('sql')), required: true})
-    .parse()
 
-
-program
     .iterate('hosts', async (host) => {
         let ssh = await new SSHClient().connect({host: cfg.getHost(host).ip, username: 'root'})
         
