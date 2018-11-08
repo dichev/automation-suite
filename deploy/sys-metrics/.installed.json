@@ -18,7 +18,7 @@
         "sofia-logserver",
         "sofia-syslog",
         "dev-hermes-lb",
-        "dev-hermes-sql",
+        "dev-hermes-mysql",
         "dev-hermes-web1",
         "dev-hermes-web2",
         "france-srv1",
