@@ -9,7 +9,6 @@
 
 const Program = require('dopamine-toolbox').Program
 const SSHClient = require('dopamine-toolbox').SSHClient
-const installed = require('./.installed.json')
 const fs = require('fs')
 const cfg = require('configurator')
 
@@ -18,24 +17,26 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
     .description('Installing sys-metrics')
-    .option('-h, --hosts <list>', 'The target host names', {required: true})
-        // .save('./installed')
+    .option('-h, --hosts <list>', 'The target host names', {required: true, choices: Object.keys(cfg.hosts) })
+    .option('--install-deps', 'Install required deps in case the vm is not unified')
 
     .iterate('hosts', async (host) => {
-        if(installed.hosts.includes(host)) throw Error(`This host ${host} is already installed`)
-
         let ssh = new SSHClient()
         await ssh.connect({ host: cfg.getHost(host).ip, username: 'root' })
+    
+        if (ssh.exists('/opt/dopamine/sys-metrics')) throw Error('The sys metrics seems already installed here')
         
-        await ssh.exec(`
-            ssh-keyscan -H gitlab.dopamine.bg >> ~/.ssh/known_hosts
-            ssh-keyscan -H monitoring.d >> ~/.ssh/known_hosts
-            
-            apt-get update
-            apt-get -y install curl git
-            curl -sL https://deb.nodesource.com/setup_8.x | bash -
-            apt-get -y install nodejs
-        `)
+        if(program.params.installDeps){
+            await ssh.exec(`
+                ssh-keyscan -H gitlab.dopamine.bg >> ~/.ssh/known_hosts
+                ssh-keyscan -H monitoring.d >> ~/.ssh/known_hosts
+                
+                apt-get update
+                apt-get -y install curl git
+                curl -sL https://deb.nodesource.com/setup_8.x | bash -
+                apt-get -y install nodejs
+            `)
+        }
         
         await ssh.exec('mkdir -p /opt/dopamine/sys-metrics')
         await ssh.chdir('/opt/dopamine/sys-metrics')

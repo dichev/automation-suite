@@ -10,13 +10,12 @@
 
 const Program = require('dopamine-toolbox').Program
 const SSHClient = require('dopamine-toolbox').SSHClient
-const installed = require('./.installed.json')
 const cfg = require('configurator')
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
 
 program
-    .option('-h, --hosts <list|all>', 'The target host names', { choices: installed.hosts, required: true })
+    .option('-h, --hosts <list|all>', 'The target host names', { choices: Object.keys(cfg.hosts), required: true })
     
     .iterate('hosts', async (host) => {
         let ssh = new SSHClient()
