@@ -21,11 +21,12 @@ SHOW VARIABLES WHERE variable_name IN(
     'table_definition_cache',
     'table_open_cache'
 )`
+const DB_HOSTS = Object.keys(cfg.hosts).filter(h => h.includes('sql') || h.includes('-db-'))
 
 let program = new Program()
 program
     .description('Generate server-conf for specific location')
-    .option('-h, --hosts <list|all>', 'The target host name', {choices: Object.keys(cfg.hosts).filter(h => h.includes('sql')), required: true})
+    .option('-h, --hosts <list|all>', 'The target host name', {choices: DB_HOSTS, required: true})
     .option('-d, --dest <path>', 'Output generated data to destination path')
     .parse()
 
@@ -48,5 +49,5 @@ program
         console.log(json)
 
         await ssh.disconnect()
-})
+    })
 

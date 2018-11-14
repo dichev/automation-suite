@@ -23,11 +23,14 @@ program
         it(`mysql config exists`, async () => await ssh.exists(`/opt/servers-conf/rsyslog/10-mysql.conf`))
         it(`nginx config exists`, async () => await ssh.exists(`/opt/servers-conf/rsyslog/11-nginx.conf`))
         it(`common config exists`, async () => await ssh.exists(`/opt/servers-conf/rsyslog/common.conf`))
-        it(`validate rsyslog configuration`, async () => await ssh.exec(`rsyslogd -N1`, {silent: true}))
         await tester.run(true)
         
         if(program.params.onlyValidate) return
-        
+    
+        if (await ssh.exists(`/etc/rsyslog.d/dope.conf`)) {
+            console.log('removing deprecated dope.conf')
+            await ssh.exec(`mv /etc/rsyslog.d/dope.conf /tmp/rsyslog-dope.conf`)
+        }
         
         switch (type) {
             case 'web':

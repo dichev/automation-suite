@@ -11,6 +11,8 @@
 const Program = require('dopamine-toolbox').Program
 const installed = require('./.installed.json')
 const cfg = require('configurator')
+const SoftBuild = '192.168.100.19'
+
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
@@ -27,12 +29,14 @@ program
         await sshlb.exec('switch-webs --quiet --webs=all --operators=all --exclude-webs=' + h.alias)
         
         let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
-        let SoftBuild = (cfg.getHost(host).network === 'office' ? "192.168.100.19" : "192.168.110.19");
+        
         //await ssh.exec('ssh-keyscan -H '+SoftBuild+' >> ~/.ssh/known_hosts ')
         await ssh.exec('apt-get -qq update && apt-get -qq install libxslt1.1 libreadline7 -y')
         await ssh.exec('ssh -o StrictHostKeyChecking=no ' + SoftBuild + ' uptime') /* da se pomisli po-elegantno */
         await ssh.exec('mkdir -p /opt/phpbrew; rsync -av --delete ' + SoftBuild + ':/opt/phpbrew/php /opt/phpbrew/')
+        await ssh.exec('mkdir -p /var/log/php') // used for cli error logs
         await ssh.exec('cd /opt/servers-conf && git pull')
+        
         // LINKS
         console.log("php version: " + program.params.phpversion)
         await ssh.exec(`rm -fv /opt/phpbrew/php/php && ln -s /opt/phpbrew/php/php-${program.params.phpversion} /opt/phpbrew/php/php`)
