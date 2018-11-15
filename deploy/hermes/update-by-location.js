@@ -104,7 +104,9 @@ program.run(async () => {
             // Populate to the other webs
             await chat.message(`\n• Update code to all other webs (public)`)
             await program.confirm(`Continue (yes)?`)
-            await web1.exec(`$HOME/bin/webs-sync ${BASE_DIR}`, {silent: true})
+            await parallelOperators(async operator => {
+                await web1.exec(`$HOME/bin/webs-sync ${operator.dir}`, {silent: true})
+            })
             await chat.message(`✓ ${to} deployed `)
             
         }
@@ -144,7 +146,9 @@ program.run(async () => {
                 console.log('No other webs, skipping..')
             } else {
                 await chat.message(`• Update blue (${otherBlueWebs})`)
-                await web1.exec(`$HOME/bin/webs-sync ${BASE_DIR} --webs=${otherBlueWebs}`, {silent: true})
+                await parallelOperators(async operator => {
+                    await web1.exec(`$HOME/bin/webs-sync ${operator.dir} --webs=${otherBlueWebs}`, {silent: true})
+                })
             }
     
             // Switch to blue
@@ -175,7 +179,10 @@ program.run(async () => {
     
             // Update green webs
             await chat.message(`• Update green (${LOCATION.green})`)
-            await web1.exec(`$HOME/bin/webs-sync ${BASE_DIR} --webs=${LOCATION.green}`, {silent: true})
+            await parallelOperators(async operator => {
+                await web1.exec(`$HOME/bin/webs-sync ${operator.dir} --webs=${LOCATION.green}`, {silent: true})
+            })
+            
     
             // Switch to all webs (green & blue)
             let allWebs = [].concat(LOCATION.blue, LOCATION.green)
