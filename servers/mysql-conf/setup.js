@@ -16,9 +16,12 @@ program
         
         
         await program.chat.message('Preparing symlinked configurations..')
-        if(!await ssh.exists('/opt/servers-conf-mysql')) {
-            await ssh.exec(`git clone git@gitlab.dopamine.bg:servers/servers-conf-mysql.git /opt/servers-conf-mysql`)
+        if(await ssh.exists('/opt/servers-conf-mysql')) {
+            await program.confirm('WARNING! The mysql conf repo is found, are you sure you want to completely replace it?')
+            await ssh.exec('mv -v /opt/servers-conf-mysql /opt/servers-conf-mysql-PREV')
         }
+        await ssh.exec(`git clone git@gitlab.dopamine.bg:servers/servers-conf-mysql.git /opt/servers-conf-mysql`)
+        
         await ssh.exec(`mv /etc/mysql /etc/mysql.old-` + Date.now())
         await ssh.exec(`ln -svfT /opt/servers-conf-mysql/mysql.service /lib/systemd/system/mysql.service && [ -f /lib/systemd/system/mysql.service ]`);
         await ssh.exec(`ln -svfT /opt/servers-conf-mysql/mysql /etc/mysql && [ -d /etc/mysql ]`)
@@ -27,6 +30,9 @@ program
 
         
         await program.confirm('Restart mysql?')
+        if(cfg.getHost(host).type === 'mysql-master') {
+            await program.confirm('Are you fucking sure??? This is the master man, it will drop all users??')
+        }
         await program.chat.message('Restarting mysql..')
         
         console.log('Restarting mysql while watching the error log, press ctrl+c to end')
