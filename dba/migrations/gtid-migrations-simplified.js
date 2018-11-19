@@ -17,11 +17,12 @@ const   Program = require('dopamine-toolbox').Program,
         CMD_GTID_ON  = `cd /etc/mysql && git reset --hard GTID_ON_2 && git status`;
 let     sshConnections = {},
         dbConnections = {},
-        program = new Program();
+        program = new Program({chat: cfg.chat.rooms.devops});
 
 let run = async (what,where,payload,cb = () => {}) => { // replace ['SELECT NOW() as tm, "OFF" as Value' ... ] with [p] for production purposes ---\/
     await program.sleep(2,payload.join(', ') + ' -> ' + where.join(', '))
     await program.confirm("Confirm to continue:")
+    await program.chat.message('`' + payload.join('\n') + '`')
     if(what === 'query') for(let ip of where) for (let p of payload) cb(ip,await dbConnections[ip].query(p))
     if(what === 'exec')  for(let ip of where) for (let p of payload) cb(ip,await sshConnections[ip].exec(p)) // <-- replace ['whoami'] with [p] for production purposes
 }
