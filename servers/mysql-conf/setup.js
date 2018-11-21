@@ -13,7 +13,9 @@ program
 
     .iterate('hosts', async (host) => {
         let ssh = await new SSHClient().connect({host: cfg.getHost(host).ip, username: 'root'})
-        
+    
+        await program.chat.message('Adding timezone tables')
+        await ssh.exec('mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql')
         
         await program.chat.message('Preparing symlinked configurations..')
         if(await ssh.exists('/opt/servers-conf-mysql')) {
