@@ -9,16 +9,16 @@
 
 
 const Program = require('dopamine-toolbox').Program
-const installed = require('./.installed.json')
 const cfg = require('configurator')
+
 const SoftBuild = '192.168.100.19'
+const PHP_VERSION = '7.1.20'
+const HOSTS = Object.keys(cfg.hosts).filter(h => h.includes('-web'))
 
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
-    
-    .option('-h, --hosts <list|all>', 'The target host name', {choices: installed.hosts, required: true})
-    .option('-p, --phpversion <version>', 'The php version number', {choices: installed.versions, def: installed.version, required: true})
+    .option('-h, --hosts <list|all>', 'The target host name', {choices: HOSTS, required: true})
     
     .iterate('hosts', async (host) => {
         
@@ -38,8 +38,8 @@ program
         await ssh.exec('cd /opt/servers-conf && git pull')
         
         // LINKS
-        console.log("php version: " + program.params.phpversion)
-        await ssh.exec(`rm -fv /opt/phpbrew/php/php && ln -s /opt/phpbrew/php/php-${program.params.phpversion} /opt/phpbrew/php/php`)
+        console.log("php version: " + PHP_VERSION)
+        await ssh.exec(`rm -fv /opt/phpbrew/php/php && ln -s /opt/phpbrew/php/php-${PHP_VERSION} /opt/phpbrew/php/php`)
         await ssh.exec('rm -fv /opt/phpbrew/php/php/etc/php.ini && ln -s /opt/servers-conf/php/php.ini /opt/phpbrew/php/php/etc/php.ini')
         await ssh.exec('rm -fv /usr/bin/php && ln -s /opt/phpbrew/php/php/bin/php /usr/bin/php')
         await ssh.exec('rm -fv /etc/init.d/php*-fpm && ln -s /opt/servers-conf/php/php-fpm.init.d /etc/init.d/php-fpm')

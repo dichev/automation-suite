@@ -8,16 +8,16 @@
 
 
 const Program = require('dopamine-toolbox').Program
-const installed = require('./.installed.json')
 const cfg = require('configurator')
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
-const VERSION = installed.version
+const PHP_VERSION = '7.1.20'
+const HOSTS = Object.keys(cfg.hosts).filter(h => h.includes('-web'))
 const assert = require('assert')
 
 program
 
-    .option('-h, --hosts <list|all>', 'The target host name', {choices: installed.hosts, required: true})
+    .option('-h, --hosts <list|all>', 'The target host name', {choices: HOSTS, required: true})
     
     .iterate('hosts', async (host) => {
         let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
@@ -33,10 +33,10 @@ program
             assert.ok((await ssh.exec(`systemctl status php-fpm | grep Active`)).startsWith('Active: active (running) '), 'php-fpm process systemd is not active!')
         })
         it('should loaded exactly php-7.1.20', async () => {
-            assert.strictEqual(await ssh.exec(`php --ini | grep Loaded`), `Loaded Configuration File:         /opt/phpbrew/php/php-${VERSION}/etc/php.ini`)
+            assert.strictEqual(await ssh.exec(`php --ini | grep Loaded`), `Loaded Configuration File:         /opt/phpbrew/php/php-${PHP_VERSION}/etc/php.ini`)
         })
-        it(`should be phpv${VERSION} with OPcache enabled`, async () => {
-            assert.strictEqual(await ssh.exec(`php -v | grep OPcache`), `with Zend OPcache v${VERSION}, Copyright (c) 1999-2018, by Zend Technologies`)
+        it(`should be phpv${PHP_VERSION} with OPcache enabled`, async () => {
+            assert.strictEqual(await ssh.exec(`php -v | grep OPcache`), `with Zend OPcache v${PHP_VERSION}, Copyright (c) 1999-2018, by Zend Technologies`)
         })
         it('should use custom php settings', async () => {
             assert.strictEqual(await ssh.exec(`php -r "echo ini_get('max_input_vars') . PHP_EOL;"`), '20000')
