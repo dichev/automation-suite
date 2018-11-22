@@ -37,7 +37,7 @@ program
             
         }
         else if(host.type === 'web' || host.type.startsWith('mysql')){
-            await program.chat.message('Preparing php configurations..')
+            await program.chat.message('Preparing servers-conf..')
             await ssh.exec(`git clone git@gitlab.dopamine.bg:servers/servers-conf-${host.location}.git /opt/servers-conf`)
             console.log(host.type === 'web' ? 'Do not forget to run php-binary/init' : 'Do not forget to run mysql-conf/setup')
             await program.confirm('Continue?')

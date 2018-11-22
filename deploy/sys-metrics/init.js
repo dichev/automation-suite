@@ -24,8 +24,6 @@ program
         let ssh = new SSHClient()
         await ssh.connect({ host: cfg.getHost(host).ip, username: 'root' })
     
-        if (ssh.exists('/opt/dopamine/sys-metrics')) throw Error('The sys metrics seems already installed here')
-        
         if(program.params.installDeps){
             await ssh.exec(`
                 ssh-keyscan -H gitlab.dopamine.bg >> ~/.ssh/known_hosts
@@ -39,16 +37,12 @@ program
         }
         
         await ssh.exec('mkdir -p /opt/dopamine/sys-metrics')
-        await ssh.chdir('/opt/dopamine/sys-metrics')
-        await ssh.exec('git clone git@gitlab.dopamine.bg:releases/sys-metrics.git .')
+        await ssh.exec('git clone git@gitlab.dopamine.bg:releases/sys-metrics.git /opt/dopamine/sys-metrics')
         await ssh.exec('systemctl enable /opt/dopamine/sys-metrics/sys-metrics.service')
         await ssh.exec('systemctl start sys-metrics')
         await ssh.exec('systemctl status sys-metrics | head -n 3')
         
         console.info('Sys metrics are deployed successfully and now are active!')
-
-        installed.hosts.push(host)
-        fs.writeFileSync(__dirname + '/.installed.json', JSON.stringify(installed, null, 4))
     
         await ssh.disconnect()
     })
