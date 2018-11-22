@@ -31,6 +31,10 @@ program
         await chat.notify('Updating repo to last revision')
         await ssh.exec(`git fetch --prune && git pull`)
 
+        // Update configurator
+        await chat.notify('Updating ONLY configurator')
+        await ssh.exec(`npm update --force configurator`)
+
         // Restart
         await chat.notify('Restart grafana-sensors.service')
         await sshRoot.exec(`systemctl restart grafana-sensors.service`)
