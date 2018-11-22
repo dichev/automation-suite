@@ -68,7 +68,7 @@ program
     
         console.info('\n2) Fetching all configurations (nginx/php-fpm)')
         console.log(hosts.map(h=>h.name).join(',') + '.. (parallel)')
-        await Promise.all(hosts.map((host, i) => host.ssh.exec(`cd ${REPO} && sleep ${i*0.2} && git fetch --prune && git reset --hard ${REVISION}`)))
+        await Promise.all(hosts.map((host, i) => host.ssh.exec(`cd ${REPO} && sleep ${i*0.5} && git fetch --prune && git reset --hard ${REVISION}`)))
     
     
         
