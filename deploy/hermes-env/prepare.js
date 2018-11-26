@@ -83,7 +83,6 @@ program
         let sensors = JSON.parse(fs.readFileSync(`${GRAFANA}/config/sensors.json`, 'utf8'))
         let operatorSensors = JSON.parse(fs.readFileSync(`${OUTPUT}/${OPERATOR}/monitoring/${OPERATOR}-sensors.json`, 'utf8'))
         fs.writeFileSync(`${GRAFANA}/config/sensors.json`, JSON.stringify(deepMerge(sensors, operatorSensors), null, 4))
-        await shell.exec(`cp ${OUTPUT}/${OPERATOR}/monitoring/${OPERATOR}.json ${GRAFANA}/config/operators/${OPERATOR}.json`)
 
         log("Please review and commit the changes")
         await shell.exec(`cd ${GRAFANA} && git add . && TortoiseGitProc -command commit -logmsg "[env] Add new operator: ${OPERATOR}"`)
