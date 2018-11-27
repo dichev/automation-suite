@@ -44,6 +44,11 @@ program
         
         console.log('\n\nChecking docker version')
         await web.exec('docker -v')
+        
+        
+        console.log('Configure gcloud auth')
+        await web.exec('gcloud auth configure-docker --quiet')
+        
         await web.disconnect()
         
     })
