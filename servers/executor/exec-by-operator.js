@@ -15,6 +15,7 @@ program
     .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators), required: true})
     .option('-e, --exec <cmd>', 'Command to be executed')
     .option('-E, --exec-file <file>', 'Read remote commands from file')
+    .option('--no-history', 'Disable saving commands to history (useful for credentials data)')
     .parse()
 
 if (program.params.exec && program.params.execFile) {
@@ -34,7 +35,7 @@ Promise.resolve().then(async () => {
         cmd = fs.readFileSync(program.params.execFile, 'utf8').replace(/\r?\n/g, '\n')
     } else {
         console.log('Enter command:')
-        let input = new Input({collectHistoryFile: __dirname + '/.history'})
+        let input = new Input({collectHistoryFile: program.params.history === false ? '' : __dirname + '/.history'})
         cmd = await input.ask('>') || 'echo Hello $HOSTNAME!'
     }
 

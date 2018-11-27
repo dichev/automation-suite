@@ -16,13 +16,13 @@ program
     .option('-u, --user <name>', 'Choose ssh user', { def: 'root' })
     .option('-e, --exec <cmd>', 'Command to be executed')
     .option('-E, --exec-file <file>', 'Read remote commands from file')
+    .option('--no-history', 'Disable saving commands to history (useful for credentials data)')
     .parse()
 
 if (program.params.exec && program.params.execFile) {
     console.warn(`! Please set only one of these: --exec or --exec-file`)
     process.exit(1)
 }
-
 
 Promise.resolve().then(async () => {
     program.params.force = true
@@ -35,7 +35,7 @@ Promise.resolve().then(async () => {
         cmd = fs.readFileSync(program.params.execFile, 'utf8').replace(/\r?\n/g, '\n')
     } else {
         console.log('Enter command:')
-        let input = new Input({collectHistoryFile: __dirname + '/.history'})
+        let input = new Input({collectHistoryFile: program.params.history === false ? '' : __dirname + '/.history'})
         cmd = await input.ask('>') || 'echo Hello $HOSTNAME!'
     }
 
