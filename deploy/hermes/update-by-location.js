@@ -71,17 +71,27 @@ program.run(async () => {
                 await fn(operator)
             }))
         }
+        
+        const sequentialOperators = async (fn) => {
+            for (let operator of OPERATORS) {
+                console.log(`${operator.name}`)
+                await fn(operator)
+            }
+        }
+    
+       
 
         if (program.params.allowPanel) {
             await chat.message('• Allowing QA panel access')
             await shell.exec(`node deploy/hermes/allow-panel-access -o ${OPERATORS.map(o => o.name)} -p 10 --no-chat`)
         }
-    
+   
         // if (to === 'r3.10.13.0') {
+        //     let forced = program.params.force ? '--force' : ''
         //     await chat.message('\n• Executing SQL migrations')
-        //     await shell.exec(`node deploy/hermes/migration -m /d/www/_releases/hermes/.migrations/r3.10.13.0/gpanel-r3.10.13.0.sql --db panel -o ${OPERATORS.map(o => o.name)} --force --no-chat`)
+        //     await shell.exec(`node deploy/hermes/migration -m /d/www/_releases/hermes/.migrations/r3.10.13.0/gpanel-r3.10.13.0.sql --db panel -o ${OPERATORS.map(o => o.name)} ${forced} --no-chat`)
         // }
-     
+    
         if(STRATEGY === 'direct') {
             
             // Update web1
@@ -104,11 +114,10 @@ program.run(async () => {
             // Populate to the other webs
             await chat.message(`\n• Update code to all other webs (public)`)
             await program.confirm(`Continue (yes)?`)
-            await parallelOperators(async operator => {
+            await sequentialOperators(async operator => {
                 await web1.exec(`$HOME/bin/webs-sync ${operator.dir}`, {silent: true})
             })
-            await chat.message(`✓ ${to} deployed `)
-            
+
         }
         
         else if( STRATEGY === 'blue-green'){
@@ -146,7 +155,7 @@ program.run(async () => {
                 console.log('No other webs, skipping..')
             } else {
                 await chat.message(`• Update blue (${otherBlueWebs})`)
-                await parallelOperators(async operator => {
+                await sequentialOperators(async operator => {
                     await web1.exec(`$HOME/bin/webs-sync ${operator.dir} --webs=${otherBlueWebs}`, {silent: true})
                 })
             }
@@ -179,7 +188,7 @@ program.run(async () => {
     
             // Update green webs
             await chat.message(`• Update green (${LOCATION.green})`)
-            await parallelOperators(async operator => {
+            await sequentialOperators(async operator => {
                 await web1.exec(`$HOME/bin/webs-sync ${operator.dir} --webs=${LOCATION.green}`, {silent: true})
             })
             
@@ -188,12 +197,15 @@ program.run(async () => {
             let allWebs = [].concat(LOCATION.blue, LOCATION.green)
             await chat.message(`• Switch to blue & green: ${allWebs}`)
             await lb.exec(`switch-webs --webs=all --operators=${OPERATORS.map(o => o.dir)}`)
-            await chat.message(`✓ ${to} deployed to ${OPERATORS.map(o => o.name)}`)
+            
         }
         else {
             throw Error(`There is no such strategy: ${STRATEGY}`)
         }
     
+        }
+    
+        await chat.message(`✓ ${to} deployed to ${OPERATORS.map(o => o.name)}`)
     }
 })
 .then(async() => {
