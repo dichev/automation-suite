@@ -181,7 +181,7 @@ program.run(async () => {
                     throw Error('Aborting')
                 }
             } else {
-                await program.sleep(10, 'Waiting a bit just in case'); // TODO: add here some checks
+                await program.sleep(15, 'Waiting a bit just in case'); // TODO: add here some checks
             }
             
             
@@ -197,15 +197,14 @@ program.run(async () => {
             let allWebs = [].concat(LOCATION.blue, LOCATION.green)
             await chat.message(`• Switch to blue & green: ${allWebs}`)
             await lb.exec(`switch-webs --webs=all --operators=${OPERATORS.map(o => o.dir)}`)
-            
+    
         }
         else {
             throw Error(`There is no such strategy: ${STRATEGY}`)
         }
     
-        }
-    
         await chat.message(`✓ ${to} deployed to ${OPERATORS.map(o => o.name)}`)
+        
     }
 })
 .then(async() => {
