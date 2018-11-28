@@ -33,11 +33,7 @@ program
             await program.confirm(`[DANGEROUS] Are you sure you want to set all to ${IP}?`)
             for (let record of records) {
                 console.log(`Set ${IP} to ${record.name}`)
-                await cf.put('dns_records/'+record.id, {
-                    name: record.name,
-                    content: IP,
-                    type: 'A'
-                })
+                await cf.put('dns_records/'+record.id, { name: record.name,  content: IP,  type: 'A' })
             }
             console.log('Done')
         } else {
