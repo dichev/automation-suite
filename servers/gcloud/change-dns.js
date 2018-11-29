@@ -12,12 +12,10 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 program
     .description('Set ip to all gserver/gpanel dns records of the zone')
     .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases`, { choices: zones, required: true })
-    .option('--ip <value>', `The DNS target ip. If is not passed they will be just listed`)
+    .option('--update', `Update dns records, otherwise just list them`)
     
     .iterate('zones', async (zone) => {
         
-        const IP = program.params.ip || false
-    
         const z = cfg.cloudflare.zones[zone]
         let cf = new CloudFlare(z.zone, z.email, z.key)
         cf.silent = true
@@ -27,17 +25,25 @@ program
                                   // .filter(r=>r.name.includes('rtg')) // for testing
     
         console.log(`Found ${records.length} records:`)
-        for (let record of records) console.log(record.content, record.name)
+        for (let record of records) {
+            let dir = record.name.match(/(gserver|gpanel)-(.+)(\.tgp.cash)/)[2]
+            let location = Object.values(cfg.operators).find(o => o.dir === dir).location
+            record.targetIP = cfg.locations[location].hosts.public
+            console.log(record.content, '=>', record.targetIP , record.name)
+        }
         
-        if(IP) {
-            await program.confirm(`[DANGEROUS] Are you sure you want to set all to ${IP}?`)
+        
+        
+        if(program.params.update) {
+            await program.confirm(`[DANGEROUS] Are you sure you want to set them all?`)
             for (let record of records) {
-                console.log(`Set ${IP} to ${record.name}`)
-                await cf.put('dns_records/'+record.id, { name: record.name,  content: IP,  type: 'A' })
+                console.log(`Set ${record.targetIP} to ${record.name}`)
+                // console.log({name: record.name, content: record.targetIP, type: 'A'})
+                await cf.put('dns_records/'+record.id, { name: record.name,  content: record.targetIP,  type: 'A' })
             }
             console.log('Done')
         } else {
-            console.log('To change the ip you should pass --ip parameter')
+            console.log('To change the ip you should pass --update parameter')
         }
     
         
