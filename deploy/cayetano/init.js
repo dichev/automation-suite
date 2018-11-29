@@ -29,6 +29,7 @@ program
         await web1.chdir('/opt/cayetano-swarm')
         await web1.exec('docker stack deploy --with-registry-auth -c cayetano-stack.yml cayetano')
         // await web1.exec('watch -n 1 docker stack ps cayetano')
+        console.log('Check this on web1:\n  watch -n 1 docker stack ps cayetano')
         
         await web1.disconnect()
     })

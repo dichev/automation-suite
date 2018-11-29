@@ -43,6 +43,7 @@ program
                 await program.chat.message(' Restarting mysql..')
                 console.log('Restarting mysql while watching the error log, press ctrl+c to end')
                 ssh.exec(`tail -f /var/log/mysql/error.log`).catch(console.error);
+                await ssh.exec(`systemctl daemon-reload`);
                 await ssh.exec(`/etc/init.d/mysql restart`)
                 await program.sleep(5)
             }

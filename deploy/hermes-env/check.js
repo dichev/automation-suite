@@ -30,26 +30,26 @@ const curl = async (url) => {
 
 
 program
-    .option('-o, --operator <name>', 'The target operator name', { required: true })
+    .option('-o, --operators <name>', 'The target operator name', { required: true })
     
-    .run(async () => {
+    .iterate('operators', async (operator) => {
         
         // Configuration
-        const OPERATOR = program.params.operator
-        const DOMAIN = cfg.operators[OPERATOR].domain
+        const DIR = cfg.operators[operator].dir
+        const DOMAIN = cfg.operators[operator].domain
         
         
         // Checkers
-        let tester = program.tester()
+        let tester = program.tester(operator)
         let it = tester.it
         
-        it('should have DNS records for gserver', async () => await lookup(`gserver-${OPERATOR}.${DOMAIN}`))
-        it('should have DNS records for gpanel', async () => await lookup(`gpanel-${OPERATOR}.${DOMAIN}`))
-        it('have heartbeat to launcher', async () => await curl(`https://gserver-${OPERATOR}.${DOMAIN}/${OPERATOR}/launcher/heartbeat`))
-        it('have heartbeat to platform', async () => await curl(`https://gserver-${OPERATOR}.${DOMAIN}/${OPERATOR}/platform/heartbeat`))
-        it('have heartbeat to gpanel', async () => await curl(`https://gpanel-${OPERATOR}.${DOMAIN}/${OPERATOR}/api/heartbeat`))
-        it('have heartbeat to campaigns', async () => await curl(`https://gserver-${OPERATOR}.${DOMAIN}/${OPERATOR}/campaigns/heartbeat`))
-        it('have heartbeat to replay', async () => await curl(`https://gserver-${OPERATOR}.${DOMAIN}/${OPERATOR}/replay/heartbeat`))
+        it('should have DNS records for gserver', async () => await lookup(`gserver-${DIR}.${DOMAIN}`))
+        it('should have DNS records for gpanel', async () => await lookup(`gpanel-${DIR}.${DOMAIN}`))
+        it('have heartbeat to launcher', async () => await curl(`https://gserver-${DIR}.${DOMAIN}/${DIR}/launcher/heartbeat`))
+        it('have heartbeat to platform', async () => await curl(`https://gserver-${DIR}.${DOMAIN}/${DIR}/platform/heartbeat`))
+        it('have heartbeat to gpanel', async () => await curl(`https://gpanel-${DIR}.${DOMAIN}/${DIR}/api/heartbeat`))
+        // it('have heartbeat to campaigns', async () => await curl(`https://gserver-${DIR}.${DOMAIN}/${DIR}/campaigns/heartbeat`))
+        // it('have heartbeat to replay', async () => await curl(`https://gserver-${DIR}.${DOMAIN}/${DIR}/replay/heartbeat`))
     
         await tester.run()
     })
