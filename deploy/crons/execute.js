@@ -27,11 +27,13 @@ program
     await web1.connect({host: location.hosts.web1, username: 'dopamine'})
     await web1.chdir(DEST)
 
-    let availableCommands = await web1.exec(`php ${program.params.project}/bin/cmd.php list`)
+    let availableCommands = await web1.exec(`php ${program.params.project}/bin/cmd.php list`, {silent: true})
 
     if (availableCommands.indexOf(program.params.cron) === -1) {
         throw Error(`Cron not found: ${program.params.cron} in project: ${program.params.project}`);
     }
     await web1.exec(`php ${program.params.project}/bin/cmd.php ${program.params.cron}`)
+    await web1.disconnect()
+    
     await program.sleep(2, 'Waiting between iterations')
 })
