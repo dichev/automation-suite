@@ -47,7 +47,8 @@ program
         const DOMAIN = cfg.operators[OPERATOR].domain
         let addresses = [
             `gserver-${OPERATOR}.${DOMAIN}`,
-            `gpanel-${OPERATOR}.${DOMAIN}`
+            `gpanel-${OPERATOR}.${DOMAIN}`,
+            `feed-${OPERATOR}.${DOMAIN}`,
         ]
 
         const z = cfg.cloudflare.zones[DOMAIN]

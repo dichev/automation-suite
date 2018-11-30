@@ -15,7 +15,6 @@ program
     .option('--update', `Update dns records, otherwise just list them`)
     
     .iterate('zones', async (zone) => {
-        
         const z = cfg.cloudflare.zones[zone]
         let cf = new CloudFlare(z.zone, z.email, z.key)
         cf.silent = true
@@ -38,8 +37,9 @@ program
             await program.confirm(`[DANGEROUS] Are you sure you want to set them all?`)
             for (let record of records) {
                 console.log(`Set ${record.targetIP} to ${record.name}`)
+                let isPanel = record.name.startsWith('gpanel') //TODO: gpanel is still not behind CF
                 // console.log({name: record.name, content: record.targetIP, type: 'A'})
-                await cf.put('dns_records/'+record.id, { name: record.name,  content: record.targetIP,  type: 'A' })
+                await cf.put('dns_records/'+record.id, { name: record.name,  content: record.targetIP,  type: 'A',  proxied: !isPanel })
             }
             console.log('Done')
         } else {
