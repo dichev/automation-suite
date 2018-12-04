@@ -22,7 +22,7 @@ let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 
 
 program
-    .option('-o, --operator <name>', 'The target operator name', { required: true })
+    .option('-o, --operator <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
 
     .run(async () => {
         const OPERATOR = program.params.operator

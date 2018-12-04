@@ -30,7 +30,7 @@ const curl = async (url) => {
 
 
 program
-    .option('-o, --operators <name>', 'The target operator name', { required: true })
+    .option('-o, --operators <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
     
     .iterate('operators', async (operator) => {
         

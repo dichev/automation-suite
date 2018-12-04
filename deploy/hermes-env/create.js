@@ -21,7 +21,7 @@ const TEMPLATES = __dirname.replace(/\\/g, '/') + '/output' // TODO: temporary
 let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 
 program
-    .option('-o, --operator <name>', 'The target operator name', { required: true })
+    .option('-o, --operator <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
 
     .run(async () => {
         // Configuration
@@ -90,6 +90,7 @@ program
         await program.chat.notify(`\nExecuting initial crons`)
         await web1.exec(`php ${DEST}/platform/bin/cmd.php exchange-rates`)
         await web1.exec(`php ${DEST}/platform/bin/cmd.php history-partitions`)
+        await web1.exec(`php ${DEST}/platform/bin/cmd.php partition-tables`)
     
         await program.confirm('Continue?')
         

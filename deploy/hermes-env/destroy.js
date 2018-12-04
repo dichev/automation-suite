@@ -21,7 +21,7 @@ const TEMPLATES = __dirname.replace(/\\/g, '/') + '/output' // TODO: temporary
 let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 
 program
-    .option('-o, --operator <name>', 'The target operator name', {required: true})
+    .option('-o, --operator <name>', 'The target operator name', {required: true, choices: Object.keys(cfg.operators)})
 
     .run(async () => {
         if(!cfg.operators[program.params.operator]) throw Error(`missing configuration for this operator ${program.params.operator}`)
