@@ -67,10 +67,10 @@ program
         log("Generating sql templates..")
         await shell.chdir(TEMPLATES)
         let SQL = {
-            masterCheck:     fs.readFileSync(`${TEMPLATES}/${OPERATOR}/db/check.sql`),
-            masterRollback:  fs.readFileSync(`${TEMPLATES}/${OPERATOR}/db/master-rollback.sql`),
-            archiveCheck:    fs.readFileSync(`${TEMPLATES}/${OPERATOR}/db/check.sql`),
-            archiveRollback: fs.readFileSync(`${TEMPLATES}/${OPERATOR}/db/archive-rollback-archive.sql`),
+            masterCheck:     fs.readFileSync(`${TEMPLATES}/${OPERATOR}/db/check.sql`, 'utf8'),
+            masterRollback:  fs.readFileSync(`${TEMPLATES}/${OPERATOR}/db/master-rollback.sql`, 'utf8'),
+            archiveCheck:    fs.readFileSync(`${TEMPLATES}/${OPERATOR}/db/check.sql`, 'utf8'),
+            archiveRollback: fs.readFileSync(`${TEMPLATES}/${OPERATOR}/db/archive-rollback.sql`, 'utf8'),
         }
         
         log('Checking master database..')

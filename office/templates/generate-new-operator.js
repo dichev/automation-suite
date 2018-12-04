@@ -124,7 +124,6 @@ program.run(async () => {
 
     
     // Generate monitoring configurations
-    await generate(`${TEMPLATES}/monitoring/monitoring.json.hbs`,      `${dest}/monitoring/${operator}.json`, vars)
     await generate(`${TEMPLATES}/monitoring/sensors.json.hbs`,         `${dest}/monitoring/${operator}-sensors.json`, vars)
     
 

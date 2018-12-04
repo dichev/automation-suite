@@ -15,7 +15,6 @@ const fs = require('fs')
 const log = console.log
 
 // Configuration
-const TEMPLATES = "d:/www/servers/template-generator"
 const OUTPUT = __dirname.replace(/\\/g, '/') + '/output'
 const GRAFANA   = "d:/www/servers/grafana-sensors"
 
