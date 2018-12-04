@@ -33,7 +33,7 @@ program
 
         // Update configurator
         await chat.notify('Updating ONLY configurator')
-        await ssh.exec(`npm update --force configurator`)
+        await ssh.exec(`npm install configurator`)
 
         // Restart
         await chat.notify('Restart grafana-sensors.service')
