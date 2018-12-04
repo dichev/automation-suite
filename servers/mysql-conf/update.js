@@ -11,6 +11,7 @@ program
     .description('Setup unified mysql configuration')
     .option('-h, --hosts <list|all>', 'The target host name', {choices: DB_HOSTS, required: true})
     .option('--mode <restart|fetch>', 'Restart mysql server or just fetch the changes (will be applied on next restart)', {choices: ['restart', 'fetch']})
+    .option('--query <sql>', 'Execute SQL command after the update (to apply global setting change without restart), for example: "SET GLOBAL expire_logs_days = 5"')
     .option('--reset', 'Reset manual changes')
 
     .iterate('hosts', async (host) => {
@@ -37,7 +38,7 @@ program
         await ssh.exec(`git pull --no-rebase --ff-only --prune`)
     
         if(program.params.mode === 'restart') {
-            const isSlave = cfg.hosts[host].type === 'mysql-slave'
+            const isSlave = ['mysql-slave','mysql-slave-archive'].includes(cfg.hosts[host].type)
             let answer = isSlave ? 'yes' : await program.ask(`DANGEROUS! Do you really want to restart ${cfg.hosts[host].type}`, ['yes', 'no'])
             if (answer === 'yes') {
                 await program.chat.message(' Restarting mysql..')
@@ -51,7 +52,15 @@ program
         else {
             console.warn(`WARNING! The changes will be applied on next restart. You should set them now using SET GLOBAL`)
         }
-        console.log('Ready')
+        
+        if(program.params.query){
+            let cmd = `mysql -uroot -e "${program.params.query.replace(/"/g, "'")}"`
+            console.log('\n>',cmd)
+            await program.confirm('Execute?')
+            await ssh.exec(cmd)
+        }
+        
+        console.log('Ready (press crtl+c to exit)')
         
         // await ssh.disconnect()
 })
