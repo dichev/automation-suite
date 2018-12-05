@@ -74,7 +74,7 @@ program
         
         
         console.info('\n3) Reload config changes')
-        if(!program.reload) console.log('nothing set to be reloaded')
+        if(!program.params.reload) console.log('nothing set to be reloaded')
         let lb = hosts.find(host => host.type === 'lb')
         let webs = hosts.filter(host => host.type === 'web')
         

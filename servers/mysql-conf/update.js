@@ -6,7 +6,7 @@ const SSHClient = require('dopamine-toolbox').SSHClient
 const cfg = require('configurator')
 const DB_HOSTS = Object.keys(cfg.hosts).filter(h => h.includes('sql') || h.includes('-db-'))
 
-let program = new Program({ chat: cfg.chat.rooms.devops })
+let program = new Program({ chat: cfg.chat.rooms.devops, smartForce: true })
 program
     .description('Setup unified mysql configuration')
     .option('-h, --hosts <list|all>', 'The target host name', {choices: DB_HOSTS, required: true})

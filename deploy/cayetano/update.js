@@ -11,7 +11,7 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
     .icon(GoogleChat.icons.DEPLOY)
-    .description('Setup cayetano docker swarm')
+    .description('Deploy cayetano docker swarm')
     .option('-l, --locations <list|all>', 'The target host name', {choices: Object.keys(cfg.locations), required: true})
 
     .iterate('locations', async (location) => {

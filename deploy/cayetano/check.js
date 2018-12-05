@@ -37,6 +37,10 @@ program
             it(`[${name}] does NOT proceed gaff request`, async () => {
                 await ssh.exec(`curl --fail -sS -X POST http://127.0.0.1:900/math/gaff/slot/classicfruit/spin -H 'content-type: application/json' -d '{"stake": "1.00", "gaff": {"scenario": "[15,13,19,12,0]" }}' || exit 0 && exit 1`, {silent: true})
             })
+    
+            it(`[${name}] has cadvisor`, async () => {
+                await ssh.exec(`curl --fail -sS http://127.0.0.1:8888/api/v2.1/version`, {silent: true})
+            })
         }
         
         await tester.run()

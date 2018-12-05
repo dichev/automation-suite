@@ -7,7 +7,7 @@ const cfg = require('configurator')
 
 const LOCATIONS = Object.values(cfg.locations).filter(l => l.live).map(l => l.name)
 
-let program = new Program({chat: cfg.chat.rooms.deployBackend})
+let program = new Program({chat: cfg.chat.rooms.deployBackend, smartForce: true})
 
 program
     .description('Update crons to match the seed repo')
@@ -32,7 +32,10 @@ program
     
         console.log(`Fetching changes..`)
         await web1.chdir('seed')
-        await web1.exec(`git fetch --prune`)
+        await web1.exec(`git fetch -q --prune`)
+        await web1.exec('git log HEAD..origin/master --oneline')
+        await web1.exec('git diff HEAD..origin/master --name-status')
+        await program.confirm('Continue?')
         await web1.exec(`git reset --hard ${REV ? REV : 'origin/master'}`)
     
         let backupFile = `crontab/backups/crontab-${Date.now()}.txt`

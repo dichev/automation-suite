@@ -105,8 +105,6 @@ program
         await program.chat.notify('\nChecking test suite')
         await shell.exec(`node deploy/hermes-env/check -o ${OPERATOR}`)
         
-        console.warn(`Manual steps: \ - Add cron tab configuration`) // TODO: automate
-        
         // Update monitoring
         await program.chat.notify('\nUpdate monitoring configuration')
         await shell.exec(`node deploy/monitoring/update --force`)
