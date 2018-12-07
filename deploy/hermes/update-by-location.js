@@ -26,14 +26,19 @@ program.run(async () => {
     if (!program.params.operators) throw Error('No operators selected')
     
     const operatorsByLocation = {}
-    for(let name of program.params.operators.split(',')){
+    const allOperators = program.params.operators.split(',')
+    for(let name of allOperators){
         let operator = cfg.operators[name]
         if(!operatorsByLocation[operator.location]) operatorsByLocation[operator.location] = []
         operatorsByLocation[operator.location].push(operator)
     }
     
     const locations = Object.keys(operatorsByLocation).sort()
-   
+    
+    if (!program.params.force && allOperators.length >= 3) {
+        let answer = await program.ask(`It seems there are ${allOperators.length} iterations. Do you want to activate --force mode?`, ['yes', 'no'], 'yes')
+        if (answer === 'yes') program.params.force = true
+    }
     
     for(let location of locations){
         let chat = program.chat
@@ -110,7 +115,7 @@ program.run(async () => {
             await parallelOperators(async operator => {
                 await web1.exec(`cd ${operator.dir} && git reset --hard --quiet ${to}`)
             })
-            
+    
             // Populate to the other webs
             await chat.message(`\n• Update code to all other webs (public)`)
             await program.confirm(`Continue (yes)?`)
@@ -146,8 +151,8 @@ program.run(async () => {
             await parallelOperators(async operator => {
                 await web1.exec(`cd ${operator.dir} && git reset --hard --quiet ${to}`)
             })
-    
-    
+            
+            
             // Update web2,web3
             await program.confirm(`\nDo you want to populate changes to blue?`)
             let otherBlueWebs = LOCATION.blue.filter(w => w !== 'web1')

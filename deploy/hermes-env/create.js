@@ -29,7 +29,6 @@ program
         const DEST = `/home/dopamine/production/${cfg.operators[OPERATOR].dir}`
         
         if (!cfg.operators[OPERATOR]) throw Error(`missing configuration for this env ${OPERATOR}`)
-        if (cfg.operators[OPERATOR].live !== false) throw Error(`This env ${OPERATOR} is used already on live, so for security reasons the command is disabled for it`)
         if (!/^[a-zA-Z0-9-_/]+$/g.test(DEST) || DEST.length <= '/home/dopamine/production/'.length) {
             throw Error(`The destination (${DEST}) is invalid and this could be VERY dangerous!`)
         }

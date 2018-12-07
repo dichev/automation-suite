@@ -20,7 +20,8 @@ program
     .parse()
 
 program.chat.thread = program.params.rev
-
+console.warn('THIS SCRIPT IS DEPRECATED IN FAVOUR OF hermes/update-by-location')
+process.exit(1)
 program
     .iterate('operators', async (operator) => {
         if (program.params.parallel) throw Error(`Currently the command doesn't support parallel mode for safety reasons`)
