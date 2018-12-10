@@ -42,6 +42,5 @@ program
         }else{
             throw('Tinyproxy is already set up!')
         }
-        console.log(existsPkgLb)
         await sshLb.disconnect()
     })
