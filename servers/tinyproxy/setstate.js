@@ -38,7 +38,7 @@ let findInFileRemote = async function (file,needle,ssh){
 program
     .description('Allow QA access to gpanel')
     .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators), required: true})
-    .option('-s, --state <string>','State to be activated [active,inactive]',{choices:['active','inactive'],required:true})
+    .option('-s, --state <string>','Desired state for this operator [active,inactive]',{choices:['active','inactive'],required:true})
     .iterate('operators', async (operator) => {
 
         const   location = cfg.getLocationByOperator(operator).name,
@@ -70,7 +70,7 @@ program
             }
 
             /** Change state to: **/
-            await program.ask(`Proxy configuration found!\nChanging to ${stateString}`)
+//            await program.ask(`Proxy configuration found!\nChanging to ${stateString}`)
             await sshWeb.exec(`sed -i -e "s/CURLOPT_PROXY] = .*;/CURLOPT_PROXY] = ${stateString};/g" ${configFile}`)
             await sshWeb.disconnect()
         }else{
