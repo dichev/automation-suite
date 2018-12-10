@@ -22,6 +22,19 @@ let packageExistsRemote = async function(pack,ssh){
     return (await ssh.exec(`dpkg -l | grep ${pack} | wc -l`,{silent:true}) > '0')
 }
 
+let fileAppendRemote = async function(file,content,ssh){
+    return await ssh.exec("echo '" + btoa(content).trim() + "' | base64 -d >> " + file)
+}
+
+let findInFileRemote = async function (file,needle,ssh){
+    try{ // Exit status is 1 [error] when nothing is found!
+        return (await ssh.exec(`cat  ${file} | grep ${needle}`,{silent:true})).split("\n")
+    }catch(e){
+        return []
+    }
+}
+
+
 program
     .description('Allow QA access to gpanel')
     .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators), required: true})
@@ -32,22 +45,34 @@ program
                 web = cfg.locations[location].hosts.webs[0],
                 lb = cfg.locations[location].hosts.lb;
 
-        let sshLb   = await new SSHClient().connect({host: lb, username: 'root'})
-        let existsPkgLb = await packageExistsRemote('tinyproxy',sshLb)
-        let existsCfg  = await fileExistsRemote('/etc/tinyproxy/tinyproxy.conf',sshLb)
-        let existsCfgDope = await fileExistsRemote('/opt/servers-conf/proxy/tinyproxy.conf',sshLb)
+        let sshLb           = await new SSHClient().connect({host: lb, username: 'root'})
+        let existsPkgLb     = await packageExistsRemote('tinyproxy',sshLb)
+        let existsCfg       = await fileExistsRemote('/etc/tinyproxy/tinyproxy.conf',sshLb)
+        let existsCfgDope   = await fileExistsRemote('/opt/servers-conf/proxy/tinyproxy.conf',sshLb)
+        await sshLb.disconnect()
+
         if(existsCfg && existsCfgDope && existsPkgLb){
-            console.log("TinyProxy config found! Setting up operator.")
-            let sshWeb  = await new SSHClient().connect({host: web.ip, username: 'root'})
-            let content = await sshWeb.exec(`cat /home/dopamine/production/${cfgOperator.dir}/wallet/config/server.config.php`,{silent:true}),
-                newContent = template({proxy:lb},tpl);
-            console.log(newContent);
+
+            console.log(`TinyProxy config found! Setting up operator: ${operator}`)
+            let configFile  = `/home/dopamine/production/${cfgOperator.dir}/wallet/config/server.config.php`
+            let sshWeb      = await new SSHClient().connect({host: web.ip, username: 'root'})
+            let proxyCnf    = await findInFileRemote(configFile,'CURLOPT_PROXY',sshWeb)
+
+            if(proxyCnf.length === 0){
+                await  program.ask('Not configured for proxy requests.\nAdd configuration?')
+                let newContent = '\n\n' + template({proxy:lb},tpl);
+//                fileAppendRemote(configFile,newContent,sshWed)
+            }else{
+                await program.ask(`Proxy configuration found!\nChanging to ${lb}`)
+                /// sed edit file here
+            }
+
             await sshWeb.disconnect()
         }else{
-            console.log(`TinyProxy Does not exists or is not configured properly!`
-                        +`\nexistsPkgLb:${existsPkgLb}`
-                        +`\nexistsCfg:${existsCfg}`
-                        +`\nexistsCfgDope:${existsCfgDope}\n`)
+            await sshWeb.disconnect()
+            throw(`TinyProxy Does not exists on lb or is not configured properly!`
+                        +`\nexistsPkgLb: ${existsPkgLb}`
+                        +`\nexistsCfg: ${existsCfg}`
+                        +`\nexistsCfgDope: ${existsCfgDope}\n`)
         }
-        await sshLb.disconnect()
 })
