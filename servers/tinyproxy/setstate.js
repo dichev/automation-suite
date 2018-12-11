@@ -36,14 +36,14 @@ program
                 /** NO proxy configuration found in file. Add proxy config with state 'false' **/
                 await program.ask(`Not configured for proxy requests at ${configFile}.\nAdd configuration?`)
                 await sshWeb.fileAppend(configFile,
-                    `foreach(Config::$endpoints as $brand=>$conf) Config::$endpoints[$brand]['curl']['options'][CURLOPT_PROXY] = null;`)
+                    `\n\nforeach(Config::$endpoints as $brand=>$conf) Config::$endpoints[$brand]['curl']['options'][CURLOPT_PROXY] = null;\n\n`)
             }
 
             /** Change state to: **/
             await program.ask(`Proxy configuration found!\nChanging to ${stateString}`)
             await sshWeb.exec(`sed -i -e "s/CURLOPT_PROXY] = .*;/CURLOPT_PROXY] = ${stateString};/g" ${configFile}`)
             await sshWeb.chdir(opDir)
-            await sshWeb.exec(`webs-sync ${opDir}`)
+            await sshWeb.exec(`/home/dopamine/bin/webs-sync ${opDir}`)
             await sshWeb.disconnect()
         }else{
             throw(`TinyProxy Does not exists on lb or is not configured properly!`
