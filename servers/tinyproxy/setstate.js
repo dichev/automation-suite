@@ -4,15 +4,9 @@
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 const SSHClient = require('dopamine-toolbox').SSHClient
-const tpl = `foreach(Config::$endpoints as $brand=>$conf) Config::$endpoints[$brand]['curl']['options'][CURLOPT_PROXY] = '{{proxy}}';`
 const proxyPort = 1080
 
 let program = new Program({chat: cfg.chat.rooms.deployBackend})
-
-let template = function(tplVars,tpl){
-    for(let key in tplVars) tpl = tpl.split(`{{${key}}}`).join(tplVars[key])
-    return tpl;
-}
 
 program
     .description('Allow QA access to gpanel')
@@ -40,9 +34,9 @@ program
 
             if(proxyCnf.length === 0){
                 /** NO proxy configuration found in file. Add proxy config with state 'false' **/
-                let newContent = '\n\n' + template({proxy:'false'},tpl) + '\n\n';
                 await program.ask(`Not configured for proxy requests at ${configFile}.\nAdd configuration?`)
-                await sshWeb.fileAppend(configFile,newContent)
+                await sshWeb.fileAppend(configFile,
+                    `foreach(Config::$endpoints as $brand=>$conf) Config::$endpoints[$brand]['curl']['options'][CURLOPT_PROXY] = false;`)
             }
 
             /** Change state to: **/

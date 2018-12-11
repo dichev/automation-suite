@@ -5,8 +5,7 @@ const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 const SSHClient = require('dopamine-toolbox').SSHClient
 
-//let program = new Program({chat: cfg.chat.rooms.deployBackend})
-let program = new Program({chat: ''})
+let program = new Program({chat: cfg.chat.rooms.deployBackend})
 
 program
     .description('Tiny proxy setup.')
