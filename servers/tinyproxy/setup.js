@@ -23,7 +23,11 @@ program
                                     +`\nexample-deploy$ node servers/servers-conf/update -l ${location}`)
 
             await sshLb.exec('apt-get install -y tinyproxy')
-            await sshLb.exec('rm /etc/tinyproxy/tinyproxy.conf && ln -s /opt/servers-conf/proxy/tinyproxy.conf /etc/tinyproxy/tinyproxy.conf')
+            if(location === 'gib'){
+                await sshLb.exec('rm /etc/tinyproxy.conf && ln -s /opt/servers-conf/proxy/tinyproxy.conf /etc/tinyproxy.conf')
+            }else{
+                await sshLb.exec('rm /etc/tinyproxy/tinyproxy.conf && ln -s /opt/servers-conf/proxy/tinyproxy.conf /etc/tinyproxy/tinyproxy.conf')
+            }
             await sshLb.exec('/etc/init.d/tinyproxy restart')
 
         }else{
