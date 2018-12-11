@@ -6,7 +6,7 @@ const cfg = require('configurator')
 const SSHClient = require('dopamine-toolbox').SSHClient
 const proxyPort = 1080
 
-let program = new Program({chat: cfg.chat.rooms.deployBackend})
+let program = new Program({chat: cfg.chat.rooms.devops})
 
 program
     .description('Allow QA access to gpanel')
@@ -15,7 +15,7 @@ program
     .iterate('operators', async (operator) => {
 
         const   location = cfg.getLocationByOperator(operator).name,
-                cfgOperator = cfg.operators[operator],
+                opDir = '/home/dopamine/production/' + cfg.operators[operator].dir,
                 web = cfg.locations[location].hosts.webs[0],
                 lb = cfg.locations[location].hosts.lb,
                 state = program.params.state,
@@ -28,7 +28,7 @@ program
         await sshLb.disconnect()
         if(existsCfg && existsCfgDope && existsPkgLb){
             console.log(`TinyProxy config found! Setting up operator: ${operator}`)
-            let configFile  = `/home/dopamine/production/${cfgOperator.dir}/wallet/config/server.config.php`
+            let configFile  = `${opDir}/wallet/config/server.config.php`
             let sshWeb      = await new SSHClient().connect({host: web.ip, username: 'root'})
             let proxyCnf    = await sshWeb.findInFile(configFile,'CURLOPT_PROXY')
 
@@ -36,12 +36,14 @@ program
                 /** NO proxy configuration found in file. Add proxy config with state 'false' **/
                 await program.ask(`Not configured for proxy requests at ${configFile}.\nAdd configuration?`)
                 await sshWeb.fileAppend(configFile,
-                    `foreach(Config::$endpoints as $brand=>$conf) Config::$endpoints[$brand]['curl']['options'][CURLOPT_PROXY] = false;`)
+                    `foreach(Config::$endpoints as $brand=>$conf) Config::$endpoints[$brand]['curl']['options'][CURLOPT_PROXY] = null;`)
             }
 
             /** Change state to: **/
             await program.ask(`Proxy configuration found!\nChanging to ${stateString}`)
             await sshWeb.exec(`sed -i -e "s/CURLOPT_PROXY] = .*;/CURLOPT_PROXY] = ${stateString};/g" ${configFile}`)
+            await sshWeb.chdir(opDir)
+            await sshWeb.exec(`webs-sync ${opDir}`)
             await sshWeb.disconnect()
         }else{
             throw(`TinyProxy Does not exists on lb or is not configured properly!`
