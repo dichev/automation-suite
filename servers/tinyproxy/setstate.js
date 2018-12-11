@@ -23,7 +23,7 @@ program
 
         let sshLb           = await new SSHClient().connect({host: lb, username: 'root'})
         let existsPkgLb     = await sshLb.packageExists('tinyproxy')
-        let existsCfg       = await sshLb.exists('/etc/tinyproxy/tinyproxy.conf')
+        let existsCfg       = await sshLb.exists('/etc/tinyproxy/tinyproxy.conf') || await sshLb.exists('/etc/tinyproxy.conf')
         let existsCfgDope   = await sshLb.exists('/opt/servers-conf/proxy/tinyproxy.conf')
         await sshLb.disconnect()
         if(existsCfg && existsCfgDope && existsPkgLb){
