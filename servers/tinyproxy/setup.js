@@ -23,10 +23,6 @@ program
                                     +`\nPlease deploy configuration with proxy/tinyproxy.conf file`
                                     +`\nexample-deploy$ node servers/servers-conf/update -l ${location}`)
 
-/** Not needed: Here just for example: Config deployment should be taking place using -> node servers/servers-conf/update
-             await sshLb.chdir('/opt/servers-conf')
-             await sshLb.chdir('git pull')
-**/
 //            await sshLb.exec('apt-get install -y tinyproxy')
 //            await sshLb.exec('rm /etc/tinyproxy/tinyproxy.conf && ln -s /opt/servers-conf/proxy/tinyproxy.conf /etc/tinyproxy/tinyproxy.conf')
 //            await sshLb.exec('/etc/init.d/tinyproxy restart')
