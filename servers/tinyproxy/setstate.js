@@ -9,7 +9,7 @@ const proxyPort = 1080
 let program = new Program({chat: cfg.chat.rooms.devops})
 
 program
-    .description('Allow QA access to gpanel')
+    .description('Switch proxy state [in/active] for operator[s]')
     .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators), required: true})
     .option('-s, --state <string>','Desired state for this operator [active,inactive]',{choices:['active','inactive'],required:true})
     .iterate('operators', async (operator) => {
