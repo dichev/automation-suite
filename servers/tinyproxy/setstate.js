@@ -5,6 +5,7 @@ const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 const SSHClient = require('dopamine-toolbox').SSHClient
 const tpl = `foreach(Config::$endpoints as $brand=>$conf) Config::$endpoints[$brand]['curl']['options'][CURLOPT_PROXY] = '{{proxy}}';`
+const proxyPort = 1080
 
 //let program = new Program({chat: cfg.chat.rooms.deployBackend})
 let program = new Program({chat: ''})
@@ -25,7 +26,7 @@ program
                 web = cfg.locations[location].hosts.webs[0],
                 lb = cfg.locations[location].hosts.lb,
                 state = program.params.state,
-                stateString = (state === 'active'? `\\"${lb}\\"` : 'false');
+                stateString = (state === 'active'? `\\"${lb}:${proxyPort}\\"` : 'false');
 
         let sshLb           = await new SSHClient().connect({host: lb, username: 'root'})
         let existsPkgLb     = await sshLb.packageExists('tinyproxy')
