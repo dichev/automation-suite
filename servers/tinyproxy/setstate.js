@@ -7,8 +7,7 @@ const SSHClient = require('dopamine-toolbox').SSHClient
 const tpl = `foreach(Config::$endpoints as $brand=>$conf) Config::$endpoints[$brand]['curl']['options'][CURLOPT_PROXY] = '{{proxy}}';`
 const proxyPort = 1080
 
-//let program = new Program({chat: cfg.chat.rooms.deployBackend})
-let program = new Program({chat: ''})
+let program = new Program({chat: cfg.chat.rooms.deployBackend})
 
 let template = function(tplVars,tpl){
     for(let key in tplVars) tpl = tpl.split(`{{${key}}}`).join(tplVars[key])
@@ -35,8 +34,7 @@ program
         await sshLb.disconnect()
         if(existsCfg && existsCfgDope && existsPkgLb){
             console.log(`TinyProxy config found! Setting up operator: ${operator}`)
-//            let configFile  = `/home/dopamine/production/${cfgOperator.dir}/wallet/config/server.config.php`
-            let configFile  = `/home/dopamine/server.config.php`
+            let configFile  = `/home/dopamine/production/${cfgOperator.dir}/wallet/config/server.config.php`
             let sshWeb      = await new SSHClient().connect({host: web.ip, username: 'root'})
             let proxyCnf    = await sshWeb.findInFile(configFile,'CURLOPT_PROXY')
 
