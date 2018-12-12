@@ -80,6 +80,11 @@ program
     }
 
     let pyxBackupPath = '/opt/pyxbackup'
+    // check /opt/pyxbackup exist and is not git repo AND then delete it
+    if (await ssh.exists(`${pyxBackupPath}`) && ! await ssh.exists(`${pyxBackupPath}/.git`)) {
+        await ssh.exec(`rm -rf ${pyxBackupPath}`)
+    }
+
     if (! await ssh.exists(`${pyxBackupPath}/.git`)) {
         await program.chat.notify('Creating backup folders')
         await ssh.exec(`mkdir -p /backups/${host}/stor`)
@@ -90,7 +95,7 @@ program
 
         await program.chat.notify('Cloning pyxbackup repo...')
         await ssh.exec(`git clone git@gitlab.dopamine.bg:devops/backups/xtrabackup.git ${pyxBackupPath}`)
-        await ssh.exec(`chmod 0755 ${pyxBackupPath}`)
+        await ssh.exec(`chmod 0755 ${pyxBackupPath}/pyxbackup`)
     }
 
     // Wrapper config
