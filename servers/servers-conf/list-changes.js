@@ -9,7 +9,7 @@
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 
-let program = new Program({ chat: cfg.chat.rooms.devops })
+let program = new Program()
 program
     .option('-l, --locations <list|all>', 'The target location name', {choices: Object.keys(cfg.locations), required: true})
     .iterate('locations', async (location) => {
