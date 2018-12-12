@@ -23,9 +23,9 @@ program
     .option('-i, --interval <int>', 'How many seconds to wait between each configuration switch. Default is 2')
     .option('-f, --force', 'Skip manual changes validations and proceed on your risk')
     .option('--no-wait-webs', 'Skip waiting for active php processes to end and other safety delays. WARNING: this will break current php processes in the middle of their execution causing strange errors.')
-    .option('--reload <nginx|webs|nginx-with-upgrade>', 'Reload nginx service or webs php-fpm', { choices: ['nginx','webs','nginx-with-upgrade']})
+    .option('--reload <nginx|webs|nginx-with-upgrade|proxy>', 'Reload nginx service or webs php-fpm', { choices: ['nginx','webs','nginx-with-upgrade','proxy']})
     
-    
+
 //TODO: no mysql!
 program
     .iterate('locations', async (location) => {
