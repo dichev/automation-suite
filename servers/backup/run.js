@@ -21,7 +21,7 @@ program
     console.log(host)
     let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
-    let mysqlHost = await ssh.exec(`cat my.cnf | grep host | cut -d'=' -f 2`)
+    let mysqlHost = await ssh.exec(`cat /root/my.cnf | grep host | cut -d'=' -f 2`)
     let mysqlHostParam = '';
     if (mysqlHost !== '') {
         mysqlHostParam = ` -H ${mysqlHost}`;
