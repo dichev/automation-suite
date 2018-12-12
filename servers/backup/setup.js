@@ -127,7 +127,7 @@ program
 
     // Check wrapper version
     await program.chat.notify(`Checking pyxBackup version`)
-    await ssh.exec(`${pyxBackupPath} --v`)
+    await ssh.exec(`${pyxBackupPath}/pyxbackup --v`)
 
     // Remove old cron file
     await program.chat.notify(`Remove old cron file`)
