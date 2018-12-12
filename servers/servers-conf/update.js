@@ -36,7 +36,8 @@ program
         const RELOAD_NGINX = params.reload === 'nginx' || params.reload === 'webs'
         const RELOAD_NGINX_WITH_UPGRADE = params.reload === 'nginx-with-upgrade'
         const RELOAD_WEBS = params.reload === 'webs'
-        
+        const RELOAD_PROXY = params.reload === 'proxy'
+
         const NO_WAIT = params.waitWebs === false // default: true
         const REPO = '/opt/servers-conf'
     
@@ -82,7 +83,12 @@ program
             console.log('\n# Reloading configuration of nginx..')
             await lb.ssh.exec(`nginx -s reload`)
         }
-        
+
+        if(RELOAD_PROXY) {
+            console.log('\n# Reloading configuration of tinyproxy..')
+            await lb.ssh.exec(`/etc/init.d/tinyproxy reload`)
+        }
+
         if(RELOAD_NGINX_WITH_UPGRADE){
             console.log('\n# Reloading configuration of nginx with UPGRADE..')
             await lb.ssh.exec(`nginx_reload_upgrade.sh`)
