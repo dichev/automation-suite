@@ -23,5 +23,5 @@ program
     let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
     await program.chat.notify(`Starting full backup`)
-    await ssh.exec(`/opt/pyxbackup full > /dev/null 2>&1`)
+    await ssh.exec(`/opt/pyxbackup/pyxbackup full > /dev/null 2>&1`)
 })
