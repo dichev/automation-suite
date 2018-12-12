@@ -20,10 +20,13 @@ let wrapperConfigTemplate = `
 `
 let cronBackupTemplate = `
 ##(do not run when running full)    
-0 0 * * {{incremental}} root {{pyxBackupPath}} --config {{wrapperCongPath}} incr
+0 {{HOUR}} * * {{incremental}} root {{pyxBackupPath}} --config {{wrapperCongPath}} incr
 ##(once a week)
-0 0 * * {{full}}        root {{pyxBackupPath}} --config {{wrapperCongPath}} full
+0 {{HOUR}} * * {{full}}        root {{pyxBackupPath}} --config {{wrapperCongPath}} full
 `
+let archiveStartTime = 16,
+    mirrorStartTime  = 0;
+
 
 function getCronDays(min, max) {
     let excluded = Math.floor(Math.random() * (max - min) + min);
@@ -54,8 +57,6 @@ program
 .description('Setup backups')
 .option('-h, --hosts <list|all>', 'The target host names', { choices: HOSTS, required: true })
 .option('-f, --force', 'Skip manual changes validations and proceed on your risk')
-
-
 .iterate('hosts', async (host) => {
     const params = program.params
     const force  = params.force !== undefined;
@@ -111,6 +112,11 @@ program
     cronBackup = cronBackup.replace(/{{pyxBackupPath}}/g, pyxBackupPath)
     cronBackup = cronBackup.replace(/{{full}}/g, full)
     cronBackup = cronBackup.replace(/{{incremental}}/g, incremental)
+    if (host.includes('archive')) {
+        cronBackup = cronBackup.replace(/{{HOUR}}/g, archiveStartTime)
+    } else {
+        cronBackup = cronBackup.replace(/{{HOUR}}/g, mirrorStartTime)
+    }
     await ssh.exec(`echo '${cronBackup}' > /etc/cron.d/pyxbackup`)
 
 
