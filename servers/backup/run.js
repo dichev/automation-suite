@@ -28,5 +28,5 @@ program
     }
 
     await program.chat.notify(`Starting full backup`)
-    await ssh.exec(`nohup /opt/pyxbackup/pyxbackup full ${mysqlHostParam} &`)
+    await ssh.execBackground(`nohup /opt/pyxbackup/pyxbackup full ${mysqlHostParam} &`)
 })
