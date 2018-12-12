@@ -105,8 +105,8 @@ program
         cronBackup = cronBackup.replace(/{{HOUR}}/g, mirrorStartTime)
     }
 
-    // get the correct host from my.cnf, because there are 2 versions: 127.0.0.1 && localhost
-    let mysqlHost = await ssh.exec(`cat /root/my.cnf | grep host | cut -d'=' -f 2`)
+    // get the correct host from .my.cnf, because there are 2 versions: 127.0.0.1 && localhost
+    let mysqlHost = await ssh.exec(`cat /root/.my.cnf | grep host | cut -d'=' -f 2`)
     let mysqlHostParam = '';
     if (mysqlHost !== '') {
         mysqlHostParam = ` -H ${mysqlHost}`;
