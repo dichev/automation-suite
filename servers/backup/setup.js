@@ -6,7 +6,6 @@ const cfg = require('configurator')
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
 let HOSTS = Object.keys(cfg.hosts).filter(h => h.includes('sofia-mysql') && (h.includes('archive') || h.includes('mirror')))
-// console.log(HOSTS)
 
 let wrapperConfigTemplate = `
     [pyxbackup]
@@ -20,9 +19,9 @@ let wrapperConfigTemplate = `
 `
 let cronBackupTemplate = `
 ##(do not run when running full)    
-0 {{HOUR}} * * {{incremental}} root {{pyxBackupPath}} --config {{wrapperCongPath}} incr
+0 {{HOUR}} * * {{incremental}} root {{pyxBackupPath}} --config {{wrapperCongPath}} incr {{mysqlHost}}
 ##(once a week)
-0 {{HOUR}} * * {{full}}        root {{pyxBackupPath}} --config {{wrapperCongPath}} full
+0 {{HOUR}} * * {{full}}        root {{pyxBackupPath}} --config {{wrapperCongPath}} full {{mysqlHost}}
 `
 let archiveStartTime = 16,
     mirrorStartTime  = 0;
@@ -40,27 +39,10 @@ function getCronDays(min, max) {
     };
 }
 
-function getRandomIntInclusive(min, max, exclude) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    exclude = Math.floor(exclude)
-    let result;
-    while(1) {
-        result = Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
-        if (result !== exclude) break;
-    }
-
-    return result;
-}
-
 program
 .description('Setup backups')
 .option('-h, --hosts <list|all>', 'The target host names', { choices: HOSTS, required: true })
-.option('-f, --force', 'Skip manual changes validations and proceed on your risk')
 .iterate('hosts', async (host) => {
-    const params = program.params
-    const force  = params.force !== undefined;
-
     let hostIP = cfg.getHost(host).ip;
     console.log(`Starting script on HOST:(${host} : ${hostIP})...`)
     await program.chat.notify(`Starting script on HOST:(${host} : ${hostIP})...`)
@@ -122,8 +104,16 @@ program
     } else {
         cronBackup = cronBackup.replace(/{{HOUR}}/g, mirrorStartTime)
     }
-    await ssh.exec(`echo '${cronBackup}' > /etc/cron.d/pyxbackup`)
 
+    // get the correct host from my.cnf, because there are 2 versions: 127.0.0.1 && localhost
+    let mysqlHost = await ssh.exec(`cat my.cnf | grep host | cut -d'=' -f 2`)
+    let mysqlHostParam = '';
+    if (mysqlHost !== '') {
+        mysqlHostParam = ` -H ${mysqlHost}`;
+    }
+    cronBackup = cronBackup.replace(/{{mysqlHost}}/g, mysqlHostParam)
+
+    await ssh.exec(`echo '${cronBackup}' > /etc/cron.d/pyxbackup`)
 
     // Check wrapper version
     await program.chat.notify(`Checking pyxBackup version`)

@@ -10,10 +10,9 @@ let HOSTS = Object.keys(cfg.hosts).filter(h => h.includes('sofia-mysql') && (h.i
 program
 .description('Setup backups')
 .option('-h, --hosts <list|all>', 'The target host names', { choices: HOSTS, required: true })
-.option('-f, --force', 'Skip manual changes validations and proceed on your risk')
+.option('-t, --type <list|all>', 'The target host names', { choices: ['full', 'incr'], required: true })
+
 .iterate('hosts', async (host) => {
-    const params = program.params
-    const force  = params.force !== undefined;
 
     let hostIP = cfg.getHost(host).ip;
     console.log(`Starting script on HOST:(${host} : ${hostIP})...`)
@@ -22,6 +21,12 @@ program
     console.log(host)
     let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
+    let mysqlHost = await ssh.exec(`cat my.cnf | grep host | cut -d'=' -f 2`)
+    let mysqlHostParam = '';
+    if (mysqlHost !== '') {
+        mysqlHostParam = ` -H ${mysqlHost}`;
+    }
+
     await program.chat.notify(`Starting full backup`)
-    await ssh.exec(`/opt/pyxbackup/pyxbackup full > /dev/null 2>&1`)
+    await ssh.exec(`/opt/pyxbackup/pyxbackup full ${mysqlHostParam} > /dev/null 2>&1`)
 })
