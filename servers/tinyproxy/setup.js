@@ -31,7 +31,7 @@ program
             await sshLb.exec('/etc/init.d/tinyproxy restart')
 
         }else{
-            throw('Tinyproxy is already set up!')
+            console.log('Tinyproxy is already set up!')
         }
         await sshLb.disconnect()
     })
