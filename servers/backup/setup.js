@@ -7,15 +7,14 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 
 let HOSTS = Object.keys(cfg.hosts).filter(h => h.includes('sofia-mysql') && (h.includes('archive') || h.includes('mirror')))
 
-let wrapperConfigTemplate = `
-    [pyxbackup]
-    stor_dir = /backups/{{HOST}}/stor
-    work_dir = /backups/{{HOST}}/work
-    retention_sets = 8
-    # Whether to compress backups
-    compress = 1
-    # What compression tool, supports gzip and qpress
-    compress_with = gzip
+let wrapperConfigTemplate = `[pyxbackup]
+stor_dir = /backups/{{HOST}}/stor
+work_dir = /backups/{{HOST}}/work
+retention_sets = 8
+# Whether to compress backups
+compress = 1
+# What compression tool, supports gzip and qpress
+compress_with = gzip
 `
 let cronBackupTemplate = `
 ##(do not run when running full)    
