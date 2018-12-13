@@ -83,6 +83,8 @@ program
         await archive.query(read(`${TEMPLATES}/${OPERATOR}/db/schema-archive.sql`))
         log('Importing master seed..')
         await master.query(read(`${TEMPLATES}/${OPERATOR}/db/seed.sql`)) //@ TODO: lag 5 secs response time
+        log('Importing operator specific seed..')
+        await master.query(read(`${TEMPLATES}/${OPERATOR}/db/operator-seed.sql`))
 
     
         // Crons

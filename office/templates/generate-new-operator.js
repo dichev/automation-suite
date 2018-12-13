@@ -48,23 +48,20 @@ program.run(async () => {
     const SECRET_FILE = `${dest}.secret.json`
     if(!fs.existsSync(SECRET_FILE)){
         console.log('Missing secret operator file!')
-        fs.copyFileSync(process.env.DOPAMINE_TEMPLATES_SECRET || `${TEMPLATES}/hermes/.secret.json.hbs`, SECRET_FILE)
+        let file = fs.readFileSync(process.env.DOPAMINE_TEMPLATES_SECRET || `${TEMPLATES}/hermes/.secret.json.hbs`, 'utf8')
+        file = file.replace('{{operator.name}}', operator)
+        fs.writeFileSync(SECRET_FILE, file)
         console.log('Please fill all configurations here:\n' + SECRET_FILE)
         await program.confirm('Continue?')
     }
+    const secret = JSON.parse(fs.readFileSync(SECRET_FILE).toString())
     
-    console.log('\nPreparing database seeds')
-    console.log('Ensure all project repos are up to date..')
-    if (program.params.refreshMasters !== false) {
-        await shell.exec(`bash d:/www/_releases/hermes/.bin/init.sh`)
+    const operatorSeed = secret.operatorSeed
+    await program.confirm('Please ensure the operator seed config is up to date: \n' + operatorSeed)
+    if (!fs.existsSync(operatorSeed)) {
+        throw Error('Warning! The operator seed is not found at ${operatorSeed}!\n Aborting..')
     }
     
-    const baseDir = 'd:/www/hermes/master'
-    let operatorSeed = `/platform/.migrator/seed/envs/${operator}.sql`
-    if(!fs.existsSync(baseDir + operatorSeed)){
-        await program.confirm('Warning! The operator seed is not found! Will be used _default.sql seed instead. Continue?')
-        operatorSeed = `/platform/.migrator/seed/envs/_default.sql`
-    }
     
     let o = cfg.operators[operator]
     let vars = {
@@ -79,9 +76,8 @@ program.run(async () => {
                 segments:    Calc.generatePassword(20, 25),
                 ronly:       Calc.generatePassword(20, 25),
             },
-            secret: JSON.parse(fs.readFileSync(SECRET_FILE).toString()),
-            operatorSeed: operatorSeed,
-            baseDir: baseDir
+            secret: secret,
+            baseDir: 'd:/www/hermes/master'
         },
         operator: Object.assign({}, o, { databases: { // TODO
             master: cfg.databases[o.databases].master,
@@ -90,7 +86,15 @@ program.run(async () => {
         }}),
         server: cfg.locations[o.location],
     }
-
+    
+    
+    console.log('\nPreparing database seeds')
+    console.log('Ensure all project repos are up to date..')
+    if (program.params.refreshMasters !== false) {
+        await shell.exec(`bash d:/www/_releases/hermes/.bin/init.sh`)
+    }
+    
+    
     // execSync(`rm -rf output/${operator}`) // TODO
 
     // Generate sql migrations
@@ -102,6 +106,8 @@ program.run(async () => {
     await generate(`${TEMPLATES}/sql/hermes-seed.sql.hbs`,             `${dest}/db/seed.sql`, vars)
     await generate(`${TEMPLATES}/sql/hermes-schema.sql.hbs`,           `${dest}/db/schema.sql`, vars)
     await generate(`${TEMPLATES}/sql/hermes-schema-archive.sql.hbs`,   `${dest}/db/schema-archive.sql`, vars)
+    console.log(operatorSeed, '->' , `${dest}/db/operator-seed.sql`)
+    fs.copyFileSync(operatorSeed, `${dest}/db/operator-seed.sql`)
     
     
     // Generate hermes configurations
