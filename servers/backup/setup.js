@@ -113,8 +113,10 @@ program
         mysqlHostParam = ` -H ${mysqlHost}`;
     }
     cronBackup = cronBackup.replace(/{{mysqlHost}}/g, mysqlHostParam)
-
     await ssh.exec(`echo '${cronBackup}' > /etc/cron.d/pyxbackup`)
+
+    // Print custom cnf info
+    await ssh.exec(`echo /opt/servers-conf-mysql/custom/${host}.cnf`)
 
     // Check wrapper version
     await program.chat.notify(`Checking pyxBackup version`)
