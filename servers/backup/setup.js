@@ -18,9 +18,9 @@ compress_with = gzip
 `
 let cronBackupTemplate = `
 ##(do not run when running full)    
-0 {{HOUR}} * * {{incremental}} root {{pyxBackupPath}} --config {{wrapperCongPath}} incr {{mysqlHost}}
+0 {{HOUR}} * * {{incremental}} root {{pyxBackupBinPath}} --config {{wrapperCongPath}} incr {{mysqlHost}}
 ##(once a week)
-0 {{HOUR}} * * {{full}}        root {{pyxBackupPath}} --config {{wrapperCongPath}} full {{mysqlHost}}
+0 {{HOUR}} * * {{full}}        root {{pyxBackupBinPath}} --config {{wrapperCongPath}} full {{mysqlHost}}
 `
 let archiveStartTime = 16,
     mirrorStartTime  = 0;
@@ -61,6 +61,8 @@ program
     }
 
     let pyxBackupPath = '/opt/pyxbackup'
+    let pyxBackupBinPath = pyxBackupPath + '/pyxbackup'
+
     // check /opt/pyxbackup exist and is not git repo AND then delete it
     if (await ssh.exists(`${pyxBackupPath}`) && ! await ssh.exists(`${pyxBackupPath}/.git`)) {
         await ssh.exec(`rm -rf ${pyxBackupPath}`)
@@ -76,7 +78,7 @@ program
 
         await program.chat.notify('Cloning pyxbackup repo...')
         await ssh.exec(`git clone git@gitlab.dopamine.bg:devops/backups/xtrabackup.git ${pyxBackupPath}`)
-        await ssh.exec(`chmod 0755 ${pyxBackupPath}/pyxbackup`)
+        await ssh.exec(`chmod 0755 ${pyxBackupBinPath}`)
     }
 
     // Wrapper config
@@ -95,7 +97,7 @@ program
         incremental = cronDays.incremental;
 
     cronBackup = cronBackup.replace(/{{wrapperCongPath}}/g, wrapperCongPath)
-    cronBackup = cronBackup.replace(/{{pyxBackupPath}}/g, pyxBackupPath)
+    cronBackup = cronBackup.replace(/{{pyxBackupBinPath}}/g, pyxBackupBinPath)
     cronBackup = cronBackup.replace(/{{full}}/g, full)
     cronBackup = cronBackup.replace(/{{incremental}}/g, incremental)
     if (host.includes('archive')) {
@@ -116,7 +118,7 @@ program
 
     // Check wrapper version
     await program.chat.notify(`Checking pyxBackup version`)
-    await ssh.exec(`${pyxBackupPath}/pyxbackup --v`)
+    await ssh.exec(`${pyxBackupBinPath} --v`)
 
     // Remove old cron file
     await program.chat.notify(`Remove old cron file`)
