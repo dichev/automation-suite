@@ -13,6 +13,8 @@ program
 .option('-t, --type <list|all>', 'The target host names', { choices: ['full', 'incr'], required: true })
 
 .iterate('hosts', async (host) => {
+    const params = program.params
+    const backupType  = params.type ;
 
     let hostIP = cfg.getHost(host).ip;
     console.log(`Starting script on HOST:(${host} : ${hostIP})...`)
@@ -28,5 +30,5 @@ program
     }
 
     await program.chat.notify(`Starting full backup`)
-    await ssh.execBackground(`nohup /opt/pyxbackup/pyxbackup full ${mysqlHostParam} &`)
+    await ssh.execBackground(`nohup /opt/pyxbackup/pyxbackup ${backupType} ${mysqlHostParam} &`)
 })
