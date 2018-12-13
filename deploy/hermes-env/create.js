@@ -82,22 +82,25 @@ program
         log('Importing archive schema..')
         await archive.query(read(`${TEMPLATES}/${OPERATOR}/db/schema-archive.sql`))
         log('Importing master seed..')
-        await master.query(read(`${TEMPLATES}/${OPERATOR}/db/seed.sql`)) //@ TODO: lag 5 secs response time
+        await master.query(read(`${TEMPLATES}/${OPERATOR}/db/seed.sql`))
         log('Importing operator specific seed..')
+        await master.query(`USE ${cfg.operators[OPERATOR].dbPrefix}platform;`)
         await master.query(read(`${TEMPLATES}/${OPERATOR}/db/operator-seed.sql`))
 
-    
+
         // Crons
         await program.chat.notify(`\nExecuting initial crons`)
         await web1.exec(`php ${DEST}/platform/bin/cmd.php exchange-rates`)
         await web1.exec(`php ${DEST}/platform/bin/cmd.php history-partitions`)
         await web1.exec(`php ${DEST}/platform/bin/cmd.php partition-tables`)
-    
+
         await program.confirm('Continue?')
-        
+        await shell.exec(`node servers/servers-conf/list-changes --locations ${LOCATION}`)
+
         // System configurations
         await program.chat.notify('\nUpdate system configurations (danger: could affect the other operators on failure)')
         log('This could affect the other envs if the setup is incorrect.')
+
         await program.confirm('DANGER! Are you sure you want to continue (yes)? ')
         await shell.exec(`node servers/servers-conf/update --locations ${LOCATION} --reload webs`)
         // TODO: rollback
