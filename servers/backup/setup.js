@@ -125,4 +125,16 @@ program
     // Remove old cron file
     await program.chat.notify(`Remove old cron file`)
     await ssh.exec(`rm -f /etc/cron.d/mysqldump-secure`)
+
+    // Clone backups-collector
+    if (! await ssh.exists(`/opt/backups/backups-collector/.git`)) {
+        await ssh.exec(`git clone git@gitlab.dopamine.bg:devops/backups/backups-collector.git /opt`)
+    }
+    await ssh.exec(`ln -sf /opt/backups/backups-collector/backups-colllector.service backups-colllector.service`)
+
+    await program.chat.notify('Starting service...')
+    await ssh.exec('systemctl daemon-reload')
+    await ssh.exec('systemctl enable backups-colllector.service')
+    await ssh.exec('systemctl restart backups-colllector.service')
+    await ssh.exec('systemctl status backups-colllector.service')
 })

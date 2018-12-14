@@ -13,7 +13,7 @@ After=network.target
 User=node_exporter
 Group=node_exporter
 Type=simple
-ExecStart=/opt/node_exporter/node_exporter --collector.systemd
+ExecStart=/opt/node_exporter/node_exporter --collector.textfile.directory=/var/log/textfile_collector --collector.systemd
 Restart=always
 
 [Install]
