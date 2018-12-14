@@ -46,6 +46,7 @@ program
     
             case 'lb':
                 await ssh.exec('ln -svf /opt/servers-conf/rsyslog/11-nginx.conf /etc/rsyslog.d/11-nginx.conf')
+                await ssh.exec('ln -svf /opt/servers-conf/rsyslog/13-proxy.conf/etc/rsyslog.d/13-proxy.conf')
                 break
     
             default:

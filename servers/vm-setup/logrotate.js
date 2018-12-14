@@ -32,6 +32,7 @@ program
         
                 case 'lb':
                     await ssh.exec('ln -svf /opt/servers-conf/logrotate/nginx /etc/logrotate.d/nginx')
+                    await ssh.exec('ln -svf /opt/servers-conf/logrotate/tinyproxy /etc/logrotate.d/tinyproxy')
                     break
         
                 default:
