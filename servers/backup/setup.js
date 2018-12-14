@@ -130,11 +130,11 @@ program
     if (! await ssh.exists(`/opt/backups/backups-collector/.git`)) {
         await ssh.exec(`git clone git@gitlab.dopamine.bg:devops/backups/backups-collector.git /opt`)
     }
-    await ssh.exec(`ln -sf /opt/backups/backups-collector/backups-colllector.service backups-colllector.service`)
+    await ssh.exec(`ln -sf /opt/backups/backups-collector/backups-collector.service backups-collector.service`)
 
     await program.chat.notify('Starting service...')
     await ssh.exec('systemctl daemon-reload')
-    await ssh.exec('systemctl enable backups-colllector.service')
-    await ssh.exec('systemctl restart backups-colllector.service')
-    await ssh.exec('systemctl status backups-colllector.service')
+    await ssh.exec('systemctl enable backups-collector.service')
+    await ssh.exec('systemctl restart backups-collector.service')
+    await ssh.exec('systemctl status backups-collector.service')
 })
