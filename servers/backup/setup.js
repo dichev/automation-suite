@@ -15,6 +15,7 @@ retention_sets = 8
 compress = 1
 # What compression tool, supports gzip and qpress
 compress_with = gzip
+extra_ibx_options = --slave-info --galera-info
 `
 let cronBackupTemplate = `
 ##(do not run when running full)    
