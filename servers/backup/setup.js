@@ -134,12 +134,14 @@ program
     // Update project - backups-collector
     await ssh.chdir('/opt/backups-collector/')
     await ssh.exec('git pull')
+    await ssh.exec('npm install')
 
-    await ssh.exec(`ln -sf /opt/backups-collector/backups-collector.service backups-collector.service`)
+    await ssh.exec(`ln -sf /opt/backups-collector/backups-collector.service /etc/systemd/system/backups-collector.service`)
 
     await program.chat.notify('Starting service...')
     await ssh.exec('systemctl daemon-reload')
     await ssh.exec('systemctl enable backups-collector.service')
     await ssh.exec('systemctl restart backups-collector.service')
+    await program.sleep(2, 'Waiting a bit just in case');
     await ssh.exec('systemctl status backups-collector.service')
 })
