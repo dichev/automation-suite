@@ -135,7 +135,7 @@ program
     await ssh.chdir('/opt/backups-collector/')
     await ssh.exec('git pull')
     await ssh.exec('npm install')
-    await ssh.exec('cp node_modules/secret/.credentials.example.json /opt/backups-collector/.credentials.json')
+    await ssh.exec('cp node_modules/configurator/secret/.credentials.example.json /opt/backups-collector/.credentials.json')
 
     await ssh.exec(`ln -sf /opt/backups-collector/backups-collector.service /etc/systemd/system/backups-collector.service`)
 
