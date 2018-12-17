@@ -137,6 +137,7 @@ program
     await ssh.exec('npm install')
     await ssh.exec('cp node_modules/configurator/secret/.credentials.example.json /opt/backups-collector/.credentials.json')
 
+    await ssh.exec('mkdir -p /var/log/textfile_collector')
     await ssh.exec(`ln -sf /opt/backups-collector/backups-collector.service /etc/systemd/system/backups-collector.service`)
 
     await program.chat.notify('Starting service...')
