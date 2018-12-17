@@ -135,6 +135,7 @@ program
     await ssh.chdir('/opt/backups-collector/')
     await ssh.exec('git pull')
     await ssh.exec('npm install')
+    await program.sleep(1, 'Waiting a bit just in case');
     await ssh.exec('cp node_modules/configurator/secret/.credentials.example.json /opt/backups-collector/.credentials.json')
 
     await ssh.exec('mkdir -p /var/log/textfile_collector')
