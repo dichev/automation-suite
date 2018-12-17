@@ -128,10 +128,14 @@ program
     await ssh.exec(`rm -f /etc/cron.d/mysqldump-secure`)
 
     // Clone backups-collector
-    if (! await ssh.exists(`/opt/backups/backups-collector/.git`)) {
-        await ssh.exec(`git clone git@gitlab.dopamine.bg:devops/backups/backups-collector.git /opt`)
+    if (! await ssh.exists(`/opt/backups-collector/.git`)) {
+        await ssh.exec(`git clone git@gitlab.dopamine.bg:devops/backups/backups-collector.git /opt/backups-collector/`)
     }
-    await ssh.exec(`ln -sf /opt/backups/backups-collector/backups-collector.service backups-collector.service`)
+    // Update project - backups-collector
+    await ssh.chdir('/opt/backups-collector/')
+    await ssh.exec('git pull')
+
+    await ssh.exec(`ln -sf /opt/backups-collector/backups-collector.service backups-collector.service`)
 
     await program.chat.notify('Starting service...')
     await ssh.exec('systemctl daemon-reload')
