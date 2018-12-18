@@ -143,7 +143,6 @@ program
 
     await program.chat.notify('Starting service...')
     await ssh.exec('systemctl daemon-reload')
-    await ssh.exec('systemctl enable backups-collector.service')
     await ssh.exec('systemctl restart backups-collector.service')
 
     await program.chat.notify('Success')
