@@ -56,17 +56,15 @@ program.iterate('hosts', async (host) => {
     }
     else {
         // Remove previous symlink
-        await ssh.exec('rm -fv /opt/node_exporter') // temp
+        await ssh.exec('rm -frv /opt/node_exporter') // temp
 
         // Install (Some servers does not have git, so we rsync it instead)
-        await ssh.exec('rm -rf /opt/dopamine/exporters/') // delete on server
-
         // Starting local shell
         let shell = await program.shell()
         await shell.exec('rm -rf exporters') // delete locally
         await program.chat.notify('Cloning exporters repo(Locally)')
         await shell.exec('git clone git@gitlab.dopamine.bg:devops/monitoring/exporters.git')
-        await shell.exec(`rsync -azpv exporters root@${hostIP}:/opt/dopamine`)
+        await shell.exec(`rsync -vrltgoD --delete exporters root@${hostIP}:/opt/dopamine`)
         await shell.exec('rm -rf exporters') // delete locally
 
         await ssh.exec('chmod +x /opt/dopamine/exporters/node_exporter/node_exporter') // delete on server
@@ -92,6 +90,7 @@ program.iterate('hosts', async (host) => {
         await program.chat.notify('Starting service...')
         await ssh.exec('systemctl daemon-reload')
         await ssh.exec('systemctl restart node_exporter.service')
+        await program.sleep(1, 'Getting status too early lead to errors');
         await ssh.exec('systemctl status node_exporter.service')
 
         // Restore previous rules, prevent duplication

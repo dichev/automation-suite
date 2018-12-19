@@ -61,17 +61,15 @@ program.iterate('hosts', async (host) => {
         await program.chat.notify('Skipping host')
     }
     else {
-        await ssh.exec('rm -fv /opt/mysqld_exporter') //temp
+        await ssh.exec('rm -frv /opt/mysqld_exporter') //temp
 
         // Install (Some servers does not have git, so we rsync it instead)
-        await ssh.exec('rm -rf /opt/dopamine/exporters/') // delete on server
-
         // Starting local shell
         let shell = await program.shell()
         await shell.exec('rm -rf exporters') // delete locally
         await program.chat.notify('Cloning exporters repo...')
         await shell.exec('git clone git@gitlab.dopamine.bg:devops/monitoring/exporters.git')
-        await shell.exec(`rsync -azpv exporters root@${hostIP}:/opt/dopamine`)
+        await shell.exec(`rsync -vrltgoD --delete exporters root@${hostIP}:/opt/dopamine`)
         await shell.exec('rm -rf exporters') // delete locally
 
         await ssh.exec('chmod +x /opt/dopamine/exporters/mysqld_exporter/mysqld_exporter') // delete on server
@@ -85,15 +83,16 @@ program.iterate('hosts', async (host) => {
 
         // set custom service file for devQA MySQL, because there're too many databases, that lead to memory leak
         if (hostIP === devQAMySQLIP) {
-            await ssh.exec(`ln -sfv /opt/dopamine/exporters/mysqld_exporter/mysql_exporter-dev.service /etc/systemd/system/mysqld_exporter.service`)
+            await ssh.exec(`ln -sfv /opt/dopamine/exporters/mysqld_exporter/mysqld_exporter-dev.service /etc/systemd/system/mysqld_exporter.service`)
         } else {
-            await ssh.exec(`ln -sfv /opt/dopamine/exporters/mysqld_exporter/mysql_exporter.service /etc/systemd/system/mysqld_exporter.service`)
+            await ssh.exec(`ln -sfv /opt/dopamine/exporters/mysqld_exporter/mysqld_exporter.service /etc/systemd/system/mysqld_exporter.service`)
         }
 
         // Service start
         await program.chat.notify('Starting service...')
         await ssh.exec('systemctl daemon-reload')
         await ssh.exec('systemctl restart mysqld_exporter.service')
+        await program.sleep(1, 'Getting status too early lead to errors');
         await ssh.exec('systemctl status mysqld_exporter.service')
 
         // Restore previous rules, prevent duplication
@@ -129,7 +128,7 @@ program.iterate('hosts', async (host) => {
         await ssh.exec(`netstat -plant | grep mysqld_export | grep -i listen || echo 'mysqld_exporter not running!!!'`)
 
         // Check version
-        await ssh.exec(`/opt/mysqld_exporter/mysqld_exporter --version || echo 'mysqld_exporter not installed!!!'`)
+        await ssh.exec(`/opt/dopamine/exporters/mysqld_exporter/mysqld_exporter --version || echo 'mysqld_exporter not installed!!!'`)
 
         await program.chat.notify('Success')
     }
