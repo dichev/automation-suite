@@ -41,6 +41,7 @@
     * **[setstate](#tinyproxy-setstate)** - switch proxy state [in/active] for operator[s]
     * **[setup](#tinyproxy-setup)** - tiny proxy setup.
 * **[vm-setup](#vm-setup)**
+    * **[add-ssh-key](#vm-setup-add-ssh-key)** - safely add ssh public key to multiple hosts
     * **[dnsmasq](#vm-setup-dnsmasq)** - setup dnsmasq configuration of the webs
     * **[known-hosts](#vm-setup-known-hosts)** 
     * **[logrotate](#vm-setup-logrotate)** - setup logrotate configurations
@@ -685,6 +686,28 @@ Additional Options:
   -h, --help                  output usage information
 ```
 ## <a name="vm-setup"></a>vm-setup
+### <a name="vm-setup-add-ssh-key"></a>add-ssh-key
+Safely add ssh public key to multiple hosts
+```
+Usage: node servers/vm-setup/add-ssh-key --hosts <list|all> --user <dopamine|root> 
+
+Safely add ssh public key to multiple hosts
+
+Options:
+  -h, --hosts <list|all>      [required] The target host names
+  -u, --user <dopamine|root>  [required] The key will be added for this user
+
+Additional Options:
+  -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose               Turn ON log details of whats happening
+  -f, --force                 Suppress confirm messages (used for automation)
+  --dry-run                   Dry run mode will do everything as usual except commands execution
+  --quiet                     Turn off chat and some logs in stdout
+  --wait <int>                Pause between iterations in seconds
+  --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                   Disable chat notification if they are activated
+  -h, --help                  output usage information
+```
 ### <a name="vm-setup-dnsmasq"></a>dnsmasq
 Setup dnsmasq configuration of the webs
 ```
