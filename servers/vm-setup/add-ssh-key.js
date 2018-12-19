@@ -41,7 +41,8 @@ Promise.resolve().then(async() => {
         
         // Backup & add the new key
         console.log('Backup current keys..')
-        await ssh.exec(`cp -v ${DIR}/authorized_keys ${DIR}/authorized_keys-PREVIOUS`)
+        let backupFile = `${DIR}/authorized_keys-BACKUP-${Date.now()}`
+        await ssh.exec(`cp -v ${DIR}/authorized_keys ${backupFile}`)
     
         console.log(`Adding key to ${DIR}/authorized_keys`)
         await ssh.exec(`echo '${KEY}' >> ${DIR}/authorized_keys`)
@@ -61,7 +62,7 @@ Promise.resolve().then(async() => {
             console.error(err.toString())
             console.warn('Something is wrong, restoring previous keys')
             try {
-                await ssh.exec(`mv ${DIR}/authorized_keys ${DIR}/authorized_keys-FAILED; mv ${DIR}/authorized_keys-PREVIOUS ${DIR}/authorized_keys`)
+                await ssh.exec(`mv ${DIR}/authorized_keys ${DIR}/authorized_keys-FAILED; mv ${backupFile} ${DIR}/authorized_keys`)
                 console.log('Restored!')
             } catch (err){
                 console.error(err)
