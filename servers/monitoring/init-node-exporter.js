@@ -72,6 +72,9 @@ program.iterate('hosts', async (host) => {
             await ssh.exec('git pull')
         }
 
+        // Add folder where logs will be placed
+        await ssh.exec('mkdir -p /var/log/textfile_collector')
+
         // Create user
         await program.chat.notify('Creating node_exporter user...')
         await ssh.exec('if ! grep -q node_exporter /etc/passwd ; then useradd -rs /bin/false node_exporter; fi')
