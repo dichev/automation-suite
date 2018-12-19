@@ -143,7 +143,7 @@ program
     await ssh.exec('cp node_modules/configurator/secret/.credentials.example.json /opt/backups-collector/.credentials.json')
 
     await ssh.exec('mkdir -p /var/log/textfile_collector')
-    await ssh.exec(`ln -sf /opt/backups-collector/backups-collector.service /etc/systemd/system/backups-collector.service`) //@ systemctl enable backups-collector.service
+    await ssh.exec(`ln -svf /opt/backups-collector/backups-collector.service /etc/systemd/system/backups-collector.service`) // когато имаш symlink не може да имаш и enable. Просто не работи. Тествано е.
 
     await program.chat.notify('Starting service...')
     await ssh.exec('systemctl daemon-reload')
