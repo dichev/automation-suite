@@ -3,7 +3,7 @@
 
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
-let program = new Program({ chat: cfg.chat.rooms.devops })
+let program = new Program({ chat: cfg.chat.rooms.test })
 
 // node_exporter port
 const PORT = 9100;
@@ -24,7 +24,8 @@ program
 .parse()
 
 // filter by network
-program.params.hosts = Object.values(cfg.hosts).filter(h => program.params.networks.includes(h.network)).map(i => i.name).join(',')
+let filteredHosts = program.params.hosts.split(',')
+program.params.hosts = Object.values(cfg.hosts).filter(h => program.params.networks.includes(h.network) && filteredHosts.includes(h.name)).map(i => i.name).join(',')
 
 program.iterate('hosts', async (host) => {
     const params = program.params
