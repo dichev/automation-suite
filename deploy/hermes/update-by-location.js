@@ -111,11 +111,11 @@ program.run(async () => {
                 await web1.exec(`cd ${operator.dir} && git fetch --prune origin --quiet`)
             })
             
-            console.info(`\nSwitching to ${to} on web1`)
+            console.info(`\nUpdate code to ${to} on web1`)
             await parallelOperators(async operator => {
                 await web1.exec(`cd ${operator.dir} && git reset --hard --quiet ${to}`)
             })
-    
+            
             // Populate to the other webs
             await chat.message(`\n• Update code to all other webs (public)`)
             await program.confirm(`Continue (yes)?`)
