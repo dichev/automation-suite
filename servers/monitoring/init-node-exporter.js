@@ -69,6 +69,8 @@ program.iterate('hosts', async (host) => {
         await shell.exec(`rsync -azpv exporters root@${hostIP}:/opt/dopamine`)
         await shell.exec('rm -rf exporters') // delete locally
 
+        await ssh.exec('chmod +x /opt/dopamine/exporters/node_exporter/node_exporter') // delete on server
+
         // Add folder where logs will be placed
         await ssh.exec('mkdir -p /var/log/textfile_collector')
 
