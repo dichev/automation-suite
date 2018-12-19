@@ -5,23 +5,6 @@ const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
-let mysqlExporterServiceTemplate = `[Unit]
-Description=Prometheus MySQL Exporter
-After=network.target
-
-[Service]
-User=root
-Group=root
-Type=simple
-{{ExecStart}}
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-`
-
-let devQACustomExecStart = `ExecStart=/opt/mysqld_exporter/mysqld_exporter --collect.binlog_size --no-collect.info_schema.tables --no-collect.info_schema.processlist`
-let defaultExecStart     = `ExecStart=/opt/mysqld_exporter/mysqld_exporter --collect.info_schema.innodb_metrics --collect.info_schema.userstats --collect.perf_schema.eventsstatements --collect.perf_schema.indexiowaits --collect.perf_schema.tableiowaits --collect.heartbeat --collect.heartbeat.database=test --collect.heartbeat.table=heartbeat`
 const PORT = 9104;
 const MYSQL_PORT = 3306;
 const IP1 = '192.168.100.64';
@@ -101,18 +84,15 @@ program.iterate('hosts', async (host) => {
         await program.chat.notify('Creating mysql_exporter service...')
 
         // set custom service file for devQA MySQL, because there're too many databases, that lead to memory leak
-        let mysqlExporterService = mysqlExporterServiceTemplate;
         if (hostIP === devQAMySQLIP) {
-            mysqlExporterService = mysqlExporterService.replace(/{{ExecStart}}/, devQACustomExecStart)
+            await ssh.exec(`ln -sfv /opt/dopamine/exporters/mysqld_exporter/mysql_exporter-dev.service /etc/systemd/system/mysqld_exporter.service`)
         } else {
-            mysqlExporterService = mysqlExporterService.replace(/{{ExecStart}}/, defaultExecStart)
+            await ssh.exec(`ln -sfv /opt/dopamine/exporters/mysqld_exporter/mysql_exporter.service /etc/systemd/system/mysqld_exporter.service`)
         }
-        await ssh.exec(`echo '${mysqlExporterService}' > /etc/systemd/system/mysqld_exporter.service`)
 
         // Service start
         await program.chat.notify('Starting service...')
         await ssh.exec('systemctl daemon-reload')
-        await ssh.exec('systemctl enable mysqld_exporter.service')
         await ssh.exec('systemctl restart mysqld_exporter.service')
         await ssh.exec('systemctl status mysqld_exporter.service')
 
