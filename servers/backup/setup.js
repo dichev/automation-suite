@@ -49,16 +49,15 @@ program
     console.log(`Starting script on HOST:(${host} : ${hostIP})...`)
     await program.chat.notify(`Starting script on HOST:(${host} : ${hostIP})...`)
 
-    console.log(host)
     let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
-    let checkXtraBackupInstalled = await ssh.exec(`dpkg -l | grep xtrabackup > /dev/null 2>&1 && echo '1' || echo '0'`) //@ use ssh.packageExists()
+    let checkXtraBackupInstalled = await ssh.packageExists('xtrabackup')
     if (!checkXtraBackupInstalled) {
         await ssh.exec(`apt-get update`);
         await ssh.exec(`apt-get install xtrabackup`);
     }
 
-    let checkGitInstalled = await ssh.exec(`dpkg -l | grep git > /dev/null 2>&1 && echo '1' || echo '0'`)
+    let checkGitInstalled = await ssh.packageExists('git')
     if (!checkGitInstalled) {
         throw 'No git installed!'
     }
@@ -76,8 +75,11 @@ program
         await ssh.exec(`mkdir -p /backups/${host}/stor`)
         await ssh.exec(`mkdir -p /backups/${host}/work`)
 
-        await program.chat.notify('Install python-mysqldb')
-        await ssh.exec(`apt-get install python-mysqldb`)
+        let checkPythonMysqlInstalled = await ssh.packageExists('python-mysqldb')
+        if(!checkPythonMysqlInstalled) {
+            await program.chat.notify('Installing python-mysqldb...')
+            await ssh.exec(`apt-get install python-mysqldb`)
+        }
 
         await program.chat.notify('Cloning pyxbackup repo...')
         await ssh.exec(`git clone git@gitlab.dopamine.bg:devops/backups/xtrabackup.git ${pyxBackupPath}`)

@@ -62,7 +62,7 @@ program.iterate('hosts', async (host) => {
 
     let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
-    let checkNetToolsInstalled = await ssh.exec(`dpkg -l | grep nettools > /dev/null 2>&1 && echo '1' || echo '0'`)
+    let checkNetToolsInstalled = await ssh.packageExists('nettools')
     if (!checkNetToolsInstalled) {
         // Install net-tools
         await ssh.exec('apt-get install -y net-tools > /dev/null')
@@ -119,10 +119,9 @@ program.iterate('hosts', async (host) => {
         await ssh.exec('systemctl restart mysqld_exporter.service')
         await ssh.exec('systemctl status mysqld_exporter.service')
 
-        let isInstalled = await ssh.exec(`dpkg -s iptables-persistent > /dev/null 2>&1 && echo '1' || echo '0'`)
-
         // Restore previous rules, prevent duplication
-        if (isInstalled === '0') {
+        let isInstalled = await ssh.packageExists('iptables-persistent')
+        if (!isInstalled) {
             await ssh.exec(`echo iptables-persistent iptables-persistent/autosave_v4 boolean true | debconf-set-selections`)
             await ssh.exec(`echo iptables-persistent iptables-persistent/autosave_v6 boolean true | debconf-set-selections`)
             await ssh.exec(`apt-get -y install iptables-persistent > /dev/null`)

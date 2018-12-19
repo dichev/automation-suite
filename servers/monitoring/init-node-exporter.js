@@ -5,20 +5,6 @@ const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
-let nodejsExporterService = `[Unit]
-Description=Node Exporter
-After=network.target
-
-[Service]
-User=node_exporter
-Group=node_exporter
-Type=simple
-ExecStart=/opt/node_exporter/node_exporter --collector.textfile.directory=/var/log/textfile_collector --collector.systemd
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-`
 // nodejs exporter port
 const PORT = 9100;
 const IP1 = '192.168.100.64';
@@ -52,13 +38,12 @@ program.iterate('hosts', async (host) => {
     if (!networks.includes(hostNetwork)) return;
 
     let hostIP = cfg.getHost(host).ip;
-
     console.log(`Starting script on HOST:(${host} : ${hostIP})...`)
     await program.chat.notify(`Starting script on HOST:(${host} : ${hostIP})...`)
 
     let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
-    let checkNetToolsInstalled = await ssh.exec(`dpkg -l | grep nettools > /dev/null 2>&1 && echo '1' || echo '0'`)
+    let checkNetToolsInstalled = await ssh.packageExists('nettools')
     if (!checkNetToolsInstalled) {
         // Install net-tools
         await ssh.exec('apt-get install -y net-tools > /dev/null')
@@ -97,7 +82,7 @@ program.iterate('hosts', async (host) => {
 
         // systemd service
         await program.chat.notify('Creating node_exporter service...')
-        await ssh.exec(`echo '${nodejsExporterService}' > /etc/systemd/system/node_exporter.service`)
+        await ssh.exec(`echo /opt/dopamine/exporters/node_exporter/node_exporter.service > /etc/systemd/system/node_exporter.service`)
 
         // Service start
         await program.chat.notify('Starting service...')
@@ -106,10 +91,9 @@ program.iterate('hosts', async (host) => {
         await ssh.exec('systemctl restart node_exporter.service')
         await ssh.exec('systemctl status node_exporter.service')
 
-        let isInstalled = await ssh.exec(`dpkg -s iptables-persistent > /dev/null 2>&1 && echo '1' || echo '0'`)
-
         // Restore previous rules, prevent duplication
-        if (isInstalled === '0') {
+        let iptablesIsInstalled = await ssh.packageExists('iptables-persistent')
+        if (!iptablesIsInstalled) {
             await ssh.exec(`echo iptables-persistent iptables-persistent/autosave_v4 boolean true | debconf-set-selections`)
             await ssh.exec(`echo iptables-persistent iptables-persistent/autosave_v6 boolean true | debconf-set-selections`)
             await ssh.exec(`apt-get -y install iptables-persistent > /dev/null`)
