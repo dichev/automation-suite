@@ -1,5 +1,9 @@
 ## Available programs:
 
+* **[cayetano](#cayetano)**
+    * **[check](#cayetano-check)** - check cayetano docker swarm
+    * **[init](#cayetano-init)** - setup cayetano docker swarm
+    * **[update](#cayetano-update)** - deploy cayetano docker swarm
 * **[cdn](#cdn)**
     * **[cachebust](#cdn-cachebust)** - cachebusting html assets
     * **[check](#cdn-check)** - test suit of games cdn
@@ -13,7 +17,7 @@
     * **[allow-panel-access](#hermes-allow-panel-access)** - allow QA access to gpanel
     * **[check](#hermes-check)** - pre-deployment tests
     * **[migration](#hermes-migration)** - auto execute SQL migrations to production
-    * **[update-by-location](#hermes-update-by-location)** - fast simultaneous deploy to all operators on the same location without down time
+    * **[update-by-location](#hermes-update-by-location)** - fast simultaneous deploy to all operators per location without down time
     * **[update](#hermes-update)** - deploy hermes release repository without down time
     * **[version](#hermes-version)** - check current hermes release versions
 * **[hermes-env](#hermes-env)**
@@ -25,6 +29,9 @@
     * **[check](#monitoring-check)** - pre-deployment tests for Grafana-Sensors
     * **[fetch](#monitoring-fetch)** - add new operator configuration in Grafana-Sensors
     * **[update](#monitoring-update)** - update Grafana-Sensors repo
+* **[ssl-framework](#ssl-framework)**
+    * **[check](#ssl-framework-check)** - pre-deployment tests for SSL-Framework
+    * **[update](#ssl-framework-update)** - update SSL-Framework
 * **[sys-metrics](#sys-metrics)**
     * **[check](#sys-metrics-check)** 
     * **[init](#sys-metrics-init)** - installing sys-metrics
@@ -33,6 +40,70 @@
     * **[update](#sys-metrics-update)** - updating sys-metrics version
 
 ## Help
+## <a name="cayetano"></a>cayetano
+### <a name="cayetano-check"></a>check
+Check cayetano docker swarm
+```
+Usage: node deploy/cayetano/check --locations <list|all> 
+
+Check cayetano docker swarm
+
+Options:
+  -l, --locations <list|all>  [required] The target host name
+
+Additional Options:
+  -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose               Turn ON log details of whats happening
+  -f, --force                 Suppress confirm messages (used for automation)
+  --dry-run                   Dry run mode will do everything as usual except commands execution
+  --quiet                     Turn off chat and some logs in stdout
+  --wait <int>                Pause between iterations in seconds
+  --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                   Disable chat notification if they are activated
+  -h, --help                  output usage information
+```
+### <a name="cayetano-init"></a>init
+Setup cayetano docker swarm
+```
+Usage: node deploy/cayetano/init --locations <list|all> 
+
+Setup cayetano docker swarm
+
+Options:
+  -l, --locations <list|all>  [required] The target host name
+
+Additional Options:
+  -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose               Turn ON log details of whats happening
+  -f, --force                 Suppress confirm messages (used for automation)
+  --dry-run                   Dry run mode will do everything as usual except commands execution
+  --quiet                     Turn off chat and some logs in stdout
+  --wait <int>                Pause between iterations in seconds
+  --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                   Disable chat notification if they are activated
+  -h, --help                  output usage information
+```
+### <a name="cayetano-update"></a>update
+Deploy cayetano docker swarm
+```
+Usage: node deploy/cayetano/update --locations <list|all> 
+
+Deploy cayetano docker swarm
+
+Options:
+  -l, --locations <list|all>  [required] The target host name
+
+Additional Options:
+  -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose               Turn ON log details of whats happening
+  -f, --force                 Suppress confirm messages (used for automation)
+  --dry-run                   Dry run mode will do everything as usual except commands execution
+  --quiet                     Turn off chat and some logs in stdout
+  --wait <int>                Pause between iterations in seconds
+  --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                   Disable chat notification if they are activated
+  -h, --help                  output usage information
+```
 ## <a name="cdn"></a>cdn
 ### <a name="cdn-cachebust"></a>cachebust
 Cachebusting html assets
@@ -273,16 +344,17 @@ Usage: node deploy/hermes/migration --operators <name> --migration-path <name> -
     -h, --help                   output usage information
 ```
 ### <a name="hermes-update-by-location"></a>update-by-location
-Fast simultaneous deploy to all operators on the same location without down time
+Fast simultaneous deploy to all operators per location without down time
 ```
 Usage: node deploy/hermes/update-by-location --rev <string> 
 
-Fast simultaneous deploy to all operators on the same location without down time
+Fast simultaneous deploy to all operators per location without down time
 
 Options:
   -o, --operators <list|all>          Comma-separated list of operators
   -r, --rev <string>                  [required] Target revision (like r3.9.9.0) or from..to revision (like r3.9.9.0..r3.9.9.1)
   -s, --strategy <direct|blue-green>  Choose deployment strategy
+  --allow-panel                       Allow QA access to GPanel
 
 Additional Options:
   -p, --parallel [limit]              When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -353,10 +425,10 @@ Usage: node deploy/hermes/version --operators <list|all>
 ### <a name="hermes-env-check"></a>check
 
 ```
-Usage: node deploy/hermes-env/check --operator <name> 
+Usage: node deploy/hermes-env/check --operators <name> 
 
   Options:
-    -o, --operator <name>   [required] The target operator name
+  -o, --operators <name>  [required] The target operator name
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -496,6 +568,53 @@ Usage: node deploy/monitoring/update [options]
   Example usage:
     node deploy/monitoring/update
 ```
+## <a name="ssl-framework"></a>ssl-framework
+### <a name="ssl-framework-check"></a>check
+Pre-deployment tests for SSL-Framework
+```
+Usage: node deploy/ssl-framework/check [options]
+
+Pre-deployment tests for SSL-Framework
+
+Options:
+
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
+
+  Example usage:
+    node deploy/ssl-framework/check
+```
+### <a name="ssl-framework-update"></a>update
+Update SSL-Framework
+```
+Usage: node deploy/ssl-framework/update [options]
+
+Update SSL-Framework
+
+Options:
+
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
+
+  Example usage:
+    node deploy/ssl-framework/update
+```
 ## <a name="sys-metrics"></a>sys-metrics
 ### <a name="sys-metrics-check"></a>check
 
@@ -530,6 +649,7 @@ Usage: node deploy/sys-metrics/init --hosts <list>
 
   Options:
     -h, --hosts <list>      [required] The target host names
+  --install-deps          Install required deps in case the vm is not unified
 
   Additional Options:
     -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
