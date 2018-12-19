@@ -6,3 +6,4 @@ test/
 **/output/*
 .history
 snippets/
+.dev/
