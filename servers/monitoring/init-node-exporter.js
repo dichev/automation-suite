@@ -66,7 +66,11 @@ program.iterate('hosts', async (host) => {
             await shell.exec('git clone git@gitlab.dopamine.bg:devops/monitoring/exporters.git')
             await shell.exec(`rsync -azpv exporters root@${hostIP}:/opt/dopamine`)
             await shell.exec('rm -rf exporters')
+        } else {
+            await ssh.chdir('/opt/dopamine/exporters/')
+            await ssh.exec('git pull')
         }
+
         // Create user
         await program.chat.notify('Creating node_exporter user...')
         await ssh.exec('if ! grep -q node_exporter /etc/passwd ; then useradd -rs /bin/false node_exporter; fi')
