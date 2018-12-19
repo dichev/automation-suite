@@ -58,7 +58,7 @@ program.iterate('hosts', async (host) => {
         // Remove previous symlink
         await ssh.exec('rm -fv /opt/node_exporter') // temp
 
-        // Install
+        // Install (Some servers does not have git, so we rsync it instead)
         if (!await ssh.exists('/opt/dopamine/exporters/.git')) {
             let shell = await program.shell()
             await shell.exec('rm -rf exporters')

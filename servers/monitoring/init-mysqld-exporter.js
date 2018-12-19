@@ -63,9 +63,7 @@ program.iterate('hosts', async (host) => {
 
     let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
-    let checkNetToolsInstalled = await ssh.packageExists('nettools')
-    if (!checkNetToolsInstalled) {
-        // Install net-tools
+    if (! await ssh.packageExists('nettools')) {
         await ssh.exec('apt-get install -y net-tools > /dev/null')
     }
 
@@ -80,28 +78,23 @@ program.iterate('hosts', async (host) => {
         await program.chat.notify('Skipping host')
     }
     else {
-        // Install
-        await ssh.exec('rm -rfv /opt/mysqld_exporter') //temp
-        let optMysqlNodeExporter = '/opt/mysqld_exporter'
-        await program.chat.notify('Cloning exporters repo...')
+        await ssh.exec('rm -fv /opt/mysqld_exporter') //temp
+
+        // Install (Some servers does not have git, so we rsync it instead)
         if (!await ssh.exists('/opt/dopamine/exporters/.git')) {
             let shell = await program.shell()
             await shell.exec('rm -rf exporters')
+            await program.chat.notify('Cloning exporters repo...')
             await shell.exec('git clone git@gitlab.dopamine.bg:devops/monitoring/exporters.git')
             await shell.exec(`rsync -azpv exporters root@${hostIP}:/opt/dopamine`)
             await shell.exec('rm -rf exporters')
         }
-        await ssh.exec(`ln -sfv /opt/dopamine/exporters/mysqld_exporter ${optMysqlNodeExporter}`)
-        await ssh.exec(`chmod +x ${optMysqlNodeExporter}/mysqld_exporter`)
 
         // Delete old service file
-        let oldOptMysqlExporter = '/etc/systemd/system/multi-user.target.wants/prometheus-mysqld-exporter.service';
-        if (await ssh.exists(oldOptMysqlExporter)) {
-            await ssh.exec('systemctl stop prometheus-mysqld-exporter.service')
-            await ssh.exec(`rm ${oldOptMysqlExporter}`)
-        }
+        await ssh.exec(`rm -f /etc/systemd/system/multi-user.target.wants/prometheus-mysqld-exporter.service`)
+        await ssh.exec(`rm -f /etc/systemd/system/prometheus-mysqld-exporter.service`)
 
-        // systemd service
+        // Systemd service
         await program.chat.notify('Creating mysql_exporter service...')
 
         // set custom service file for devQA MySQL, because there're too many databases, that lead to memory leak
@@ -121,13 +114,13 @@ program.iterate('hosts', async (host) => {
         await ssh.exec('systemctl status mysqld_exporter.service')
 
         // Restore previous rules, prevent duplication
-        let isInstalled = await ssh.packageExists('iptables-persistent')
-        if (!isInstalled) {
+        if (! await ssh.packageExists('iptables-persistent')) {
             await ssh.exec(`echo iptables-persistent iptables-persistent/autosave_v4 boolean true | debconf-set-selections`)
             await ssh.exec(`echo iptables-persistent iptables-persistent/autosave_v6 boolean true | debconf-set-selections`)
             await ssh.exec(`apt-get -y install iptables-persistent > /dev/null`)
         }
 
+        // Remove previously added ips from us, then restore them
         await ssh.exec(`iptables-save > /etc/iptables/rules.v4`)
         await ssh.exec(`cat /etc/iptables/rules.v4 | grep -v ${PORT} > /tmp/rules.v4 && mv /tmp/rules.v4 /etc/iptables/rules.v4`)
         await ssh.exec('iptables-restore /etc/iptables/rules.v4')
@@ -144,16 +137,18 @@ program.iterate('hosts', async (host) => {
         await ssh.exec(`iptables -I INPUT -p tcp -s ${IP7} --dport ${PORT} -j ACCEPT`)
         await ssh.exec(`iptables -I INPUT -p tcp -s ${IP8} --dport ${PORT} -j ACCEPT`)
         await ssh.exec(`iptables-save > /etc/iptables/rules.v4`)
+
+
+        await program.sleep(2, 'Waiting a bit just in case');
+
+        // Check exporter works
+        await program.chat.notify('Checking exporter work... Please wait, it could take some time')
+        await ssh.exec(`netstat -plant | grep mysqld_export | grep -i listen || echo 'mysqld_exporter not running!!!'`)
+
+        // Check version
+        await ssh.exec(`/opt/mysqld_exporter/mysqld_exporter --version || echo 'mysqld_exporter not installed!!!'`)
+
+        await program.chat.notify('Success')
     }
-    await program.sleep(2, 'Waiting a bit just in case');
-
-    // Check exporter works
-    await program.chat.notify('Checking exporter work... Please wait, it could take some time')
-    await ssh.exec(`netstat -plant | grep mysqld_export | grep -i listen || echo 'mysqld_exporter not running!!!'`)
-
-    // Check version
-    await ssh.exec(`/opt/mysqld_exporter/mysqld_exporter --version || echo 'mysqld_exporter not installed!!!'`)
-
-    await program.chat.notify('Success')
 })
 
