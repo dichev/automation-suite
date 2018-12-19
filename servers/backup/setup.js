@@ -7,6 +7,8 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 
 let HOSTS = Object.keys(cfg.hosts).filter(h => h.includes('sofia-mysql') && (h.includes('archive') || h.includes('mirror')))
 
+//@ вместо динамични темлейти, то по добре да се вкарат в mysql репото (https://gitlab.dopamine.bg/servers/servers-conf-mysql)
+//@ така ще могат лесно да се customize-ват и ще има видимост какви са
 let wrapperConfigTemplate = `[pyxbackup]
 stor_dir = /backups/{{HOST}}/stor
 work_dir = /backups/{{HOST}}/work
@@ -27,7 +29,7 @@ let archiveStartTime = 16,
     mirrorStartTime  = 0;
 
 
-function getCronDays(min, max) {
+function getCronDays(min, max) { //@ ползвайки репо тези неща няма да са нужни
     let excluded = Math.floor(Math.random() * (max - min) + min);
     let list = [];
     for (let i = min; i <= max; i++) {
@@ -50,7 +52,7 @@ program
     console.log(host)
     let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
-    let checkXtraBackupInstalled = await ssh.exec(`dpkg -l | grep xtrabackup > /dev/null 2>&1 && echo '1' || echo '0'`)
+    let checkXtraBackupInstalled = await ssh.exec(`dpkg -l | grep xtrabackup > /dev/null 2>&1 && echo '1' || echo '0'`) //@ use ssh.packageExists()
     if (!checkXtraBackupInstalled) {
         await ssh.exec(`apt-get update`);
         await ssh.exec(`apt-get install xtrabackup`);
@@ -125,7 +127,7 @@ program
 
     // Remove old cron file
     await program.chat.notify(`Remove old cron file`)
-    await ssh.exec(`rm -f /etc/cron.d/mysqldump-secure`)
+    await ssh.exec(`rm -vf /etc/cron.d/mysqldump-secure`)
 
     // Clone backups-collector
     if (! await ssh.exists(`/opt/backups-collector/.git`)) {
@@ -139,7 +141,7 @@ program
     await ssh.exec('cp node_modules/configurator/secret/.credentials.example.json /opt/backups-collector/.credentials.json')
 
     await ssh.exec('mkdir -p /var/log/textfile_collector')
-    await ssh.exec(`ln -sf /opt/backups-collector/backups-collector.service /etc/systemd/system/backups-collector.service`)
+    await ssh.exec(`ln -sf /opt/backups-collector/backups-collector.service /etc/systemd/system/backups-collector.service`) //@ systemctl enable backups-collector.service
 
     await program.chat.notify('Starting service...')
     await ssh.exec('systemctl daemon-reload')

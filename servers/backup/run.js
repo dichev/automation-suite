@@ -23,12 +23,13 @@ program
     console.log(host)
     let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
-    let mysqlHost = await ssh.exec(`cat /root/.my.cnf | grep host | cut -d'=' -f 2`)
+    let mysqlHost = await ssh.exec(`cat /root/.my.cnf | grep host | cut -d'=' -f 2`) //@ по добре .my.cnf да се унифицира, вместо да се workaround-ва
     let mysqlHostParam = '';
     if (mysqlHost !== '') {
         mysqlHostParam = ` -H ${mysqlHost}`;
     }
+    //@ съответно може директно mysqlHost = '127.0.0.1'
 
     await program.chat.notify(`Starting full backup`)
-    await ssh.execBackground(`nohup /opt/pyxbackup/pyxbackup ${backupType} ${mysqlHostParam} &`)
+    await ssh.execBackground(`nohup /opt/pyxbackup/pyxbackup ${backupType} ${mysqlHostParam} &`) //@ тук няма нужда от nohup и & понеже самия execBackground го прави
 })
