@@ -2,7 +2,7 @@
 'use strict';
 
 const Program = require('dopamine-toolbox').Program
-const cfg = require('configurator').OfficeConfig
+const cfg = require('configurator')
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
 let mysqlExporterServiceTemplate = `[Unit]
@@ -35,16 +35,28 @@ const IP8 = '192.168.110.66';
 const devQAMySQLIP = '192.168.14.31';
 
 program
-.description('Setup monitoring mysql exporter')
+.description('Setup monitoring: Mysqld Exporter')
 .option('-h, --hosts <list|all>', 'The target host names', { choices: Object.keys(cfg.hosts), required: true })
+.option('-n, --networks <list|all>', 'Networks', { choices: [... new Set(Object.values(cfg.hosts).map(i => i.network))], required: true})
 .option('-f, --force', 'Skip manual changes validations and proceed on your risk')
+.parse()
 
+// filter by network
+program.params.hosts = Object.values(cfg.hosts).filter(h => program.params.networks.includes(h.network)).map(i => i.name).join(',')
 
-.iterate('hosts', async (host) => {
+program.iterate('hosts', async (host) => {
     const params = program.params
     const force  = params.force !== undefined;
+    let networks  = params.networks !== undefined ? params.networks : null;
+    networks = networks.split(',')
+
+    let hostNetwork = cfg.getHost(host).network;
+
+    // Execute only if the host network is included
+    if (!networks.includes(hostNetwork)) return;
 
     let hostIP = cfg.getHost(host).ip;
+
     console.log(`Starting script on HOST:(${host} : ${hostIP})...`)
     await program.chat.notify(`Starting script on HOST:(${host} : ${hostIP})...`)
 
@@ -60,7 +72,7 @@ program
     let mysqlPortInUse = await ssh.exec(`netstat -tulpn | grep LISTEN | grep ${MYSQL_PORT} > /dev/null 2>&1 && echo '1' || echo '0'`)
     if (mysqlPortInUse === '0') return;
 
-    let portIsInUse        = await ssh.exec(`netstat -tulpn | grep LISTEN | grep ${PORT} > /dev/null 2>&1 && echo '1' || echo '0'`)
+    let portIsInUse = await ssh.exec(`netstat -tulpn | grep LISTEN | grep ${PORT} > /dev/null 2>&1 && echo '1' || echo '0'`)
     let iptablesRulesExist = await ssh.exec(`iptables -L | awk -F ':' ' {print $2}' | sort -u | grep ${PORT} > /dev/null 2>&1 && echo '1' || echo '0'`)
 
     if (!force && (portIsInUse === '1' && iptablesRulesExist === '1')) {
@@ -71,7 +83,7 @@ program
         await ssh.exec('rm -rfv /opt/mysqld_exporter') //temp
         let optMysqlNodeExporter = '/opt/mysqld_exporter'
         await program.chat.notify('Cloning exporters repo...')
-        if (! await ssh.exists('/opt/dopamine/exporters/.git')) {
+        if (!await ssh.exists('/opt/dopamine/exporters/.git')) {
             let shell = await program.shell()
             await shell.exec('rm -rf exporters')
             await shell.exec('git clone git@gitlab.dopamine.bg:devops/monitoring/exporters.git')
@@ -83,7 +95,7 @@ program
 
         // Delete old service file
         let oldOptMysqlExporter = '/etc/systemd/system/multi-user.target.wants/prometheus-mysqld-exporter.service';
-        if(await ssh.exists(oldOptMysqlExporter)) {
+        if (await ssh.exists(oldOptMysqlExporter)) {
             await ssh.exec('systemctl stop prometheus-mysqld-exporter.service')
             await ssh.exec(`rm ${oldOptMysqlExporter}`)
         }
@@ -132,7 +144,6 @@ program
         await ssh.exec(`iptables -I INPUT -p tcp -s ${IP7} --dport ${PORT} -j ACCEPT`)
         await ssh.exec(`iptables -I INPUT -p tcp -s ${IP8} --dport ${PORT} -j ACCEPT`)
         await ssh.exec(`iptables-save > /etc/iptables/rules.v4`)
-
     }
     await program.sleep(2, 'Waiting a bit just in case');
 
