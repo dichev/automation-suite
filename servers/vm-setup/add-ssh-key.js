@@ -45,14 +45,13 @@ Promise.resolve().then(async() => {
     
         console.log(`Adding key to ${DIR}/authorized_keys`)
         await ssh.exec(`echo '${KEY}' >> ${DIR}/authorized_keys`)
-        console.log('done!')
-        
+
         
         
         // VERY IMPORTANT!
         // The code bellow will test is the root access lost accidentally and will try to recover it
         // it's purposely written very paranoid
-        console.log('\nTest root access')
+        console.log('\nTesting root access..')
         try {
             let ssh2 = await new SSHClient().connect({host: cfg.getHost(host).ip, username: 'root'})
             await ssh2.exec('echo success')
