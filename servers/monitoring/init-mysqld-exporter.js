@@ -81,14 +81,17 @@ program.iterate('hosts', async (host) => {
         await ssh.exec('rm -fv /opt/mysqld_exporter') //temp
 
         // Install (Some servers does not have git, so we rsync it instead)
-        if (!await ssh.exists('/opt/dopamine/exporters/.git')) {
-            let shell = await program.shell()
-            await shell.exec('rm -rf exporters')
-            await program.chat.notify('Cloning exporters repo...')
-            await shell.exec('git clone git@gitlab.dopamine.bg:devops/monitoring/exporters.git')
-            await shell.exec(`rsync -azpv exporters root@${hostIP}:/opt/dopamine`)
-            await shell.exec('rm -rf exporters')
-        }
+        await ssh.exec('rm -rf /opt/dopamine/exporters/') // delete on server
+
+        // Starting local shell
+        let shell = await program.shell()
+        await shell.exec('rm -rf exporters') // delete locally
+        await program.chat.notify('Cloning exporters repo...')
+        await shell.exec('git clone git@gitlab.dopamine.bg:devops/monitoring/exporters.git')
+        await shell.exec(`rsync -azpv exporters root@${hostIP}:/opt/dopamine`)
+        await shell.exec('rm -rf exporters') // delete locally
+
+        await ssh.exec('chmod +x /opt/dopamine/exporters/mysqld_exporter/mysqld_exporter') // delete on server
 
         // Delete old service file
         await ssh.exec(`rm -f /etc/systemd/system/multi-user.target.wants/prometheus-mysqld-exporter.service`)
