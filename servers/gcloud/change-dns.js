@@ -25,10 +25,20 @@ program
     
         console.log(`Found ${records.length} records:`)
         for (let record of records) {
-            let dir = record.name.match(/(gserver|gpanel)-(.+)(\.tgp.cash)/)[2]
+            let dir = record.name.match(/(gserver|gpanel|feed)-(.+)\.(.+)\.(.+)/)[2] //TODO: HARDCODED!! FIX IT
+            let operator = Object.values(cfg.operators).find(o => o.dir === dir)
+            if(!operator) {
+                console.warn(`WARNING - ${dir} is not valid operator and is skipped..`)
+                continue
+            }
             let location = Object.values(cfg.operators).find(o => o.dir === dir).location
+            let isPanel = record.name.startsWith('gpanel') //TODO: gpanel is still not behind CF
+            let desiredIp = cfg.locations[location].hosts.public
+            console.log(record.content.padEnd(15), record.proxied ? '(cf)  ': '      ', '=>', desiredIp.padEnd(15), !isPanel ? '(cf)' : '    ', record.name)
+    
+            // Override to the desired stats
             record.targetIP = cfg.locations[location].hosts.public
-            console.log(record.content, '=>', record.targetIP , record.name)
+            record.proxied = !isPanel
         }
         
         
@@ -37,9 +47,8 @@ program
             await program.confirm(`[DANGEROUS] Are you sure you want to set them all?`)
             for (let record of records) {
                 console.log(`Set ${record.targetIP} to ${record.name}`)
-                let isPanel = record.name.startsWith('gpanel') //TODO: gpanel is still not behind CF
                 // console.log({name: record.name, content: record.targetIP, type: 'A'})
-                await cf.put('dns_records/'+record.id, { name: record.name,  content: record.targetIP,  type: 'A',  proxied: !isPanel })
+                await cf.put('dns_records/'+record.id, { name: record.name,  content: record.targetIP,  type: 'A',  proxied: record.proxied })
             }
             console.log('Done')
         } else {
