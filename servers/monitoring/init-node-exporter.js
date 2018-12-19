@@ -45,7 +45,6 @@ program.iterate('hosts', async (host) => {
     let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
     if (! await ssh.packageExists('nettools')) {
-        // Install net-tools
         await ssh.exec('apt-get install -y net-tools > /dev/null')
     }
 
@@ -57,7 +56,7 @@ program.iterate('hosts', async (host) => {
     }
     else {
         // Remove previous symlink
-        await ssh.exec('rm -f /opt/node_exporter') // temp
+        await ssh.exec('rm -fv /opt/node_exporter') // temp
 
         // Install
         if (!await ssh.exists('/opt/dopamine/exporters/.git')) {
@@ -67,9 +66,6 @@ program.iterate('hosts', async (host) => {
             await shell.exec('git clone git@gitlab.dopamine.bg:devops/monitoring/exporters.git')
             await shell.exec(`rsync -azpv exporters root@${hostIP}:/opt/dopamine`)
             await shell.exec('rm -rf exporters')
-        } else {
-            await ssh.chdir('/opt/dopamine/exporters/')
-            await ssh.exec('git pull')
         }
 
         // Add folder where logs will be placed
