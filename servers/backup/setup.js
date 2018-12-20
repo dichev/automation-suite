@@ -75,6 +75,7 @@ program
     }
     // Update project - backups-collector
     await ssh.chdir('/opt/backups-collector/')
+    await ssh.exec('git reset --hard')
     await ssh.exec('git pull')
     await ssh.exec(`cat '{"hostname": "${host}"}' > /opt/backups-collector/.hostConf.json`)
     await ssh.exec('rm -rf /opt/backups-collector/node_modules') // TEMP!!!!!
