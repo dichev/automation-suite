@@ -7,18 +7,6 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 
 let HOSTS = Object.keys(cfg.hosts).filter(h => h.includes('sofia-mysql') && (h.includes('archive') || h.includes('mirror')))
 
-//@ вместо динамични темлейти, то по добре да се вкарат в mysql репото (https://gitlab.dopamine.bg/servers/servers-conf-mysql)
-//@ така ще могат лесно да се customize-ват и ще има видимост какви са
-let wrapperConfigTemplate = `[pyxbackup]
-stor_dir = /backups/{{HOST}}/stor
-work_dir = /backups/{{HOST}}/work
-retention_sets = 8
-# Whether to compress backups
-compress = 1
-# What compression tool, supports gzip and qpress
-compress_with = gzip
-extra_ibx_options = --slave-info --galera-info
-`
 let cronBackupTemplate = `
 ##(do not run when running full)    
 0 {{HOUR}} * * {{incremental}} root {{pyxBackupBinPath}} --config {{wrapperCongPath}} incr {{mysqlHost}}
@@ -90,12 +78,9 @@ program
     }
 
     // Wrapper config
-    let wrapperConfig = wrapperConfigTemplate
-    wrapperConfig = wrapperConfig.replace(/{{HOST}}/g, host)
     let wrapperCongPath = '/etc/pyxbackup.cnf'
     await program.chat.notify('Creating pyxbackup.cnf')
-    await ssh.exec(`echo '${wrapperConfig}' > ${wrapperCongPath}`)
-
+    await ssh.exec(`cat /opt/servers-conf-mysql/pyxbackup/${host}.cnf > ${wrapperCongPath}`)
 
     // Create cron file
     await program.chat.notify('Creating cron.d file')

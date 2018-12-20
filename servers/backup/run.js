@@ -31,5 +31,5 @@ program
     //@ съответно може директно mysqlHost = '127.0.0.1'
 
     await program.chat.notify(`Starting full backup`)
-    await ssh.execBackground(`nohup /opt/pyxbackup/pyxbackup ${backupType} ${mysqlHostParam} &`) //@ тук няма нужда от nohup и & понеже самия execBackground го прави
+    await ssh.execBackground(`/opt/pyxbackup/pyxbackup ${backupType} ${mysqlHostParam}`)
 })
