@@ -30,7 +30,6 @@ program
     
         console.log('\nInstalling packages..')
         await web.exec(`
-            set -e
             apt-get -qq update
             apt-get -q -y install software-properties-common
             
