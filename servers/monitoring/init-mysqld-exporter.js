@@ -78,19 +78,14 @@ program.iterate('hosts', async (host) => {
         await ssh.exec(`rm -f /etc/systemd/system/multi-user.target.wants/prometheus-mysqld-exporter.service`)
         await ssh.exec(`rm -f /etc/systemd/system/prometheus-mysqld-exporter.service`)
 
-        // Systemd service
-        await program.chat.notify('Creating mysql_exporter service...')
-
-        // set custom service file for devQA MySQL, because there're too many databases, that lead to memory leak
-        if (hostIP === devQAMySQLIP) {
-            await ssh.exec(`ln -sfv /opt/dopamine/exporters/mysqld_exporter/mysqld_exporter-dev.service /etc/systemd/system/mysqld_exporter.service`)
-        } else {
-            await ssh.exec(`ln -sfv /opt/dopamine/exporters/mysqld_exporter/mysqld_exporter.service /etc/systemd/system/mysqld_exporter.service`)
-        }
-
         // Service start
-        await program.chat.notify('Starting service...')
-        await ssh.exec('systemctl daemon-reload')
+        await program.chat.notify('Create & starting service...')
+        // Set custom service file for devQA MySQL, because there're too many databases, that lead to memory leak
+        if (hostIP === devQAMySQLIP) {
+            await ssh.exec('systemctl enable /opt/dopamine/exporters/mysqld_exporter/mysqld_exporter-dev.service')
+        } else {
+            await ssh.exec('systemctl enable /opt/dopamine/exporters/mysqld_exporter/mysqld_exporter.service')
+        }
         await ssh.exec('systemctl restart mysqld_exporter.service')
         await program.sleep(1, 'Getting status too early lead to errors');
         await ssh.exec('systemctl status mysqld_exporter.service')

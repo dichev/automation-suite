@@ -82,13 +82,9 @@ program.iterate('hosts', async (host) => {
 
         let optNodeExporterPath = '/opt/dopamine/exporters/node_exporter'
 
-        // systemd service
-        await program.chat.notify('Creating node_exporter service...')
-        await ssh.exec(`ln -svf ${optNodeExporterPath}/node_exporter.service /etc/systemd/system/node_exporter.service`)
-
         // Service start
-        await program.chat.notify('Starting service...')
-        await ssh.exec('systemctl daemon-reload')
+        await program.chat.notify('Creating & starting service...')
+        await ssh.exec(`systemctl enable ${optNodeExporterPath}/node_exporter.service`)
         await ssh.exec('systemctl restart node_exporter.service')
         await program.sleep(1, 'Getting status too early lead to errors');
         await ssh.exec('systemctl status node_exporter.service')
