@@ -42,7 +42,7 @@ Promise.resolve().then(async() => {
         // Backup & add the new key
         console.log('Backup current keys..')
         let backupFile = `${DIR}/authorized_keys-BACKUP-${Date.now()}`
-        await ssh.exec(`cp -v ${DIR}/authorized_keys ${backupFile}`)
+        await ssh.exec(`cp -pv ${DIR}/authorized_keys ${backupFile}`)
     
         console.log(`Adding key to ${DIR}/authorized_keys`)
         await ssh.exec(`echo '${KEY}' >> ${DIR}/authorized_keys`)
