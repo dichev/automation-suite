@@ -82,7 +82,10 @@ program
         }
 
         await program.chat.notify('Cloning pyxbackup repo...')
-        await ssh.exec(`git clone git@gitlab.dopamine.bg:devops/backups/xtrabackup.git ${pyxBackupPath}`)
+        await ssh.exec(`git clone https://github.com/dotmanila/pyxbackup.git ${pyxBackupPath}`)
+        await ssh.chdir(pyxBackupBinPath)
+        //reset to the last stable commit. (No tags available in repo)
+        await ssh.exec('git reset --hard 3e3f7af81a312209e19390eee9b947e61e6f9ec9')
         await ssh.exec(`chmod 0755 ${pyxBackupBinPath}`)
     }
 
@@ -143,10 +146,9 @@ program
     await ssh.exec('cp node_modules/configurator/secret/.credentials.example.json /opt/backups-collector/.credentials.json')
 
     await ssh.exec('mkdir -p /var/log/textfile_collector')
-    await ssh.exec(`ln -svf /opt/backups-collector/backups-collector.service /etc/systemd/system/backups-collector.service`) // когато имаш symlink не може да имаш и enable. Просто не работи. Тествано е.
 
     await program.chat.notify('Starting service...')
-    await ssh.exec('systemctl daemon-reload')
+    await ssh.exec('systemctl enable /opt/backups-collector/backups-collector.service')
     await ssh.exec('systemctl restart backups-collector.service')
 
     await program.chat.notify('Success')
