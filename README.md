@@ -88,7 +88,18 @@ All commands could be run on any machine by any developer however the best way i
 By this way will be eliminated the risks of differences in local envs and local changes. Also the access control and logging will be simplified.
 
 
+### Windows setup
+It's recommended to use ComEmu configured to git bash emulator.
 
+To use the Pageant in bash add following:
+```bash
+echo "eval \$(/usr/bin/ssh-pageant -r -a '/tmp/.ssh-pageant-\$USERNAME')" >> nano ~/.bashrc
+```
+For Windows also add following environment variables (don't forget ti check are the paths correct):
+```
+GIT_SSH=C:\Program Files\PuTTY\plink.exe  // This will allow git to use by default your putty keys on local environments:
+PATH=C:\Program Files\Git\bin             // this will allow node to run bash (here should be stored your bash.exe)
+```
 ### Known Issues
 
 - Colors in shell are displayed as ANSI codes in Windows MinGW64
