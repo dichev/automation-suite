@@ -77,7 +77,7 @@ program
     await ssh.chdir('/opt/backups-collector/')
     await ssh.exec('git reset --hard')
     await ssh.exec('git pull')
-    await ssh.exec(`cat '{"hostname": "${host}"}' > /opt/backups-collector/.hostConf.json`)
+    await ssh.exec(`echo '{"hostname": "${host}"}' > /opt/backups-collector/.hostConf.json`)
     await ssh.exec('rm -rf /opt/backups-collector/node_modules') // TEMP!!!!!
     await ssh.exec('npm install')
     await program.sleep(1, 'Waiting a bit just in case');
