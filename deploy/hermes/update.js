@@ -9,98 +9,150 @@ let program = new Program({chat: cfg.chat.rooms.deployBackend, smartForce: true}
 
 program
     .icon(GoogleChat.icons.DEPLOY)
-    .description('Deploy hermes release repository without down time')
-    .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators), required: true})
+    .description('Fast simultaneous deploy to all operators per location without down time')
+    .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators)})
     .option('-r, --rev <string>', `Target revision (like r3.9.9.0) or from..to revision (like r3.9.9.0..r3.9.9.1)`, {required: true})
     .option('-s, --strategy <direct|blue-green>', `Choose deployment strategy`, { def: 'blue-green', choices: ['direct', 'blue-green'] })
     .option('--allow-panel', `Allow QA access to GPanel`)
     .example(`
-        node deploy/hermes/update --operators bots --rev r3.9.9.1 --strategy blue-green --allow-panel --force
+        node deploy/hermes/update-by-location --operators bots --rev r3.9.9.1 --strategy blue-green --force
     `)
     .parse()
 
 program.chat.thread = program.params.rev
-console.warn('THIS SCRIPT IS DEPRECATED IN FAVOUR OF hermes/update-by-location')
-process.exit(1)
-program
-    .iterate('operators', async (operator) => {
-        if (program.params.parallel) throw Error(`Currently the command doesn't support parallel mode for safety reasons`)
-        if(operator === 'bots') return
 
-        const LOCATION = cfg.getLocationByOperator(operator);
-        const OPERATOR_DIR = cfg.operators[operator].dir // TODO: temporary - still used for switch webs
-        const DEST = 'production/' + cfg.operators[operator].dir
+program.run(async () => {
+    if (program.params.parallel) throw Error(`Currently the command doesn't support parallel mode for safety reasons`)
+    if (!program.params.operators) throw Error('No operators selected')
+    
+    const operatorsByLocation = {}
+    const allOperators = program.params.operators.split(',')
+    for(let name of allOperators){
+        let operator = cfg.operators[name]
+        if(!operatorsByLocation[operator.location]) operatorsByLocation[operator.location] = []
+        operatorsByLocation[operator.location].push(operator)
+    }
+    
+    const locations = Object.keys(operatorsByLocation).sort()
+    
+    if (!program.params.force && allOperators.length >= 3) {
+        let answer = await program.ask(`It seems there are ${allOperators.length} iterations. Do you want to activate --force mode?`, ['yes', 'no'], 'yes')
+        if (answer === 'yes') program.params.force = true
+    }
+    
+    for(let location of locations){
+        let chat = program.chat
+        await chat.message(`*Executing over ${location}*`)
+        await program.confirm('Continue?')
+        
+
         const REVS = program.params.rev
         const STRATEGY = program.params.strategy
         const [from, to] = REVS && REVS.includes('..') ? REVS.split('..') : [null, REVS]
         
-        let chat = program.chat
+        const OPERATORS = operatorsByLocation[location]
+        const LOCATION = cfg.locations[location]
+        const BASE_DIR = '/home/dopamine/production'
+        
+        
         let shell = program.shell()
     
     
+        await chat.message(`Affected operators: ` + OPERATORS.map(o => o.name).join(', '))
+    
         // Prepare
         await chat.message('\n• Pre-deploy validations')
-        let currentRev = await shell.exec(`node deploy/hermes/version --no-chat --quiet -o ${operator}`)
-        if(currentRev === to){
-            let answer = await program.ask(`WARNING! Current release (${currentRev}) is the same as target release (${to})\nDo you want to skip the update?`, ['yes', 'no'], 'yes')
-            if(answer === 'yes') return
-        }
-
         try {
-            await shell.exec(`node deploy/hermes/check --quiet --no-chat -o ${operator} ` + (REVS ? `-r ${REVS}` : ''))
+            await shell.exec(`node deploy/hermes/check -p 5 --quiet --force --no-chat -o ${OPERATORS.map(o => o.name)} ` + (REVS ? `-r ${REVS}` : '')) //TODO
         } catch (e) {
-            await program.ask('WARNING! Some test failed! Are you sure you want to continue?', ['yes', 'no'], 'yes')
-            // throw e
+            let answer = await program.ask('WARNING! Some test failed! Are you sure you want to continue?', ['yes', 'no'], 'no')
+            if(answer === 'no') throw e
         }
+    
+    
+        const parallelOperators = async (fn) => {
+            await Promise.all(OPERATORS.map(async (operator, i) => {
+                await program.sleep(i * 0.5, operator.name)
+                await fn(operator)
+            }))
+        }
+        
+        const sequentialOperators = async (fn) => {
+            for (let operator of OPERATORS) {
+                console.log(`${operator.name}`)
+                await fn(operator)
+            }
+        }
+    
+       
+
         if (program.params.allowPanel) {
             await chat.message('• Allowing QA panel access')
-            await shell.exec(`node deploy/hermes/allow-panel-access -o ${operator} --no-chat`)
+            await shell.exec(`node deploy/hermes/allow-panel-access -o ${OPERATORS.map(o => o.name)} -p 10 --no-chat`)
         }
-    
+   
         // if (to === 'r3.10.13.0') {
-        //     await chat.message('• Executing SQL migrations')
-        //     await shell.exec(`node deploy/hermes/migration -m /d/www/_releases/hermes/.migrations/r3.10.13.0/gpanel-r3.10.13.0.sql --db panel -o ${operator} --force --no-chat`)
+        //     let forced = program.params.force ? '--force' : ''
+        //     await chat.message('\n• Executing SQL migrations')
+        //     await shell.exec(`node deploy/hermes/migration -m /d/www/_releases/hermes/.migrations/r3.10.13.0/gpanel-r3.10.13.0.sql --db panel -o ${OPERATORS.map(o => o.name)} ${forced} --no-chat`)
         // }
-        
-        if(STRATEGY === 'direct') {
     
+        if(STRATEGY === 'direct') {
+            
             // Update web1
             await chat.message('\n• Update code on web1 (public)')
             await program.confirm(`Continue (yes)?`)
             let web1 = await program.ssh(LOCATION.hosts.web1, 'dopamine')
-            await web1.chdir(DEST)
-            await web1.exec('git fetch --prune origin --quiet')
-            await web1.exec(`git reset --hard --quiet ${to}`)
-            console.info(`The version is switched to ${to}`)
+            await web1.chdir(BASE_DIR)
+    
+    
+            console.info(`\nFetching changes`)
+            await parallelOperators(async operator => {
+                await web1.exec(`cd ${operator.dir} && git fetch --prune origin --quiet`)
+            })
             
+            console.info(`\nUpdate code to ${to} on web1`)
+            await parallelOperators(async operator => {
+                await web1.exec(`cd ${operator.dir} && git reset --hard --quiet ${to}`)
+            })
             
             // Populate to the other webs
             await chat.message(`\n• Update code to all other webs (public)`)
             await program.confirm(`Continue (yes)?`)
-            await web1.exec(`$HOME/bin/webs-sync .`, {silent: true})
-            await chat.message(`✓ ${to} deployed to ${operator}`)
-            
+            await sequentialOperators(async operator => {
+                await web1.exec(`$HOME/bin/webs-sync ${operator.dir}`, {silent: true})
+            })
+
         }
         
         else if( STRATEGY === 'blue-green'){
+            
             
             let [web1, lb] = await Promise.all([
                 program.ssh(LOCATION.hosts.web1, 'dopamine'),
                 program.ssh(LOCATION.hosts.lb, 'root')
             ])
+            await web1.chdir(BASE_DIR)
     
+            
             // Switch to green
             await chat.message('• Switch to green (web4,web5)')
-            await lb.exec(`switch-webs --webs=${LOCATION.green} --operators=${OPERATOR_DIR}`)
+            await lb.exec(`switch-webs --webs=${LOCATION.green} --operators=${OPERATORS.map(o => o.dir)}`)
     
     
             // Update web1
+            await chat.message('• Fetch changes')
+            await parallelOperators(async operator => {
+                await web1.exec(`cd ${operator.dir} && git fetch --prune origin --quiet`)
+            })
+    
+    
             await chat.message('• Update blue (web1)')
-            await web1.chdir(DEST)
-            await web1.exec('git fetch --prune origin --quiet')
-            await web1.exec(`git reset --hard --quiet ${to}`)
-    
-    
+            await parallelOperators(async operator => {
+                await web1.exec(`cd ${operator.dir} && git reset --hard --quiet ${to}`)
+            })
+            
+            
             // Update web2,web3
             await program.confirm(`\nDo you want to populate changes to blue?`)
             let otherBlueWebs = LOCATION.blue.filter(w => w !== 'web1')
@@ -108,13 +160,15 @@ program
                 console.log('No other webs, skipping..')
             } else {
                 await chat.message(`• Update blue (${otherBlueWebs})`)
-                await web1.exec(`$HOME/bin/webs-sync . --webs=${otherBlueWebs}`, {silent: true})
+                await sequentialOperators(async operator => {
+                    await web1.exec(`$HOME/bin/webs-sync ${operator.dir} --webs=${otherBlueWebs}`, {silent: true})
+                })
             }
     
             // Switch to blue
             await program.confirm(`\nDo you want to switch to blue?`)
             await chat.message('• Switch to blue')
-            await lb.exec(`switch-webs --webs=${LOCATION.blue} --operators=${OPERATOR_DIR}`)
+            await lb.exec(`switch-webs --webs=${LOCATION.blue} --operators=${OPERATORS.map(o => o.dir)}`)
     
     
             
@@ -127,32 +181,37 @@ program
                 let answer = program.params.force ? '' : await program.ask('Do you need to ROLLBACK?', ['rollback', ''], '')
                 if (answer === 'rollback') {
                     await chat.warn('Aborting', 'Something is wrong, we will rollback by switching to green')
-                    await lb.exec(`switch-webs --webs=${LOCATION.green} --operators=${OPERATOR_DIR}`)
+                    await lb.exec(`switch-webs --webs=${LOCATION.green} --operators=${OPERATORS.map(o => o.dir)}`)
                     await chat.message('Switched to green, please confirm everything is fine', {popup: true})
                     throw Error('Aborting')
                 }
             } else {
-                await program.sleep(10, 'Waiting a bit just in case'); // TODO: add here some checks
+                await program.sleep(15, 'Waiting a bit just in case'); // TODO: add here some checks
             }
             
             
     
             // Update green webs
             await chat.message(`• Update green (${LOCATION.green})`)
-            await web1.exec(`$HOME/bin/webs-sync . --webs=${LOCATION.green}`, {silent: true})
+            await sequentialOperators(async operator => {
+                await web1.exec(`$HOME/bin/webs-sync ${operator.dir} --webs=${LOCATION.green}`, {silent: true})
+            })
+            
     
             // Switch to all webs (green & blue)
             let allWebs = [].concat(LOCATION.blue, LOCATION.green)
             await chat.message(`• Switch to blue & green: ${allWebs}`)
-            await lb.exec(`switch-webs --webs=all --operators=${OPERATOR_DIR}`)
-            await chat.message(`✓ ${to} deployed to ${operator}`)
+            await lb.exec(`switch-webs --webs=all --operators=${OPERATORS.map(o => o.dir)}`)
+    
         }
         else {
             throw Error(`There is no such strategy: ${STRATEGY}`)
         }
-        
     
-    })
-    .then(async() => {
-        if(program.params.strategy === 'direct') await program.chat.message(`QA validation: Please validate and let me know when you are ready`, {popup: true})
-    })
+        await chat.message(`✓ ${to} deployed to ${OPERATORS.map(o => o.name)}`)
+        
+    }
+})
+.then(async() => {
+    if(program.params.strategy === 'direct') await program.chat.message(`QA validation: Please validate and let me know when you are ready`, {popup: true})
+})
