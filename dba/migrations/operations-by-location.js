@@ -4,7 +4,7 @@
 const   Program = require('dopamine-toolbox').Program,
         SSHClient = require('dopamine-toolbox').SSHClient,
         MySQL = require('dopamine-toolbox').MySQL,
-        colors = require('ansicolors'),
+        colors = require('colors'),
         cfg = require('configurator');
 
 let     sshConnections = {},
