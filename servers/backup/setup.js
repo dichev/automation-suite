@@ -57,10 +57,15 @@ program
     await program.chat.notify('Creating pyxbackup.cnf')
     await ssh.exec(`cat /opt/servers-conf-mysql/pyxbackup/conf/${host}.cnf > ${wrapperCongPath}`)
 
+    
     // Create cron file
     await program.chat.notify('Creating cron.d file')
-    await ssh.exec(`ln -sfv /opt/servers-conf-mysql/pyxbackup/cron/${host}.cnf /etc/cron.d/${host}`)
-
+    await ssh.exec(`ln -sfv /opt/servers-conf-mysql/pyxbackup/crons/${host} /etc/cron.d/${host}`)
+    // Delete old pyxbackup file in cron.d
+    if (await ssh.exists(`/etc/cron.d/${host}`)) {
+        await ssh.exec('rm -f /etc/cron.d/pyxbackup')
+    }  
+    
     // Check wrapper version
     await program.chat.notify(`Checking pyxBackup version`)
     await ssh.exec(`${pyxBackupBinPath} --v`)
