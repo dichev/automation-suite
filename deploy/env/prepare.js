@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node deploy/hermes-env/prepare --operator bots --location belgium -v
+ * $ node deploy/env/prepare --operator bots --location belgium -v
  */
 
 

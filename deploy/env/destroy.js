@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node deploy/hermes-env/destroy --operator bots -v
+ * $ node deploy/env/destroy --operator bots -v
  */
 
 

@@ -20,11 +20,11 @@
     * **[update-by-location](#hermes-update-by-location)** - fast simultaneous deploy to all operators per location without down time
     * **[update](#hermes-update)** - deploy hermes release repository without down time
     * **[version](#hermes-version)** - check current hermes release versions
-* **[hermes-env](#hermes-env)**
-    * **[check](#hermes-env-check)** 
-    * **[create](#hermes-env-create)** 
-    * **[destroy](#hermes-env-destroy)** 
-    * **[prepare](#hermes-env-prepare)** 
+* **[env](#env)**
+    * **[check](#env-check)** 
+    * **[create](#env-create)** 
+    * **[destroy](#env-destroy)** 
+    * **[prepare](#env-prepare)** 
 * **[monitoring](#monitoring)**
     * **[check](#monitoring-check)** - pre-deployment tests for Grafana-Sensors
     * **[fetch](#monitoring-fetch)** - add new operator configuration in Grafana-Sensors
@@ -421,11 +421,11 @@ Usage: node deploy/hermes/version --operators <list|all>
   Example usage:
     $ node deploy/hermes/version --operators all -p 10
 ```
-## <a name="hermes-env"></a>hermes-env
-### <a name="hermes-env-check"></a>check
+## <a name="env"></a>env
+### <a name="env-check"></a>check
 
 ```
-Usage: node deploy/hermes-env/check --operators <name> 
+Usage: node deploy/env/check --operators <name> 
 
   Options:
   -o, --operators <name>  [required] The target operator name
@@ -441,10 +441,10 @@ Usage: node deploy/hermes-env/check --operators <name>
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
-### <a name="hermes-env-create"></a>create
+### <a name="env-create"></a>create
 
 ```
-Usage: node deploy/hermes-env/create --operator <name> 
+Usage: node deploy/env/create --operator <name> 
 
   Options:
     -o, --operator <name>   [required] The target operator name
@@ -460,10 +460,10 @@ Usage: node deploy/hermes-env/create --operator <name>
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
-### <a name="hermes-env-destroy"></a>destroy
+### <a name="env-destroy"></a>destroy
 
 ```
-Usage: node deploy/hermes-env/destroy --operator <name> 
+Usage: node deploy/env/destroy --operator <name> 
 
   Options:
     -o, --operator <name>   [required] The target operator name
@@ -479,10 +479,10 @@ Usage: node deploy/hermes-env/destroy --operator <name>
     --no-chat               Disable chat notification if they are activated
     -h, --help              output usage information
 ```
-### <a name="hermes-env-prepare"></a>prepare
+### <a name="env-prepare"></a>prepare
 
 ```
-Usage: node deploy/hermes-env/prepare --operator <name> 
+Usage: node deploy/env/prepare --operator <name> 
 
   Options:
     -o, --operator <name>   [required] The target operator name

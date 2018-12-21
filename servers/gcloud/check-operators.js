@@ -25,7 +25,7 @@ program
     
     
         await shell.exec(`node deploy/cayetano/check --no-chat -l ${location} ${verbose}`)
-        await shell.exec(`node deploy/hermes-env/check --no-chat -p 10 -o ${OPERATORS.map(o => o.name)} ${verbose}`)
+        await shell.exec(`node deploy/env/check --no-chat -p 10 -o ${OPERATORS.map(o => o.name)} ${verbose}`)
         await shell.exec(`node deploy/hermes/check --no-chat -p 10 -o ${OPERATORS.map(o => o.name)} ${verbose}`)
         
         for(let operator of OPERATORS){

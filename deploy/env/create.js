@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node deploy/hermes-env/create --operator bots
+ * $ node deploy/env/create --operator bots
  */
 
 
@@ -37,7 +37,7 @@ program
         
         
         // Preparations
-        log(`Before the deploy you must prepare all configurations using:\n $ node deploy/hermes-env/prepare --operator ${OPERATOR} --location ${LOCATION}`)
+        log(`Before the deploy you must prepare all configurations using:\n $ node deploy/env/prepare --operator ${OPERATOR} --location ${LOCATION}`)
         await program.confirm('Have you prepared them (yes)? ')
         // TODO check if they exists
 
@@ -107,7 +107,7 @@ program
     
         // Checkers & tests
         await program.chat.notify('\nChecking test suite')
-        await shell.exec(`node deploy/hermes-env/check -o ${OPERATOR}`)
+        await shell.exec(`node deploy/env/check -o ${OPERATOR}`)
         
         // Update monitoring
         await program.chat.notify('\nUpdate monitoring configuration')

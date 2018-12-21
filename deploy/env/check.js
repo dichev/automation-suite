@@ -3,7 +3,7 @@
 
 /**
  * Usage:
- * $ node deploy/hermes-env/check --operator rtg --location belgium
+ * $ node deploy/env/check --operator rtg --location belgium
  */
 
 
