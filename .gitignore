@@ -1,9 +1,7 @@
 .idea/
 node_modules/
-.secret.json
-lab/
-test/
 **/output/*
-.history
 snippets/
+.history
 .dev/
+.tmp/

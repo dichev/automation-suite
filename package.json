@@ -12,9 +12,11 @@
     "docs": "node docs/generate --groups all"
   },
   "dependencies": {
+    "color-name": "^1.1.4",
     "configurator": "git+ssh://git@gitlab.dopamine.bg:devops/configurator.git",
     "deepmerge": "^3.0.0",
     "dopamine-toolbox": "git+ssh://git@gitlab.dopamine.bg:devops/toolbox.git",
+    "diff": "^3.5.0",
     "handlebars": "^4.0.12",
     "node-fetch": "^2.2.0",
     "node-version-compare": "^1.0.1"
