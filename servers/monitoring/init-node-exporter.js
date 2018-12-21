@@ -3,23 +3,9 @@
 
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
-let program = new Program({ chat: cfg.chat.rooms.devops })
+let program = new Program({ chat: cfg.chat.rooms.test })
 
-let nodejsExporterService = `[Unit]
-Description=Node Exporter
-After=network.target
-
-[Service]
-User=node_exporter
-Group=node_exporter
-Type=simple
-ExecStart=/opt/node_exporter/node_exporter --collector.textfile.directory=/var/log/textfile_collector --collector.systemd
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-`
-// nodejs exporter port
+// node_exporter port
 const PORT = 9100;
 const IP1 = '192.168.100.64';
 const IP2 = '192.168.100.65';
@@ -38,7 +24,8 @@ program
 .parse()
 
 // filter by network
-program.params.hosts = Object.values(cfg.hosts).filter(h => program.params.networks.includes(h.network)).map(i => i.name).join(',')
+let filteredHosts = program.params.hosts.split(',')
+program.params.hosts = Object.values(cfg.hosts).filter(h => program.params.networks.includes(h.network) && filteredHosts.includes(h.name)).map(i => i.name).join(',')
 
 program.iterate('hosts', async (host) => {
     const params = program.params
@@ -52,15 +39,12 @@ program.iterate('hosts', async (host) => {
     if (!networks.includes(hostNetwork)) return;
 
     let hostIP = cfg.getHost(host).ip;
-
     console.log(`Starting script on HOST:(${host} : ${hostIP})...`)
     await program.chat.notify(`Starting script on HOST:(${host} : ${hostIP})...`)
 
     let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
-    let checkNetToolsInstalled = await ssh.exec(`dpkg -l | grep nettools > /dev/null 2>&1 && echo '1' || echo '0'`)
-    if (!checkNetToolsInstalled) {
-        // Install net-tools
+    if (! await ssh.packageExists('nettools')) {
         await ssh.exec('apt-get install -y net-tools > /dev/null')
     }
 
@@ -71,50 +55,48 @@ program.iterate('hosts', async (host) => {
         await program.chat.notify('Skipping host')
     }
     else {
-        // Install
-        await ssh.exec('rm -rfv /opt/node_exporter') //temp
-        let optNodeExporter = '/opt/node_exporter'
-        await program.chat.notify('Cloning exporters repo...')
-        if (!await ssh.exists('/opt/dopamine/exporters/.git')) {
-            let shell = await program.shell()
-            await shell.exec('rm -rf exporters')
-            await shell.exec('git clone git@gitlab.dopamine.bg:devops/monitoring/exporters.git')
-            await shell.exec(`rsync -azpv exporters root@${hostIP}:/opt/dopamine`)
-            await shell.exec('rm -rf exporters')
-        }
-        await ssh.exec(`ln -sfv /opt/dopamine/exporters/node_exporter ${optNodeExporter}`)
-        await ssh.exec(`chmod +x ${optNodeExporter}/node_exporter`)
+        // Remove previous symlink
+        await ssh.exec('rm -frv /opt/node_exporter') // temp
+
+        // Install (Some servers does not have git, so we rsync it instead)
+        // Starting local shell
+        let shell = await program.shell()
+        await shell.exec('rm -rf exporters') // delete locally
+        await program.chat.notify('Cloning exporters repo(Locally)')
+        await shell.exec('git clone git@gitlab.dopamine.bg:devops/monitoring/exporters.git')
+        await shell.exec(`rsync -vrltgoD --delete exporters root@${hostIP}:/opt/dopamine`)
+        await shell.exec('rm -rf exporters') // delete locally
+
+        await ssh.exec('chmod +x /opt/dopamine/exporters/node_exporter/node_exporter') // delete on server
+
+        // Add folder where logs will be placed
+        await ssh.exec('mkdir -p /var/log/textfile_collector')
 
         // Create user
         await program.chat.notify('Creating node_exporter user...')
         await ssh.exec('if ! grep -q node_exporter /etc/passwd ; then useradd -rs /bin/false node_exporter; fi')
 
         // Delete old service file
-        let nodeExporterService = '/etc/systemd/system/multi-user.target.wants/node_exporter.service';
-        if (await ssh.exists(nodeExporterService)) {
-            await ssh.exec(`rm ${nodeExporterService}`)
-        }
+        await ssh.exec(`rm -f /etc/systemd/system/multi-user.target.wants/node_exporter.service`)
+        await ssh.exec(`rm -f /etc/systemd/system/node_exporter.service`)
 
-        // systemd service
-        await program.chat.notify('Creating node_exporter service...')
-        await ssh.exec(`echo '${nodejsExporterService}' > /etc/systemd/system/node_exporter.service`)
+        let optNodeExporterPath = '/opt/dopamine/exporters/node_exporter'
 
         // Service start
-        await program.chat.notify('Starting service...')
-        await ssh.exec('systemctl daemon-reload')
-        await ssh.exec('systemctl enable node_exporter.service')
+        await program.chat.notify('Creating & starting service...')
+        await ssh.exec(`systemctl enable ${optNodeExporterPath}/node_exporter.service`)
         await ssh.exec('systemctl restart node_exporter.service')
+        await program.sleep(1, 'Getting status too early lead to errors');
         await ssh.exec('systemctl status node_exporter.service')
 
-        let isInstalled = await ssh.exec(`dpkg -s iptables-persistent > /dev/null 2>&1 && echo '1' || echo '0'`)
-
         // Restore previous rules, prevent duplication
-        if (isInstalled === '0') {
+        if (! await ssh.packageExists('iptables-persistent')) {
             await ssh.exec(`echo iptables-persistent iptables-persistent/autosave_v4 boolean true | debconf-set-selections`)
             await ssh.exec(`echo iptables-persistent iptables-persistent/autosave_v6 boolean true | debconf-set-selections`)
             await ssh.exec(`apt-get -y install iptables-persistent > /dev/null`)
         }
 
+        // Remove previously added ips from us, then restore them
         await ssh.exec(`iptables-save > /etc/iptables/rules.v4`)
         await ssh.exec(`cat /etc/iptables/rules.v4 | grep -v ${PORT} > /tmp/rules.v4 && mv /tmp/rules.v4 /etc/iptables/rules.v4`)
         await ssh.exec('iptables-restore /etc/iptables/rules.v4')
@@ -131,16 +113,18 @@ program.iterate('hosts', async (host) => {
         await ssh.exec(`iptables -I INPUT -p tcp -s ${IP7} --dport ${PORT} -j ACCEPT`)
         await ssh.exec(`iptables -I INPUT -p tcp -s ${IP8} --dport ${PORT} -j ACCEPT`)
         await ssh.exec(`iptables-save > /etc/iptables/rules.v4`)
+
+        // Sleep
+        await program.sleep(2, 'Waiting a bit just in case');
+
+        // Check exporter works
+        await program.chat.notify('Checking exporter work... Please wait, it could take some time')
+        await ssh.exec(`netstat -plant | grep node_exporter | grep -i listen || echo 'node_exporter not running'`)
+
+        // Check version
+        await ssh.exec(`${optNodeExporterPath}/node_exporter --version || echo 'node_exporter not installed!!!'`)
+
+        await program.chat.notify('Success')
     }
-    await program.sleep(2, 'Waiting a bit just in case');
-
-    // Check exporter works
-    await program.chat.notify('Checking exporter work... Please wait, it could take some time')
-    await ssh.exec(`netstat -plant | grep node_exporter | grep -i listen || echo 'node_exporter not running'`)
-
-    // Check version
-    await ssh.exec(`/opt/node_exporter/node_exporter --version || echo 'node_exporter not installed!!!'`)
-
-    await program.chat.notify('Success')
 })
 

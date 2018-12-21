@@ -7,40 +7,6 @@ let program = new Program({ chat: cfg.chat.rooms.devops })
 
 let HOSTS = Object.keys(cfg.hosts).filter(h => h.includes('sofia-mysql') && (h.includes('archive') || h.includes('mirror')))
 
-//@ вместо динамични темлейти, то по добре да се вкарат в mysql репото (https://gitlab.dopamine.bg/servers/servers-conf-mysql)
-//@ така ще могат лесно да се customize-ват и ще има видимост какви са
-let wrapperConfigTemplate = `[pyxbackup]
-stor_dir = /backups/{{HOST}}/stor
-work_dir = /backups/{{HOST}}/work
-retention_sets = 8
-# Whether to compress backups
-compress = 1
-# What compression tool, supports gzip and qpress
-compress_with = gzip
-extra_ibx_options = --slave-info --galera-info
-`
-let cronBackupTemplate = `
-##(do not run when running full)    
-0 {{HOUR}} * * {{incremental}} root {{pyxBackupBinPath}} --config {{wrapperCongPath}} incr {{mysqlHost}}
-##(once a week)
-0 {{HOUR}} * * {{full}}        root {{pyxBackupBinPath}} --config {{wrapperCongPath}} full {{mysqlHost}}
-`
-let archiveStartTime = 16,
-    mirrorStartTime  = 0;
-
-
-function getCronDays(min, max) { //@ ползвайки репо тези неща няма да са нужни
-    let excluded = Math.floor(Math.random() * (max - min) + min);
-    let list = [];
-    for (let i = min; i <= max; i++) {
-        if (i !== excluded) list.push(i);
-    }
-    return {
-        full: excluded,
-        incremental: list.join(',')
-    };
-}
-
 program
 .description('Setup backups')
 .option('-h, --hosts <list|all>', 'The target host names', { choices: HOSTS, required: true })
@@ -49,17 +15,13 @@ program
     console.log(`Starting script on HOST:(${host} : ${hostIP})...`)
     await program.chat.notify(`Starting script on HOST:(${host} : ${hostIP})...`)
 
-    console.log(host)
-    let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
+    let ssh = await program.ssh(hostIP, 'root')
 
-    let checkXtraBackupInstalled = await ssh.exec(`dpkg -l | grep xtrabackup > /dev/null 2>&1 && echo '1' || echo '0'`) //@ use ssh.packageExists()
-    if (!checkXtraBackupInstalled) {
+    if (! await ssh.packageExists('xtrabackup')) {
         await ssh.exec(`apt-get update`);
         await ssh.exec(`apt-get install xtrabackup`);
     }
-
-    let checkGitInstalled = await ssh.exec(`dpkg -l | grep git > /dev/null 2>&1 && echo '1' || echo '0'`)
-    if (!checkGitInstalled) {
+    if (! await ssh.packageExists('git')) {
         throw 'No git installed!'
     }
 
@@ -76,58 +38,41 @@ program
         await ssh.exec(`mkdir -p /backups/${host}/stor`)
         await ssh.exec(`mkdir -p /backups/${host}/work`)
 
-        await program.chat.notify('Install python-mysqldb')
-        await ssh.exec(`apt-get install python-mysqldb`)
+        if(! await ssh.packageExists('python-mysqldb')) {
+            await program.chat.notify('Installing python-mysqldb...')
+            await ssh.exec(`apt-get install python-mysqldb`)
+        }
 
         await program.chat.notify('Cloning pyxbackup repo...')
-        await ssh.exec(`git clone git@gitlab.dopamine.bg:devops/backups/xtrabackup.git ${pyxBackupPath}`)
+        await ssh.exec(`git clone https://github.com/dotmanila/pyxbackup.git ${pyxBackupPath}`)
+        await ssh.chdir(pyxBackupBinPath)
+        //reset to the last stable commit. (No tags available in repo)
+        await ssh.exec('git reset --hard 3e3f7af81a312209e19390eee9b947e61e6f9ec9')
         await ssh.exec(`chmod 0755 ${pyxBackupBinPath}`)
     }
 
     // Wrapper config
-    let wrapperConfig = wrapperConfigTemplate
-    wrapperConfig = wrapperConfig.replace(/{{HOST}}/g, host)
     let wrapperCongPath = '/etc/pyxbackup.cnf'
+
     await program.chat.notify('Creating pyxbackup.cnf')
-    await ssh.exec(`echo '${wrapperConfig}' > ${wrapperCongPath}`)
+    await ssh.exec(`cat /opt/servers-conf-mysql/pyxbackup/conf/${host}.cnf > ${wrapperCongPath}`)
 
-
+    
     // Create cron file
     await program.chat.notify('Creating cron.d file')
-    let cronDays = getCronDays(0, 6)
-    let cronBackup = cronBackupTemplate,
-        full = cronDays.full,
-        incremental = cronDays.incremental;
-
-    cronBackup = cronBackup.replace(/{{wrapperCongPath}}/g, wrapperCongPath)
-    cronBackup = cronBackup.replace(/{{pyxBackupBinPath}}/g, pyxBackupBinPath)
-    cronBackup = cronBackup.replace(/{{full}}/g, full)
-    cronBackup = cronBackup.replace(/{{incremental}}/g, incremental)
-    if (host.includes('archive')) {
-        cronBackup = cronBackup.replace(/{{HOUR}}/g, archiveStartTime)
-    } else {
-        cronBackup = cronBackup.replace(/{{HOUR}}/g, mirrorStartTime)
-    }
-
-    // get the correct host from .my.cnf, because there are 2 versions: 127.0.0.1 && localhost
-    let mysqlHost = await ssh.exec(`cat /root/.my.cnf | grep host | cut -d'=' -f 2`)
-    let mysqlHostParam = '';
-    if (mysqlHost !== '') {
-        mysqlHostParam = ` -H ${mysqlHost}`;
-    }
-    cronBackup = cronBackup.replace(/{{mysqlHost}}/g, mysqlHostParam)
-    await ssh.exec(`echo '${cronBackup}' > /etc/cron.d/pyxbackup`)
-
-    // Print custom cnf info
-    await ssh.exec(`echo /opt/servers-conf-mysql/custom/${host}.cnf`)
-
+    await ssh.exec(`ln -sfv /opt/servers-conf-mysql/pyxbackup/crons/${host} /etc/cron.d/${host}`)
+    // Delete old pyxbackup file in cron.d
+    if (await ssh.exists(`/etc/cron.d/${host}`)) {
+        await ssh.exec('rm -f /etc/cron.d/pyxbackup')
+    }  
+    
     // Check wrapper version
     await program.chat.notify(`Checking pyxBackup version`)
     await ssh.exec(`${pyxBackupBinPath} --v`)
 
     // Remove old cron file
-    await program.chat.notify(`Remove old cron file`)
-    await ssh.exec(`rm -vf /etc/cron.d/mysqldump-secure`)
+    // await program.chat.notify(`Remove old cron file`)
+    // await ssh.exec(`rm -vf /etc/cron.d/mysqldump-secure`)
 
     // Clone backups-collector
     if (! await ssh.exists(`/opt/backups-collector/.git`)) {
@@ -135,16 +80,17 @@ program
     }
     // Update project - backups-collector
     await ssh.chdir('/opt/backups-collector/')
+    await ssh.exec('git reset --hard')
     await ssh.exec('git pull')
+    await ssh.exec(`echo '{"hostname": "${host}"}' > /opt/backups-collector/.hostConf.json`)
+    await ssh.exec('rm -rf /opt/backups-collector/node_modules') // TEMP!!!!!
     await ssh.exec('npm install')
     await program.sleep(1, 'Waiting a bit just in case');
-    await ssh.exec('cp node_modules/configurator/secret/.credentials.example.json /opt/backups-collector/.credentials.json')
 
     await ssh.exec('mkdir -p /var/log/textfile_collector')
-    await ssh.exec(`ln -sf /opt/backups-collector/backups-collector.service /etc/systemd/system/backups-collector.service`) //@ systemctl enable backups-collector.service
 
     await program.chat.notify('Starting service...')
-    await ssh.exec('systemctl daemon-reload')
+    await ssh.exec('systemctl enable /opt/backups-collector/backups-collector.service')
     await ssh.exec('systemctl restart backups-collector.service')
 
     await program.chat.notify('Success')
