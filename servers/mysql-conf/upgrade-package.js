@@ -40,7 +40,7 @@ program
             await program.sleep(2)
         }
 
-        console.log('Ready (press crtl+c to exit)')
+        console.log('\n\n    Ready (press crtl+c to exit)\n\n')
         
         // await ssh.disconnect()
 })
