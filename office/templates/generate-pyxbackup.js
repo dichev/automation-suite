@@ -44,7 +44,8 @@ program
                 let name = dest + '/' + file.slice(0, -'.hbs'.length).replace(/host/, host)
 
             let vars = {
-                host: host
+                host: host,
+                hour: host.includes('archive') ? 14  : 8,
             }
             let content = template(vars)
             await save(name, content)
