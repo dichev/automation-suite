@@ -7,9 +7,10 @@ const inquirer = require('inquirer')
 const Servers = Object.keys(cfg.hosts)
 
 inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'))
+const initialFilter = process.argv[2] || ''
 
-let ServersFilter = function(answersSoFar,input){
-    input = input || '';
+let ServersFilter = (answersSoFar,input) => {
+    input = input || initialFilter;
     let ServersFiltered = Servers.filter(el => el.match(new RegExp(input,'i')) )
     return new Promise(resolve => resolve(ServersFiltered) );
 }
