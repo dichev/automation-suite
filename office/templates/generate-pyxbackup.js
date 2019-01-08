@@ -25,6 +25,15 @@ const save = async (file, content) => {
     }
 }
 
+function getDays(item) {
+    let nums = [...Array(7).keys()];
+    let index = nums.indexOf(item);
+    if (index !== -1) nums.splice(index, 1);
+
+    return nums;
+}
+let i=0;
+
 let program = new Program()
 program
 .description('Generate prometheus config specific location')
@@ -38,17 +47,21 @@ program
     let templates = (await new Shell().exec(`cd ${TEMPLATES} && find -type f`, { silent: true })).split('\n').map(t => t.trim().slice(2))
 
     for(let file of templates) {
-
         if (file.endsWith('.hbs')) {
             const template = Handlebars.compile(fs.readFileSync(`${TEMPLATES}/${file}`).toString(), {noEscape: true})
                 let name = dest + '/' + file.slice(0, -'.hbs'.length).replace(/host/, host)
 
             let vars = {
                 host: host,
+                fullDays: i,
+                incrDays: getDays(i),
                 hour: host.includes('archive') ? 14  : 8,
             }
+
             let content = template(vars)
             await save(name, content)
         }
     }
+    i++;
+    if(i === 7) i=0;
 })
