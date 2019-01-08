@@ -10,7 +10,7 @@ inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'))
 
 let ServersFilter = function(answersSoFar,input){
     input = input || '';
-    let ServersFiltered = Servers.filter(el => el.indexOf(input) > -1 )
+    let ServersFiltered = Servers.filter(el => el.match(new RegExp(input,'i')) )
     return new Promise(resolve => resolve(ServersFiltered) );
 }
 
