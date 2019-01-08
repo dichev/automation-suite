@@ -16,7 +16,7 @@
     "configurator": "git+ssh://git@gitlab.dopamine.bg:devops/configurator.git",
     "deepmerge": "^3.0.0",
     "diff": "^3.5.0",
-    "dopamine-toolbox": "git+ssh://git@gitlab.dopamine.bg:devops/toolbox.git#n.terziev/shell",
+    "dopamine-toolbox": "git+ssh://git@gitlab.dopamine.bg:devops/toolbox.git",
     "handlebars": "^4.0.12",
     "inquirer": "^6.2.1",
     "inquirer-autocomplete-prompt": "^1.0.1",
