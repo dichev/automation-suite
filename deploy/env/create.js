@@ -94,7 +94,7 @@ program
         await web1.exec(`php ${DEST}/platform/bin/cmd.php history-partitions`)
         await web1.exec(`php ${DEST}/platform/bin/cmd.php partition-tables`)
 
-        await program.confirm('Continue?')
+        await program.confirm('Are the cron results okay?')
         await shell.exec(`node servers/servers-conf/list-changes --locations ${LOCATION}`)
 
         // System configurations
