@@ -10,8 +10,8 @@ const path = require('path')
 const Handlebars = require('handlebars')
 
 const NEW_LINE = '\r\n'; //require('os').EOL
-const TEMPLATES = `d:/www/servers/template-generator/templates/pyxbackup`
-const DEST = `d:/www/servers`
+const TEMPLATES = `d:/www/servers/template-generator/templates/prometheus`
+const DEST = `d:/www/monitoring/`
 
 const save = async (file, content) => {
     console.log(file)
@@ -25,43 +25,42 @@ const save = async (file, content) => {
     }
 }
 
-function getDays(item) {
-    let nums = [...Array(7).keys()];
-    let index = nums.indexOf(item);
-    if (index !== -1) nums.splice(index, 1);
-
-    return nums;
-}
-let i=0;
-
 let program = new Program()
 program
-.description('Generate pyxbackup config specific location')
-.option('-h, --hosts <list|all>', 'The target host names', { choices: Object.keys(cfg.hosts), required: true })
-.option('-f, --force', 'Skip manual changes validations and proceed on your risk')
-.iterate('hosts', async (host) => {
-    console.log(`Generating pyxbackup...`)
-    const dest = (program.params.dest || DEST).replace(/\\/g, '/') + `/servers-conf-mysql/pyxbackup`
-    console.log(host)
+.description('Generate prometheus config specific location')
+.run(async () => {
+    console.log(`Generating server-conf..`)
+    const dest = (program.params.dest || DEST).replace(/\\/g, '/') + `prometheus`
 
     let templates = (await new Shell().exec(`cd ${TEMPLATES} && find -type f`, { silent: true })).split('\n').map(t => t.trim().slice(2))
+
+    let hosts = Object.values(cfg.hosts).filter(h => h.network === 'live' || h.network === 'devops').map(i => i.name)
+    let mysqlServers = []
+    let nodeServers = []
+
+    hosts.forEach( (host)=> {
+        let hostInfo = cfg.getHost(host)
+
+        if(hostInfo.type.includes('mysql')) {
+            mysqlServers.push(hostInfo)
+        }
+        nodeServers.push(hostInfo)
+    })
 
     for(let file of templates) {
         if (file.endsWith('.hbs')) {
             const template = Handlebars.compile(fs.readFileSync(`${TEMPLATES}/${file}`).toString(), {noEscape: true})
-                let name = dest + '/' + file.slice(0, -'.hbs'.length).replace(/host/, host)
+
+            let name = dest + '/' + file.slice(0, -'.hbs'.length)
 
             let vars = {
-                host: host,
-                fullDays: i,
-                incrDays: getDays(i),
-                hour: host.includes('archive') ? 14  : 8,
+                node: nodeServers,
+                mysql: mysqlServers,
             }
 
             let content = template(vars)
             await save(name, content)
         }
     }
-    i++;
-    if(i === 7) i=0;
 })
+
