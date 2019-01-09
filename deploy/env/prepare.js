@@ -84,8 +84,8 @@ program
         }
         
         if(reload){
-            console.log('Reload office dns cache..')
-            let sshOfficeDNS = await new SSHClient().connect({host: cfg.OfficeConfig.hosts['sofia-dhcp-main'].ip, username: 'root'})
+            console.log('\nReload office dns cache..')
+            let sshOfficeDNS = await new SSHClient().connect({host: cfg.hosts['sofia-dhcp-main'].ip, username: 'root'})
             await sshOfficeDNS.exec('/etc/init.d/bind9 restart')
             await sshOfficeDNS.disconnect()
         }
