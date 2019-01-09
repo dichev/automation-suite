@@ -25,8 +25,8 @@ program
         await program.confirm(`Continue?`)
         
         
-        await web1.exec('git clone git@gitlab.dopamine.bg:releases/docker-conf.git /opt/docker-conf')
-        await web1.chdir('/opt/docker-conf')
+        await web1.exec('git clone git@gitlab.dopamine.bg:releases/docker-conf.git /opt/dopamine/docker-conf')
+        await web1.chdir('/opt/dopamine/docker-conf')
         await web1.exec('docker stack deploy --with-registry-auth -c cayetano-stack.yml cayetano')
         // await web1.exec('watch -n 1 docker stack ps cayetano')
         console.log('Check this on web1:\n  watch -n 1 docker stack ps cayetano')

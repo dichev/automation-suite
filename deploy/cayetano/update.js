@@ -18,7 +18,7 @@ program
         let web1 = await new SSHClient().connect({ host: cfg.locations[location].hosts.web1, username: 'root' })
         
         
-        await web1.chdir('/opt/docker-conf')
+        await web1.chdir('/opt/dopamine/docker-conf')
         await web1.exec('git pull')
         await web1.exec('docker stack deploy --with-registry-auth -c cayetano-stack.yml cayetano')
         // await web1.exec('watch -n 1 docker stack ps cayetano')
