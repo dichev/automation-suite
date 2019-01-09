@@ -106,5 +106,5 @@ PATH=C:\Program Files\Git\bin             // this will allow node to run bash (h
 ```bash
 ?[32m hey, I am green ?[39m
 ```
-This happens when child process have colors and it's stdio is attached to the parent process. It seems to be limititation of the terminal emulator, so the best way to fix it is to switch to [ConEmu](https://conemu.github.io/)
+This happens when child process have colors and it's stdio is attached to the parent process. It seems to be limititation of the terminal emulator, so the best way to fix it is to switch to [ConEmu](https://conemu.github.io/) and set its terminal exactly to: `"C:\Program Files\Git\bin\bash.exe"`
 
