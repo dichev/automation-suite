@@ -108,10 +108,11 @@ program.iterate('hosts', async (host) => {
         // Setting security rules
         await program.chat.notify('Setting security rules..')
         await ssh.exec(`iptables -I INPUT -p tcp -s 0.0.0.0/0 --dport ${PORT} -j DROP`)
-        ipConfig[hostNetwork].forEach(async(IP) => {
-            await ssh.exec(`iptables -I INPUT -p tcp -s ${IP} --dport ${PORT} -j ACCEPT`)
-        })
+        for(let y=0; y < ipConfig[hostNetwork].length; y++) {
+            await ssh.exec(`iptables -I INPUT -p tcp -s ${ipConfig[hostNetwork][y]} --dport ${PORT} -j ACCEPT`)
+        }
         await ssh.exec(`iptables-save > /etc/iptables/rules.v4`)
+
 
         // Sleep
         await program.sleep(2, 'Waiting a bit just in case');
