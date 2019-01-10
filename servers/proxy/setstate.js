@@ -4,7 +4,7 @@
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 const SSHClient = require('dopamine-toolbox').SSHClient
-const proxyPort = 1080
+const proxyPort = 3128
 
 let program = new Program({chat: cfg.chat.rooms.devops})
 
@@ -15,19 +15,12 @@ program
     .iterate('operators', async (operator) => {
 
         const   location = cfg.getLocationByOperator(operator).name,
-                opDir = '/home/dopamine/production/' + cfg.operators[operator].dir,
-                web = cfg.locations[location].hosts.webs[0],
-                lb = cfg.locations[location].hosts.lb,
-                state = program.params.state,
-                stateString = (state === 'active'? `\\"${lb}:${proxyPort}\\"` : 'false');
+            opDir = '/home/dopamine/production/' + cfg.operators[operator].dir,
+            web = cfg.locations[location].hosts.webs[0],
+            lb = cfg.locations[location].hosts.lb,
+            state = program.params.state,
+            stateString = (state === 'active'? `\\"${lb}:${proxyPort}\\"` : 'false');
 
-        let sshLb           = await new SSHClient().connect({host: lb, username: 'root'})
-        let existsPkgLb     = await sshLb.packageExists('tinyproxy')
-        let existsCfg       = await sshLb.exists('/etc/tinyproxy/tinyproxy.conf') || await sshLb.exists('/etc/tinyproxy.conf')
-        let existsCfgDope   = await sshLb.exists('/opt/servers-conf/proxy/tinyproxy.conf')
-        await sshLb.disconnect()
-        if(existsCfg && existsCfgDope && existsPkgLb){
-            console.log(`TinyProxy config found! Setting up operator: ${operator}`)
             let configFile  = `${opDir}/wallet/config/server.config.php`
             let sshWeb      = await new SSHClient().connect({host: web.ip, username: 'root'})
             let proxyCnf    = await sshWeb.findInFile(configFile,'CURLOPT_PROXY')
@@ -45,10 +38,4 @@ program
             await sshWeb.chdir(opDir)
             await sshWeb.exec(`/home/dopamine/bin/webs-sync ${opDir}`)
             await sshWeb.disconnect()
-        }else{
-            throw(`TinyProxy Does not exists on lb or is not configured properly!`
-                        +`\nexistsPkgLb: ${existsPkgLb}`
-                        +`\nexistsCfg: ${existsCfg}`
-                        +`\nexistsCfgDope: ${existsCfgDope}\n`)
-        }
-})
+    })
