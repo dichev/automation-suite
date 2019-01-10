@@ -61,6 +61,7 @@ program.run(async () => {
             
             excludeTables: [
                 '__sync_users_bet_limits_default_prev',
+                '__sync_users_bet_limits_default_next',
                 // 'games_configuration_view',
                 'bonus_usage_report_archive', // TMP due permission error
                 'view_rtp_monthly' // TMP due permission error
