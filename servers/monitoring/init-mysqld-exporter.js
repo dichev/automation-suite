@@ -4,17 +4,10 @@
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 let program = new Program({ chat: cfg.chat.rooms.devops })
+const ipConfig = require('./ipConfig')
 
 const PORT = 9104;
 const MYSQL_PORT = 3306;
-const IP1 = '192.168.100.64';
-const IP2 = '192.168.100.65';
-const IP3 = '192.168.100.14';
-const IP4 = '192.168.110.64';
-const IP5 = '192.168.110.65';
-const IP6 = '192.168.110.14';
-const IP7 = '192.168.100.66';
-const IP8 = '192.168.110.66';
 const devQAMySQLIP = '192.168.14.31';
 
 program
@@ -38,6 +31,8 @@ program.iterate('hosts', async (host) => {
 
     // Execute only if the host network is included
     if (!networks.includes(hostNetwork)) return;
+
+    if (!ipConfig[hostNetwork]) throw Error(`${hostNetwork} does not exist in ipConfig!`)
 
     let hostIP = cfg.getHost(host).ip;
 
@@ -113,14 +108,10 @@ program.iterate('hosts', async (host) => {
         // Setting security rules
         await program.chat.notify('Setting security rules..')
         await ssh.exec(`iptables -I INPUT -p tcp -s 0.0.0.0/0 --dport ${PORT} -j DROP`)
-        await ssh.exec(`iptables -I INPUT -p tcp -s ${IP1} --dport ${PORT} -j ACCEPT`)
-        await ssh.exec(`iptables -I INPUT -p tcp -s ${IP2} --dport ${PORT} -j ACCEPT`)
-        await ssh.exec(`iptables -I INPUT -p tcp -s ${IP3} --dport ${PORT} -j ACCEPT`)
-        await ssh.exec(`iptables -I INPUT -p tcp -s ${IP4} --dport ${PORT} -j ACCEPT`)
-        await ssh.exec(`iptables -I INPUT -p tcp -s ${IP5} --dport ${PORT} -j ACCEPT`)
-        await ssh.exec(`iptables -I INPUT -p tcp -s ${IP6} --dport ${PORT} -j ACCEPT`)
-        await ssh.exec(`iptables -I INPUT -p tcp -s ${IP7} --dport ${PORT} -j ACCEPT`)
-        await ssh.exec(`iptables -I INPUT -p tcp -s ${IP8} --dport ${PORT} -j ACCEPT`)
+
+        ipConfig[hostNetwork].forEach(async(IP) => {
+            await ssh.exec(`iptables -I INPUT -p tcp -s ${IP} --dport ${PORT} -j ACCEPT`)
+        })
         await ssh.exec(`iptables-save > /etc/iptables/rules.v4`)
 
 
