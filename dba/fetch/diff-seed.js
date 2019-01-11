@@ -13,13 +13,13 @@ const path = require('path')
 const cfg = require('configurator')
 const colors = require('colors/safe')
 
-const DEST = path.resolve(__dirname + '/../../.tmp/schema-diff').replace(/\\/g, '/')
+const DEST = path.resolve(__dirname + '/../../.tmp/diff-seed').replace(/\\/g, '/')
 const DATABASES = ['platform', 'demo', 'panel', 'jackpot', 'stats', 'segments', 'tournaments', 'rewards', 'bonus', 'archive']
 
 
 let program = new Program()
 program
-    .description('Compare database schemas of the operators')
+    .description('Compare database seed of the operators')
     .option('-o, --operators <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
     .option('--base <operator>', 'The operator which database will be used as base for the comparison. By default will be used the first one from the --operators list')
     .parse()
@@ -58,23 +58,52 @@ program.run(async () => {
         
         await dump({
             connection: db.getConnection(),
-            
-            excludeTables: [
-                '__sync_users_bet_limits_default_prev',
-                '__sync_users_bet_limits_default_next',
-                // 'games_configuration_view',
-                'bonus_usage_report_archive', // TMP due permission error
-                'view_rtp_monthly' // TMP due permission error
-            ],
+    
             dest: DEST + '/' + dbname + '.sql',
             modifiers: [
-                (output) => output.replace(/ AUTO_INCREMENT=\d+/g, ''),
-                (output) => output.replace(/ DEFINER=`.+`/g, ''),
-                (output) => output.replace(/ SQL SECURITY INVOKER/g, ''),
-                (output) => output.replace(/\(PARTITION [\s\S]+ ENGINE = InnoDB\) /g, ' --- list of available partitions ---\n'),
+                (output) => output.replace(/ AUTO_INCREMENT=\d+/g, '')
             ],
+            
             sortKeys: true,
-            exportData: false // be careful with this option on mirrors
+            exportSchema: false,
+            exportData: true, // be careful with this option on mirrors
+    
+            reorderColumns: {
+                _commands: 'command ASC',
+                // platform
+                languages: 'name ASC',
+                settings: 'type ASC',
+                translations: '`key` ASC',
+                // panel
+                _configuration: '`key` ASC',
+            },
+            excludeColumns: {
+                _commands: ['id','timeLastRun', 'status'],
+                // platform
+                settings: ['id','value'],
+                languages: ['id'],
+                translations: ['translationId'],
+                // panel
+                _roles: ['createdAt', 'updatedAt'],
+                _configuration: ['id', 'value'],
+            },
+            
+            includeTables: [
+                // common
+                "_commands",
+                // platform
+                "games_providers",
+                "languages",
+                "settings",
+                "transactions_rgi_statuses",
+                "transactions_round_statuses",
+                "transactions_statuses",
+                "transactions_types",
+                "translations",
+                // panel
+                "_roles",
+                "_configuration",
+            ]
         })
         
     }
@@ -118,7 +147,8 @@ program.run(async () => {
             }
         })
         if (totalDiffs > 0) {
-            console.info(`Total diffs: ${totalDiffs} lines`)
+            console.info(`\nTotal diffs: ${totalDiffs} lines`)
+            console.info(`See: diff ${DEST + '/' + BASE} ${DEST + '/' + TARGET}`)
             console.info('-'.repeat(60))
         }
     }
