@@ -38,7 +38,7 @@ const getOperatorVars = (operator) => {// TODO: these are custom mappings from t
     return Object.assign({}, operator, {
         fpm: {
             shared: false,
-            maxRequests: 1500,
+            maxRequests: 1000,
             port: operator.fpm.port,
             processes: operator.fpm.processes
         },
