@@ -23,12 +23,13 @@ program
     .iterate('hosts', async (host) => {
         
         let h = cfg.hosts[host]
-        let hostsList = cfg.locations[h.location].hosts
-        let sshlb = await program.ssh(hostsList.lb, 'root')
+        let IP = h.ip
+        let hosts = cfg.locations[h.location].hosts
+        let sshlb = await program.ssh(hosts.lb, 'root')
         
-        await sshlb.exec('switch-webs --quiet --webs=all --operators=all --exclude-webs=' + h.alias)
+        await sshlb.exec('switch-webs --quiet --webs=all --operators=all --exclude-webs=' + hosts.webs.find(w => w.ip === IP).name)
         
-        let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
+        let ssh = await program.ssh(IP, 'root')
         
         //await ssh.exec('ssh-keyscan -H '+SoftBuild+' >> ~/.ssh/known_hosts ')
         await ssh.exec('apt-get -qq update && apt-get -qq install libxslt1.1 libreadline7 -y')
