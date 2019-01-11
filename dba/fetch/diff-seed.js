@@ -74,6 +74,8 @@ program.run(async () => {
                 languages: 'name ASC',
                 settings: 'type ASC',
                 translations: '`key` ASC',
+                games: 'gameName ASC',
+                games_maths: 'mathName ASC',
                 // panel
                 _configuration: '`key` ASC',
             },
@@ -83,6 +85,8 @@ program.run(async () => {
                 settings: ['id','value'],
                 languages: ['id'],
                 translations: ['translationId'],
+                games: ['id', 'status', 'gameNameMask'],
+                games_maths: ['id'],
                 // panel
                 _roles: ['createdAt', 'updatedAt'],
                 _configuration: ['id', 'value'],
@@ -100,6 +104,8 @@ program.run(async () => {
                 "transactions_statuses",
                 "transactions_types",
                 "translations",
+                "games",
+                "games_maths",
                 // panel
                 "_roles",
                 "_configuration",
