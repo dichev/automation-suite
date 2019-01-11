@@ -3,18 +3,11 @@
 
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
-let program = new Program({ chat: cfg.chat.rooms.test })
+let program = new Program({ chat: cfg.chat.rooms.devops })
+const ipConfig = require('./ipConfig')
 
 // node_exporter port
 const PORT = 9100;
-const IP1 = '192.168.100.64';
-const IP2 = '192.168.100.65';
-const IP3 = '192.168.100.14';
-const IP4 = '192.168.110.64';
-const IP5 = '192.168.110.65';
-const IP6 = '192.168.110.14';
-const IP7 = '192.168.100.66';
-const IP8 = '192.168.110.66';
 
 program
 .description('Setup monitoring: Node Exporter')
@@ -38,7 +31,10 @@ program.iterate('hosts', async (host) => {
     // Execute only if the host network is included
     if (!networks.includes(hostNetwork)) return;
 
+    if (!ipConfig[hostNetwork]) throw Error(`${hostNetwork} does not exist in ipConfig!`)
+
     let hostIP = cfg.getHost(host).ip;
+
     console.log(`Starting script on HOST:(${host} : ${hostIP})...`)
     await program.chat.notify(`Starting script on HOST:(${host} : ${hostIP})...`)
 
@@ -58,14 +54,22 @@ program.iterate('hosts', async (host) => {
         // Remove previous symlink
         await ssh.exec('rm -frv /opt/node_exporter') // temp
 
-        // Install (Some servers does not have git, so we rsync it instead)
-        // Starting local shell
-        let shell = await program.shell()
-        await shell.exec('rm -rf exporters') // delete locally
-        await program.chat.notify('Cloning exporters repo(Locally)')
-        await shell.exec('git clone git@gitlab.dopamine.bg:devops/monitoring/exporters.git')
-        await shell.exec(`rsync -vrltgoD --delete exporters root@${hostIP}:/opt/dopamine`)
-        await shell.exec('rm -rf exporters') // delete locally
+        if(await ssh.packageExists('git')) {
+            if(!await ssh.exists('/opt/dopamine/exporters/')) {
+                await ssh.exec('git clone git@gitlab.dopamine.bg:devops/monitoring/exporters.git /opt/dopamine/exporters')
+            }
+            await ssh.chdir('/opt/dopamine/exporters')
+            await ssh.exec('git pull')
+        } else {
+            // Install (Some servers does not have git, so we rsync it instead)
+            // Starting local shell
+            let shell = await program.shell()
+            await shell.exec('rm -rf exporters') // delete locally
+            await program.chat.notify('Cloning exporters repo(Locally)')
+            await shell.exec('git clone git@gitlab.dopamine.bg:devops/monitoring/exporters.git')
+            await shell.exec(`rsync -vrltgoD --delete exporters root@${hostIP}:/opt/dopamine`)
+            await shell.exec('rm -rf exporters') // delete locally
+        }
 
         await ssh.exec('chmod +x /opt/dopamine/exporters/node_exporter/node_exporter') // delete on server
 
@@ -104,15 +108,11 @@ program.iterate('hosts', async (host) => {
         // Setting security rules
         await program.chat.notify('Setting security rules..')
         await ssh.exec(`iptables -I INPUT -p tcp -s 0.0.0.0/0 --dport ${PORT} -j DROP`)
-        await ssh.exec(`iptables -I INPUT -p tcp -s ${IP1} --dport ${PORT} -j ACCEPT`)
-        await ssh.exec(`iptables -I INPUT -p tcp -s ${IP2} --dport ${PORT} -j ACCEPT`)
-        await ssh.exec(`iptables -I INPUT -p tcp -s ${IP3} --dport ${PORT} -j ACCEPT`)
-        await ssh.exec(`iptables -I INPUT -p tcp -s ${IP4} --dport ${PORT} -j ACCEPT`)
-        await ssh.exec(`iptables -I INPUT -p tcp -s ${IP5} --dport ${PORT} -j ACCEPT`)
-        await ssh.exec(`iptables -I INPUT -p tcp -s ${IP6} --dport ${PORT} -j ACCEPT`)
-        await ssh.exec(`iptables -I INPUT -p tcp -s ${IP7} --dport ${PORT} -j ACCEPT`)
-        await ssh.exec(`iptables -I INPUT -p tcp -s ${IP8} --dport ${PORT} -j ACCEPT`)
+        for(let y=0; y < ipConfig[hostNetwork].length; y++) {
+            await ssh.exec(`iptables -I INPUT -p tcp -s ${ipConfig[hostNetwork][y]} --dport ${PORT} -j ACCEPT`)
+        }
         await ssh.exec(`iptables-save > /etc/iptables/rules.v4`)
+
 
         // Sleep
         await program.sleep(2, 'Waiting a bit just in case');
