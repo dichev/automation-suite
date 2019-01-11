@@ -23,23 +23,25 @@
     * **[setup-all-vm](#gcloud-setup-all-vm)** - setup unified server configurations
 * **[monitoring](#monitoring)**
     * **[init-mysqld-exporter](#monitoring-init-mysqld-exporter)** - setup monitoring: Mysqld Exporter
-    * **[init-nodejs-exporter](#monitoring-init-nodejs-exporter)** - setup monitoring: Node Exporter
+    * **[init-node-exporter](#monitoring-init-node-exporter)** - setup monitoring: Node Exporter
 * **[mysql-conf](#mysql-conf)**
     * **[fetch-configs](#mysql-conf-fetch-configs)** - generate server-conf for specific location
     * **[fetch-dynamic-configs](#mysql-conf-fetch-dynamic-configs)** - generate server-conf for specific location
     * **[setup](#mysql-conf-setup)** - setup unified mysql configuration
     * **[update](#mysql-conf-update)** - setup unified mysql configuration
     * **[upgrade-package](#mysql-conf-upgrade-package)** - upgrade percona mysql package to it&#x27;s latest version
+* **[nginx](#nginx)**
+    * **[whitelist](#nginx-whitelist)** - whitelist ips for operator
 * **[php-binary](#php-binary)**
     * **[check](#php-binary-check)** 
     * **[init](#php-binary-init)** 
+* **[proxy](#proxy)**
+    * **[setstate](#proxy-setstate)** - switch proxy state [in/active] for operator[s]
+    * **[setup](#proxy-setup)** - tiny proxy setup.
 * **[servers-conf](#servers-conf)**
     * **[init](#servers-conf-init)** - setup unified server configurations
     * **[list-changes](#servers-conf-list-changes)** 
     * **[update](#servers-conf-update)** - auto update sever configurations by reloading one by one each server
-* **[tinyproxy](#tinyproxy)**
-    * **[setstate](#tinyproxy-setstate)** - switch proxy state [in/active] for operator[s]
-    * **[setup](#tinyproxy-setup)** - tiny proxy setup.
 * **[vm-setup](#vm-setup)**
     * **[add-ssh-key](#vm-setup-add-ssh-key)** - safely add ssh public key to multiple hosts
     * **[dnsmasq](#vm-setup-dnsmasq)** - setup dnsmasq configuration of the webs
@@ -401,10 +403,10 @@ Additional Options:
   --no-chat                  Disable chat notification if they are activated
   -h, --help                 output usage information
 ```
-### <a name="monitoring-init-nodejs-exporter"></a>init-nodejs-exporter
+### <a name="monitoring-init-node-exporter"></a>init-node-exporter
 Setup monitoring: Node Exporter
 ```
-Usage: node servers/monitoring/init-nodejs-exporter --hosts <list|all> --networks <list|all> 
+Usage: node servers/monitoring/init-node-exporter --hosts <list|all> --networks <list|all> 
 
 Setup monitoring: Node Exporter
 
@@ -535,6 +537,30 @@ Additional Options:
   --no-chat               Disable chat notification if they are activated
   -h, --help              output usage information
 ```
+## <a name="nginx"></a>nginx
+### <a name="nginx-whitelist"></a>whitelist
+Whitelist ips for operator
+```
+Usage: node servers/nginx/whitelist --operators <list|all> --ips <list|all> --task <string> 
+
+Whitelist ips for operator
+
+Options:
+  -o, --operators <list|all>  [required] Comma-separated list of operators
+  -i, --ips <list|all>        [required] Comma-separated list of ips to be checked/added
+  -t, --task <string>         [required] Task to be added to allow list
+
+Additional Options:
+  -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose               Turn ON log details of whats happening
+  -f, --force                 Suppress confirm messages (used for automation)
+  --dry-run                   Dry run mode will do everything as usual except commands execution
+  --quiet                     Turn off chat and some logs in stdout
+  --wait <int>                Pause between iterations in seconds
+  --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                   Disable chat notification if they are activated
+  -h, --help                  output usage information
+```
 ## <a name="php-binary"></a>php-binary
 ### <a name="php-binary-check"></a>check
 
@@ -573,6 +599,50 @@ Additional Options:
   --announce              Announce what and why is happening and delay the execution to give time to all to prepare
   --no-chat               Disable chat notification if they are activated
   -h, --help              output usage information
+```
+## <a name="proxy"></a>proxy
+### <a name="proxy-setstate"></a>setstate
+Switch proxy state [in/active] for operator[s]
+```
+Usage: node servers/proxy/setstate --operators <list|all> --state <string> 
+
+Switch proxy state [in/active] for operator[s]
+
+Options:
+  -o, --operators <list|all>  [required] Comma-separated list of operators
+  -s, --state <string>        [required] Desired state for this operator [active,inactive]
+
+Additional Options:
+  -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose               Turn ON log details of whats happening
+  -f, --force                 Suppress confirm messages (used for automation)
+  --dry-run                   Dry run mode will do everything as usual except commands execution
+  --quiet                     Turn off chat and some logs in stdout
+  --wait <int>                Pause between iterations in seconds
+  --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                   Disable chat notification if they are activated
+  -h, --help                  output usage information
+```
+### <a name="proxy-setup"></a>setup
+Tiny proxy setup.
+```
+Usage: node servers/proxy/setup --locations <list|all> 
+
+Tiny proxy setup.
+
+Options:
+  -l, --locations <list|all>  [required] Location
+
+Additional Options:
+  -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose               Turn ON log details of whats happening
+  -f, --force                 Suppress confirm messages (used for automation)
+  --dry-run                   Dry run mode will do everything as usual except commands execution
+  --quiet                     Turn off chat and some logs in stdout
+  --wait <int>                Pause between iterations in seconds
+  --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                   Disable chat notification if they are activated
+  -h, --help                  output usage information
 ```
 ## <a name="servers-conf"></a>servers-conf
 ### <a name="servers-conf-init"></a>init
@@ -640,50 +710,6 @@ Additional Options:
   --announce                                      Announce what and why is happening and delay the execution to give time to all to prepare
   --no-chat                                       Disable chat notification if they are activated
   -h, --help                                      output usage information
-```
-## <a name="tinyproxy"></a>tinyproxy
-### <a name="tinyproxy-setstate"></a>setstate
-Switch proxy state [in/active] for operator[s]
-```
-Usage: node servers/tinyproxy/setstate --operators <list|all> --state <string> 
-
-Switch proxy state [in/active] for operator[s]
-
-Options:
-  -o, --operators <list|all>  [required] Comma-separated list of operators
-  -s, --state <string>        [required] Desired state for this operator [active,inactive]
-
-Additional Options:
-  -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-  -v, --verbose               Turn ON log details of whats happening
-  -f, --force                 Suppress confirm messages (used for automation)
-  --dry-run                   Dry run mode will do everything as usual except commands execution
-  --quiet                     Turn off chat and some logs in stdout
-  --wait <int>                Pause between iterations in seconds
-  --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
-  --no-chat                   Disable chat notification if they are activated
-  -h, --help                  output usage information
-```
-### <a name="tinyproxy-setup"></a>setup
-Tiny proxy setup.
-```
-Usage: node servers/tinyproxy/setup --locations <list|all> 
-
-Tiny proxy setup.
-
-Options:
-  -l, --locations <list|all>  [required] Location
-
-Additional Options:
-  -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-  -v, --verbose               Turn ON log details of whats happening
-  -f, --force                 Suppress confirm messages (used for automation)
-  --dry-run                   Dry run mode will do everything as usual except commands execution
-  --quiet                     Turn off chat and some logs in stdout
-  --wait <int>                Pause between iterations in seconds
-  --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
-  --no-chat                   Disable chat notification if they are activated
-  -h, --help                  output usage information
 ```
 ## <a name="vm-setup"></a>vm-setup
 ### <a name="vm-setup-add-ssh-key"></a>add-ssh-key
