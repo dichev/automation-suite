@@ -11,8 +11,6 @@ const Program = require('dopamine-toolbox').Program
 const SSHClient = require('dopamine-toolbox').SSHClient
 const cfg = require('configurator')
 const CloudFlare = require('dopamine-toolbox').plugins.CloudFlare
-const deepMerge = require('deepmerge')
-const fs = require('fs')
 const log = console.log
 
 // Configuration
