@@ -1,0 +1,53 @@
+gcloud config set account y.georgiev@dopamine.bg
+gcloud config set project hermes-europe
+
+gcloud compute addresses create belgium-europe-template-lb --subnet=default --addresses=10.132.1.221 --region=europe-west1
+gcloud compute addresses create belgium-europe-template-web --subnet=default --addresses=10.132.1.222 --region=europe-west1
+gcloud compute addresses create belgium-europe-template-sql --subnet=default --addresses=10.132.1.223 --region=europe-west1
+gcloud compute addresses create belgium-europe-template-lb-external --network-tier=PREMIUM --region=europe-west1
+gcloud compute addresses create belgium-europe-template-web-external --network-tier=PREMIUM --region=europe-west1
+gcloud compute addresses create belgium-europe-template-sql-external --network-tier=PREMIUM --region=europe-west1
+
+
+gcloud compute instances create --can-ip-forward --tags=lb1,http-server,https-server --subnet=default --address=belgium-europe-template-lb-external --private-network-ip=belgium-europe-template-lb \
+--custom-cpu=2 --custom-memory=4G --boot-disk-size=20G --boot-disk-type=pd-ssd --image-family=debian-9 --image-project=debian-cloud --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-europe-template-lb
+gcloud compute instances create --can-ip-forward --tags=lb1,http-server,https-server --subnet=default --address=belgium-europe-template-web-external --private-network-ip=belgium-europe-template-web \
+--custom-cpu=2 --custom-memory=4G --boot-disk-size=20G --boot-disk-type=pd-ssd --image-family=debian-9 --image-project=debian-cloud --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-europe-template-web
+gcloud compute instances create --can-ip-forward --tags=lb1,http-server,https-server --subnet=default --address=belgium-europe-template-sql-external --private-network-ip=belgium-europe-template-sql \
+--custom-cpu=2 --custom-memory=4G --boot-disk-size=20G --boot-disk-type=pd-ssd --image-family=debian-9 --image-project=debian-cloud --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-europe-template-sql
+
+
+gcloud compute instances stop belgium-europe-template-lb
+gcloud compute images delete template-lb -q
+gcloud compute images create --source-disk=belgium-europe-template-lb template-lb --source-disk-zone=europe-west1-d 
+gcloud compute instances start belgium-europe-template-lb
+
+gcloud compute instances stop belgium-europe-template-web
+gcloud compute images delete template-web -q
+gcloud compute images create --source-disk=belgium-europe-template-web template-web --source-disk-zone=europe-west1-d 
+gcloud compute instances start belgium-europe-template-web
+
+gcloud compute instances stop belgium-europe-template-sql
+gcloud compute images delete template-sql -q
+gcloud compute images create --source-disk=belgium-europe-template-sql template-sql --source-disk-zone=europe-west1-d 
+gcloud compute instances start belgium-europe-template-sql
+
+
+gcloud compute instances delete belgium-europe-template-lb --zone=europe-west1-d -q
+gcloud compute instances delete belgium-europe-template-web --zone=europe-west1-d -q
+gcloud compute instances delete belgium-europe-template-sql --zone=europe-west1-d -q
+
+
+gcloud compute instances stop belgium-europe-template-lb
+gcloud compute instances stop belgium-europe-template-web
+gcloud compute instances stop belgium-europe-template-sql
+
+
+ТоДо:
+Да се махне rsyslog-а при инит
+rsyslogd: imfile warning: directory '/var/log/php': No such file or directory [v8.24.0 try http://www.rsyslog.com/e/2046 ]
+може ли и тази директория да добавиш в image-a на php-то
+Да се погледнат сис метриктие в имиджите

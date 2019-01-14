@@ -1,0 +1,118 @@
+gcloud config set account y.georgiev@redtigergaming.com
+gcloud config set project hermes-belgium-mga
+
+ADD SSH KEY!!
+
+gcloud compute networks create --subnet-mode=custom belgium-mga-net
+gcloud compute networks subnets create belgium-mga-net1 --network=belgium-mga-net --region=europe-west1 --range=10.132.22.0/24
+
+gcloud compute addresses create belgium-mga-lb1 --subnet=belgium-mga-net1 --addresses=10.132.22.101 --region=europe-west1
+gcloud compute addresses create belgium-mga-web1 --subnet=belgium-mga-net1 --addresses=10.132.22.111 --region=europe-west1
+gcloud compute addresses create belgium-mga-web2 --subnet=belgium-mga-net1 --addresses=10.132.22.112 --region=europe-west1
+gcloud compute addresses create belgium-mga-web3 --subnet=belgium-mga-net1 --addresses=10.132.22.113 --region=europe-west1
+gcloud compute addresses create belgium-mga-web4 --subnet=belgium-mga-net1 --addresses=10.132.22.114 --region=europe-west1
+gcloud compute addresses create belgium-mga-web5 --subnet=belgium-mga-net1 --addresses=10.132.22.115 --region=europe-west1
+gcloud compute addresses create belgium-mga-db-master1-ps --subnet=belgium-mga-net1 --addresses=10.132.22.131 --region=europe-west1
+gcloud compute addresses create belgium-mga-db-slave1-ps --subnet=belgium-mga-net1 --addresses=10.132.22.151 --region=europe-west1
+gcloud compute addresses create belgium-mga-db-archive --subnet=belgium-mga-net1 --addresses=10.132.22.171 --region=europe-west1
+
+gcloud compute addresses create belgium-mga-db-master2-mars --subnet=belgium-mga-net1 --addresses=10.132.22.132 --region=europe-west1
+gcloud compute addresses create belgium-mga-db-slave2-mars --subnet=belgium-mga-net1 --addresses=10.132.22.152 --region=europe-west1
+gcloud compute addresses create belgium-mga-db-master3 --subnet=belgium-mga-net1 --addresses=10.132.22.133 --region=europe-west1
+gcloud compute addresses create belgium-mga-db-slave3 --subnet=belgium-mga-net1 --addresses=10.132.22.153 --region=europe-west1
+gcloud compute addresses create belgium-mga-db-master4 --subnet=belgium-mga-net1 --addresses=10.132.22.134 --region=europe-west1
+gcloud compute addresses create belgium-mga-db-slave4 --subnet=belgium-mga-net1 --addresses=10.132.22.154 --region=europe-west1
+
+gcloud compute addresses create belgium-mga-db-iom --subnet=belgium-mga-net1 --addresses=10.132.22.191 --region=europe-west1
+gcloud compute addresses create belgium-mga-db-iom-external --network-tier=PREMIUM --region=europe-west1
+
+
+gcloud compute addresses create belgium-mga-lb1-external --network-tier=PREMIUM --region=europe-west1
+gcloud compute addresses create belgium-mga-vpn-gw-ip --network-tier=PREMIUM --region=europe-west1
+
+gcloud compute instances create --can-ip-forward --tags=internet,http-server,https-server --subnet=belgium-mga-net1 --address=belgium-mga-lb1-external --private-network-ip=belgium-mga-lb1 \
+--custom-cpu=2 --custom-memory=4G --boot-disk-size=50G --boot-disk-type=pd-ssd --image=template-lb --image-project=hermes-europe --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-mga-lb1
+gcloud compute instances create --can-ip-forward --tags=net-lb1 --subnet=belgium-mga-net1 --no-address --private-network-ip=belgium-mga-web1 \
+--custom-cpu=4 --custom-memory=12G --boot-disk-size=50G --boot-disk-type=pd-standard --image=template-web --image-project=hermes-europe --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-mga-web1
+gcloud compute instances create --can-ip-forward --tags=net-lb1 --subnet=belgium-mga-net1 --no-address --private-network-ip=belgium-mga-web2 \
+--custom-cpu=4 --custom-memory=12G --boot-disk-size=50G --boot-disk-type=pd-standard --image=template-web --image-project=hermes-europe --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-mga-web2
+gcloud compute instances create --can-ip-forward --tags=net-lb1 --subnet=belgium-mga-net1 --no-address --private-network-ip=belgium-mga-web3 \
+--custom-cpu=4 --custom-memory=12G --boot-disk-size=50G --boot-disk-type=pd-standard --image=template-web --image-project=hermes-europe --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-mga-web3
+gcloud compute instances create --can-ip-forward --tags=net-lb1 --subnet=belgium-mga-net1 --no-address --private-network-ip=belgium-mga-web4 \
+--custom-cpu=4 --custom-memory=12G --boot-disk-size=50G --boot-disk-type=pd-standard --image=template-web --image-project=hermes-europe --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-mga-web4
+gcloud compute instances create --can-ip-forward --tags=net-lb1 --subnet=belgium-mga-net1 --no-address --private-network-ip=belgium-mga-web5 \
+--custom-cpu=4 --custom-memory=12G --boot-disk-size=50G --boot-disk-type=pd-standard --image=template-web --image-project=hermes-europe --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-mga-web5
+gcloud compute instances create --can-ip-forward --tags=net-lb1 --subnet=belgium-mga-net1 --no-address --private-network-ip=belgium-mga-db-master1-ps \
+--custom-cpu=8 --custom-memory=32G --boot-disk-size=600G --boot-disk-type=pd-ssd --image=template-sql --image-project=hermes-europe --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-mga-db-master1-ps
+gcloud compute instances create --can-ip-forward --tags=net-lb1 --subnet=belgium-mga-net1 --no-address --private-network-ip=belgium-mga-db-slave1-ps \
+--custom-cpu=8 --custom-memory=32G --boot-disk-size=600G --boot-disk-type=pd-ssd --image=template-sql --image-project=hermes-europe --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-mga-db-slave1-ps
+gcloud compute instances create --can-ip-forward --tags=net-lb1 --subnet=belgium-mga-net1 --no-address --private-network-ip=belgium-mga-db-archive \
+--custom-cpu=4 --custom-memory=16G --boot-disk-size=2500G --boot-disk-type=pd-standard --image=template-sql --image-project=hermes-europe --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-mga-db-archive
+
+gcloud compute instances create --can-ip-forward --tags=internet,http-server,https-server --subnet=belgium-mga-net1 --address=belgium-mga-db-iom-external --private-network-ip=belgium-mga-db-iom \
+--custom-cpu=16 --custom-memory=64G --boot-disk-size=800G --boot-disk-type=pd-ssd --image=template-sql --image-project=hermes-europe --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-mga-db-iom
+
+gcloud compute instances create --can-ip-forward --tags=net-lb1 --subnet=belgium-mga-net1 --no-address --private-network-ip=belgium-mga-db-master2-mars \
+--custom-cpu=8 --custom-memory=32G --boot-disk-size=300G --boot-disk-type=pd-ssd --image=template-sql --image-project=hermes-europe --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-mga-db-master2-mars
+gcloud compute instances create --can-ip-forward --tags=net-lb1 --subnet=belgium-mga-net1 --no-address --private-network-ip=belgium-mga-db-slave2-mars \
+--custom-cpu=8 --custom-memory=32G --boot-disk-size=300G --boot-disk-type=pd-ssd --image=template-sql --image-project=hermes-europe --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-mga-db-slave2-mars
+
+
+gcloud compute instances create --can-ip-forward --tags=net-lb1 --subnet=belgium-mga-net1 --no-address --private-network-ip=belgium-mga-db-master3 \
+--custom-cpu=8 --custom-memory=32G --boot-disk-size=300G --boot-disk-type=pd-ssd --image=template-sql --image-project=hermes-europe --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-mga-db-master3
+gcloud compute instances create --can-ip-forward --tags=net-lb1 --subnet=belgium-mga-net1 --no-address --private-network-ip=belgium-mga-db-slave3 \
+--custom-cpu=8 --custom-memory=32G --boot-disk-size=300G --boot-disk-type=pd-ssd --image=template-sql --image-project=hermes-europe --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-mga-db-slave3
+
+
+gcloud compute instances create --can-ip-forward --tags=net-lb1 --subnet=belgium-mga-net1 --no-address --private-network-ip=belgium-mga-db-master4 \
+--custom-cpu=8 --custom-memory=32G --boot-disk-size=300G --boot-disk-type=pd-ssd --image=template-sql --image-project=hermes-europe --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-mga-db-master4
+gcloud compute instances create --can-ip-forward --tags=net-lb1 --subnet=belgium-mga-net1 --no-address --private-network-ip=belgium-mga-db-slave4 \
+--custom-cpu=8 --custom-memory=32G --boot-disk-size=300G --boot-disk-type=pd-ssd --image=template-sql --image-project=hermes-europe --min-cpu-platform="Intel Skylake" \
+--zone=europe-west1-d  belgium-mga-db-slave4
+
+gcloud compute target-vpn-gateways create belgium-mga-vpn-gw --network=belgium-mga-net --region=europe-west1
+
+gcloud compute forwarding-rules create belgium-mga-vpn-gw-esp --region europe-west1 --ip-protocol ESP --address 35.233.13.94 --target-vpn-gateway belgium-mga-vpn-gw
+gcloud compute forwarding-rules create belgium-mga-vpn-gw-udp500 --region europe-west1 --ip-protocol UDP --ports 500 --address 35.233.13.94 --target-vpn-gateway belgium-mga-vpn-gw
+gcloud compute forwarding-rules create belgium-mga-vpn-gw-udp4500 --region europe-west1 --ip-protocol UDP --ports 4500 --address 35.233.13.94 --target-vpn-gateway belgium-mga-vpn-gw
+
+gcloud compute vpn-tunnels create --peer-address=79.124.5.203 --shared-secret=kU8xLMG0erbaNzzC --target-vpn-gateway=belgium-mga-vpn-gw --ike-version=2 \
+ --local-traffic-selector=0.0.0.0/0 --remote-traffic-selector=0.0.0.0/0 --region=europe-west1 belgium-mga-vpn-to-telepoint
+gcloud compute vpn-tunnels create --peer-address=185.89.237.181 --shared-secret=kU8xLMG0erbaNzzC --target-vpn-gateway=belgium-mga-vpn-gw --ike-version=2 \
+ --local-traffic-selector=0.0.0.0/0 --remote-traffic-selector=0.0.0.0/0 --region=europe-west1 belgium-mga-vpn-to-malta
+
+
+gcloud compute routes create  net-lb1 --description="network from net" --network=belgium-mga-net --destination-range=0.0.0.0/0 --tags=net-lb1 --next-hop-instance=belgium-mga-lb1 --priority 100
+gcloud compute routes create  internet --description="internet access" --network=belgium-mga-net --destination-range=0.0.0.0/0 --tags=internet --next-hop-gateway=default-internet-gateway --priority 100
+gcloud compute routes create route-to-office100 --network=belgium-mga-net --destination-range 192.168.100.0/24 --next-hop-vpn-tunnel belgium-mga-vpn-to-telepoint --next-hop-vpn-tunnel-region europe-west1
+gcloud compute routes create route-to-malta226 --network=belgium-mga-net --destination-range 192.168.226.0/24 --next-hop-vpn-tunnel belgium-mga-vpn-to-malta --next-hop-vpn-tunnel-region europe-west1
+
+
+gcloud compute firewall-rules create allow-ping-from-all-to-local --network belgium-mga-net --allow icmp
+gcloud compute firewall-rules create allow-ssh-from-vpn100-to-local --network belgium-mga-net --allow tcp:22 --source-ranges=192.168.100.0/24
+gcloud compute firewall-rules create allow-mysql-from-vpn100-to-local --network belgium-mga-net --allow tcp:3306 --source-ranges=192.168.100.0/24
+gcloud compute firewall-rules create allow-all-from-local-to-local --network belgium-mga-net --allow udp,tcp,icmp --source-ranges=10.132.22.0/24 NE RABOTI AMA DA PRORABOTI
+
+gcloud compute firewall-rules create allow-cadvisor-from-vpn100-to-local --network belgium-mga-net --allow tcp:8888 --source-ranges=192.168.100.0/24
+
+gcloud compute firewall-rules create allow-from-public-to-local --network belgium-mga-net --allow tcp:22,tcp:80,tcp:443,icmp
+gcloud compute firewall-rules create allow-from-vpn-to-local --network belgium-mga-net --allow tcp:22,tcp:80,tcp:443,icmp
+gcloud compute firewall-rules create allow-iperf-from-vpn-to-local --network belgium-mga-net --allow tcp:5001
+
+gcloud compute firewall-rules create allow-ssh-from-vpn226-to-local --network belgium-mga-net --allow tcp:22 --source-ranges=192.168.226.0/24
+gcloud compute firewall-rules create allow-mysql-from-vpn226-to-local --network belgium-mga-net --allow tcp:3306 --source-ranges=192.168.226.0/24
