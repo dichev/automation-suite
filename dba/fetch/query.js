@@ -12,7 +12,7 @@ program
     .description('Fetch anything from operator database replications')
     .option('-q, --query <sql>', 'Read-only SQL query')
     .option('-o, --operators <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
-    .option('--db <type>', 'The target database type', { choices: ['platform', 'panel', 'bonus', 'archive'], def: 'platform' })
+    .option('--db <type>', 'The target database type', { choices: ['platform', 'demo', 'panel', 'bonus', 'segments', 'stats', 'jackpot', 'tournaments', 'archive'], def: 'platform' })
     .parse()
 
 
@@ -40,6 +40,13 @@ Promise.resolve().then(async () => {
         let db = new MySQL()
         await db.connect({user: ronly.user, password: ronly.password}, ssh)
         let dbname = cfg.operators[operator].dbPrefix + program.params.db
+    
+        if (operator === 'paddymars' || operator === 'betfairmars') {
+            if (program.params.db === 'jackpot') {
+                dbname = 'jackpot_bp'
+                console.warn('WARNING! Paddy/betfair has shared db: ' + dbname)
+            }
+        }
         
         await db.query(`USE ${dbname};`)
         let rows = await db.query(query.replace(/:dbname/g, dbname))
