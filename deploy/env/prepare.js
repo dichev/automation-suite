@@ -17,7 +17,6 @@ const log = console.log
 
 // Configuration
 const OUTPUT = __dirname.replace(/\\/g, '/') + '/output'
-const GRAFANA   = "d:/www/servers/grafana-sensors"
 const CONFIGURATOR   = "d:/www/devops/configurator"
 
 let program = new Program({ chat: cfg.chat.rooms.deployBackend })
@@ -89,17 +88,7 @@ program
             await sshOfficeDNS.exec('/etc/init.d/bind9 restart')
             await sshOfficeDNS.disconnect()
         }
-        
-    
-        // Templating the Monitoring System
-        log("Generating monitoring configurations from templates..")
-        await shell.exec(`cd ${GRAFANA} && git reset --quiet --hard && git pull --quiet --prune`)
-        let sensors = JSON.parse(fs.readFileSync(`${GRAFANA}/config/sensors.json`, 'utf8'))
-        let operatorSensors = JSON.parse(fs.readFileSync(`${OUTPUT}/${OPERATOR}/monitoring/${OPERATOR}-sensors.json`, 'utf8'))
-        fs.writeFileSync(`${GRAFANA}/config/sensors.json`, JSON.stringify(deepMerge(sensors, operatorSensors), null, 4))
 
-        log("Please review and commit the changes")
-        await shell.exec(`cd ${GRAFANA} && git add . && TortoiseGitProc -command commit -logmsg "[env] Add new operator: ${OPERATOR}"`)
 
         log('Done')
     

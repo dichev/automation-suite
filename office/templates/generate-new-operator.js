@@ -128,10 +128,6 @@ program.run(async () => {
     await generate(`${TEMPLATES}/hermes/tournaments.php.hbs`,          `${dest}/hermes/tournaments/config/server.config.php`, vars)
     await generate(`${TEMPLATES}/hermes/wallet.php.hbs`,               `${dest}/hermes/wallet/config/server.config.php`, vars)
 
-    
-    // Generate monitoring configurations
-    await generate(`${TEMPLATES}/monitoring/sensors.json.hbs`,         `${dest}/monitoring/${operator}-sensors.json`, vars)
-    
 
     // Generate server configurations
     console.log('Ready!\n Do not forget to generate server configs')
