@@ -39,14 +39,7 @@ Promise.resolve().then(async () => {
         let ronly = cfg.access.mysql.readOnly
         let db = new MySQL()
         await db.connect({user: ronly.user, password: ronly.password}, ssh)
-        let dbname = cfg.operators[operator].dbPrefix + program.params.db
-    
-        if (operator === 'paddymars' || operator === 'betfairmars') {
-            if (program.params.db === 'jackpot') {
-                dbname = 'jackpot_bp'
-                console.warn('WARNING! Paddy/betfair has shared db: ' + dbname)
-            }
-        }
+        let dbname = cfg.getOperatorDatabaseName(operator, program.params.db)
         
         await db.query(`USE ${dbname};`)
         let rows = await db.query(query.replace(/:dbname/g, dbname))
