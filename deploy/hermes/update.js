@@ -136,7 +136,7 @@ program.run(async () => {
     
             
             // Switch to green
-            await chat.message('• Switch to green (web4,web5)')
+            await chat.message(`• Switch to green (${LOCATION.green})`)
             await lb.exec(`switch-webs --webs=${LOCATION.green} --operators=${OPERATORS.map(o => o.dir)}`)
     
     
