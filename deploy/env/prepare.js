@@ -15,7 +15,6 @@ const log = console.log
 
 // Configuration
 const OUTPUT = __dirname.replace(/\\/g, '/') + '/output'
-const CONFIGURATOR   = "d:/www/devops/configurator"
 
 let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 
@@ -27,10 +26,7 @@ program
         const OPERATOR = program.params.operator
         const LOCATION = cfg.operators[OPERATOR].location
         let shell = await program.shell()
-    
-        log("Please review and commit the configurator")
-        await shell.exec(`cd ${CONFIGURATOR} && git add . && TortoiseGitProc -command commit -logmsg "[env] Add new operator: ${OPERATOR}"`)
-    
+
         // Templating the environment
         log("Generating operators configurations from templates..")
         await shell.exec(`node office/templates/generate-new-operator -o ${OPERATOR} --dest ${OUTPUT}`)
