@@ -9,7 +9,7 @@ const util = require('util')                                // Toolbox ?
 const fs = require('fs')
 const whois = util.promisify(require('whois').lookup)       // можеби е по-добре да са в туулбокса
 const dnsReverse = util.promisify(require('dns').reverse)   // и да се връшат promisify- нати
-const RootDir = require('os').tmpdir() + '/dope-'+ Date.now()
+const RootDir = require('os').tmpdir().replace(/\\/g, '/') + '/dope-'+ Date.now() // windows compatibility
 const Econf = {silent:true}
 const Url = "https://jira.dopamine.bg/browse"
 const now = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
@@ -77,7 +77,7 @@ program
             if(existingIps.indexOf(ip) === -1 ) fs.appendFileSync(configFile,'\nallow\t' + (ip + ';').padEnd(20,' ') + '#' + task)
         }
 
-        await shell.exec(`git commit ${configFile} -m "Relative to ${Url}/${task}"`,Econf)
+        await shell.exec(`git add . && git commit -m "Relative to ${Url}/${task}"`,Econf)
         console.log(fs.readFileSync(configFile).toString().grep('^allow'))
         await shell.exec(`git push --set-upstream origin ${branch}`)
         console.log('#Deploy changes using those commands:\n'
