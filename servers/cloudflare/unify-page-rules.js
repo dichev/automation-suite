@@ -21,34 +21,51 @@ program
     
         const z = cfg.cloudflare.zones[zone]
         let cf = new CloudFlare(z.zone, z.email, z.key)
-
-      
-
-        // Create Page Rule
-        let pattern = `gserver-*.${z.domain}/`
-
-        // remove the same rule if exists
-        let rules = await cf.get('pagerules')
-        for (let rule of rules.result) {
-            console.log('checking rule for:', rule.targets[0].constraint)
-            if (rule.targets[0].constraint.value === pattern) {
-                console.log('deleting')
-                await cf.delete(`pagerules/${rule.id}`)
+    
+    
+        const PAGE_RULES = [
+            {
+                status: 'active',
+                targets: [{
+                    target: 'url',
+                    constraint: {operator: 'matches', value: `gserver-*.${z.domain}/`}
+                }], actions: [
+                    {id: 'always_online', value: 'off'},
+                    {id: 'browser_check', value: 'off'},
+                    {id: 'cache_level', value: 'bypass'}
+                ]
+            },
+            {
+                status: 'active',
+                targets: [{
+                    target: 'url',
+                    constraint: {operator: 'matches', value: `feed-*.${z.domain}/`}
+                }], actions: [
+                    {id: 'always_online', value: 'off'},
+                    {id: 'browser_check', value: 'off'},
+                    {id: 'cache_level', value: 'bypass'}
+                ]
+            },
+        ]
+        
+        
+        for(let options of PAGE_RULES) {
+            let pattern = options.targets[0].constraint.value
+    
+            // check is page rule already exists
+            let rules = await cf.get('pagerules')
+            let exists = rules.result.find(rule => rule.targets[0].constraint.value === pattern)
+    
+            if (exists) {
+                // update the rule
+                await program.confirm(`The page rule for ${pattern} already exists, do you want to replace it? (${exists.id})`)
+                await cf.put(`pagerules/${exists.id}`, options)
+            } else {
+                // add the rule
+                console.log(`Adding new rule for ${pattern}`)
+                await cf.post('pagerules', options)
             }
+    
         }
-
-        // add the rule
-        await cf.post('pagerules', {
-            status: 'active',
-            targets: [{
-                target: 'url',
-                constraint: {operator: 'matches', value: pattern}
-            }], actions: [
-                {id: 'always_online', value: 'off'},
-                {id: 'browser_check', value: 'off'},
-                {id: 'cache_level', value: 'bypass'}
-            ]
-        })
-
     
     })
