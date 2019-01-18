@@ -5,8 +5,6 @@ const Program = require('dopamine-toolbox').Program
 const SSHClient = require('dopamine-toolbox').SSHClient
 const cfg = require('configurator')
 
-const LOCATIONS = Object.values(cfg.locations).filter(l => l.live).map(l => l.name)
-
 let program = new Program({chat: cfg.chat.rooms.deployBackend, smartForce: true})
 
 program
@@ -15,7 +13,7 @@ program
         node deploy/crons/update --locations belgium
         node deploy/crons/update --locations belgium --rev r3.9.9.0
     `)
-    .option('-l, --locations <list|all>', `Comma-separated list of locations`, {choices: LOCATIONS, required: true})
+    .option('-l, --locations <list|all>', `Comma-separated list of locations`, {choices: Object.keys(cfg.locations).filter(name => name !== 'dev'), required: true})
     .option('-r, --rev <string>', `Target revision (like r3.9.9.0)`)
     
     .iterate('locations', async (location) => {

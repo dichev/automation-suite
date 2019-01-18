@@ -65,6 +65,11 @@ program.iterate('locations', async (location) => {
     for(let file of templates){
         // console.log(file, '=>')
         
+        if(file.includes('data-service.conf')) { // skips data-services confs when is used externally
+            console.log(`[SKIP] ${dest}/${file}`)
+            if(cfg.locations[location].dataService.external === true) continue
+        }
+        
         if (file.endsWith('.hbs')) {
             const template = Handlebars.compile(fs.readFileSync(`${TEMPLATES}/${file}`).toString(), {noEscape: true})
     

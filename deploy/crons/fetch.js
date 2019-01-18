@@ -7,7 +7,6 @@ const cfg = require('configurator')
 const fs = require('fs')
 
 const STORAGE = `d:/www/_releases/hermes.seed/crontab`
-const LOCATIONS = Object.values(cfg.locations).filter(l => l.live).map(l => l.name)
 
 let program = new Program({chat: cfg.chat.rooms.devops})
 
@@ -16,7 +15,7 @@ program
     .example(`
         node deploy/crons/fetch --locations all -p
     `)
-    .option('-l, --locations <list|all>', `Comma-separated list of locations`, {choices: LOCATIONS, required: true})
+    .option('-l, --locations <list|all>', `Comma-separated list of locations`, {choices: Object.keys(cfg.locations).filter(name => name !== 'dev'), required: true})
     
     .iterate('locations', async (location) => {
         console.log(`${location} | Fetching crons..`)
