@@ -5,7 +5,7 @@ const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
-let HOSTS = Object.keys(cfg.hosts).filter(h => h.includes('sofia-mysql') && (h.includes('archive') || h.includes('mirror')))
+let HOSTS = Object.keys(cfg.hosts).filter(h => h.includes('sofia-replication'))
 
 program
 .description('Setup backups')
