@@ -15,8 +15,19 @@ program
         let ssh = await new SSHClient().connect({host: lb, username: 'root'})
         await ssh.chdir('/opt/dopamine/')
         let exists = await ssh.exists('/opt/dopamine/docker-conf')
-        if(!exists) await ssh.exec('git clone git@gitlab.dopamine.bg:releases/docker-conf.git')
+        if(exists){
+            await ssh.chdir('/opt/dopamine/docker-conf')
+            await ssh.exec('git pull')
+        }else{
+            await ssh.exec('git clone git@gitlab.dopamine.bg:releases/docker-conf.git')
+        }
         await ssh.chdir('/opt/dopamine/docker-conf')
+        try{
+            await ssh.exec('docker swarm init')
+        }catch(e){
+                // that's ok. Already initialized as a swarm node.
+        }
+
         let lbRunning = await ssh.exec('docker ps | grep loadbalancer | wc -l')
         if(lbRunning === '0'){
             await program.confirm(`Loadbalancer seems not to be running. Do you want to deploy lb-stack now?`)
