@@ -14,8 +14,8 @@ program
     .run(async () => {
         await program.confirm(`Warning! You're going to update to the last revision.\nDo you want to continue?`)
         
-        let ssh     = await program.ssh(cfg.hosts.monitoring.ip, 'dopamine')
-        let sshRoot = await program.ssh(cfg.hosts.monitoring.ip, 'root')
+        let ssh     = await program.ssh(cfg.hosts['sofia-devops-monitoring'].ip, 'dopamine')
+        let sshRoot = await program.ssh(cfg.hosts['sofia-devops-monitoring'].ip, 'root')
     
         let chat  = program.chat
         let shell = program.shell()
