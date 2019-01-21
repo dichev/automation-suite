@@ -16,7 +16,7 @@ program
     .run(async () => {
         const DEST = '/opt/dopamine/ssl-server-framework/'
         
-        let web1 = await program.ssh(cfg.hosts.monitoring.ip, 'dopamine')
+        let web1 = await program.ssh(cfg.hosts['sofia-devops-monitoring'].ip, 'dopamine')
         web1.silent = true
         
         let tester = program.tester()
