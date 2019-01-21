@@ -58,7 +58,8 @@ program.iterate('locations', async (location) => {
     const dest = (program.params.dest || DEST).replace(/\\/g, '/') + `/servers-conf-${location}`
     
     console.log('Resetting servers conf repo')
-    await new Shell().exec(`cd ${dest} && git reset --hard && git checkout -q master && git pull -q --ff-only origin master`)
+    let shell = new Shell()
+    await shell.exec(`cd ${dest} && git reset --hard && git checkout -q master && git pull -q --ff-only origin master`)
     
     let templates = (await program.shell().exec(`cd ${TEMPLATES} && find -type f`, { silent: true })).split('\n').map(t => t.trim().slice(2))
     
@@ -74,7 +75,6 @@ program.iterate('locations', async (location) => {
             const template = Handlebars.compile(fs.readFileSync(`${TEMPLATES}/${file}`).toString(), {noEscape: true})
     
             if (file.includes('OPERATOR')) {
-        
                 for (let operator of Object.values(cfg.operators).filter(o => o.location === location)) {
                     let name = dest + '/' + file.replace(/OPERATOR/g, operator.dir).slice(0, -'.hbs'.length)
                     let vars = {
@@ -82,18 +82,31 @@ program.iterate('locations', async (location) => {
                         serverOperators: null,
                         operator: getOperatorVars(operator)
                     }
-                    let content = template(vars) + NEW_LINE + NEW_LINE
+                    let content = template(vars)
+                    await save(name, content)
+                }
+            }
+            else if (file.includes('DOMAIN')) {
+                for (let domain of cfg.locations[location].domains) {
+                    let name = dest + '/' + file.replace(/DOMAIN/g, domain).slice(0, -'.hbs'.length)
+                    let vars = {
+                        domain: domain,
+                        server: cfg.locations[location],
+                        serverOperators: null,
+                        operator: null
+                    }
+                    let content = template(vars)
                     await save(name, content)
                 }
             }
             else {
                 let name = dest + '/' + file.slice(0, -'.hbs'.length)
                 let vars = {
-                    server: cfg.locations[location], // TODO: rename to location in templates
+                    server: cfg.locations[location],
                     serverOperators: Object.values(cfg.operators).filter(o => o.location === location), // TODO check that
                     operator: null
                 }
-                let content = template(vars) + NEW_LINE + NEW_LINE // TODO: remove these new lines
+                let content = template(vars)
                 await save(name, content)
             }
         } else {
