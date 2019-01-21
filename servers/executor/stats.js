@@ -59,9 +59,13 @@ inquirer.prompt([{
         .iterate('hosts', async (host) => {
 
             try{
+                let memInfo = ''
                 let ssh = await new SSHClient().connect({host: cfg.hosts[host].ip, username: 'root'},{silent:true})
                 let procs,mem,cpu,time,uptime = false
-                if(hasMem)  mem = await ssh.exec("free | grep Mem | awk '{print $3/$2 * 100.0}' | cut -d'.' -f1",{silent:true})
+                if(hasMem){
+                    mem = await ssh.exec("free | grep Mem | awk '{print $3/$2 * 100.0}' | cut -d'.' -f1",{silent:true})
+                    memInfo = await ssh.exec("free -h | grep ^Mem | awk '{print $3\"/\"$2}'",{silent:true})
+                }
                 if(hasCpu)  cpu = await ssh.exec("top -bn 1 | awk -v np=`nproc` 'NR>7{s+=$9} END {print s/np}' | cut -d'.' -f1",{silent:true})
                 if(hasLoad) uptime = (await ssh.exec("cat /proc/loadavg | cut -d' ' -f1,2,3",{silent:true})).split(' ').reverse()
                 if(hasFpm)  procs = await ssh.exec("ps -xauw | grep fpm | grep -v grep | wc -l",{silent:true})
@@ -70,7 +74,7 @@ inquirer.prompt([{
                 let line = new Line().padding(2)
                     line.column((iterator + 1) + ')', 5)
                     line.column(host, 35)
-                if(hasMem)  line.column(Gauge(mem, 100, 11, 90,mem + '%'), 20, [clc.white])
+                if(hasMem)  line.column(Gauge(mem, 100, 11, 90,(mem + '%').padEnd(4,' ') + memInfo), 30, [clc.white])
                 if(hasCpu)  line.column(Gauge(cpu, 100, 11, 90,cpu + '%'), 20, [clc.white])
                 if(hasFpm)  line.column(procs, 5, [clc.yellow])
                 if(hasLoad) line.column(Sparkline(uptime,' load'),30,[clc.yellow])
@@ -92,7 +96,7 @@ inquirer.prompt([{
             line.column('No:', 5, [clc.cyan])
             line.column('Host:', 35, [clc.cyan])
 
-            if(hasMem)  line.column('Mem:', 20, [clc.cyan])
+            if(hasMem)  line.column('Mem:', 30, [clc.cyan])
             if(hasCpu)  line.column('Cpu:', 20, [clc.cyan])
             if(hasFpm)  line.column('Fpm:', 5, [clc.cyan])
             if(hasLoad) line.column('LoadAvg:', 30, [clc.cyan])

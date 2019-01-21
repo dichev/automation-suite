@@ -4,19 +4,30 @@
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 const SSHClient = require('dopamine-toolbox').SSHClient
-const sleep = 2
+const sleep = 25
 let program = new Program({chat: cfg.chat.rooms.devops})
 
 program
-    .description('Tiny proxy setup.')
+    .description('Proxy setup.')
     .option('-l, --locations <list|all>', 'Location', {choices: Object.keys(cfg.locations), required: true})
     .iterate('locations', async (location) => {
         let lb = cfg.locations[location].hosts.lb
         let ssh = await new SSHClient().connect({host: lb, username: 'root'})
         await ssh.chdir('/opt/dopamine/')
         let exists = await ssh.exists('/opt/dopamine/docker-conf')
-        if(!exists) await ssh.exec('git clone git@gitlab.dopamine.bg:releases/docker-conf.git')
+        if(exists){
+            await ssh.chdir('/opt/dopamine/docker-conf')
+            await ssh.exec('git pull')
+        }else{
+            await ssh.exec('git clone git@gitlab.dopamine.bg:releases/docker-conf.git')
+        }
         await ssh.chdir('/opt/dopamine/docker-conf')
+        try{
+            await ssh.exec('docker swarm init')
+        }catch(e){
+                // that's ok. Already initialized as a swarm node.
+        }
+
         let lbRunning = await ssh.exec('docker ps | grep loadbalancer | wc -l')
         if(lbRunning === '0'){
             await program.confirm(`Loadbalancer seems not to be running. Do you want to deploy lb-stack now?`)
