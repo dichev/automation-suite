@@ -8,7 +8,7 @@ const DB_HOSTS = Object.keys(cfg.hosts).filter(h => h.includes('sql') || h.inclu
 
 let program = new Program({ chat: cfg.chat.rooms.devops, smartForce: true })
 program
-    .description('Setup unified mysql configuration')
+    .description('Update mysql configuration')
     .option('-h, --hosts <list|all>', 'The target host name', {choices: DB_HOSTS, required: true})
     .option('--mode <restart|fetch>', 'Restart mysql server or just fetch the changes (will be applied on next restart)', {choices: ['restart', 'fetch']})
     .option('--query <sql>', 'Execute SQL command after the update (to apply global setting change without restart), for example: "SET GLOBAL expire_logs_days = 5"')

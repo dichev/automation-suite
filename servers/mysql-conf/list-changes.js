@@ -17,7 +17,6 @@ program
         
         await ssh.exec('git fetch origin master --quiet')
         await ssh.exec('git log HEAD..origin/master --oneline')
-        await ssh.exec('git diff HEAD..origin/master --name-status')
         
         await ssh.disconnect()
 })
