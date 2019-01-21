@@ -16,7 +16,7 @@ program
         console.log(records)
     
         console.log('\nWriting all records to: `/etc/db.resolv.conf`')
-        let dns = await program.ssh(cfg.hosts['sofia-dhcp-main'].ip, 'root')
+        let dns = await program.ssh(cfg.hosts['sofia-office-dhcp-main'].ip, 'root')
         await dns.writeFile(`/etc/db.resolv.conf`, records)
         await dns.exec(`/etc/init.d/dnsmasq reload`)
         await dns.exec(`rndc flush internal`)
