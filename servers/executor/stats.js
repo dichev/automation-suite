@@ -74,6 +74,7 @@ inquirer.prompt([{
                 let line = new Line().padding(2)
                     line.column((iterator + 1) + ')', 5)
                     line.column(host, 35)
+                    line.column(cfg.hosts[host].ip,18)
                 if(hasMem)  line.column(Gauge(mem, 100, 11, 90,(mem + '%').padEnd(4,' ') + memInfo), 30, [clc.white])
                 if(hasCpu)  line.column(Gauge(cpu, 100, 11, 90,cpu + '%'), 20, [clc.white])
                 if(hasFpm)  line.column(procs, 5, [clc.yellow])
@@ -95,7 +96,7 @@ inquirer.prompt([{
             line.padding(2)
             line.column('No:', 5, [clc.cyan])
             line.column('Host:', 35, [clc.cyan])
-
+            line.column('ip:', 18, [clc.cyan])
             if(hasMem)  line.column('Mem:', 30, [clc.cyan])
             if(hasCpu)  line.column('Cpu:', 20, [clc.cyan])
             if(hasFpm)  line.column('Fpm:', 5, [clc.cyan])

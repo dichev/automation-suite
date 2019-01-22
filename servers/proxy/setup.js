@@ -28,11 +28,7 @@ program
                 // that's ok. Already initialized as a swarm node.
         }
 
-        let lbRunning = await ssh.exec('docker ps | grep loadbalancer | wc -l')
-        if(lbRunning === '0'){
-            await program.confirm(`Loadbalancer seems not to be running. Do you want to deploy lb-stack now?`)
-            await ssh.exec('docker stack deploy --with-registry-auth -c lb-stack.yml loadbalancer')
-        }
+        await ssh.exec('docker stack deploy --with-registry-auth -c lb-stack.yml loadbalancer')
         console.log(`Sleeping for ${sleep} sec`)
         await program.sleep(sleep)
         await ssh.exec('curl -x http://127.0.0.1:3128 -s -o /dev/null -w "%{http_code}" -I https://dopamine.bg')
