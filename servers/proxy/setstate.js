@@ -4,7 +4,6 @@
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 const SSHClient = require('dopamine-toolbox').SSHClient
-const proxyPort = 3128
 
 let program = new Program({chat: cfg.chat.rooms.devops})
 
@@ -17,9 +16,9 @@ program
         const   location = cfg.getLocationByOperator(operator).name,
             opDir = '/home/dopamine/production/' + cfg.operators[operator].dir,
             web = cfg.locations[location].hosts.webs[0],
-            lb = cfg.locations[location].hosts.lb,
+            proxy = cfg.locations[location].hosts.proxy,
             state = program.params.state,
-            stateString = (state === 'active'? `\\"${lb}:${proxyPort}\\"` : 'false');
+            stateString = (state === 'active'? `\\"${proxy}\\"` : 'false');
 
             let configFile  = `${opDir}/wallet/config/server.config.php`
             let sshWeb      = await new SSHClient().connect({host: web.ip, username: 'root'})
