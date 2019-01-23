@@ -9,7 +9,8 @@
   },
   "scripts": {
     "dev-links": "npm link dopamine-toolbox configurator",
-    "docs": "node docs/generate --groups all"
+    "docs": "node docs/generate --groups all",
+	"reset-update": "git reset --hard && git pull && npm i && npm i configurator && npm i dopamine-toolbox"
   },
   "dependencies": {
     "cli-progress": "^2.1.1",
