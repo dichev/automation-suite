@@ -6,7 +6,7 @@ const cfg = require('configurator')
 const promisify = require('util').promisify
 const lookup = promisify(require('dns').lookup)
 
-let program = new Program({chat: cfg.chat.rooms.devops})
+let program = new Program()
 
 program
     .description('Check are all host names resolved from current machine')
