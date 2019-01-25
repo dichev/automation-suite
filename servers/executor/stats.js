@@ -38,6 +38,7 @@ inquirer.prompt([{
             {name: 'Mem',checked:true},
             {name: 'Load'},
             {name: 'Fpm'},
+            {name: 'SQL',checked:true},
             {name: 'Time'}
         ],
     validate: function(answer) {
@@ -49,6 +50,7 @@ inquirer.prompt([{
     let hasMem  = (Metrics.indexOf('Mem')  > -1)
     let hasCpu  = (Metrics.indexOf('Cpu')  > -1)
     let hasFpm  = (Metrics.indexOf('Fpm')  > -1)
+    let hasSql  = (Metrics.indexOf('SQL')  > -1)
     let hasLoad = (Metrics.indexOf('Load') > -1)
     let hasTime = (Metrics.indexOf('Time') > -1)
 
@@ -61,7 +63,7 @@ inquirer.prompt([{
             try{
                 let memInfo = ''
                 let ssh = await new SSHClient().connect({host: cfg.hosts[host].ip, username: 'root'},{silent:true})
-                let procs,mem,cpu,time,uptime = false
+                let procs,mem,cpu,time,uptime,sqlStats = false
                 if(hasMem){
                     mem = await ssh.exec("free | grep Mem | awk '{print $3/$2 * 100.0}' | cut -d'.' -f1",{silent:true})
                     memInfo = await ssh.exec("free -h | grep ^Mem | awk '{print $3\"/\"$2}'",{silent:true})
@@ -69,6 +71,7 @@ inquirer.prompt([{
                 if(hasCpu)  cpu = await ssh.exec("top -bn 1 | awk -v np=`nproc` 'NR>7{s+=$9} END {print s/np}' | cut -d'.' -f1",{silent:true})
                 if(hasLoad) uptime = (await ssh.exec("cat /proc/loadavg | cut -d' ' -f1,2,3",{silent:true})).split(' ').reverse()
                 if(hasFpm)  procs = await ssh.exec("ps -xauw | grep fpm | grep -v grep | wc -l",{silent:true})
+                if(hasSql)  sqlStats = await ssh.exec("mysqladmin status 2>&1 | awk -F\" \" '{printf \"[%4d /%7d]\", $4,$NF}' ",{silent:true})
                 if(hasTime) time = await ssh.exec("date +%H-%M-%S",{silent:true})
 
                 let line = new Line().padding(2)
@@ -78,6 +81,7 @@ inquirer.prompt([{
                 if(hasMem)  line.column(Gauge(mem, 100, 11, 90,(mem + '%').padEnd(4,' ') + memInfo), 30, [clc.white])
                 if(hasCpu)  line.column(Gauge(cpu, 100, 11, 90,cpu + '%'), 20, [clc.white])
                 if(hasFpm)  line.column(procs, 5, [clc.yellow])
+                if(hasSql)  line.column(sqlStats, 16)
                 if(hasLoad) line.column(Sparkline(uptime,' load'),30,[clc.yellow])
                 if(hasTime) line.column(time,10,[clc.yellow])
 
@@ -100,6 +104,7 @@ inquirer.prompt([{
             if(hasMem)  line.column('Mem:', 30, [clc.cyan])
             if(hasCpu)  line.column('Cpu:', 20, [clc.cyan])
             if(hasFpm)  line.column('Fpm:', 5, [clc.cyan])
+            if(hasSql)  line.column('Sql conn / qry:', 16, [clc.cyan])
             if(hasLoad) line.column('LoadAvg:', 30, [clc.cyan])
             if(hasTime) line.column('Time (UTC)', 10, [clc.cyan])
 
