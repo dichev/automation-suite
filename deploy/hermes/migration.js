@@ -32,12 +32,8 @@ Promise.resolve().then(async() => {
         let db = await program.mysql({user: 'root', ssh: {user: 'root', host: program.params.db === 'archive' ? dbs.archive : dbs.master}})
         let dbname = cfg.operators[operator].dbPrefix + program.params.db
     
-        if (operator === 'paddymars' || operator === 'betfairmars') {
-            if (program.params.db === 'jackpot') {
-                throw Error('shared db not yet supported')
-                // dbname = 'jackpot_bp'
-                // console.warn('WARNING! Paddy/betfair has shared db: ') //@ this will be executed twice!!
-            }
+        if (cfg.operators[operator].sharedJackpot) {
+            throw Error(`Shared db ${cfg.operators[operator].sharedJackpot} not yet supported because there is a risk to be executed twice`)
         }
         
         console.log(`Running migration over ${operator}..`)
