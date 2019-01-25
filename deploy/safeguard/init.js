@@ -17,7 +17,6 @@ program
         let ssh = new SSHClient()
         await ssh.connect({host: cfg.locations[location].hosts.web1, username: 'root'})
     
-        process.exit()
         await ssh.exec(`mkdir -p ${DEST}`)
         await ssh.chdir(DEST)
         
