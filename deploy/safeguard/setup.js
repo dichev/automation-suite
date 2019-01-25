@@ -13,7 +13,7 @@ program
     .description('Installing safeguard')
     .option('-l, --locations <list|all>', 'The target location (will be used web1)', { choices: Object.keys(cfg.locations), required: true })
 
-    .iterate('hosts', async (host) => {
+    .iterate('locations', async (location) => {
         let ssh = new SSHClient()
         await ssh.connect({host: cfg.locations[location].hosts.web1, username: 'root'})
     

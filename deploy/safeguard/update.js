@@ -20,13 +20,12 @@ program
         
         await ssh.chdir(DEST)
         await ssh.exec('git fetch --prune origin')
-        
-        console.info('\n2. Deploy')
         await ssh.exec(`
             git reset --hard ${program.params.rev}
+            echo "Reinstalling npm packages.."
             npm install --no-optional
             
-            systemctl restart safeguard')
+            systemctl restart safeguard
             systemctl status safeguard | head -n 3
         `)
         
