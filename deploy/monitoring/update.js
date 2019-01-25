@@ -36,6 +36,7 @@ program
         // Update configurator
         await chat.notify('Updating ONLY configurator')
         await ssh.exec(`npm install configurator`)
+        await ssh.exec(`chown -R dopamine:dopamine node_modules`)
 
         // Restart
         await chat.notify('Restart grafana-sensors.service')
