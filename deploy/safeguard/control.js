@@ -6,17 +6,16 @@ const SSHClient = require('dopamine-toolbox').SSHClient
 const cfg = require('configurator')
 
 const DEST = '/opt/dopamine/safeguard'
-const HOSTS = Object.keys(cfg.hosts).filter(h => h.includes('master') && !h.includes('replication'))
 
 let program = new Program({chat: cfg.chat.rooms.devops})
 
 program
-    .option('-h, --hosts <list|all>', 'The target host names', { choices: HOSTS, required: true })
+    .option('-l, --locations <list|all>', 'The target location (will be used web1)', { choices: Object.keys(cfg.locations), required: true })
     .option('--mode <stop|start|restart>', 'The systemctl command to be executed', { choices: ['stop','start','restart'], required: true })
     
     .iterate('hosts', async (host) => {
         let ssh = new SSHClient()
-        await ssh.connect({host: cfg.getHost(host).ip, username: 'root'})
+        await ssh.connect({host: cfg.locations[location].hosts.web1, username: 'root'})
         
         await ssh.exec(`systemctl ${program.params.mode} safeguard`)
         await ssh.exec('systemctl status safeguard | head -n 3')
