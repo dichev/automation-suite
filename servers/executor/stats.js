@@ -81,7 +81,7 @@ inquirer.prompt([{
                 if(hasMem)  line.column(Gauge(mem, 100, 11, 90,(mem + '%').padEnd(4,' ') + memInfo), 30, [clc.white])
                 if(hasCpu)  line.column(Gauge(cpu, 100, 11, 90,cpu + '%'), 20, [clc.white])
                 if(hasFpm)  line.column(procs, 5, [clc.yellow])
-                if(hasSql)  line.column(sqlStats, 15)
+                if(hasSql)  line.column(sqlStats, 16)
                 if(hasLoad) line.column(Sparkline(uptime,' load'),30,[clc.yellow])
                 if(hasTime) line.column(time,10,[clc.yellow])
 
@@ -104,7 +104,7 @@ inquirer.prompt([{
             if(hasMem)  line.column('Mem:', 30, [clc.cyan])
             if(hasCpu)  line.column('Cpu:', 20, [clc.cyan])
             if(hasFpm)  line.column('Fpm:', 5, [clc.cyan])
-            if(hasSql)  line.column('Sql conn / qry:', 15, [clc.cyan])
+            if(hasSql)  line.column('Sql conn / qry:', 16, [clc.cyan])
             if(hasLoad) line.column('LoadAvg:', 30, [clc.cyan])
             if(hasTime) line.column('Time (UTC)', 10, [clc.cyan])
 
