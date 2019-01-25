@@ -29,11 +29,14 @@ program
         // Update repo
         await ssh.chdir('/home/dopamine/grafana-sensors')
         await chat.notify('Updating repo to last revision')
+        await ssh.exec(`git reset --hard`) // removing package*.json
         await ssh.exec(`git fetch --prune && git pull`)
+        await ssh.exec(`chown -R dopamine:dopamine node_modules`)
 
         // Update configurator
         await chat.notify('Updating ONLY configurator')
         await ssh.exec(`npm install configurator`)
+        await ssh.exec(`chown -R dopamine:dopamine node_modules`)
 
         // Restart
         await chat.notify('Restart grafana-sensors.service')
