@@ -8,10 +8,9 @@
 
 const Program = require('dopamine-toolbox').Program
 const SSHClient = require('dopamine-toolbox').SSHClient
-const installed = require('./.installed')
 const cfg = require('configurator')
 const fetch = require('node-fetch')
-
+const HOSTS = Object.values(cfg.hosts).filter(h => h.type === 'cdn').map(h => h.name)
 
 let program = new Program()
 
@@ -52,7 +51,7 @@ const cachebust = async (url, apiKey) => {
 
 program
     .description('Cachebusting html assets')
-    .option('-h, --hosts <list|all>', `Comma-separated list of cdn regions`, {choices: installed.hosts, required: true})
+    .option('-h, --hosts <list|all>', `Comma-separated list of cdn regions`, {choices: HOSTS, required: true})
 
     .iterate('hosts', async (host) => {
 
