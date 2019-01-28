@@ -7,7 +7,6 @@
  */
 
 const Program = require('dopamine-toolbox').Program
-const SSHClient = require('dopamine-toolbox').SSHClient
 const cfg = require('configurator')
 const fetch = require('node-fetch')
 const HOSTS = Object.values(cfg.hosts).filter(h => h.type === 'cdn').map(h => h.name)
@@ -22,7 +21,6 @@ const errors = {
 
 const cachebust = async (url, apiKey) => {
     let response, body, error
-
     try {
         response = await fetch(url, {
             method: 'POST',
@@ -58,14 +56,7 @@ program
         const chat = program.chat
         await chat.notify(`\nStarting cachebust for ${host}`)
 
-        const DEST = `/home/dopamine/bin/config`
-        let cdn = new SSHClient()
-        await cdn.connect({host: cfg.getHost(host).ip, username: 'dopamine'})
-        await cdn.chdir(DEST)
-
-        const config = JSON.parse(await cdn.exec('cat .config.json', { secret: true }))
-        const apiKey = config.platform.launcherApiKey
-
+        const apiKey = cfg.access.hermes.launcher.apiKey
 
         let operators = Object.keys(cfg.operators).filter(key => cfg.operators[key].cdn === host && cfg.operators[key].live === true).map(key => cfg.operators[key]);
         let requests = []
@@ -81,7 +72,5 @@ program
             await chat.notify(`\nThere was a problem with the cachebust. Please investigate!`)
             throw Error('There was a problem with the cachebust. Please investigate!')
         }
-    
-        await cdn.disconnect()
 
     })
