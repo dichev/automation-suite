@@ -22,7 +22,6 @@ program
         it(`php config exists`, async () => await ssh.exists(`/opt/servers-conf/rsyslog/12-php.conf`))
         it(`mysql config exists`, async () => await ssh.exists(`/opt/servers-conf/rsyslog/10-mysql.conf`))
         it(`nginx config exists`, async () => await ssh.exists(`/opt/servers-conf/rsyslog/11-nginx.conf`))
-        it(`proxy config exists`, async () => await ssh.exists(`/opt/servers-conf/rsyslog/13-proxy.conf`))
         it(`common config exists`, async () => await ssh.exists(`/opt/servers-conf/rsyslog/common.conf`))
         await tester.run(true)
         
@@ -46,8 +45,8 @@ program
                 break
     
             case 'lb':
+            case 'cdn':
                 await ssh.exec('ln -svf /opt/servers-conf/rsyslog/11-nginx.conf /etc/rsyslog.d/11-nginx.conf && [ -f /etc/rsyslog.d/11-nginx.conf ]')
-                await ssh.exec('ln -svf /opt/servers-conf/rsyslog/13-proxy.conf /etc/rsyslog.d/13-proxy.conf && [ -f /etc/rsyslog.d/13-proxy.conf ]')
                 break
     
             default:

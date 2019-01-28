@@ -15,7 +15,7 @@ program
     .iterate('hosts', async (host) => {
         let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
         const type = cfg.getHost(host).type
-        
+    
         if(!program.params.onlyValidate) {
             switch (type) {
                 case 'web':
@@ -31,8 +31,8 @@ program
                     break
         
                 case 'lb':
+                case 'cdn':
                     await ssh.exec('ln -svf /opt/servers-conf/logrotate/nginx /etc/logrotate.d/nginx && [ -f /etc/logrotate.d/nginx ]')
-                    await ssh.exec('rm -fv /etc/logrotate.d/tinyproxy && ln -svf /opt/servers-conf/logrotate/tinyproxy /etc/logrotate.d/tinyproxy && [ -f /etc/logrotate.d/tinyproxy ]')
                     break
         
                 default:
