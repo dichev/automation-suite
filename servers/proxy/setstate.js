@@ -25,12 +25,13 @@ program
 
             await program.ask(`Configuration for proxy requests at ${configFile} set to ${stateString}`)
             await sshWeb.exec(`sed -i '/CURLOPT_PROXY/d' ${configFile}`)
+            await sshWeb.exec(`sed -i '/\\#ProxyStart/,/\\#ProxyEnd/d'${configFile}`)
             await sshWeb.fileAppend(configFile,
-                `\n## Proxy start
+                `\n#ProxyStart
                 foreach(Config::$endpoints as $brand=>$conf){
                     Config::$endpoints[$brand]['curl']['options'][CURLOPT_PROXY] = ${stateString};
                     Config::$endpoints[$brand]['curl']['options'][CURLOPT_USERAGENT] = "redtiger/$brand/${operator}";
-                }\n## Proxy end`)
+                }\n#ProxyEnd`)
 
             await sshWeb.chdir(opDir)
             await sshWeb.exec(`/home/dopamine/bin/webs-sync ${opDir}`)
