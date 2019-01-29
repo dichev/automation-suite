@@ -30,7 +30,7 @@ program
                 `\n#ProxyStart
 foreach(Config::$endpoints as $brand=>$conf){
     Config::$endpoints[$brand]['curl']['options'][CURLOPT_PROXY] = ${stateString};
-    Config::$endpoints[$brand]['curl']['options'][CURLOPT_USERAGENT] = "redtiger/$brand/${operator}";
+    Config::$endpoints[$brand]['curl']['options'][CURLOPT_USERAGENT] = "redtiger/${operator}/$brand";
 }\n#ProxyEnd`)
 
             await sshWeb.chdir(opDir)
