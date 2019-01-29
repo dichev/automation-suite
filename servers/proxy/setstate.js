@@ -28,10 +28,10 @@ program
             await sshWeb.exec(`sed -i '/\\#ProxyStart/,/\\#ProxyEnd/d' ${configFile}`)
             await sshWeb.fileAppend(configFile,
                 `\n#ProxyStart
-    foreach(Config::$endpoints as $brand=>$conf){
-        Config::$endpoints[$brand]['curl']['options'][CURLOPT_PROXY] = ${stateString};
-        Config::$endpoints[$brand]['curl']['options'][CURLOPT_USERAGENT] = "redtiger/$brand/${operator}";
-    }\n#ProxyEnd`)
+foreach(Config::$endpoints as $brand=>$conf){
+    Config::$endpoints[$brand]['curl']['options'][CURLOPT_PROXY] = ${stateString};
+    Config::$endpoints[$brand]['curl']['options'][CURLOPT_USERAGENT] = "redtiger/$brand/${operator}";
+}\n#ProxyEnd`)
 
             await sshWeb.chdir(opDir)
             await sshWeb.exec(`/home/dopamine/bin/webs-sync ${opDir}`)
