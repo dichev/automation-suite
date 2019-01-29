@@ -18,14 +18,14 @@ program
             web = cfg.locations[location].hosts.webs[0],
             proxy = cfg.locations[location].hosts.proxy,
             state = program.params.state,
-            stateString = (state === 'active'? `\\"${proxy}\\"` : 'false');
+            stateString = (state === 'active'? `\"${proxy}\"` : 'false');
 
             let configFile  = `${opDir}/wallet/config/server.config.php`
             let sshWeb      = await new SSHClient().connect({host: web.ip, username: 'root'})
 
             await program.ask(`Configuration for proxy requests at ${configFile} set to ${stateString}`)
             await sshWeb.exec(`sed -i '/CURLOPT_PROXY/d' ${configFile}`)
-            await sshWeb.exec(`sed -i '/\\#ProxyStart/,/\\#ProxyEnd/d'${configFile}`)
+            await sshWeb.exec(`sed -i '/\\#ProxyStart/,/\\#ProxyEnd/d' ${configFile}`)
             await sshWeb.fileAppend(configFile,
                 `\n#ProxyStart
                 foreach(Config::$endpoints as $brand=>$conf){
