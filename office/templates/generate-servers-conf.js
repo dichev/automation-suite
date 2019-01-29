@@ -101,9 +101,17 @@ program.iterate('locations', async (location) => {
             }
             else {
                 let name = dest + '/' + file.slice(0, -'.hbs'.length)
+    
+                let serverOperators = Object.values(cfg.operators)
+                  .filter(o => o.location === location)
+                  .map(operator => {
+                      operator['_dbMaster'] = cfg.databases[operator.databases].master
+                      return operator
+                  })
+                
                 let vars = {
                     server: cfg.locations[location],
-                    serverOperators: Object.values(cfg.operators).filter(o => o.location === location), // TODO check that
+                    serverOperators: serverOperators,
                     operator: null
                 }
                 let content = template(vars)
