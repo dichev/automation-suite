@@ -4,6 +4,7 @@
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 const Shell = require('dopamine-toolbox').Shell
+const JiraApi = require('jira-client')
 const Netmask = require('netmask').Netmask                  // Toolbox ?
 const util = require('util')                                // Toolbox ?
 const fs = require('fs')
@@ -14,25 +15,44 @@ const Econf = {silent:true}
 const Url = "https://jira.dopamine.bg/browse"
 const now = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
 
+var jira = new JiraApi({
+    protocol: 'https',
+    host: 'jira.dopamine.bg',
+    username: 'j.doe',
+    password: 'pass',
+    apiVersion: '2',
+    strictSSL: true
+});
+
 //let program = new Program({chat: cfg.chat.rooms.deployBackend})
 let program = new Program({chat: ''})
 let shell = new Shell()
 fs.mkdirSync(RootDir)
 
 // TODO! Maybe add them to toolbox
+String.prototype.replaceAll = function(search, replacement) { return this.replace(new RegExp(search, 'g'), replacement) }
 String.prototype.grep = function(reg){ reg = new RegExp(reg,'i'); return this.split("\n").filter( line => line.match(reg) ).join("\n") }
+String.prototype.fromTo = function(from,to){ let tmp = this.substr(this.indexOf(from) + from.length); return tmp.substr(0,tmp.indexOf(to)) }
+String.prototype.column = function(columnNumber){ return this.replaceAll('\r','').split("\n").map(line => { return line.split(' ')[columnNumber] }).join('\n') }
 Array.prototype.unique = function(){ return this.filter( (value,index) => this.indexOf(value) === index  ) }
 Array.prototype.duplicates = function(){ return this.filter( value => this.indexOf(value) !== this.lastIndexOf(value)  ).unique() }
 
 program
     .description("Whitelist ips for operator")
-    .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators), required: true})
-    .option('-i, --ips <list|all>',`Comma-separated list of ips to be checked/added`, {required:true})
-    .option('-t, --task <string>',`Task to be added to allow list`, {required:true})
-    .iterate('operators', async (operator) => {
+    .option('-t, --tasks <list>',`Task to be processed`, {required:true})
+    .iterate('tasks', async (issueNumber) => {
+        console.log(issueNumber)
+        let issue = await jira.findIssue(issueNumber);
+        let ips = issue.fields.description
+            .fromTo('{code:java|title=Required rules*}','{code}')
+            .column(0)
+            .replaceAll(';','')
+            .split("\n").filter(a => a)
+        let operator = issue.fields.description.fromTo('*Operator:* ',' As described').toLowerCase()
+        console.log([operator,ips])
+
         let me =  await shell.exec('git config user.name',Econf)
-        let ips = program.params.ips.split(',')
-        let task = program.params.task
+        let task = issueNumber
         let location = cfg.getLocationByOperator(operator).name
         let gitProject = 'servers-conf-' + location
         let branch = me + '/' +task
@@ -44,7 +64,6 @@ program
 
         await shell.chdir(RootDir)
         await shell.exec(`git clone git@gitlab.dopamine.bg:servers/servers-conf-${location}.git`,Econf)
-
         let currentConfig = fs.readFileSync(configFile).toString()
 
         for (let ip of ips){
@@ -77,9 +96,9 @@ program
             if(existingIps.indexOf(ip) === -1 ) fs.appendFileSync(configFile,'\nallow\t' + (ip + ';').padEnd(20,' ') + '#' + task)
         }
 
-        await shell.exec(`git add . && git commit -m "Relative to ${Url}/${task}"`,Econf)
+//        await shell.exec(`git add . && git commit -m "Relative to ${Url}/${task}"`,Econf)
         console.log(fs.readFileSync(configFile).toString().grep('^allow'))
-        await shell.exec(`git push --set-upstream origin ${branch}`)
+//        await shell.exec(`git push --set-upstream origin ${branch}`)
         console.log('#Deploy changes using those commands:\n'
             + `node servers/servers-conf/list-changes -l ${location}\n`
             + `node servers/servers-conf/update -l ${location} --reload nginx\n`
