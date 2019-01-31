@@ -1,0 +1,11 @@
+[pyxbackup]
+stor_dir = /backups/{{host}}/stor
+work_dir = /backups/{{host}}/work
+retention_sets = 8
+retention_months = 3
+
+# Whether to compress backups
+compress = 1
+# What compression tool, supports gzip and qpress
+compress_with = gzip
+extra_ibx_options = --slave-info --galera-info

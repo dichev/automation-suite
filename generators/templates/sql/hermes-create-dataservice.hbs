@@ -1,0 +1,9 @@
+# Master: data_service ------------------------------------
+CREATE DATABASE data_service    DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+
+CREATE USER 'data_service'@'%'    IDENTIFIED BY '{{generatePassword}}';
+
+GRANT ALL PRIVILEGES ON `data\_service`.*        TO 'data_service'@'%';
+GRANT SELECT, SHOW VIEW ON `data\_service`.*     TO 'data_service'@'%';
+
+GRANT USAGE ON *.* TO 'data_service'@'%' WITH MAX_USER_CONNECTIONS 200;

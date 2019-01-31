@@ -1,0 +1,31 @@
+if $syslogtag == 'mysqlerror:' then {
+       *.*  @@(o,z9){{server.externalHosts.logserver}}:514
+       stop
+}
+
+if $syslogtag == 'weberror:' then {
+       *.*  @@(o,z9){{server.externalHosts.logserver}}:514
+       stop
+}
+
+if $syslogtag == 'webaccess:' then {
+       *.*  @@(o,z9){{server.externalHosts.logserver}}:514
+       stop
+}
+
+if $syslogtag == 'phperror:' then {
+       *.*  @@(o,z9){{server.externalHosts.logserver}}:514
+       stop
+}
+
+if $syslogtag == 'proxylog:' then {
+       *.*  @@(o,z9){{server.externalHosts.logserver}}:514
+       stop
+}
+
+if $syslogtag == 'ptkill:' then {
+       *.*  @@(o,z9){{server.externalHosts.logserver}}:514
+       stop
+}
+
+*.* @@(o,z9){{server.externalHosts.logserver}}:514

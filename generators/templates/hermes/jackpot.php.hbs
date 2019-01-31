@@ -1,0 +1,11 @@
+<?php
+namespace jackpot;
+
+Config::$PRODUCTION = {{server.production}};
+
+Config::$db = [
+    'host'       => '{{operator.databases.master}}',
+    'database'   => '{{operator.dbPrefix}}jackpot',
+    'user'       => '{{operator.dbPrefix}}jackpot',
+    'password'   => '{{custom.passwords.jackpot}}'
+];

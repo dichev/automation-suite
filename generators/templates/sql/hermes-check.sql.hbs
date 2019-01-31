@@ -1,0 +1,4 @@
+SHOW DATABASES LIKE '{{sqlEscape operator.dbPrefix}}%';
+SELECT host, user FROM mysql.user WHERE user LIKE '{{sqlEscape operator.dbPrefix}}%';
+
+

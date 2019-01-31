@@ -1,0 +1,13 @@
+
+upstream {{operator.dir}}{{operator.suffix}} {
+    least_conn;
+
+    {{#each server.hosts.webs}}
+    {{#unless this.active}}# {{/unless}}server {{this.ip}}:{{@root.operator.fpm.port}}; #{{name}}
+    {{/each}}
+}
+
+upstream {{operator.dir}}{{operator.suffix}}-admin {
+     server {{server.hosts.webs.0.ip}}:{{@root.operator.fpm.port}}; #{{server.hosts.webs.0.name}}
+}
+

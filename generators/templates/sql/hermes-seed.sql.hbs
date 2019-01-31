@@ -1,0 +1,51 @@
+{{setBaseDir custom.baseDir}}
+
+# Master: {{operator.name}} ------------------------------------
+SELECT SLEEP(1);
+USE {{operator.dbPrefix}}bonus;
+{{import '/bonus/.migrator/seed/seed.sql'}}
+
+USE {{operator.dbPrefix}}demo;
+{{import '/demo/.migrator/seed/seed.sql'}}
+
+USE {{operator.dbPrefix}}segments;
+{{import '/segments/.migrator/seed/seed.sql'}}
+
+USE {{operator.dbPrefix}}stats;
+{{import '/stats/.migrator/seed/seed.sql'}}
+
+SELECT SLEEP(1);
+USE {{operator.dbPrefix}}panel;
+{{import '/gpanel/.migrator/seed/seed.sql'}}
+
+{{#if custom.secret.adminUsers}}
+TRUNCATE `_users`;
+INSERT INTO `_users` (`adminName`, `userName`, `email`, `password`, `roleId`, `timeZoneId`, `expiresAt`, `active`, `casinos`) VALUES
+{{#each custom.secret.adminUsers}}
+('{{adminName}}','{{userName}}','{{email}}','{{password}}',{{roleId}},{{timeZoneId}},{{#if expiresAt}}'{{expiresAt}}'{{else}}NULL{{/if}},1,''){{#if @last}};{{else}},{{/if}}
+{{/each}}
+{{/if}}
+
+SELECT SLEEP(1);
+USE {{operator.dbPrefix}}platform;
+{{import '/platform/.migrator/seed/seed.sql'}}
+SELECT SLEEP(1);
+{{import '/platform/.migrator/seed/games/games-certified.sql'}}
+
+TRUNCATE `currencies_exchange_rates`; # TODO
+UPDATE `settings` SET `value` = '{{server.cdn.office}}' WHERE `type` = 'cdn.address.office';
+UPDATE `settings` SET `value` = '{{server.cdn.public}}' WHERE `type` = 'cdn.address.public';
+
+SELECT SLEEP(1);
+
+# USE {{operator.dbPrefix}}jackpot;
+# custom
+
+USE {{operator.dbPrefix}}rewards;
+{{import '/rewards/.migrator/seed/seed.sql'}}
+
+USE {{operator.dbPrefix}}tournaments;
+{{import '/tournaments/.migrator/seed/seed.sql'}}
+
+USE {{operator.dbPrefix}}reports;
+{{import '/reports/.migrator/seed/seed.sql'}}

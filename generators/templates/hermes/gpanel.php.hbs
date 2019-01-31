@@ -1,0 +1,55 @@
+<?php
+namespace config;
+
+if(file_exists(__DIR__.'/operators/{{operator.dir}}.php')) {
+     require __DIR__.'/operators/{{operator.dir}}.php';
+}
+
+Config::$PRODUCTION = {{server.production}};
+
+Config::$apiURL = Config::$apiPath . '/';
+
+Config::$urlBase = 'https://gpanel-{{operator.dir}}{{operator.suffix}}.{{operator.domain}}/{{operator.dir}}{{operator.suffix}}/app/';
+
+// Databases configuration --------------------------
+$databases = [
+    'default'          => '{{operator.dbPrefix}}panel',
+    'platform'         => '{{operator.dbPrefix}}platform',
+    'demo'             => '{{operator.dbPrefix}}demo',
+    'jackpots'         => '{{operator.dbPrefix}}jackpot',
+    'bonus'            => '{{operator.dbPrefix}}bonus',
+    'stats'            => '{{operator.dbPrefix}}stats',
+    'platform_archive' => '{{operator.dbPrefix}}archive',
+    'segments'         => '{{operator.dbPrefix}}segments',
+    'tournaments'      => '{{operator.dbPrefix}}tournaments',
+    'rewards'          => '{{operator.dbPrefix}}rewards',
+];
+
+foreach ($databases as $key => $dbname) {
+    $databases[$key] = [
+        'database'   => $dbname,
+        'host'       => '{{operator.databases.master}}',
+        'user'       => '{{operator.dbPrefix}}panel',
+        'password'   => '{{custom.passwords.panel}}',
+        'slave'      => false
+    ];
+}
+$databases['platform_archive']['host'] = '{{operator.databases.archive}}';
+$databases['platform_archive']['slave'] = false;
+
+Config::$db = $databases;
+unset($databases);
+
+
+//** @var array $mailgunCredentials - holds URL and Key for mailgun */
+Config::$mailgunCredentials['apiURL'] = '{{custom.secret.mailgun.apiUrl}}';
+Config::$mailgunCredentials['apiKey'] = '{{custom.secret.mailgun.apiKey}}';
+Config::$emailDefaults['sender'] = 'support@redtigergaming.com';
+
+
+//** @var array BackOffice link and address for the email sending */
+Config::$boData = [
+    'link'    => '<a href="https://gpanel-{{operator.dir}}{{operator.suffix}}.{{operator.domain}}/{{operator.dir}}{{operator.suffix}}/app/" target="_blank">RedTiger - {{toUpperCase operator.dir}} Back Office</a>',
+    'address' => 'support@redtigergaming.com'
+];
+

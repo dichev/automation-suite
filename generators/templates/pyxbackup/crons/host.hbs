@@ -1,0 +1,5 @@
+##(do not run when running full)
+0 {{hour}} * * {{incrDays}} root /opt/pyxbackup/pyxbackup --config /opt/servers-conf-mysql/pyxbackup/conf/{{host}}.cnf incr -H 127.0.0.1
+##(once a week)
+0 {{hour}} * * {{fullDays}}           root /opt/pyxbackup/pyxbackup --config /opt/servers-conf-mysql/pyxbackup/conf/{{host}}.cnf full -H 127.0.0.1
+

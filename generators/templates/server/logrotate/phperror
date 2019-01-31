@@ -1,0 +1,12 @@
+/var/log/php/error.log {
+  rotate 7
+  daily
+  missingok
+  notifempty
+  compress
+  delaycompress
+  create 0660 dopamine adm
+  postrotate
+    service rsyslog rotate >/dev/null 2>&1 || true
+  endscript
+}

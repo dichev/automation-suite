@@ -1,0 +1,9 @@
+<?php
+namespace gateway;
+
+Config::$PRODUCTION = {{server.production}};
+Config::$operator = '{{operator.name}}';
+Config::$baseUrl = '/{{operator.dir}}/api';
+
+Config::$apiKey = '{{generatePassword 30 35}}';
+Config::$apiSecret = '{{generatePassword 10 15}}';

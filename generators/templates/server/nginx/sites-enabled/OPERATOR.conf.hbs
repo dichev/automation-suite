@@ -1,0 +1,292 @@
+server {
+    listen {{server.hosts.lb}}:443;
+    server_name feed-{{operator.dir}}{{operator.suffix}}.{{operator.domain}};
+    root /var/www/;
+    include '/etc/nginx/conf.d/ssl.{{operator.domain}}.conf';
+
+    include '/etc/nginx/conf.d/robots.conf';
+    include '/etc/nginx/conf.d/favicons.conf';
+
+    location = /429.json {
+        default_type application/json;
+        internal;
+        return 429 '{"success":false,"error":{"msg":"Your access is temporary blocked. Please try again later.","code":429}}';
+    }
+
+    location /tournaments/leaderboard {
+        limit_req zone=by_ip_15rs burst=6 nodelay;
+        error_page 503 =429 /429.json;
+
+        {{#unless operator.public}}
+        include '/etc/nginx/conf.d/allow/{{operator.dir}}{{operator.suffix}}.conf';
+        include '/etc/nginx/conf.d/allow-me.conf';
+        {{/unless}}
+        try_files $uri $uri/ /tournaments/leaderboard/index.php?$query_string;
+        location ~ \.php$ {
+            limit_except GET HEAD OPTIONS {
+                deny all;
+            }
+
+            fastcgi_index index.php;
+            fastcgi_pass {{operator.dir}}{{operator.suffix}};
+            fastcgi_param SCRIPT_FILENAME /platform/public/index.php;
+            include fastcgi.conf;
+            add_header Access-Control-Allow-Headers 'Content-Type';
+
+            # cache settings
+            fastcgi_cache_key "$scheme$request_method$host$request_uri";
+            fastcgi_cache feed;
+            fastcgi_cache_valid 200 302 301 404 3s;
+            fastcgi_cache_lock on;
+            fastcgi_cache_use_stale updating;
+            fastcgi_ignore_headers Cache-Control Expires Vary;
+            add_header X-Cache $upstream_cache_status;
+            add_header "Access-Control-Allow-Origin" "*";
+            fastcgi_hide_header "Access-Control-Allow-Origin";
+        }
+    }
+
+    location /jackpots {
+        limit_req zone=by_ip_15rs burst=6 nodelay;
+        error_page 503 =429 /429.json;
+        {{#unless operator.public}}
+        include '/etc/nginx/conf.d/allow/{{operator.dir}}{{operator.suffix}}.conf';
+        include '/etc/nginx/conf.d/allow-me.conf';
+        {{/unless}}
+        try_files $uri $uri/ /jackpots/index.php?$query_string;
+        location ~ \.php$ {
+            limit_except GET HEAD OPTIONS {
+                deny all;
+            }
+
+            fastcgi_index index.php;
+            fastcgi_pass {{operator.dir}}{{operator.suffix}};
+            fastcgi_param SCRIPT_FILENAME /platform/public/index.php;
+            include fastcgi.conf;
+            add_header Access-Control-Allow-Headers 'Content-Type';
+
+            # cache settings
+            fastcgi_cache_key "$scheme$request_method$host$request_uri";
+            fastcgi_cache feed;
+            fastcgi_cache_valid 200 302 301 404 3s;
+            fastcgi_cache_lock on;
+            fastcgi_cache_use_stale updating;
+            fastcgi_ignore_headers Cache-Control Expires Vary;
+            add_header X-Cache $upstream_cache_status;
+            add_header "Access-Control-Allow-Origin" "*";
+            fastcgi_hide_header "Access-Control-Allow-Origin";
+        }
+    }
+
+    location /jackpots/extended {
+        limit_req zone=by_ip_15rs burst=6 nodelay;
+        error_page 503 =429 /429.json;
+        {{#unless operator.public}}
+        include '/etc/nginx/conf.d/allow/{{operator.dir}}{{operator.suffix}}.conf';
+        include '/etc/nginx/conf.d/allow-me.conf';
+        {{/unless}}
+        try_files $uri $uri/ /jackpots/extended/index.php?$query_string;
+        location ~ \.php$ {
+            limit_except GET HEAD OPTIONS {
+                deny all;
+            }
+
+            fastcgi_index index.php;
+            fastcgi_pass {{operator.dir}}{{operator.suffix}};
+            fastcgi_param SCRIPT_FILENAME /platform/public/index.php;
+            include fastcgi.conf;
+            add_header Access-Control-Allow-Headers 'Content-Type';
+
+            # cache settings
+            # The access to this feed is restricted by the platform via remote ip
+            # Adding $remote_addr at the end is IMPORTANT protection against abusers
+            fastcgi_cache_key "$scheme$request_method$host$request_uri$remote_addr";
+            fastcgi_cache feedExtended;
+            fastcgi_cache_valid 200 302 301 404 3s;
+            fastcgi_cache_lock on;
+            fastcgi_cache_use_stale updating;
+            fastcgi_ignore_headers Cache-Control Expires Vary;
+            add_header X-Cache $upstream_cache_status;
+            add_header "Access-Control-Allow-Origin" "*";
+            fastcgi_hide_header "Access-Control-Allow-Origin";
+        }
+    }
+}
+
+server {
+    listen {{server.hosts.lb}}:443;
+    server_name gserver-{{operator.dir}}{{operator.suffix}}.{{operator.domain}};
+    root /var/www/;
+    include '/etc/nginx/conf.d/ssl.{{operator.domain}}.conf';
+
+    include '/etc/nginx/conf.d/robots.conf';
+    include '/etc/nginx/conf.d/favicons.conf';
+
+    
+    location = /429.json {
+        default_type application/json;
+        internal;
+        return 429 '{"success":false,"error":{"msg":"Your access is temporary blocked. Please try again later.","code":429}}';
+    }
+
+    location /{{operator.dir}}/platform {
+        {{#if server.production}}
+        limit_req zone=by_ip_15rs burst=6 nodelay;
+        {{else}}
+        limit_req zone=by_ip_100rs burst=80 nodelay;
+        {{/if}}
+        error_page 503 =429 /429.json;
+
+        {{#unless operator.public}}
+        include '/etc/nginx/conf.d/allow/{{operator.dir}}{{operator.suffix}}.conf';
+        include '/etc/nginx/conf.d/allow-me.conf';
+        {{/unless}}
+        {{#if operator.basicAuth}}
+        satisfy any;
+        include '/etc/nginx/conf.d/allow-me.conf';
+        auth_basic "Restricted Area";
+        auth_basic_user_file /etc/nginx/htaccess.external;
+        deny all;
+        {{/if}}
+        try_files $uri $uri/ /{{operator.dir}}/platform/index.php?$query_string;
+        location ~ \.php$ {
+            fastcgi_index index.php;
+            fastcgi_pass {{operator.dir}}{{operator.suffix}};
+            fastcgi_param SCRIPT_FILENAME /platform/public/index.php;
+            include fastcgi.conf;
+            add_header Access-Control-Allow-Headers 'Content-Type';
+        }
+    }
+    {{#unless server.production}}
+    location /{{operator.dir}}/demo {
+        {{#if server.production}}
+        limit_req zone=by_ip_15rs burst=6 nodelay;
+        {{else}}
+        limit_req zone=by_ip_100rs burst=80 nodelay;
+        {{/if}}
+        error_page 503 =429 /429.json;
+
+        {{#unless operator.public}}
+        include '/etc/nginx/conf.d/allow/{{operator.dir}}{{operator.suffix}}.conf';
+        include '/etc/nginx/conf.d/allow-me.conf';
+        {{/unless}}
+        {{#if operator.basicAuth}}
+        satisfy any;
+        include '/etc/nginx/conf.d/allow-me.conf';
+        auth_basic "Restricted Area";
+        auth_basic_user_file /etc/nginx/htaccess.external;
+        deny all;
+        {{/if}}
+        try_files $uri $uri/ /{{operator.dir}}/demo/index.php?$query_string;
+        location ~ \.php$ {
+            fastcgi_index index.php;
+            fastcgi_pass {{operator.dir}}{{operator.suffix}};
+            fastcgi_param SCRIPT_FILENAME /demo/public/index.php;
+            include fastcgi.conf;
+            add_header Access-Control-Allow-Headers 'Content-Type';
+        }
+    }
+    {{/unless}}
+
+    location /{{operator.dir}}/launcher {
+        {{#if server.production}}
+        limit_req zone=by_ip_15rs burst=6 nodelay;
+        {{else}}
+        limit_req zone=by_ip_100rs burst=80 nodelay;
+        {{/if}}
+        error_page 503 =429 /429.json;
+
+        {{#unless operator.public}}
+        include '/etc/nginx/conf.d/allow/{{operator.dir}}{{operator.suffix}}.conf';
+        include '/etc/nginx/conf.d/allow-me.conf';
+        {{/unless}}
+        {{#if operator.basicAuth}}
+        satisfy any;
+        include '/etc/nginx/conf.d/allow-me.conf';
+        auth_basic "Restricted Area";
+        auth_basic_user_file /etc/nginx/htaccess.external;
+        deny all;
+        {{/if}}
+        try_files $uri $uri/ /{{operator.dir}}/launcher/index.php?$query_string;
+        location ~ \.php$ {
+            fastcgi_index index.php;
+            fastcgi_pass {{operator.dir}}{{operator.suffix}};
+            fastcgi_param SCRIPT_FILENAME /launcher/public/index.php;
+            include fastcgi.conf;
+            add_header Access-Control-Allow-Headers 'Content-Type';
+        }
+    }
+
+    location /{{operator.dir}}/replay {
+        {{#if server.production}}
+        limit_req zone=by_ip_15rs burst=6 nodelay;
+        {{else}}
+        limit_req zone=by_ip_100rs burst=80 nodelay;
+        {{/if}}
+        error_page 503 =429 /429.json;
+
+        include '/etc/nginx/conf.d/allow/{{operator.dir}}{{operator.suffix}}.conf';
+        include '/etc/nginx/conf.d/allow-me.conf';
+        try_files $uri $uri/ /{{operator.dir}}/replay/index.php?$query_string;
+        location ~ \.php$ {
+            fastcgi_index index.php;
+            fastcgi_pass {{operator.dir}}{{operator.suffix}};
+            fastcgi_param SCRIPT_FILENAME /replay/public/index.php;
+            include fastcgi.conf;
+            add_header Access-Control-Allow-Headers 'Content-Type';
+        }
+    }
+
+    #TODO: check is it accessible:
+    location /{{operator.dir}}/campaigns {
+        include '/etc/nginx/conf.d/allow/{{operator.dir}}{{operator.suffix}}.conf';
+        include '/etc/nginx/conf.d/allow-me.conf';
+        try_files $uri $uri/ /{{operator.dir}}/campaigns/index.php?$query_string;
+        location ~ \.php$ {
+            fastcgi_index index.php;
+            fastcgi_pass {{operator.dir}}{{operator.suffix}};
+            fastcgi_param SCRIPT_FILENAME /campaigns/public/index.php;
+            include fastcgi.conf;
+            add_header Access-Control-Allow-Headers 'Content-Type';
+        }
+    }
+
+    location /{{operator.dir}}/api {
+        limit_req zone=by_ip_15rs burst=6 nodelay;
+        error_page 503 =429 /429.json;
+        
+        include '/etc/nginx/conf.d/allow/{{operator.dir}}{{operator.suffix}}.conf';
+        include '/etc/nginx/conf.d/allow-me.conf';
+        try_files $uri $uri/ /{{operator.dir}}/api/index.php?$query_string;
+        location ~ \.php$ {
+            fastcgi_index index.php;
+            fastcgi_pass {{operator.dir}}{{operator.suffix}};
+            fastcgi_param SCRIPT_FILENAME /gateway/public/index.php;
+            include fastcgi.conf;
+            add_header Access-Control-Allow-Headers 'Content-Type';
+        }
+    }
+}
+
+server {
+    listen {{server.hosts.lb}}:443;
+    server_name gpanel-{{operator.dir}}{{operator.suffix}}.{{operator.domain}};
+    root /var/www/;
+    include '/etc/nginx/conf.d/ssl.{{operator.domain}}.conf';
+
+    include '/etc/nginx/conf.d/robots.conf';
+    include '/etc/nginx/conf.d/favicons.conf';
+
+    location /{{operator.dir}} {
+        include '/etc/nginx/conf.d/allow/{{operator.dir}}{{operator.suffix}}.conf';
+        include '/etc/nginx/conf.d/allow-me.conf';
+        try_files $uri $uri/ /{{operator.dir}}/index.php?$query_string;
+        location ~ \.php$ {
+            fastcgi_index index.php;
+            fastcgi_pass {{operator.dir}}{{operator.suffix}}-admin;
+            fastcgi_param SCRIPT_FILENAME /gpanel/api/public/index.php;
+            include fastcgi.conf;
+            add_header Access-Control-Allow-Headers 'Content-Type';
+        }
+    }
+}

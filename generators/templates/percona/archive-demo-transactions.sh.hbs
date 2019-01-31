@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -e
+
+# Saves a lot space on binlog --------------------------------
+mysql -uroot -e "SET GLOBAL binlog_format = STATEMENT"
+# ------------------------------------------------------------
+
+RESULTS="/root/migrations/results.log"
+
+echo -e "START $(du -hs /var/lib/mysql/{{operator.dbPrefix}}platform)" >> ${RESULTS}
+
+
+echo -e "\n\n----------------- {{operator.name}} ---------------------"
+echo -e "Altering transactions_demo_archive table:"
+
+pt-online-schema-change \
+  --alter " \
+    DROP INDEX gameId, \
+    DROP beenForRecon, \
+    DROP languageId, \
+    DROP affiliate, \
+    DROP channel, \
+    DROP reconRetries, \
+    DROP ip, \
+    DROP txPrefix, \
+    DROP playRequestId, \
+    DROP txRefId, \
+    DROP rgiId, \
+    MODIFY COLUMN id bigint(1) UNSIGNED NOT NULL AUTO_INCREMENT FIRST, \
+    MODIFY COLUMN roundInstanceId bigint(1) UNSIGNED NOT NULL AFTER id, \
+    ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=4 \
+  " \
+  D={{operator.dbPrefix}}platform,t=transactions_demo_archive \
+  --execute --statistics --progress time,1 --recursion-method none \
+  --chunk-time 10.00 --max-load Threads_running=200 --critical-load Threads_running=1000
+
+
+echo -e "\n\n-------------------------------------------------"
+echo -e "END   $(du -hs /var/lib/mysql/{{operator.dbPrefix}}platform)" >> ${RESULTS}
+tail -n 2 ${RESULTS}
+echo -e "See all summary results here: ${RESULTS}"
+
+# Saves a lot space on binlog --------------------------------
+mysql -uroot -e "SET GLOBAL binlog_format = MIXED"
+# ------------------------------------------------------------

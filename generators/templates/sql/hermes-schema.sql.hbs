@@ -1,0 +1,34 @@
+{{setBaseDir custom.baseDir}}
+
+# Master: {{operator.name}} ------------------------------------
+
+USE {{operator.dbPrefix}}bonus;
+{{import '/bonus/.migrator/schema/schema.sql'}}
+
+USE {{operator.dbPrefix}}demo;
+{{import '/demo/.migrator/schema/schema.sql'}}
+TRUNCATE sessions; # TODO
+
+USE {{operator.dbPrefix}}segments;
+{{import '/segments/.migrator/schema/schema.sql'}}
+
+USE {{operator.dbPrefix}}stats;
+{{import '/stats/.migrator/schema/schema.sql'}}
+
+USE {{operator.dbPrefix}}panel;
+{{import '/gpanel/.migrator/schema/schema.sql'}}
+
+USE {{operator.dbPrefix}}platform;
+{{import '/platform/.migrator/schema/schema.sql'}}
+
+USE {{operator.dbPrefix}}jackpot;
+{{import '/jackpot/.migrator/schema/schema.sql'}}
+
+USE {{operator.dbPrefix}}rewards;
+{{import '/rewards/.migrator/schema/schema.sql'}}
+
+USE {{operator.dbPrefix}}tournaments;
+{{import '/tournaments/.migrator/schema/schema.sql'}}
+
+USE {{operator.dbPrefix}}reports;
+{{import '/reports/.migrator/schema/schema.sql'}}

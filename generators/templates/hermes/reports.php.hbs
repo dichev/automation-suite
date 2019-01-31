@@ -1,0 +1,15 @@
+<?php
+
+namespace reports;
+
+Config::$PRODUCTION = {{server.production}};
+Config::$baseUrl = '/{{operator.dir}}/reports';
+
+Config::$db['default'] = [
+    'host'       => '{{operator.databases.master}}',
+    'database'   => '{{operator.dbPrefix}}reports',
+    'user'       => '{{operator.dbPrefix}}reports',
+    'password'   => '{{custom.passwords.reports}}',
+];
+
+Config::$secretKey = '{{generatePassword}}';

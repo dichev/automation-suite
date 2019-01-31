@@ -1,0 +1,14 @@
+{{setBaseDir custom.baseDir}}
+
+# Archive platform: {{operator.name}} ------------------------------------
+
+USE {{operator.dbPrefix}}archive;
+{{import '/platform/.migrator/schema/schema_archive.sql'}}
+
+
+
+# Archive bonus: {{operator.name}} ------------------------------------
+
+USE {{operator.dbPrefix}}archive;
+{{import '/bonus/.migrator/schema/schema_archive.sql'}}
+

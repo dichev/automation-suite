@@ -1,0 +1,46 @@
+<?php
+namespace stats\config;
+
+if(file_exists(__DIR__.'/operators/{{operator.dir}}.php')) {
+     require __DIR__.'/operators/{{operator.dir}}.php';
+}
+
+Config::$PRODUCTION = {{server.production}};
+
+Config::$platformUrl = 'https://gserver-{{operator.dir}}{{operator.suffix}}.{{operator.domain}}/{{operator.dir}}{{operator.suffix}}/platform';
+
+Config::$db = [
+    Config::DB_STATS => [
+        'host'       => '{{operator.databases.master}}',
+        'database'   => '{{operator.dbPrefix}}stats',
+        'user'       => '{{operator.dbPrefix}}stats',
+        'password'   => '{{custom.passwords.stats}}',
+        'slave'      => false
+    ],
+    Config::DB_PLATFORM => [
+        'host'       => '{{operator.databases.master}}',
+        'database'   => '{{operator.dbPrefix}}platform',
+        'user'       => '{{operator.dbPrefix}}ronly', // RONLY!!
+        'password'   => '{{custom.passwords.ronly}}',
+        'slave'      => false
+    ],
+    Config::DB_BONUS => [
+        'host'       => '{{operator.databases.master}}',
+        'database'   => '{{operator.dbPrefix}}bonus',
+        'user'       => '{{operator.dbPrefix}}ronly', // RONLY!!
+        'password'   => '{{custom.passwords.ronly}}',
+        'slave'      => false
+    ],
+    Config::DB_GPANEL => [
+        'host'       => '{{operator.databases.master}}',
+        'database'   => '{{operator.dbPrefix}}panel',
+        'user'       => '{{operator.dbPrefix}}ronly', // RONLY!!
+        'password'   => '{{custom.passwords.ronly}}',
+        'slave'      => false
+    ],
+];
+
+//** @var array $mailgunCredentials - holds URL and Key for mailgun */
+Config::$mailgunCredentials['apiURL'] = '{{custom.secret.mailgun.apiUrl}}';
+Config::$mailgunCredentials['apiKey'] = '{{custom.secret.mailgun.apiKey}}';
+Config::$emailDefaults['sender'] = 'support@redtigergaming.com';

@@ -1,0 +1,14 @@
+<?php
+
+namespace rewards;
+
+Config::$PRODUCTION = {{server.production}};
+
+Config::$db['default'] = [
+    'host'     => '{{operator.databases.master}}',
+    'database' => '{{operator.dbPrefix}}rewards',
+    'user'     => '{{operator.dbPrefix}}platform',
+    'password' => '{{custom.passwords.platform}}',
+];
+
+Config::$baseUrl = '/{{operator.dir}}/rewards';

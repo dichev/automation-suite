@@ -1,0 +1,22 @@
+<?php
+namespace bonus;
+
+Config::$PRODUCTION = {{server.production}};
+Config::$baseUrl = '/{{operator.dir}}/bonus';
+
+Config::$db['default'] = [
+    'host'       => '{{operator.databases.master}}',
+    'database'   => '{{operator.dbPrefix}}bonus',
+    'user'       => '{{operator.dbPrefix}}bonus',
+    'password'   => '{{custom.passwords.bonus}}',
+];
+
+Config::$db['archive'] = [
+    'host'       => '{{operator.databases.archive}}',
+    'database'   => '{{operator.dbPrefix}}archive',
+    'user'       => '{{operator.dbPrefix}}platform',
+    'password'   => '{{custom.passwords.platform}}',
+];
+
+Config::$maxInfinitySpins = 1000;
+Config::$newSessionTimeout = 3600;

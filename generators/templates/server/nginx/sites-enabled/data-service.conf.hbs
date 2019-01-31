@@ -1,0 +1,17 @@
+server {
+    listen {{server.hosts.lb}}:443 ssl;
+	server_name	{{server.dataService.domain}};
+    root /var/www/;
+	include '/etc/nginx/conf.d/ssl.{{server.domains.[0]}}.conf';
+	location / {
+        include '/etc/nginx/conf.d/allow/data-service.conf';
+        include '/etc/nginx/conf.d/allow-me.conf';
+        try_files $uri $uri/ /index.php?$query_string;
+        location ~ \.php$ {
+            fastcgi_index index.php;
+            fastcgi_pass data-service;
+            fastcgi_param  SCRIPT_FILENAME /public/index.php;
+            include fastcgi.conf;
+        }
+	}
+}

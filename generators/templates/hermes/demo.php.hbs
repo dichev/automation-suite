@@ -1,0 +1,15 @@
+<?php
+namespace demo\config;
+
+use demo\Config;
+
+Config::$PRODUCTION = {{server.production}};
+
+Config::$db = [
+    'default' => [
+        'host'       => '{{operator.databases.master}}',
+        'database'   => '{{operator.dbPrefix}}demo',
+        'user'       => '{{operator.dbPrefix}}demo',
+        'password'   => '{{custom.passwords.demo}}',
+    ]
+];

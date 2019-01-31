@@ -1,0 +1,28 @@
+<?php
+namespace segments;
+
+$envFile = realpath(__DIR__ . '/../config/envs/production.php');
+require_once $envFile;
+
+$operatorFile = realpath(__DIR__ . '/../config/operators/{{operator.dir}}.php');
+if (file_exists($operatorFile)) require_once $operatorFile;
+
+Config::$PRODUCTION = {{server.production}};
+Config::$baseUrl = '/{{operator.dir}}/segments';
+
+Config::$db = [
+    Config::DB_DEFAULT => [
+        'host'     => '{{operator.databases.master}}',
+        'database' => '{{operator.dbPrefix}}segments',
+        'user'     => '{{operator.dbPrefix}}segments',
+        'password' => '{{custom.passwords.segments}}',
+        'slave'      => false
+    ],
+    Config::DB_PLATFORM => [
+        'host'       => '{{operator.databases.master}}',
+        'database'   => '{{operator.dbPrefix}}platform',
+        'user'       => '{{operator.dbPrefix}}ronly', // RONLY!!
+        'password'   => '{{custom.passwords.ronly}}',
+        'slave'      => false
+    ],
+];

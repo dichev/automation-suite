@@ -1,0 +1,8 @@
+# WARNING - This should be used only for local testing
+
+# Archive: {{operator.name}} ------------------------------------
+DROP DATABASE IF EXISTS {{operator.dbPrefix}}archive;
+DROP USER IF EXISTS '{{operator.dbPrefix}}platform'@'%';
+DROP USER IF EXISTS '{{operator.dbPrefix}}ronly'@'%';
+DROP USER IF EXISTS '{{operator.dbPrefix}}panel'@'%';
+

@@ -1,0 +1,28 @@
+[data-service]
+
+user = www-data
+group = www-data
+listen = 9070
+listen.owner = www-data
+listen.group = www-data
+
+pm = ondemand
+pm.process_idle_timeout = 30s
+pm.max_children = 20
+pm.max_requests = 150
+
+;access.log = /var/log/$pool.access.log
+access.format = "%R - %u %t \"%m %r%Q%q\" %s %f %{mili}d %{kilo}M %C%%"
+rlimit_files = 10240
+
+;CHROOT
+{{#unless server.production}}
+prefix = /home/dopamine/dev/data-service
+{{else}}
+prefix = /home/dopamine/production/common/data-service
+{{/unless}}
+chroot = $prefix
+chdir = /
+
+;STATUS page
+pm.status_path = /status

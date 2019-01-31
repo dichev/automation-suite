@@ -1,0 +1,21 @@
+<?php
+namespace replay\config;
+
+Config::$PRODUCTION = {{server.production}};
+
+Config::$db = [
+    'default' => [
+        'host'     => '{{operator.databases.master}}',
+        'database' => '{{operator.dbPrefix}}platform',
+        'user'     => '{{operator.dbPrefix}}platform',
+        'password' => '{{custom.passwords.platform}}'
+    ]
+];
+
+// Provider Id
+// Config::$providerId = Config::{{toUpperCase operator.dir}};
+Config::$providers[Config::$providerId]['apiKey'] = '{{generatePassword}}';
+
+// Config::$providerName = '{{operator.dir}}';
+
+// Config::$txPrefix = '{{operator.dir}}-';

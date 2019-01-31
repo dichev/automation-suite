@@ -1,0 +1,11 @@
+# Master: {{operator.name}} ------------------------------------
+# WARNING - there will be moment when the user will have no permissions in current sessions
+#           to minimize the risk run all statement as single batch query
+
+REVOKE ALL PRIVILEGES, GRANT OPTION FROM '{{operator.dbPrefix}}platform'@'%';
+REVOKE ALL PRIVILEGES, GRANT OPTION FROM '{{operator.dbPrefix}}panel'@'%';
+REVOKE ALL PRIVILEGES, GRANT OPTION FROM '{{operator.dbPrefix}}ronly'@'%';
+
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}platform`.* TO '{{operator.dbPrefix}}platform'@'%';
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}%`.*        TO '{{operator.dbPrefix}}panel'@'%';
+GRANT SELECT, SHOW VIEW ON `{{sqlEscape operator.dbPrefix}}%`.*     TO '{{operator.dbPrefix}}ronly'@'%';

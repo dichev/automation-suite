@@ -1,0 +1,28 @@
+server {
+    listen {{server.hosts.lb}}:80 default_server;
+    rewrite ^(.*) https://$host$1 permanent;
+
+    include '/etc/nginx/conf.d/robots.conf';
+    include '/etc/nginx/conf.d/favicons.conf';
+
+    # no need of ratelimit here, because of the permanent rewrite 
+}
+
+server {
+    listen {{server.hosts.lb}}:443 ssl default_server;
+    server_name default.{{server.domains.[0]}};
+    root /var/www/;
+    include '/etc/nginx/conf.d/ssl.{{server.domains.[0]}}.conf';
+
+    include '/etc/nginx/conf.d/robots.conf';
+    include '/etc/nginx/conf.d/favicons.conf';
+
+    location = /429.json {
+        default_type application/json;
+        internal;
+        return 429 '{"success":false,"error":{"msg":"Your access is temporary blocked. Please try again later.","code":429}}';
+    }
+
+    limit_req zone=by_ip_5rs;
+    error_page 503 =429 /429.json;
+}

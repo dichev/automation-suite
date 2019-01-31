@@ -1,0 +1,30 @@
+[{{operator.dir}}{{operator.suffix}}]
+
+user = www-data
+group = www-data
+listen = {{operator.fpm.port}}
+listen.owner = www-data
+listen.group = www-data
+
+{{#unless operator.live}}
+pm = ondemand
+pm.process_idle_timeout = 10s
+{{else}}
+pm = static
+pm.start_servers = {{operator.fpm.processes}}
+{{/unless}}
+pm.max_children = {{operator.fpm.processes}}
+pm.max_requests = {{operator.fpm.maxRequests}}
+
+;access.log = /var/log/$pool.access.log
+access.format = "%R - %u %t \"%m %r%Q%q\" %s %f %{mili}d %{kilo}M %C%%" 
+rlimit_files = 10240
+ 
+;CHROOT
+prefix = {{operator.baseDir}}/{{operator.dir}}/
+chroot = $prefix
+chdir = /
+
+;STATUS page
+pm.status_path = /status
+

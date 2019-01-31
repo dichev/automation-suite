@@ -1,0 +1,13 @@
+/var/log/mysql/*.log {
+  create 644 mysql mysql
+  notifempty
+  daily
+  rotate 5
+  missingok
+  nocompress
+  sharedscripts
+  postrotate
+    /usr/bin/mysqladmin flush-logs
+    service rsyslog rotate >/dev/null 2>&1 || true
+  endscript
+}

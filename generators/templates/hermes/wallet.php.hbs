@@ -1,0 +1,26 @@
+<?php
+namespace wallet;
+
+require_once __DIR__ . '/endpoints/{{operator.dir}}.php';
+{{# if custom.secret.apiKeys.wallet.hasRealDemo}}
+require_once __DIR__ . '/endpoints/{{operator.dir}}-demo.php';
+{{else}}
+require_once __DIR__ . '/endpoints/demo.php';
+{{/if}}
+
+Config::$PRODUCTION = {{server.production}};
+
+Config::$db['default'] = [
+    'host'       => '{{operator.databases.master}}',
+    'database'   => '{{operator.dbPrefix}}platform',
+    'user'       => '{{operator.dbPrefix}}platform',
+    'password'   => '{{custom.passwords.platform}}',
+];
+
+Config::$endpoints['{{operator.dir}}']['apiUrl'] = '{{custom.secret.apiKeys.wallet.apiUrl}}';
+Config::$endpoints['{{operator.dir}}']['credentials']['apiKey'] = '{{custom.secret.apiKeys.wallet.apiKey}}';
+Config::$endpoints['{{operator.dir}}']['credentials']['reconToken'] = '{{custom.secret.apiKeys.wallet.reconToken}}';
+Config::$endpoints['{{operator.dir}}']['curl']['ssl']['ca'] = '/etc/cacert.pem';
+
+foreach(Config::$endpoints as $brand=>$conf) Config::$endpoints[$brand]['curl']['options'][CURLOPT_PROXY] = "{{server.hosts.proxy}}";
+

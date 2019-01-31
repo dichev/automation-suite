@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+set -e
+
+
+# TODO: check is baracuda by default
+# TODO: sed -i 's/\r//g' THIS_FILE
+# EXTRA ALTER FOR: ugs, ugs3
+
+
+
+
+echo -e "\n\n----------------- {{operator.name}} ---------------------"
+echo -e "Altering transactions_demo table:"
+
+pt-online-schema-change \
+  --alter " \
+    DROP beenForRecon, \
+    DROP languageId, \
+    DROP affiliate, \
+    DROP channel, \
+    DROP reconRetries, \
+    DROP ip, \
+    DROP txPrefix, \
+    DROP playRequestId, \
+    DROP txRefId, \
+    DROP rgiId, \
+    MODIFY COLUMN id bigint(1) UNSIGNED NOT NULL AUTO_INCREMENT FIRST, \
+    MODIFY COLUMN roundInstanceId bigint(1) UNSIGNED NOT NULL AFTER id, \
+    ROW_FORMAT = DYNAMIC \
+  " \
+  D={{operator.dbPrefix}}platform,t=transactions_demo \
+  --execute --statistics --progress time,1 --recursion-method none \
+  --chunk-time 0.100 --max-load Threads_running=200 --critical-load Threads_running=1000
+
+
+
+
+echo -e "START $(du -hs /var/lib/mysql/{{operator.dbPrefix}}platform)" >> /root/migrations/results.log
+
+echo -e "\n\n----------------- {{operator.name}} ---------------------"
+echo -e "Altering transactions_real table:"
+
+pt-online-schema-change \
+  --alter " \
+    DROP beenForRecon, \
+    DROP languageId, \
+    DROP affiliate, \
+    DROP channel, \
+    DROP reconRetries, \
+    DROP ip, \
+    DROP txPrefix, \
+    DROP playRequestId, \
+    DROP txRefId, \
+    DROP rgiId, \
+    MODIFY COLUMN id bigint(1) UNSIGNED NOT NULL AUTO_INCREMENT FIRST, \
+    MODIFY COLUMN roundInstanceId bigint(1) UNSIGNED NOT NULL AFTER id, \
+    ROW_FORMAT = DYNAMIC \
+  " \
+  D={{operator.dbPrefix}}platform,t=transactions_real \
+  --execute --statistics --progress time,1 --recursion-method none \
+  --chunk-time 0.100 --max-load Threads_running=200 --critical-load Threads_running=1000
+
+
+
+
+echo -e "\n\n----------------- {{operator.name}} ---------------------"
+echo -e "Altering transactions_demo table:"
+
+pt-online-schema-change \
+  --alter " \
+    MODIFY COLUMN id bigint(1) UNSIGNED NOT NULL AUTO_INCREMENT FIRST, \
+    ROW_FORMAT = DYNAMIC \
+  " \
+  D={{operator.dbPrefix}}platform,t=transactions_round_instance \
+  --execute --statistics --progress time,1 --recursion-method none \
+  --chunk-time 0.100 --max-load Threads_running=200 --critical-load Threads_running=1000
+
+
+echo -e "END   $(du -hs /var/lib/mysql/{{operator.dbPrefix}}platform)" >> /root/migrations/results.log
+tail -n 2 /root/migrations/results.log
+echo -e "See all summary results here: /root/migrations/results.log"

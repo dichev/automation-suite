@@ -1,0 +1,31 @@
+<?php
+
+namespace rgs;
+
+Config::$db = [
+    'default' => [
+        'host'       => '{{operator.databases.master}}',
+        'database'   => '{{operator.dbPrefix}}platform',
+        'user'       => '{{operator.dbPrefix}}platform',
+        'password'   => '{{custom.passwords.platform}}'
+    ],
+
+    'archive'    => [
+        'host'       => '{{operator.databases.archive}}',
+        'database'   => '{{operator.dbPrefix}}archive',
+        'user'       => '{{operator.dbPrefix}}platform',
+        'password'   => '{{custom.passwords.platform}}'
+    ],
+];
+
+Config::$commands['exchange-rates'] = [
+    'apiUrl' => 'https://{{server.dataService.domain}}/exchange-rates/convert?from=[fromCurrency]&to=[toCurrency]',
+    'user'   => '{{custom.secret.uds.user}}',
+    'key'    => '{{custom.secret.uds.key}}',
+];
+
+{{#if server.hosts.java}}
+Config::$mathProviders['cayetano']['enabled'] = true;
+Config::$mathProviders['cayetano']['domain'] = 'http://{{server.hosts.java}}/';
+{{/if}}
+

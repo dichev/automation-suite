@@ -1,0 +1,22 @@
+# Master: {{operator.name}} ------------------------------------
+DROP DATABASE IF EXISTS {{operator.dbPrefix}}bonus;
+DROP DATABASE IF EXISTS {{operator.dbPrefix}}demo;
+DROP DATABASE IF EXISTS {{operator.dbPrefix}}jackpot;
+DROP DATABASE IF EXISTS {{operator.dbPrefix}}panel;
+DROP DATABASE IF EXISTS {{operator.dbPrefix}}platform;
+DROP DATABASE IF EXISTS {{operator.dbPrefix}}rewards;
+DROP DATABASE IF EXISTS {{operator.dbPrefix}}segments;
+DROP DATABASE IF EXISTS {{operator.dbPrefix}}stats;
+DROP DATABASE IF EXISTS {{operator.dbPrefix}}tournaments;
+DROP DATABASE IF EXISTS {{operator.dbPrefix}}reports;
+
+DROP USER IF EXISTS '{{operator.dbPrefix}}bonus'@'%';
+DROP USER IF EXISTS '{{operator.dbPrefix}}demo'@'%';
+DROP USER IF EXISTS '{{operator.dbPrefix}}jackpot'@'%';
+DROP USER IF EXISTS '{{operator.dbPrefix}}panel'@'%';
+DROP USER IF EXISTS '{{operator.dbPrefix}}platform'@'%';
+DROP USER IF EXISTS '{{operator.dbPrefix}}segments'@'%';
+DROP USER IF EXISTS '{{operator.dbPrefix}}stats'@'%';
+DROP USER IF EXISTS '{{operator.dbPrefix}}reports'@'%';
+DROP USER IF EXISTS '{{operator.dbPrefix}}ronly'@'%';
+
