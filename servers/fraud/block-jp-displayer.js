@@ -14,6 +14,19 @@ const DELAY_MIN = 5 // minutes
 const DELAY_MAX = 15 // minutes
 const THRESHOLD = 10
 
+const KEEP_FOREVER = [
+    '148.252.128.134',
+    '54.171.161.41',
+    '176.26.185.21',
+    '185.125.207.238',
+    '185.125.207.240',
+    '185.125.207.237',
+    '138.201.17.161',
+    '185.125.207.241',
+    '86.24.234.122',
+    '138.201.200.213'
+]
+
 let program = new Program({chat: cfg.chat.rooms.anomaly })
 
 program
@@ -45,8 +58,8 @@ program
             for (let rule of rules) {
                 let oneDaysAgo = new Date()
                 oneDaysAgo.setTime(oneDaysAgo.getTime() - (24 * 60 * 60 * 1000))
-                if (new Date(rule.created_on) < oneDaysAgo) {
-                    await program.chat.message(`Remove the ban of ${rule.configuration.value} (added on ${rule.created_on}`)
+                if (!KEEP_FOREVER.includes(rule.configuration.value) && new Date(rule.created_on) < oneDaysAgo) {
+                    console.log(`Remove the ban of ${rule.configuration.value} (added on ${rule.created_on}`)
                     await program.confirm(`Do you want to remove the ban of ${rule.configuration.value} (added on ${rule.created_on})`)
                     await cf.delete('firewall/access_rules/rules/' + rule.id)
                 }

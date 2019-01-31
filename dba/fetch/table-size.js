@@ -12,7 +12,7 @@ program
     .description('Fetch anything from operator database replications')
     .option('-t, --tables <list>', 'Comma separated list of tables', {required: true})
     .option('-o, --operators <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
-    .option('--db <type>', 'The target database type', { choices: ['platform', 'panel', 'bonus', 'archive'], def: 'platform' })
+    .option('--db <type>', 'The target database type', { choices: ['platform', 'demo', 'panel', 'bonus', 'segments', 'stats', 'jackpot', 'tournaments', 'archive'], def: 'platform' })
     
     
     .iterate('operators', async (operator) => {
