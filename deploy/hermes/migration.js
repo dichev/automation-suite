@@ -32,7 +32,7 @@ Promise.resolve().then(async() => {
         let db = await program.mysql({user: 'root', ssh: {user: 'root', host: program.params.db === 'archive' ? dbs.archive : dbs.master}})
         let dbname = cfg.operators[operator].dbPrefix + program.params.db
     
-        if (cfg.operators[operator].sharedJackpot) {
+        if (program.params.db === 'jackpot' && cfg.operators[operator].sharedJackpot) {
             throw Error(`Shared db ${cfg.operators[operator].sharedJackpot} not yet supported because there is a risk to be executed twice`)
         }
         
