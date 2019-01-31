@@ -29,6 +29,10 @@
 * **[monitoring](#monitoring)**
     * **[check](#monitoring-check)** - pre-deployment tests for Grafana-Sensors
     * **[update](#monitoring-update)** - update Grafana-Sensors repo
+* **[safeguard](#safeguard)**
+    * **[control](#safeguard-control)** 
+    * **[setup](#safeguard-setup)** - installing safeguard
+    * **[update](#safeguard-update)** - updating safeguard version
 * **[ssl-framework](#ssl-framework)**
     * **[check](#ssl-framework-check)** - pre-deployment tests for SSL-Framework
     * **[update](#ssl-framework-update)** - update SSL-Framework
@@ -561,6 +565,70 @@ Additional Options:
 
   Example usage:
     node deploy/monitoring/update
+```
+## <a name="safeguard"></a>safeguard
+### <a name="safeguard-control"></a>control
+
+```
+Usage: node deploy/safeguard/control --locations <list|all> --mode <stop|start|restart> 
+
+Options:
+  -l, --locations <list|all>   [required] The target location (will be used web1)
+  --mode <stop|start|restart>  [required] The systemctl command to be executed
+
+Additional Options:
+  -p, --parallel [limit]       When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose                Turn ON log details of whats happening
+  -f, --force                  Suppress confirm messages (used for automation)
+  --dry-run                    Dry run mode will do everything as usual except commands execution
+  --quiet                      Turn off chat and some logs in stdout
+  --wait <int>                 Pause between iterations in seconds
+  --announce                   Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                    Disable chat notification if they are activated
+  -h, --help                   output usage information
+```
+### <a name="safeguard-setup"></a>setup
+Installing safeguard
+```
+Usage: node deploy/safeguard/setup --locations <list|all> 
+
+Installing safeguard
+
+Options:
+  -l, --locations <list|all>  [required] The target location (will be used web1)
+
+Additional Options:
+  -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose               Turn ON log details of whats happening
+  -f, --force                 Suppress confirm messages (used for automation)
+  --dry-run                   Dry run mode will do everything as usual except commands execution
+  --quiet                     Turn off chat and some logs in stdout
+  --wait <int>                Pause between iterations in seconds
+  --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                   Disable chat notification if they are activated
+  -h, --help                  output usage information
+```
+### <a name="safeguard-update"></a>update
+Updating safeguard version
+```
+Usage: node deploy/safeguard/update --locations <list|all> --rev <tag> 
+
+Updating safeguard version
+
+Options:
+  -l, --locations <list|all>  [required] The target location (will be used web1)
+  -r, --rev <tag>             [required] The target version as tag name
+
+Additional Options:
+  -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose               Turn ON log details of whats happening
+  -f, --force                 Suppress confirm messages (used for automation)
+  --dry-run                   Dry run mode will do everything as usual except commands execution
+  --quiet                     Turn off chat and some logs in stdout
+  --wait <int>                Pause between iterations in seconds
+  --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                   Disable chat notification if they are activated
+  -h, --help                  output usage information
 ```
 ## <a name="ssl-framework"></a>ssl-framework
 ### <a name="ssl-framework-check"></a>check

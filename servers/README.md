@@ -27,17 +27,21 @@
 * **[mysql-conf](#mysql-conf)**
     * **[fetch-configs](#mysql-conf-fetch-configs)** - generate server-conf for specific location
     * **[fetch-dynamic-configs](#mysql-conf-fetch-dynamic-configs)** - generate server-conf for specific location
+    * **[list-changes](#mysql-conf-list-changes)** - check for not applied changes in mysql server repo
     * **[setup](#mysql-conf-setup)** - setup unified mysql configuration
-    * **[update](#mysql-conf-update)** - setup unified mysql configuration
+    * **[update](#mysql-conf-update)** - update mysql configuration
     * **[upgrade-package](#mysql-conf-upgrade-package)** - upgrade percona mysql package to it&#x27;s latest version
 * **[nginx](#nginx)**
+    * **[disable-operators](#nginx-disable-operators)** - enable/disable nginx access to operators on specific location
+    * **[switch-webs-by-location](#nginx-switch-webs-by-location)** - switch between webs used by locations
+    * **[switch-webs-by-operator](#nginx-switch-webs-by-operator)** - switch between webs used by the operators
     * **[whitelist](#nginx-whitelist)** - whitelist ips for operator
 * **[php-binary](#php-binary)**
     * **[check](#php-binary-check)** 
     * **[init](#php-binary-init)** 
 * **[proxy](#proxy)**
     * **[setstate](#proxy-setstate)** - switch proxy state [in/active] for operator[s]
-    * **[setup](#proxy-setup)** - tiny proxy setup.
+    * **[setup](#proxy-setup)** - proxy setup.
 * **[servers-conf](#servers-conf)**
     * **[init](#servers-conf-init)** - setup unified server configurations
     * **[list-changes](#servers-conf-list-changes)** 
@@ -471,6 +475,27 @@ Additional Options:
   --no-chat               Disable chat notification if they are activated
   -h, --help              output usage information
 ```
+### <a name="mysql-conf-list-changes"></a>list-changes
+Check for not applied changes in mysql server repo
+```
+Usage: node servers/mysql-conf/list-changes --hosts <list|all> 
+
+Check for not applied changes in mysql server repo
+
+Options:
+  -h, --hosts <list|all>  [required] The target host name
+
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
+```
 ### <a name="mysql-conf-setup"></a>setup
 Setup unified mysql configuration
 ```
@@ -493,15 +518,15 @@ Additional Options:
   -h, --help              output usage information
 ```
 ### <a name="mysql-conf-update"></a>update
-Setup unified mysql configuration
+Update mysql configuration
 ```
-Usage: node servers/mysql-conf/update --hosts <list|all> 
+Usage: node servers/mysql-conf/update --hosts <list|all> --mode <restart|fetch> 
 
-Setup unified mysql configuration
+Update mysql configuration
 
 Options:
   -h, --hosts <list|all>  [required] The target host name
-  --mode <restart|fetch>  Restart mysql server or just fetch the changes (will be applied on next restart)
+  --mode <restart|fetch>  [required] Restart mysql server or just fetch the changes (will be applied on next restart)
   --query <sql>           Execute SQL command after the update (to apply global setting change without restart), for example: "SET GLOBAL expire_logs_days = 5"
   --reset                 Reset manual changes
 
@@ -538,6 +563,88 @@ Additional Options:
   -h, --help              output usage information
 ```
 ## <a name="nginx"></a>nginx
+### <a name="nginx-disable-operators"></a>disable-operators
+Enable/disable nginx access to operators on specific location
+```
+Usage: node servers/nginx/disable-operators --locations <list|all> --operators <list|all> 
+
+Enable/disable nginx access to operators on specific location
+
+Options:
+  -l, --locations <list|all>    [required] The target host name
+  -o, --operators <list|all>    [required] Comma-separated list of operators
+  --filter-by-databases <name>  Filter operators by databases name
+  --enable                      Toggle to reenable them
+
+Additional Options:
+  -p, --parallel [limit]        When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose                 Turn ON log details of whats happening
+  -f, --force                   Suppress confirm messages (used for automation)
+  --dry-run                     Dry run mode will do everything as usual except commands execution
+  --quiet                       Turn off chat and some logs in stdout
+  --wait <int>                  Pause between iterations in seconds
+  --announce                    Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                     Disable chat notification if they are activated
+  -h, --help                    output usage information
+```
+### <a name="nginx-switch-webs-by-location"></a>switch-webs-by-location
+Switch between webs used by locations
+```
+Usage: node servers/nginx/switch-webs-by-location --webs <webs|all> --locations <location|all> 
+
+Switch between webs used by locations
+
+Options:
+  -w, --webs <webs|all>           [required] Comma-separated list on which webs to be executed
+  -l, --locations <location|all>  [required] Comma-separated list of location (this wil filter the operators in defined location)
+  --exclude-webs <webs>           Comma-separated list on which webs to be EXCLUDED from the --webs list
+
+Additional Options:
+  -p, --parallel [limit]          When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose                   Turn ON log details of whats happening
+  -f, --force                     Suppress confirm messages (used for automation)
+  --dry-run                       Dry run mode will do everything as usual except commands execution
+  --quiet                         Turn off chat and some logs in stdout
+  --wait <int>                    Pause between iterations in seconds
+  --announce                      Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                       Disable chat notification if they are activated
+  -h, --help                      output usage information
+
+  Example usage:
+    $ switch-webs --webs=all  --operators=all
+    $ switch-webs --webs=web1 --operators=all
+    $ switch-webs --webs=all  --operators=all --exclude-webs=web1,web2
+    $ switch-webs --webs=web1,web2 --operators=rtg,bots --no-reload
+```
+### <a name="nginx-switch-webs-by-operator"></a>switch-webs-by-operator
+Switch between webs used by the operators
+```
+Usage: node servers/nginx/switch-webs-by-operator --webs <webs|all> --operators <operators|all> 
+
+Switch between webs used by the operators
+
+Options:
+  -w, --webs <webs|all>            [required] Comma-separated list on which webs to be executed
+  -o, --operators <operators|all>  [required] Comma-separated list on which operators to be executed
+  --exclude-webs <webs>            Comma-separated list on which webs to be EXCLUDED from the --webs list
+
+Additional Options:
+  -p, --parallel [limit]           When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose                    Turn ON log details of whats happening
+  -f, --force                      Suppress confirm messages (used for automation)
+  --dry-run                        Dry run mode will do everything as usual except commands execution
+  --quiet                          Turn off chat and some logs in stdout
+  --wait <int>                     Pause between iterations in seconds
+  --announce                       Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                        Disable chat notification if they are activated
+  -h, --help                       output usage information
+
+  Example usage:
+    $ switch-webs --webs=all  --operators=all
+    $ switch-webs --webs=web1 --operators=all
+    $ switch-webs --webs=all  --operators=all --exclude-webs=web1,web2
+    $ switch-webs --webs=web1,web2 --operators=rtg,bots --no-reload
+```
 ### <a name="nginx-whitelist"></a>whitelist
 Whitelist ips for operator
 ```
@@ -624,11 +731,11 @@ Additional Options:
   -h, --help                  output usage information
 ```
 ### <a name="proxy-setup"></a>setup
-Tiny proxy setup.
+Proxy setup.
 ```
 Usage: node servers/proxy/setup --locations <list|all> 
 
-Tiny proxy setup.
+Proxy setup.
 
 Options:
   -l, --locations <list|all>  [required] Location

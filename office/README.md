@@ -6,7 +6,8 @@
 * **[templates](#templates)**
     * **[generate-migrations](#templates-generate-migrations)** - generate SQL migrations by location
     * **[generate-new-operator](#templates-generate-new-operator)** - generate all configurations for new operator deployment
-    * **[generate-pyxbackup](#templates-generate-pyxbackup)** - generate prometheus config specific location
+    * **[generate-prometheus-conf](#templates-generate-prometheus-conf)** - generate prometheus config specific location
+    * **[generate-pyxbackup](#templates-generate-pyxbackup)** - generate pyxbackup config specific location
     * **[generate-servers-conf](#templates-generate-servers-conf)** - generate server-conf for specific location
 
 ## Help
@@ -97,12 +98,32 @@ Additional Options:
   --no-chat               Disable chat notification if they are activated
   -h, --help              output usage information
 ```
-### <a name="templates-generate-pyxbackup"></a>generate-pyxbackup
+### <a name="templates-generate-prometheus-conf"></a>generate-prometheus-conf
 Generate prometheus config specific location
+```
+Usage: node office/templates/generate-prometheus-conf [options]
+
+Generate prometheus config specific location
+
+Options:
+
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
+```
+### <a name="templates-generate-pyxbackup"></a>generate-pyxbackup
+Generate pyxbackup config specific location
 ```
 Usage: node office/templates/generate-pyxbackup --hosts <list|all> 
 
-Generate prometheus config specific location
+Generate pyxbackup config specific location
 
 Options:
   -h, --hosts <list|all>  [required] The target host names
