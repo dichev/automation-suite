@@ -53,6 +53,8 @@ program.run(async () => {
         const OPERATORS = operatorsByLocation[location]
         const LOCATION = cfg.locations[location]
         const BASE_DIR = '/home/dopamine/production'
+
+        // if(location === 'belgium-mga' || location === 'belgium-alderney' ||  location === 'belgium-rtg') continue
         
         
         let shell = program.shell()
@@ -207,6 +209,12 @@ program.run(async () => {
         else {
             throw Error(`There is no such strategy: ${STRATEGY}`)
         }
+
+        // if (to === 'r3.10.13.0') {
+        //     let forced = program.params.force ? '--force' : ''
+        //     await chat.message('\n• Executing SQL migrations')
+        //     await shell.exec(`node deploy/hermes/migration -m /d/www/_releases/hermes/.migrations/r3.10.13.0/gpanel-r3.10.13.0.sql --db panel -o ${OPERATORS.map(o => o.name)} ${forced} --no-chat`)
+        // }
     
         await chat.message(`✓ ${to} deployed to ${OPERATORS.map(o => o.name)}`)
         

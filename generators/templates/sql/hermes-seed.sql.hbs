@@ -20,9 +20,9 @@ USE {{operator.dbPrefix}}panel;
 
 {{#if custom.secret.adminUsers}}
 TRUNCATE `_users`;
-INSERT INTO `_users` (`adminName`, `userName`, `email`, `password`, `roleId`, `timeZoneId`, `expiresAt`, `active`, `casinos`) VALUES
+INSERT INTO `_users` (`adminName`, `userName`, `email`, `password`, `roleId`, `timeZoneId`, `forcePasswordChange`, `expiresAt`, `active`, `casinos`) VALUES
 {{#each custom.secret.adminUsers}}
-('{{adminName}}','{{userName}}','{{email}}','{{password}}',{{roleId}},{{timeZoneId}},{{#if expiresAt}}'{{expiresAt}}'{{else}}NULL{{/if}},1,''){{#if @last}};{{else}},{{/if}}
+('{{adminName}}','{{userName}}','{{email}}','{{password}}',{{roleId}},{{timeZoneId}},{{forcePasswordChange}},{{#if expiresAt}}'{{expiresAt}}'{{else}}NULL{{/if}},1,''){{#if @last}};{{else}},{{/if}}
 {{/each}}
 {{/if}}
 
