@@ -29,11 +29,11 @@ program
 
         // Templating the environment
         log("Generating operators configurations from templates..")
-        await shell.exec(`node office/templates/generate-new-operator -o ${OPERATOR} --dest ${OUTPUT}`)
+        await shell.exec(`node generators/generate-new-operator -o ${OPERATOR} --dest ${OUTPUT}`)
     
         log("Generating servers configurations from templates..")
         log("Please review and commit the server configurations")
-        await shell.exec(`node office/templates/generate-servers-conf -l ${LOCATION} --commit "[env] Add new operator: ${OPERATOR}"`)
+        await shell.exec(`node generators/generate-servers-conf -l ${LOCATION} --commit "[env] Add new operator: ${OPERATOR}"`)
         log("\n\n===================================================\n\n")
 
 

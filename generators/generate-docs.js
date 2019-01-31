@@ -12,12 +12,19 @@ const fs = require('fs')
 const path = require('path')
 const Handlebars = require('handlebars')
 
+const TEMPLATES = __dirname.replace(/\\/g, '/') + '/templates/docs'
+
 const templates = {
-    main: Handlebars.compile(fs.readFileSync(__dirname + '/templates/README_main.hbs').toString()),
-    program: Handlebars.compile(fs.readFileSync(__dirname + '/templates/README_program.hbs').toString()),
+    main: Handlebars.compile(fs.readFileSync(TEMPLATES + '/README_main.hbs').toString()),
+    program: Handlebars.compile(fs.readFileSync(TEMPLATES + '/README_program.hbs').toString()),
 }
 
-const GROUPS = ['deploy', 'servers', 'office', 'dba']
+const GROUPS = [
+    'deploy',
+    'servers',
+    'office',
+    'dba',
+]
 
 let program = new Program()
 

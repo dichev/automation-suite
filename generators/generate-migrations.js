@@ -10,7 +10,8 @@ const Handlebars = require('handlebars')
 
 const NEW_LINE = '\r\n'; //require('os').EOL
 
-const MIGRATION = `/d/www/servers/template-generator/templates/migrations/migration.sql.hbs`
+const TEMPLATES = __dirname.replace(/\\/g, '/') + '/templates'
+const MIGRATION = TEMPLATES + '/migrations/migration.sql.hbs'
 const DEST = __dirname + '/output'
 
 let program = new Program()

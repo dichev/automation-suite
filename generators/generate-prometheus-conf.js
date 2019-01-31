@@ -10,7 +10,7 @@ const path = require('path')
 const Handlebars = require('handlebars')
 
 const NEW_LINE = '\r\n'; //require('os').EOL
-const TEMPLATES = `d:/www/servers/template-generator/templates/prometheus`
+const TEMPLATES = __dirname.replace(/\\/g, '/') + '/templates/prometheus'
 const DEST = `d:/www/monitoring/`
 
 const save = async (file, content) => {

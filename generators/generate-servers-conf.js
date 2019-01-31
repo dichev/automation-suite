@@ -10,7 +10,7 @@ const path = require('path')
 const Handlebars = require('handlebars')
 
 const NEW_LINE = '\r\n'; //require('os').EOL
-const TEMPLATES = `d:/www/servers/template-generator/templates/server`
+const TEMPLATES = __dirname.replace(/\\/g, '/') + '/templates/server'
 const DEST = `d:/www/servers`
 
 let program = new Program()
@@ -60,6 +60,9 @@ program.iterate('locations', async (location) => {
     console.log('Resetting servers conf repo')
     let shell = new Shell()
     await shell.exec(`cd ${dest} && git reset --hard && git checkout -q master && git pull -q --ff-only origin master`)
+    // if (location !== 'dev') {
+    //     await shell.exec(`cd ${dest} && mv nginx/conf.d/allow .keep.allow && rm -rf */ && mkdir -p nginx/conf.d/ && mv .keep.allow nginx/conf.d/allow`) // TODO: protect!
+    // }
     
     let templates = (await program.shell().exec(`cd ${TEMPLATES} && find -type f`, { silent: true })).split('\n').map(t => t.trim().slice(2))
     

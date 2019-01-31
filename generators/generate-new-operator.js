@@ -13,7 +13,7 @@ const Helpers = require('./lib/Helpers')
 const NEW_LINE = '\r\n'; //require('os').EOL
 
 const DEST = __dirname + '/output'
-const TEMPLATES = `d:/www/servers/template-generator/templates`
+const TEMPLATES = __dirname.replace(/\\/g, '/') + '/templates'
 const SERVER_CONF_REPOS = `d:/www/servers`
 
 let program = new Program()
@@ -31,7 +31,7 @@ const generate = async (source, dest, vars) => {
     if (!fs.existsSync(dir)) await program.shell().exec(`mkdir -p ${dir}`)
     
     const template = Handlebars.compile(fs.readFileSync(source).toString(), {noEscape: true})
-    const content = template(vars) + NEW_LINE + NEW_LINE // TODO remove these new lines
+    const content = template(vars)
     fs.writeFileSync(dest, content.replace(/\r?\n/g, NEW_LINE)) // unify new lines
 }
 
