@@ -11,15 +11,20 @@ program
     
     .option('-l, --locations <list|all>', 'The target host name', {choices: Object.keys(cfg.locations), required: true})
     .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators), required: true})
+    .option('--filter-by-databases <name>', 'Filter operators by databases name')
     .option('--enable', `Toggle to reenable them`)
 
 program
     .iterate('locations', async (location) => {
         const lb = await new SSHClient().connect({host: cfg.locations[location].hosts.lb, username: 'root'})
         const DISABLED = program.params.enable !== true
-        const OPERATORS = program.params.operators.split(',').map(o => cfg.operators[o]).filter(o => o.location === location)
-    
-        console.log(DISABLED ? 'Disabling' : 'Enabling' + ' following operators: \n' + OPERATORS.map(o => o.name).join('\n'))
+        
+        let OPERATORS = program.params.operators.split(',').map(o => cfg.operators[o]).filter(o => o.location === location)
+        if(program.params.filterByDatabases) {
+            OPERATORS = OPERATORS.filter(o => o.databases === program.params.filterByDatabases)
+        }
+        
+        console.log((DISABLED ? 'Disabling' : 'Enabling') + ' following operators: \n' + OPERATORS.map(o => o.name).join('\n'))
         await program.confirm('Continue?')
         
         if(DISABLED){
