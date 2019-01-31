@@ -30,7 +30,7 @@ program
         await ssh.chdir('/home/dopamine/grafana-sensors')
         await chat.notify('Updating repo to last revision')
         
-        await ssh.exec(`chown -R dopamine:dopamine .`)
+        await sshRoot.exec(`chown -R dopamine:dopamine /home/dopamine/grafana-sensors/`)
 
         await ssh.exec(`git reset --hard`) // removing package*.json
         await ssh.exec(`git fetch --prune && git pull`)
