@@ -29,6 +29,7 @@ program.run(async () => {
     const allOperators = program.params.operators.split(',')
     for(let name of allOperators){
         let operator = cfg.operators[name]
+        if(operator.freeze) throw Error(`Can not deploy to ${name} because the operator is frozen!`)
         if(!operatorsByLocation[operator.location]) operatorsByLocation[operator.location] = []
         operatorsByLocation[operator.location].push(operator)
     }
