@@ -20,11 +20,8 @@ program
         let gitProject = 'servers-conf-' + location
         let configFile = `${RootDir}/${gitProject}/nginx/conf.d/allow/${operator}.conf`
 
-        await shell.chdir(RootDir)
-        if(fs.existsSync(`${RootDir}/${gitProject}`)){
-            await shell.chdir(`${RootDir}/${gitProject}`)
-            await shell.exec('git pull',{silent:true})
-        }else{
+        if(!fs.existsSync(`${RootDir}/${gitProject}`)){
+            await shell.chdir(RootDir)
             await shell.exec(`git clone git@gitlab.dopamine.bg:servers/servers-conf-${location}.git`,{silent:true})
         }
         if( fs.existsSync(configFile)) console.log(fs.readFileSync(configFile).toString().grep('^allow'))
