@@ -4,7 +4,7 @@
 const Program = require('dopamine-toolbox').Program
 const SSHClient = require('dopamine-toolbox').SSHClient
 const cfg = require('configurator')
-const DEST = `d:/www/servers/servers-conf-mysql/current`
+const DEST = cfg.dirs.serversConfRepos + `/servers-conf-mysql/current`
 
 const SQL = `
 SHOW VARIABLES WHERE variable_name IN(

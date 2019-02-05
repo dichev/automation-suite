@@ -8,7 +8,7 @@ const fs = require('fs')
 const path = require('path')
 
 const NEW_LINE = '\r\n'; //require('os').EOL
-const DEST = `d:/www/servers/servers-conf-mysql/current`
+const DEST = cfg.dirs.serversConfRepos + `/servers-conf-mysql/current`
 
 let program = new Program()
 program

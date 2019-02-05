@@ -14,7 +14,7 @@ const NEW_LINE = '\r\n'; //require('os').EOL
 
 const DEST = __dirname + '/output'
 const TEMPLATES = __dirname.replace(/\\/g, '/') + '/templates'
-const SERVER_CONF_REPOS = `d:/www/servers`
+const SERVER_CONF_REPOS = cfg.dirs.serversConfRepos
 
 let program = new Program()
 program

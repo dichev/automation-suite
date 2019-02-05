@@ -11,7 +11,7 @@ const Handlebars = require('handlebars')
 
 const NEW_LINE = '\r\n'; //require('os').EOL
 const TEMPLATES = __dirname.replace(/\\/g, '/') + '/templates/server'
-const DEST = `d:/www/servers`
+const DEST = cfg.dirs.serversConfRepos
 
 let program = new Program()
 program

@@ -34,6 +34,4 @@ program
     }
     await web1.exec(`php ${program.params.project}/bin/cmd.php ${program.params.cron}`)
     await web1.disconnect()
-    
-    await program.sleep(2, 'Waiting between iterations')
 })
