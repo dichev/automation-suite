@@ -13,7 +13,7 @@ fs.mkdirSync(RootDir)
 String.prototype.grep = function(reg){ reg = new RegExp(reg,'i'); return this.split("\n").filter( line => line.match(reg) ).join("\n") }
 
 program
-    .description("List whitelisted ips for operator")
+    .description("List ips for operator")
     .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators), required: true})
     .iterate('operators', async (operator) => {
         let location = cfg.getLocationByOperator(operator).name
@@ -21,11 +21,11 @@ program
         let configFile = `${RootDir}/${gitProject}/nginx/conf.d/allow/${operator}.conf`
 
         await shell.chdir(RootDir)
-        try{
-            await shell.exec(`git clone git@gitlab.dopamine.bg:servers/servers-conf-${location}.git`,{silent:true})
-        }catch(e){
+        if(fs.existsSync(`${RootDir}/${gitProject}`)){
             await shell.chdir(`${RootDir}/${gitProject}`)
             await shell.exec('git pull',{silent:true})
+        }else{
+            await shell.exec(`git clone git@gitlab.dopamine.bg:servers/servers-conf-${location}.git`,{silent:true})
         }
         if( fs.existsSync(configFile)) console.log(fs.readFileSync(configFile).toString().grep('^allow'))
     })
