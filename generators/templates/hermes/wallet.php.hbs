@@ -22,5 +22,9 @@ Config::$endpoints['{{operator.dir}}']['credentials']['apiKey'] = '{{custom.secr
 Config::$endpoints['{{operator.dir}}']['credentials']['reconToken'] = '{{custom.secret.apiKeys.wallet.reconToken}}';
 Config::$endpoints['{{operator.dir}}']['curl']['ssl']['ca'] = '/etc/cacert.pem';
 
-foreach(Config::$endpoints as $brand=>$conf) Config::$endpoints[$brand]['curl']['options'][CURLOPT_PROXY] = "{{server.hosts.proxy}}";
-
+#ProxyStart
+foreach(Config::$endpoints as $brand=>$conf){
+    Config::$endpoints[$brand]['curl']['options'][CURLOPT_PROXY] = "{{server.hosts.proxy}}";
+    Config::$endpoints[$brand]['curl']['options'][CURLOPT_USERAGENT] = "redtiger/ugseu/$brand";
+}
+#ProxyEnd
