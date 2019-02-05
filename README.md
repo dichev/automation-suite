@@ -100,6 +100,23 @@ For Windows also add following environment variables (don't forget ti check are 
 GIT_SSH=C:\Program Files\PuTTY\plink.exe  // This will allow git to use by default your putty keys on local environments:
 PATH=C:\Program Files\Git\bin             // this will allow node to run bash (here should be stored your bash.exe)
 ```
+
+### Linux setup
+First set this to ensure there will be no issues with the new line between Windows/Linux 
+```bash
+git config --global core.autocrlf
+
+# Important this must be set before the repo is cloned. 
+# Otherwise you should set it locally to the repo too:
+# $ cd automation && git config core.autocrlf
+```
+Add to crontab this update script:
+```
+# Auto-Update automation
+0 5 * * * cd /root/automation && git reset --hard && git pull && npm install && npm i configurator && npm i dopamine-toolbox && git reset --hard
+```
+Don't forget the cron user may not have git credentials and you should create key with gitlab access for it
+
 ### Known Issues
 
 - Colors in shell are displayed as ANSI codes in Windows MinGW64
