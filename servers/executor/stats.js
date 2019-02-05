@@ -110,7 +110,8 @@ inquirer.prompt([{
 
             line.fill()
             line = line.contents();
-            let pageSize = (iterator < process.stdout.rows ? iterator : process.stdout.rows ) - 5
+            let availableRows = process.stdout.rows - 5
+            let pageSize = (iterator < availableRows ? iterator : availableRows )
             inquirer.prompt([{
                 name: 'Server',
                 type: 'autocomplete',
