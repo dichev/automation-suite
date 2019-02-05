@@ -9,7 +9,7 @@ let program = new Program({chat: cfg.chat.rooms.devops})
 
 program
     .description('Check proxy states by location')
-    .option('-l, --locations <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.locations), required: true})
+    .option('-l, --locations <list|all>', `Comma-separated list of Locations`, {choices: Object.keys(cfg.locations), required: true})
     .iterate('locations', async (location) => {
         let web = cfg.locations[location].hosts.webs[0],
             operators = Object.values(cfg.operators).filter(o => o.location === location ).map(o => o.dir)
