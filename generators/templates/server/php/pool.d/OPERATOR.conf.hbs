@@ -6,14 +6,9 @@ listen = {{operator.fpm.port}}
 listen.owner = www-data
 listen.group = www-data
 
-{{#unless operator.live}}
 pm = ondemand
-pm.process_idle_timeout = 10s
-{{else}}
-pm = static
-pm.start_servers = {{operator.fpm.processes}}
-{{/unless}}
 pm.max_children = {{operator.fpm.processes}}
+pm.process_idle_timeout = 60s
 pm.max_requests = {{operator.fpm.maxRequests}}
 
 ;access.log = /var/log/$pool.access.log
