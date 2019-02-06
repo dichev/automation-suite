@@ -61,6 +61,8 @@ program
                 console.log(host.name + '..')
                 let changes = await host.ssh.exec(`cd ${REPO} && git status --short --untracked-files=no`)
                 if (changes) throw Error(`Aborting.. Manual changes found at ${host.name}`)
+                let branch = await host.ssh.exec(`cd ${REPO} && git rev-parse --abbrev-ref HEAD`, { silent: true })
+                if(branch !== 'master') throw Error(`Aborting.. Manual changes found at ${host.name}. The repo is not on master, but is on branch ${branch}`)
             }
             
         } else {
