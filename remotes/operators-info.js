@@ -16,7 +16,7 @@
     }
 
     let getSpinsPerSec = async function(ip,hook){
-        let measureTime = 2
+        let measureTime = 1
         let cmd = `timeout ${measureTime} tail -f -n 0 /var/log/nginx/access.log | grep ${hook} --line-buffered | grep 'game/spin'`
         let ssh = await new SSHClient().connect({host: ip, username: 'root'})
         let sps = await ssh.exec(cmd,{silent:true})
@@ -46,7 +46,6 @@
                     rows('web1',hosts.web1)
                 }
             }
-            rows('spins per seccond',await getSpinsPerSec(hosts.lb,operator.domain))
+            rows('spins per seccond',await getSpinsPerSec(hosts.lb,'gserver-' + operator.name + '.' + operator.domain))
         })
 })();
-
