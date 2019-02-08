@@ -7,6 +7,7 @@ const SSHClient = require('dopamine-toolbox').SSHClient
 const Input = require('dopamine-toolbox').Input
 const cfg = require('configurator')
 const fs = require('fs')
+const colors = require('colors')
 
 let program = new Program()
 
@@ -20,10 +21,16 @@ program
     .parse()
 
 
+let errors = 0
 const iterate = async (cmd) => {
     await program.iterate('hosts', async (host) => {
         let ssh = await new SSHClient().connect({host: cfg.getHost(host).ip, username: program.params.user})
-        await ssh.exec(cmd)
+        try {
+            await ssh.exec(cmd)
+        } catch (err) {
+            // console.error(err.toString())
+            errors++
+        }
         await ssh.disconnect()
     })
 }
@@ -41,9 +48,11 @@ Promise.resolve().then(async () => {
     if(program.params.exec) {
         cmd = program.params.exec
         await iterate(cmd)
+        if (errors) throw Error(`There was ${errors} errors during execution!`)
     } else if(program.params.execFile){
         cmd = fs.readFileSync(program.params.execFile, 'utf8').replace(/\r?\n/g, '\n')
         await iterate(cmd)
+        if (errors) throw Error(`There was ${errors} errors during execution!`)
     } else {
         console.log('Enter command:')
         let input = new Input({collectHistoryFile: program.params.history === false ? '' : __dirname + '/.history'})
@@ -52,6 +61,10 @@ Promise.resolve().then(async () => {
             if (!cmd) continue;
             if (cmd === 'exit') break;
             await iterate(cmd)
+            if(errors) {
+                console.warn(colors.red(`\n[WARN] There was ${errors} errors during execution!`))
+                errors = 0
+            }
             console.log('')
         }
     }
