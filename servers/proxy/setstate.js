@@ -11,7 +11,15 @@ program
     .description('Switch proxy state [in/active] for operator[s]')
     .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators), required: true})
     .option('-s, --state <string>','Desired state for this operator [active,inactive]',{choices:['active','inactive'],required:true})
-    .iterate('operators', async (operator) => {
+    .option('--filter-by-location <name>', 'Filter operators by location name', {choices: Object.keys(cfg.locations)})
+    .parse()
+
+if(program.params.filterByLocation){
+    program.params.operators = program.params.operators.split(',').filter(o => cfg.operators[o].location === program.params.filterByLocation).join(',')
+    console.log('Affected operators:', program.params.operators)
+}
+
+program.iterate('operators', async (operator) => {
 
         const   location = cfg.getLocationByOperator(operator).name,
             opDir = '/home/dopamine/production/' + cfg.operators[operator].dir,
