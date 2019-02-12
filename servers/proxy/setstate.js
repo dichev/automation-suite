@@ -5,7 +5,7 @@ const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 const SSHClient = require('dopamine-toolbox').SSHClient
 
-let program = new Program({chat: cfg.chat.rooms.devops})
+let program = new Program({chat: cfg.chat.rooms.devops, smartForce: true })
 
 program
     .description('Switch proxy state [in/active] for operator[s]')
@@ -31,7 +31,7 @@ program.iterate('operators', async (operator) => {
             let configFile  = `${opDir}/wallet/config/server.config.php`
             let sshWeb      = await new SSHClient().connect({host: web.ip, username: 'root'})
 
-            await program.ask(`Configuration for proxy requests at ${configFile} set to ${stateString}`)
+            await program.confirm(`Configuration for proxy requests at ${configFile} set to ${stateString}`)
             await sshWeb.exec(`sed -i '/CURLOPT_PROXY/d' ${configFile}`)
             await sshWeb.exec(`sed -i '/\\#ProxyStart/,/\\#ProxyEnd/d' ${configFile}`)
             await sshWeb.fileAppend(configFile,
