@@ -32,6 +32,7 @@ program.iterate('hosts', async (name) => { // TODO: check is the web on google c
     }
     
     // 2. gcloud compute instances stop NAME
+    await program.confirm('Stop the VM?')
     await program.chat.message(`Stopping VM..`)
     await shell.exec(`gcloud compute instances stop ${host.name}`) // TODO: possible name conflicts with google cloud instance name
     
@@ -47,9 +48,15 @@ program.iterate('hosts', async (name) => { // TODO: check is the web on google c
     // 4. gcloud compute instances start NAME
     await program.chat.message(`Starting VM..`)
     await shell.exec(`gcloud compute instances start ${host.name}`)
+    await shell.exec(`gcloud compute instances list --filter "${host.name}"`)
+    await program.confirm('Is it fine?')
     
     
-    // 5. enable operators
+    // 5. test is it php working
+    await program.chat.message(`Checking is php working..`)
+    await shell.exec(`node servers/php-binary/check -h ${host.name} --no-chat`)
+    
+    // 6. enable operators
     await program.chat.message(`Activate traffic to ${webId}`)
     await shell.exec(`node servers/nginx/switch-webs-by-location -l ${host.location} -w all --no-chat`)
     
