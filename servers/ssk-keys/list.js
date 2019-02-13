@@ -11,7 +11,7 @@ let program = new Program()
 program
     .description('List current ssh keys of multiple hosts')
     .option('-h, --hosts <list|all>', 'The target host names', { choices: Object.keys(cfg.hosts), required: true })
-    .option('-u, --user <dopamine|root|all>', 'Check the keys of these users', { choices: ['dozpamine', 'root'], def: 'all'})
+    .option('-u, --user <dopamine|root|all>', 'Check the keys of these users', { choices: ['dopamine', 'root'], def: 'all'})
     .parse()
     
 
@@ -21,12 +21,7 @@ program.iterate('hosts', async (host) => {
     for(let user of program.params.user.split(',')){
         const FILE = user === 'root' ? '/root/.ssh/authorized_keys' : `/home/${user}/.ssh/authorized_keys`
         console.log(`\nList ${user} ssh keys (${FILE}):`)
-        if(!await ssh.exists(FILE)) {
-            console.log('No such user..')
-            continue
-        }
-        let keys = await ssh.readFile(FILE)
-        console.log(keys.split('\n').filter(line => line.trim() !== '').map(line => line.trim().replace(/ssh-rsa +(.{50}).+ (.+)/, '$1 $2')).join('\n'))
+        await ssh.exec(`awk 'NF {print substr($2,0,40) "  " $3}' ${FILE} || echo none`)
     }
     
     await ssh.disconnect()
