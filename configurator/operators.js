@@ -16,7 +16,7 @@ program
         if(program.params.filter){
            operators = operators
                 .join('\n')
-                .grep(program.params.filter)
+                .grep(program.params.grep)
                 .split('\n')
         }
         console.log(operators.join(','))
