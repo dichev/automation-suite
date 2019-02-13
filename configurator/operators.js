@@ -13,7 +13,7 @@ program
     .option('-g, --grep <string>', `Expression to apply as filter`, {required: false})
     .iterate('locations', async (location) => {
         let operators = Object.values(cfg.operators).filter(o => o.location === location ).map(o => o.dir)
-        if(program.params.filter){
+        if(program.params.grep){
            operators = operators
                 .join('\n')
                 .grep(program.params.grep)
