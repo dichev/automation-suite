@@ -50,6 +50,7 @@ program
         for(let database of cfg.locations[location].hosts.databases){
             let db = cfg.databases[database]
             if(db.master)                              hosts.push({ type: 'mysql', name: 'master',  ssh: await program.ssh(db.master, 'root') })
+            if(db.slave && db.slave !== db.master)     hosts.push({ type: 'mysql', name: 'slave',   ssh: await program.ssh(db.slave, 'root') })
             if(db.archive && db.archive !== db.master) hosts.push({ type: 'mysql', name: 'archive', ssh: await program.ssh(db.archive, 'root') })
         }
        
