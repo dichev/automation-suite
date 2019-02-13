@@ -21,7 +21,7 @@ program.iterate('hosts', async (host) => {
     for(let user of program.params.user.split(',')){
         const FILE = user === 'root' ? '/root/.ssh/authorized_keys' : `/home/${user}/.ssh/authorized_keys`
         console.log(`\nList ${user} ssh keys (${FILE}):`)
-        await ssh.exec(`awk 'NF {print substr($2,0,40) "  " $3}' ${FILE} || echo none`)
+        await ssh.exec(`awk 'NF {  print ($1 !~ /^#/) ? substr($2,0,40) "  " $3 : $0 ; }' ${FILE} || echo none`)
     }
     
     await ssh.disconnect()
