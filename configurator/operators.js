@@ -12,7 +12,7 @@ program
     .option('-l, --locations <list|all>', `Comma-separated list of Locations`, {choices: Object.keys(cfg.locations), required: true})
     .option('-g, --grep <string>', `Expression to apply as filter`, {required: false})
     .iterate('locations', async (location) => {
-        let operators = Object.values(cfg.operators).filter(o => o.location === location ).map(o => o.dir)
+        let operators = Object.values(cfg.operators).filter(o => o.location === location ).map(o => o.name)
         if(program.params.grep){
            operators = operators
                 .join('\n')
