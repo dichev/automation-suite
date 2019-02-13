@@ -90,6 +90,20 @@ program
             await program.confirm('DANGER! Do you want to drop users/databases. To confirm please type "drop" here: ', 'no', ['drop'])
             await archive.query(SQL.archiveRollback)
         }
+
+
+
+        let shell2 = await program.shell()
+        await program.confirm(`Have you deleted the nginx & server configs from repo - ${LOCATION}?`)
+        await shell2.exec(`node servers/servers-conf/list-changes --locations ${LOCATION}`)
+
+        // System configurations
+        await program.chat.notify('\nUpdate system configurations (danger: could affect the other operators on failure)')
+        log('This could affect the other envs if the setup is incorrect.')
+
+        await program.confirm('DANGER! Are you sure you want to continue (yes)? ')
+        await shell2.exec(`node servers/servers-conf/update --locations ${LOCATION} --reload webs`)
+    
     
         log(`Destroyed successfully`)
     })
