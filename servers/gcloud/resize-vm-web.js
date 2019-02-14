@@ -24,6 +24,7 @@ program.iterate('hosts', async (name) => {
     await shell.exec(`gcloud config set project ${cfg.locations[host.location].gcloud.project}`)
     const INSTANCE = await shell.exec(`gcloud compute instances list | grep ${host.ip} | awk '{print $1}'`)
     if(!INSTANCE) throw Error(`There is no gcloud compute instance with this ip ${host.ip}`)
+    await shell.exec(`gcloud compute instances list | grep ${host.ip}`)
     await program.confirm(`Are you sure you want to change instance "${INSTANCE}" to custom (${host.resources.cpu} vCPU, ${host.resources.memory} GiB)?`)
     
     // switch webs traffic
