@@ -31,6 +31,14 @@ program.iterate('hosts', async (name) => {
     await shell.exec(`node servers/nginx/switch-webs-by-location -l ${host.location} -w all --exclude-webs ${WEB} --no-chat`)
     
     
+    // deactivate docker node (cayetano math)
+    await program.chat.message(`Deactivate cayetano math (docker node)..`)
+    let master = await new SSHClient().connect({host: cfg.locations[host.location].web1, username: 'root'})
+    await master.exec(`docker node update --availability drain ${INSTANCE}`)
+    await master.exec(`sleep 2 && docker node inspect --pretty ${INSTANCE} | grep Availability`)
+    await program.confirm('Is it drained?')
+    
+    
     // stop crontab on web1
     if(WEB === 'web1'){
         await program.chat.message(`Stopping cron jobs..`)
@@ -65,10 +73,23 @@ program.iterate('hosts', async (name) => {
     await program.chat.message(`Checking is php working..`)
     await shell.exec(`node servers/php-binary/check -h ${host.name} --no-chat`)
     
+    
+    // activate docker node (cayetano math)
+    await program.chat.message(`Activate cayetano math (docker node)..`)
+    master = await new SSHClient().connect({host: cfg.locations[host.location].web1, username: 'root'})
+    await master.exec(`docker node update --availability active ${INSTANCE}`)
+    await master.exec(`sleep 2 && docker node inspect --pretty ${INSTANCE} | grep Availability`)
+    await program.confirm('Is it available?')
+    if(cfg.locations[host.location].webs.length === 2) { // special case when the location has only 2 webs
+        await program.chat.message(`Redistribute services across the 2 webs..`)
+        await master.exec(`docker service update --force cayetano_math`)
+    }
+    await master.disconnect()
+    
+    
     // enable operators
     await program.chat.message(`Activate traffic to ${WEB}`)
     await shell.exec(`node servers/nginx/switch-webs-by-location -l ${host.location} -w all --no-chat`)
-    
     
     
 })
