@@ -31,13 +31,13 @@ program
         console.log('\nInstalling packages..')
         await web.exec(`
             apt-get -qq update
-            apt-get -q -y install software-properties-common
-            
-            curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+            apt-get install -q -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
+
+            curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add - 
             add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
-            
+
             apt-get -qq update
-            apt-get -q -y install docker-ce
+            apt-get install -q -y docker-ce docker-ce-cli containerd.io
         `)
 
         
