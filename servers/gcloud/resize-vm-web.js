@@ -22,9 +22,9 @@ program.iterate('hosts', async (name) => {
     // check resources
     console.log(`Switch to project: ${cfg.locations[host.location].gcloud.project}`)
     await shell.exec(`gcloud config set project ${cfg.locations[host.location].gcloud.project}`)
-    await shell.exec(`gcloud compute instances list | grep "${host.name}" || echo "GCloud instance ${host.name} not found" && exit 1`) // TODO: possible name conflicts with google cloud instance name
-    await program.confirm(`Are you sure you want to change it to {cpu: ${host.resources.cpu}, memory: ${host.resources.memory}GB}?`)
-    
+    const INSTANCE = await shell.exec(`gcloud compute instances list | grep ${host.ip} | awk '{print $1}'`)
+    if(!INSTANCE) throw Error(`There is no gcloud compute instance with this ip ${host.ip}`)
+    await program.confirm(`Are you sure you want to change instance "${INSTANCE}" to custom (${host.resources.cpu} vCPU, ${host.resources.memory} GiB)?`)
     
     // switch webs traffic
     await program.chat.message(`Disable traffic to ${WEB}`)
@@ -43,12 +43,12 @@ program.iterate('hosts', async (name) => {
     // gcloud compute instances stop NAME
     await program.confirm('Stop the VM?')
     await program.chat.message(`Stopping VM..`)
-    await shell.exec(`gcloud compute instances stop ${host.name}`)
+    await shell.exec(`gcloud compute instances stop ${INSTANCE}`)
     
     
     // gcloud compute instances set-machine-type NAME --machine-type custom-4-1024 4=4vCPU, 1024=1G RAM
     await program.chat.message(`Changing VM resources..`)
-    await shell.exec(`gcloud compute set-machine-type ${host.name} \
+    await shell.exec(`gcloud compute set-machine-type ${INSTANCE} \
         --custom-cpu=${host.resources.cpu} \
         --custom-memory=${host.resources.memory}
     `)
@@ -56,8 +56,8 @@ program.iterate('hosts', async (name) => {
     
     // gcloud compute instances start NAME
     await program.chat.message(`Starting VM..`)
-    await shell.exec(`gcloud compute instances start ${host.name}`)
-    await shell.exec(`gcloud compute instances list --filter "${host.name}"`)
+    await shell.exec(`gcloud compute instances start ${INSTANCE}`)
+    await shell.exec(`gcloud compute instances list --filter "${INSTANCE}"`)
     await program.confirm('Is it fine?')
     
     
