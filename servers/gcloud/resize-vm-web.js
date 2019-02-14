@@ -33,9 +33,9 @@ program.iterate('hosts', async (name) => {
     
     // deactivate docker node (cayetano math)
     await program.chat.message(`Deactivate cayetano math (docker node)..`)
-    let master = await new SSHClient().connect({host: cfg.locations[host.location].web1, username: 'root'})
-    await master.exec(`docker node update --availability drain ${INSTANCE}`)
-    await master.exec(`sleep 2 && docker node inspect --pretty ${INSTANCE} | grep Availability`)
+    let manager = await new SSHClient().connect({host: cfg.locations[host.location].web1, username: 'root'})
+    await manager.exec(`docker node update --availability drain ${INSTANCE}`)
+    await manager.exec(`sleep 2 && docker node inspect --pretty ${INSTANCE} | grep Availability`)
     await program.confirm('Is it drained?')
     
     
@@ -76,15 +76,15 @@ program.iterate('hosts', async (name) => {
     
     // activate docker node (cayetano math)
     await program.chat.message(`Activate cayetano math (docker node)..`)
-    master = await new SSHClient().connect({host: cfg.locations[host.location].web1, username: 'root'})
-    await master.exec(`docker node update --availability active ${INSTANCE}`)
-    await master.exec(`sleep 2 && docker node inspect --pretty ${INSTANCE} | grep Availability`)
+    manager = await new SSHClient().connect({host: cfg.locations[host.location].web1, username: 'root'})
+    await manager.exec(`docker node update --availability active ${INSTANCE}`)
+    await manager.exec(`sleep 2 && docker node inspect --pretty ${INSTANCE} | grep Availability`)
     await program.confirm('Is it available?')
     if(cfg.locations[host.location].webs.length === 2) { // special case when the location has only 2 webs
         await program.chat.message(`Redistribute services across the 2 webs..`)
-        await master.exec(`docker service update --force cayetano_math`)
+        await manager.exec(`docker service update --force cayetano_math`)
     }
-    await master.disconnect()
+    await manager.disconnect()
     
     
     // enable operators
