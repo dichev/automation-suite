@@ -28,7 +28,7 @@ program
         console.log(`Pulling ${image} on all webs to speed up the deploy populating`)
         for(let web of cfg.locations[location].hosts.webs){
             let ssh = await new SSHClient().connect({host: web.ip, username: 'root'})
-            await ssh.exec(`docker pull eu.gcr.io/hermes-belgium-mga/cayetano-math:r1.0.58`)
+            await ssh.exec(`docker pull ${image}`)
             await ssh.disconnect()
         }
         
