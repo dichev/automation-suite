@@ -87,6 +87,7 @@ program.iterate('hosts', async (name) => {
     await program.confirm('Is it active?')
     if(cfg.locations[host.location].hosts.webs.length === 2) { // special case when the location has only 2 webs
         await program.chat.message(`Redistribute docker containers across the 2 webs..`)
+        await program.sleep(60, 'Waiting just in case') // there is a corner case where the container from docker drain is still starting
         await manager.exec(`docker service update --force cayetano_math`)
     }
     await manager.disconnect()
