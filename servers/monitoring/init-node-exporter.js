@@ -40,6 +40,12 @@ program.iterate('hosts', async (host) => {
 
     let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
+    // install git
+    if (! await ssh.packageExists('git')) {
+        await ssh.exec('apt-get install git > /dev/null')
+    }
+
+    // install nettools
     if (! await ssh.packageExists('nettools')) {
         await ssh.exec('apt-get install -y net-tools > /dev/null')
     }
