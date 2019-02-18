@@ -41,8 +41,8 @@ program.iterate('hosts', async (host) => {
     let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
     // install git
-    if (! await ssh.packageExists('git')) {
-        await ssh.exec('apt-get install git > /dev/null')
+    if (await ssh.exec(`git --version > /dev/null 2>&1 && echo '1' || echo '0'`) === '0') {
+        await ssh.exec('apt-get update -y && apt-get install git -y > /dev/null')
     }
 
     // install nettools
