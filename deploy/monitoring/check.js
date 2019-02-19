@@ -31,12 +31,6 @@ program
         it('should not have local changes', async () => {
             empty(await web1.exec(`git status --short --untracked-files=no`))
         })
-        it('should be with Status of the service -> Active: active(running)', async () => {
-            contains(await web1.exec(`systemctl status grafana-sensors.service | grep "Active: active (running)"`), "Active: active (running)")
-        })
-        it('should be able to call a single sensor and return success', async () => {
-            contains(await web1.exec(`node test.js sensors/availability-heartbeat.js rtg`), "heartbeat.panel.status")
-        })
         
         it.info(`diffs between releases:`, async () => {
             console.info('      ' + await web1.exec(`git diff`))
