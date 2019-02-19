@@ -36,7 +36,8 @@ program
         await ssh.exec(`git fetch --prune && git pull`)
 
         // login, build, push docker image
-        await ssh.exec(`./buildDocker.sh`)
+        await sshRoot.chdir('/opt/dopamine/grafana-sensors')
+        await sshRoot.exec(`bash buildDocker.sh`)
 
         await program.sleep(1)
 
