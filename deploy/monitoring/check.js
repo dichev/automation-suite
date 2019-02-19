@@ -14,7 +14,7 @@ program
          node deploy/monitoring/check
     `)
     .run(async () => {
-        const DEST = '/home/dopamine/grafana-sensors/'
+        const DEST = '/opt/dopamine/grafana-sensors/'
         
         let web1 = await program.ssh(cfg.hosts['sofia-devops-monitoring'].ip, 'dopamine')
         web1.silent = true
