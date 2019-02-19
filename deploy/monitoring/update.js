@@ -38,8 +38,10 @@ program
         // login, build, push docker image
         await ssh.exec(`./buildDocker.sh`)
 
-        
+        await program.sleep(1)
 
-        await program.sleep(2)
+        // deploy prodmon stack
+        await shell.exec(`node deploy/prodmon/update.js`)
 
+        await chat.notify('Done')
     })
