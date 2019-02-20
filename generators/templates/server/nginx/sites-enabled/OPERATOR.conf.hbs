@@ -46,6 +46,38 @@ server {
         }
     }
 
+    location /games/suggestions {
+        limit_req zone=by_ip_15rs burst=6 nodelay;
+        error_page 503 =429 /429.json;
+        {{#unless operator.public}}
+        include '/etc/nginx/conf.d/allow/{{operator.dir}}{{operator.suffix}}.conf';
+        include '/etc/nginx/conf.d/allow-me.conf';
+        {{/unless}}
+        try_files $uri $uri/ /games/suggestions/index.php?$query_string;
+        location ~ \.php$ {
+            limit_except GET HEAD OPTIONS {
+                deny all;
+            }
+
+            fastcgi_index index.php;
+            fastcgi_pass {{operator.dir}}{{operator.suffix}};
+            fastcgi_param SCRIPT_FILENAME /platform/public/index.php;
+            include fastcgi.conf;
+            add_header Access-Control-Allow-Headers 'Content-Type';
+
+            # cache settings
+            fastcgi_cache_key "$scheme$request_method$host$request_uri";
+            fastcgi_cache feedGamesSuggestions;
+            fastcgi_cache_valid 200 302 301 404 2m;
+            fastcgi_cache_lock on;
+            fastcgi_cache_use_stale updating;
+            fastcgi_ignore_headers Cache-Control Expires Vary;
+            add_header X-Cache $upstream_cache_status;
+            add_header "Access-Control-Allow-Origin" "*";
+            fastcgi_hide_header "Access-Control-Allow-Origin";
+        }
+    }
+
     location /jackpots {
         limit_req zone=by_ip_15rs burst=6 nodelay;
         error_page 503 =429 /429.json;
