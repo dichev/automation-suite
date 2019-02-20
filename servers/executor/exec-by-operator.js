@@ -22,15 +22,16 @@ program
 let errors = 0
 const iterate = async (cmd) => {
     await program.iterate('operators', async (operator) => {
-        let ssh = await new SSHClient().connect({host: cfg.getLocationByOperator(operator).hosts.web1, username: 'dopamine'})
-        await ssh.chdir('/home/dopamine/production/' + cfg.operators[operator].dir)
+        let ssh = null
         try {
+            ssh = await new SSHClient().connect({host: cfg.getLocationByOperator(operator).hosts.web1, username: 'dopamine'})
+            await ssh.chdir('/home/dopamine/production/' + cfg.operators[operator].dir)
             await ssh.exec(cmd)
         } catch (err) {
-            // console.error(err.toString())
+            if(!ssh) console.error(err.toString())
             errors++
         }
-        await ssh.disconnect()
+        if(ssh) await ssh.disconnect()
     })
 }
 

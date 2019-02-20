@@ -24,14 +24,15 @@ program
 let errors = 0
 const iterate = async (cmd) => {
     await program.iterate('hosts', async (host) => {
-        let ssh = await new SSHClient().connect({host: cfg.getHost(host).ip, username: program.params.user})
+        let ssh = null
         try {
+            ssh = await new SSHClient().connect({host: cfg.getHost(host).ip, username: program.params.user})
             await ssh.exec(cmd)
         } catch (err) {
-            // console.error(err.toString())
+            if(!ssh) console.error(err.toString())
             errors++
         }
-        await ssh.disconnect()
+        if(ssh) await ssh.disconnect()
     })
 }
 
