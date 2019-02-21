@@ -5,7 +5,7 @@ const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 const SSHClient = require('dopamine-toolbox').SSHClient
 
-let program = new Program({chat: cfg.chat.rooms.devops})
+let program = new Program()
 
 program
     .description('Check proxy states by location')
