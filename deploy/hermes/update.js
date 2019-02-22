@@ -219,6 +219,11 @@ program.run(async () => {
     
         await chat.message(`✓ ${to} deployed to ${OPERATORS.map(o => o.name)}`)
         
+        
+        console.info(`\nList manual git changes`)
+        await shell.exec('git status -u')
+        await program.confirm('Do you want to hard reset?')
+        await shell.exec('git reset --hard')
     }
 })
 .then(async() => {
