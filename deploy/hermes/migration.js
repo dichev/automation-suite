@@ -21,7 +21,7 @@ program
 
 
 Promise.resolve().then(async() => {
-    let sql = fs.readFileSync(program.params.migrationPath).toString()
+    const sql = fs.readFileSync(program.params.migrationPath).toString()
     
     await program.iterate('operators', async (operator) => {
         
@@ -38,10 +38,10 @@ Promise.resolve().then(async() => {
         
         console.log(`Running migration over ${operator}..`)
         await db.query(`USE ${dbname};`)
-        sql = sql.replace(/{{operator\.dbPrefix}}/g, cfg.operators[operator].dbPrefix)
-        console.log(sql)
+        let sqlParsed = sql.replace(/{{operator\.dbPrefix}}/g, cfg.operators[operator].dbPrefix)
+        console.log(sqlParsed)
         await program.confirm('Confirm?')
-        await db.query(sql)
+        await db.query(sqlParsed)
         console.log(await db.query(`SHOW WARNINGS`))
 
     })
