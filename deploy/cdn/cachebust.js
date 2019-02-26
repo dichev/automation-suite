@@ -37,7 +37,7 @@ const cachebust = async (url, apiKey) => {
         console.warn(`Could not clear cache for [${url}] : [${response && response.status}] ${JSON.stringify(error)}`)
     }
 
-    await program.sleep(500)
+    await program.sleep(1)
 
     return {error, response, body}
 }
