@@ -3,7 +3,6 @@
 * **[dns](#dns)**
     * **[check](#dns-check)** - check are all host names resolved from current machine
     * **[update](#dns-update)** - auto sync dns records for all host names in to the office DNS server.
-* **[templates](#templates)**
 
 ## Help
 ## <a name="dns"></a>dns
@@ -47,4 +46,3 @@ Additional Options:
   --no-chat               Disable chat notification if they are activated
   -h, --help              output usage information
 ```
-## <a name="templates"></a>templates

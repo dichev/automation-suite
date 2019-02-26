@@ -14,12 +14,16 @@
 * **[executor](#executor)**
     * **[exec-by-operator](#executor-exec-by-operator)** - execute any command on over the base directory of any operator
     * **[exec](#executor-exec)** - execute any command on any host
+    * **[mysql-exec](#executor-mysql-exec)** - execute any command on any host
+    * **[stats](#executor-stats)** - show server stats
 * **[fraud](#fraud)**
     * **[block-jp-displayer](#fraud-block-jp-displayer)** - auto Block the &quot;JP Displayer bot&quot; for fun - will be banned NOT immediately but in random periods bet..
 * **[gcloud](#gcloud)**
     * **[change-dns](#gcloud-change-dns)** - set ip to all gserver/gpanel dns records of the zone
     * **[check-operators](#gcloud-check-operators)** 
     * **[create-dns](#gcloud-create-dns)** - set ip to all gserver/gpanel dns records of the zone
+    * **[resize-vm-mysql](#gcloud-resize-vm-mysql)** - resize master mysql VM on Google Cloud with minimal downtime
+    * **[resize-vm-web](#gcloud-resize-vm-web)** - resize webs VM on Google Cloud without downtime
     * **[setup-all-vm](#gcloud-setup-all-vm)** - setup unified server configurations
 * **[monitoring](#monitoring)**
     * **[init-mysqld-exporter](#monitoring-init-mysqld-exporter)** - setup monitoring: Mysqld Exporter
@@ -35,19 +39,27 @@
     * **[disable-operators](#nginx-disable-operators)** - enable/disable nginx access to operators on specific location
     * **[switch-webs-by-location](#nginx-switch-webs-by-location)** - switch between webs used by locations
     * **[switch-webs-by-operator](#nginx-switch-webs-by-operator)** - switch between webs used by the operators
+    * **[whitelist-check](#nginx-whitelist-check)** - list ips for operator
     * **[whitelist](#nginx-whitelist)** - whitelist ips for operator
 * **[php-binary](#php-binary)**
     * **[check](#php-binary-check)** 
     * **[init](#php-binary-init)** 
 * **[proxy](#proxy)**
+    * **[check-state](#proxy-check-state)** - check proxy states by location
     * **[setstate](#proxy-setstate)** - switch proxy state [in/active] for operator[s]
     * **[setup](#proxy-setup)** - proxy setup.
 * **[servers-conf](#servers-conf)**
     * **[init](#servers-conf-init)** - setup unified server configurations
     * **[list-changes](#servers-conf-list-changes)** 
+    * **[update-cdn](#servers-conf-update-cdn)** - update servers configuration of CDN
     * **[update](#servers-conf-update)** - auto update sever configurations by reloading one by one each server
+* **[ssh](#ssh)**
+    * **[config-generator](#ssh-config-generator)** - generate ssh_config file
+* **[ssh-keys](#ssh-keys)**
+    * **[add](#ssh-keys-add)** - safely add ssh public key to multiple hosts
+    * **[list](#ssh-keys-list)** - list current ssh keys of multiple hosts
+    * **[remove](#ssh-keys-remove)** - safely REMOVE ssh public key to multiple hosts
 * **[vm-setup](#vm-setup)**
-    * **[add-ssh-key](#vm-setup-add-ssh-key)** - safely add ssh public key to multiple hosts
     * **[dnsmasq](#vm-setup-dnsmasq)** - setup dnsmasq configuration of the webs
     * **[known-hosts](#vm-setup-known-hosts)** 
     * **[logrotate](#vm-setup-logrotate)** - setup logrotate configurations
@@ -277,6 +289,52 @@ Additional Options:
   --no-chat               Disable chat notification if they are activated
   -h, --help              output usage information
 ```
+### <a name="executor-mysql-exec"></a>mysql-exec
+Execute any command on any host
+```
+Usage: node servers/executor/mysql-exec --hosts <list> 
+
+Execute any command on any host
+
+Options:
+  -h, --hosts <list>      [required] The target host names
+  -u, --user <name>       Choose ssh user (default: "root")
+  -e, --exec <cmd>        Command to be executed
+  -E, --exec-file <file>  Read remote commands from file
+  --no-history            Disable saving commands to history (useful for credentials data)
+
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
+```
+### <a name="executor-stats"></a>stats
+Show server stats
+```
+Usage: node servers/executor/stats --hosts <list|all> 
+
+Show server stats
+
+Options:
+  -h, --hosts <list|all>  [required] The target host name
+
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
+```
 ## <a name="fraud"></a>fraud
 ### <a name="fraud-block-jp-displayer"></a>block-jp-displayer
 Auto Block the &quot;JP Displayer bot&quot; for fun - will be banned NOT immediately but in random periods between 5m - 15m just to look like human action
@@ -350,6 +408,48 @@ Set ip to all gserver/gpanel dns records of the zone
 Options:
   -z, --zones <list|all>  [required] Comma-separated list of cloudflare zone aliases
   --update                Update dns records, otherwise just list them
+
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
+```
+### <a name="gcloud-resize-vm-mysql"></a>resize-vm-mysql
+Resize master mysql VM on Google Cloud with minimal downtime
+```
+Usage: node servers/gcloud/resize-vm-mysql --hosts <list|all> 
+
+Resize master mysql VM on Google Cloud with minimal downtime
+
+Options:
+  -h, --hosts <list|all>  [required] The target host names
+
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
+```
+### <a name="gcloud-resize-vm-web"></a>resize-vm-web
+Resize webs VM on Google Cloud without downtime
+```
+Usage: node servers/gcloud/resize-vm-web --hosts <list|all> 
+
+Resize webs VM on Google Cloud without downtime
+
+Options:
+  -h, --hosts <list|all>  [required] The target host names
 
 Additional Options:
   -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -645,17 +745,15 @@ Additional Options:
     $ switch-webs --webs=all  --operators=all --exclude-webs=web1,web2
     $ switch-webs --webs=web1,web2 --operators=rtg,bots --no-reload
 ```
-### <a name="nginx-whitelist"></a>whitelist
-Whitelist ips for operator
+### <a name="nginx-whitelist-check"></a>whitelist-check
+List ips for operator
 ```
-Usage: node servers/nginx/whitelist --operators <list|all> --ips <list|all> --task <string> 
+Usage: node servers/nginx/whitelist-check --operators <list|all> 
 
-Whitelist ips for operator
+List ips for operator
 
 Options:
   -o, --operators <list|all>  [required] Comma-separated list of operators
-  -i, --ips <list|all>        [required] Comma-separated list of ips to be checked/added
-  -t, --task <string>         [required] Task to be added to allow list
 
 Additional Options:
   -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -667,6 +765,27 @@ Additional Options:
   --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
   --no-chat                   Disable chat notification if they are activated
   -h, --help                  output usage information
+```
+### <a name="nginx-whitelist"></a>whitelist
+Whitelist ips for operator
+```
+Usage: node servers/nginx/whitelist --tasks <list> 
+
+Whitelist ips for operator
+
+Options:
+  -t, --tasks <list>      [required] Task to be processed
+
+Additional Options:
+  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose           Turn ON log details of whats happening
+  -f, --force             Suppress confirm messages (used for automation)
+  --dry-run               Dry run mode will do everything as usual except commands execution
+  --quiet                 Turn off chat and some logs in stdout
+  --wait <int>            Pause between iterations in seconds
+  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat               Disable chat notification if they are activated
+  -h, --help              output usage information
 ```
 ## <a name="php-binary"></a>php-binary
 ### <a name="php-binary-check"></a>check
@@ -708,16 +827,15 @@ Additional Options:
   -h, --help              output usage information
 ```
 ## <a name="proxy"></a>proxy
-### <a name="proxy-setstate"></a>setstate
-Switch proxy state [in/active] for operator[s]
+### <a name="proxy-check-state"></a>check-state
+Check proxy states by location
 ```
-Usage: node servers/proxy/setstate --operators <list|all> --state <string> 
+Usage: node servers/proxy/check-state --locations <list|all> 
 
-Switch proxy state [in/active] for operator[s]
+Check proxy states by location
 
 Options:
-  -o, --operators <list|all>  [required] Comma-separated list of operators
-  -s, --state <string>        [required] Desired state for this operator [active,inactive]
+  -l, --locations <list|all>  [required] Comma-separated list of Locations
 
 Additional Options:
   -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
@@ -729,6 +847,29 @@ Additional Options:
   --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
   --no-chat                   Disable chat notification if they are activated
   -h, --help                  output usage information
+```
+### <a name="proxy-setstate"></a>setstate
+Switch proxy state [in/active] for operator[s]
+```
+Usage: node servers/proxy/setstate --operators <list|all> --state <string> 
+
+Switch proxy state [in/active] for operator[s]
+
+Options:
+  -o, --operators <list|all>   [required] Comma-separated list of operators
+  -s, --state <string>         [required] Desired state for this operator [active,inactive]
+  --filter-by-location <name>  Filter operators by location name
+
+Additional Options:
+  -p, --parallel [limit]       When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose                Turn ON log details of whats happening
+  -f, --force                  Suppress confirm messages (used for automation)
+  --dry-run                    Dry run mode will do everything as usual except commands execution
+  --quiet                      Turn off chat and some logs in stdout
+  --wait <int>                 Pause between iterations in seconds
+  --announce                   Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                    Disable chat notification if they are activated
+  -h, --help                   output usage information
 ```
 ### <a name="proxy-setup"></a>setup
 Proxy setup.
@@ -792,6 +933,29 @@ Additional Options:
   --no-chat                   Disable chat notification if they are activated
   -h, --help                  output usage information
 ```
+### <a name="servers-conf-update-cdn"></a>update-cdn
+Update servers configuration of CDN
+```
+Usage: node servers/servers-conf/update-cdn --hosts <list|all> 
+
+Update servers configuration of CDN
+
+Options:
+  -h, --hosts <list|all>   [required] Comma-separated list of cdn regions
+  -r, --revision <string>  Target git revision or branch (default: "origin/master")
+  -f, --force              Skip manual changes validations and proceed on your risk
+
+Additional Options:
+  -p, --parallel [limit]   When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose            Turn ON log details of whats happening
+  -f, --force              Suppress confirm messages (used for automation)
+  --dry-run                Dry run mode will do everything as usual except commands execution
+  --quiet                  Turn off chat and some logs in stdout
+  --wait <int>             Pause between iterations in seconds
+  --announce               Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                Disable chat notification if they are activated
+  -h, --help               output usage information
+```
 ### <a name="servers-conf-update"></a>update
 Auto update sever configurations by reloading one by one each server
 ```
@@ -818,11 +982,35 @@ Additional Options:
   --no-chat                                       Disable chat notification if they are activated
   -h, --help                                      output usage information
 ```
-## <a name="vm-setup"></a>vm-setup
-### <a name="vm-setup-add-ssh-key"></a>add-ssh-key
+## <a name="ssh"></a>ssh
+### <a name="ssh-config-generator"></a>config-generator
+generate ssh_config file
+```
+Usage: node servers/ssh/config-generator --hosts <list|all> 
+
+generate ssh_config file
+
+Options:
+  -u, --user <string>      User for remote login
+  -i, --identity <string>  Identity file location
+  -h, --hosts <list|all>   [required] Comma-separated list of hosts
+
+Additional Options:
+  -p, --parallel [limit]   When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose            Turn ON log details of whats happening
+  -f, --force              Suppress confirm messages (used for automation)
+  --dry-run                Dry run mode will do everything as usual except commands execution
+  --quiet                  Turn off chat and some logs in stdout
+  --wait <int>             Pause between iterations in seconds
+  --announce               Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                Disable chat notification if they are activated
+  -h, --help               output usage information
+```
+## <a name="ssh-keys"></a>ssh-keys
+### <a name="ssh-keys-add"></a>add
 Safely add ssh public key to multiple hosts
 ```
-Usage: node servers/vm-setup/add-ssh-key --hosts <list|all> --user <dopamine|root> 
+Usage: node servers/ssh-keys/add --hosts <list|all> --user <dopamine|root> 
 
 Safely add ssh public key to multiple hosts
 
@@ -841,6 +1029,51 @@ Additional Options:
   --no-chat                   Disable chat notification if they are activated
   -h, --help                  output usage information
 ```
+### <a name="ssh-keys-list"></a>list
+List current ssh keys of multiple hosts
+```
+Usage: node servers/ssh-keys/list --hosts <list|all> 
+
+List current ssh keys of multiple hosts
+
+Options:
+  -h, --hosts <list|all>          [required] The target host names
+  -u, --user <dopamine|root|all>  Check the keys of these users
+
+Additional Options:
+  -p, --parallel [limit]          When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose                   Turn ON log details of whats happening
+  -f, --force                     Suppress confirm messages (used for automation)
+  --dry-run                       Dry run mode will do everything as usual except commands execution
+  --quiet                         Turn off chat and some logs in stdout
+  --wait <int>                    Pause between iterations in seconds
+  --announce                      Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                       Disable chat notification if they are activated
+  -h, --help                      output usage information
+```
+### <a name="ssh-keys-remove"></a>remove
+Safely REMOVE ssh public key to multiple hosts
+```
+Usage: node servers/ssh-keys/remove --hosts <list|all> --user <dopamine|root> 
+
+Safely REMOVE ssh public key to multiple hosts
+
+Options:
+  -h, --hosts <list|all>      [required] The target host names
+  -u, --user <dopamine|root>  [required] The key will be removed for this user
+
+Additional Options:
+  -p, --parallel [limit]      When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
+  -v, --verbose               Turn ON log details of whats happening
+  -f, --force                 Suppress confirm messages (used for automation)
+  --dry-run                   Dry run mode will do everything as usual except commands execution
+  --quiet                     Turn off chat and some logs in stdout
+  --wait <int>                Pause between iterations in seconds
+  --announce                  Announce what and why is happening and delay the execution to give time to all to prepare
+  --no-chat                   Disable chat notification if they are activated
+  -h, --help                  output usage information
+```
+## <a name="vm-setup"></a>vm-setup
 ### <a name="vm-setup-dnsmasq"></a>dnsmasq
 Setup dnsmasq configuration of the webs
 ```

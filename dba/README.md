@@ -107,6 +107,7 @@ Additional Options:
   --no-chat               Disable chat notification if they are activated
   -h, --help              output usage information
 ```
+## <a name="mariadb"></a>mariadb
 ## <a name="migrations"></a>migrations
 ### <a name="migrations-sync-history-pending-rounds"></a>sync-history-pending-rounds
 
