@@ -17,6 +17,7 @@ program
 program.iterate('hosts', async (name) => {
     let shell = new Shell()
     let host = cfg.hosts[name]
+    let forced = program.params.force ? '--force' : ''
     
     const DB_GROUP = Object.entries(cfg.databases).find(([group, dbs]) => dbs.master === host.ip)[0]
     if(!DB_GROUP && !cfg.databases[DB_GROUP]) throw Error(`Can't find database group`)
@@ -42,7 +43,7 @@ program.iterate('hosts', async (name) => {
 
     // disable webs traffic
     await program.chat.message(`Disable traffic`)
-    await shell.exec(`node servers/nginx/disable-operators -l ${host.location} -o all --filter-by-databases ${DB_GROUP} --no-chat`)
+    await shell.exec(`node servers/nginx/disable-operators ${force} -l ${host.location} -o all --filter-by-databases ${DB_GROUP} --no-chat`)
 
     
     // stop mysql
@@ -104,7 +105,7 @@ program.iterate('hosts', async (name) => {
     
     // enable operators
     await program.chat.message(`Activate traffic`)
-    await shell.exec(`node servers/nginx/disable-operators -l ${host.location} -o all --filter-by-databases ${DB_GROUP} --no-chat --enable`)
+    await shell.exec(`node servers/nginx/disable-operators ${force} -l ${host.location} -o all --filter-by-databases ${DB_GROUP} --no-chat --enable`)
     
     // start crontab on web1
     await program.chat.message(`Starting cron jobs..`)
