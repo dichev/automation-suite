@@ -92,10 +92,9 @@ program.iterate('hosts', async (name) => {
     ssh.exec(`tail -f /var/log/mysql/error.log`).catch(() => {})
     
     while (true) {
-        let status = await ssh.exec(`systemctl is-active mysql || echo `)
-        if(status.trim() === 'inactive') {
-            break
-        }
+        let statusA = await ssh.exec(`systemctl is-active -q mysql && echo active || echo inactive`)
+        let statusB = await ssh.exec(`mysql  -rsN  -e "SHOW GLOBAL STATUS LIKE 'uptime'" >/dev/null 2>&1 && echo active || echo inactive`)
+        if(statusA.trim() === 'active' && statusB.trim() === 'active') break
         await program.sleep(1, 'waiting')
     }
     await program.confirm('If mysql is stopped, then press <ENTER> to continue')
