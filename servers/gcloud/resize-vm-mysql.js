@@ -13,7 +13,7 @@ program
     .description('Resize master mysql VM on Google Cloud with minimal downtime')
     .option('-h, --hosts <list|all>', 'The target host names', { choices: ONLY_GCLOUD_MYSQL_HOSTS, required: true })
     
-
+//TODO: compare memory against buffer pool size
 program.iterate('hosts', async (name) => {
     let shell = new Shell()
     let host = cfg.hosts[name]
@@ -81,7 +81,7 @@ program.iterate('hosts', async (name) => {
     // gcloud compute instances start NAME
     await program.chat.message(`Starting VM..`)
     await shell.exec(`gcloud compute instances start ${INSTANCE} --zone ${ZONE}`)
-    await program.sleep(20, 'Waiting a bit more')
+    await program.sleep(1)
     await shell.exec(`gcloud compute instances list --filter "${INSTANCE}"`)
     await program.confirm('Is it fine?')
     
