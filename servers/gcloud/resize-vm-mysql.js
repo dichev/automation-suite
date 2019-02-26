@@ -14,10 +14,11 @@ program
     .option('-h, --hosts <list|all>', 'The target host names', { choices: ONLY_GCLOUD_MYSQL_HOSTS, required: true })
     
 //TODO: compare memory against buffer pool size
+//TODO: detect no crons
 program.iterate('hosts', async (name) => {
     let shell = new Shell()
     let host = cfg.hosts[name]
-    let forced = program.params.force ? '--force' : ''
+    let force = program.params.force ? '--force' : ''
     
     const DB_GROUP = Object.entries(cfg.databases).find(([group, dbs]) => dbs.master === host.ip)[0]
     if(!DB_GROUP && !cfg.databases[DB_GROUP]) throw Error(`Can't find database group`)
