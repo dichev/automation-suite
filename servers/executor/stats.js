@@ -14,50 +14,55 @@ const Sparkline = clui.Sparkline;
 const Gauge = clui.Gauge;
 const Line = clui.Line;
 const cliProgress = require('cli-progress')
-inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'))
 
-let Menu = []
+let program = new Program({quiet: true})
+program
+    .description('Show server stats')
+    .option('-h, --hosts <list|all>', 'The target host name', {choices: Object.keys(cfg.hosts), required: true})
 
-let ServersFilter = (answersSoFar,input) => {
-    input = input || '';
-    let ServersFiltered = Menu.filter(el => (el.split(' ').filter(a=>a))[1].match(new RegExp(input,'i')) )
-    return new Promise(resolve => resolve(ServersFiltered) );
-}
+program.run(async() => {
+    
+    inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'))
 
-const bar = new cliProgress.Bar({clearOnComplete:true}, cliProgress.Presets.shades_classic)
-let iterator = 0
-let program = new Program({quiet:true })
-
-inquirer.prompt([{
-    name: 'Metrics',
-    type: 'checkbox',
-    message: "What to look for",
-    Cpu:1,
-    choices: [
-            {name: 'Cpu',checked: true},
-            {name: 'Mem',checked:true},
-            {name: 'Load'},
-            {name: 'Fpm'},
-            {name: 'SQL',checked:true},
-            {name: 'Time'}
-        ],
-    validate: function(answer) {
-        return true;
+    let Menu = []
+    
+    let ServersFilter = (answersSoFar,input) => {
+        input = input || '';
+        let ServersFiltered = Menu.filter(el => (el.split(' ').filter(a=>a))[1].match(new RegExp(input,'i')) )
+        return new Promise(resolve => resolve(ServersFiltered) );
     }
-}]).then(async (answer) => {
-
-    let Metrics = answer.Metrics
-    let hasMem  = (Metrics.indexOf('Mem')  > -1)
-    let hasCpu  = (Metrics.indexOf('Cpu')  > -1)
-    let hasFpm  = (Metrics.indexOf('Fpm')  > -1)
-    let hasSql  = (Metrics.indexOf('SQL')  > -1)
-    let hasLoad = (Metrics.indexOf('Load') > -1)
-    let hasTime = (Metrics.indexOf('Time') > -1)
-
-    program
-        .description('Show server stats')
-        .option('-h, --hosts <list|all>', 'The target host name', {choices: Object.keys(cfg.hosts), required: true})
-    program
+    
+    const bar = new cliProgress.Bar({clearOnComplete:true}, cliProgress.Presets.shades_classic)
+    let iterator = 0
+    
+    
+    inquirer.prompt([{
+        name: 'Metrics',
+        type: 'checkbox',
+        message: "What to look for",
+        Cpu:1,
+        choices: [
+                {name: 'Cpu',checked: true},
+                {name: 'Mem',checked:true},
+                {name: 'Load'},
+                {name: 'Fpm'},
+                {name: 'SQL',checked:true},
+                {name: 'Time'}
+            ],
+        validate: function(answer) {
+            return true;
+        }
+    }]).then(async (answer) => {
+    
+        let Metrics = answer.Metrics
+        let hasMem  = (Metrics.indexOf('Mem')  > -1)
+        let hasCpu  = (Metrics.indexOf('Cpu')  > -1)
+        let hasFpm  = (Metrics.indexOf('Fpm')  > -1)
+        let hasSql  = (Metrics.indexOf('SQL')  > -1)
+        let hasLoad = (Metrics.indexOf('Load') > -1)
+        let hasTime = (Metrics.indexOf('Time') > -1)
+    
+        program
         .iterate('hosts', async (host) => {
 
             try{
@@ -124,6 +129,7 @@ inquirer.prompt([{
                 await ssh.shell()
                 await ssh.disconnect()
             });
-    })
+        })
 
+    })
 })
