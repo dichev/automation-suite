@@ -11,8 +11,13 @@ program
     
     .option('-l, --locations <list|all>', 'The target host name', {choices: Object.keys(cfg.locations), required: true})
     .option('-o, --operators <list|all>', `Comma-separated list of operators`, {choices: Object.keys(cfg.operators), required: true})
-    .option('--filter-by-databases <name>', 'Filter operators by databases name')
+    .option('--filter-by-databases <name>', 'Filter operators by databases name', {choices: Object.keys(cfg.databases)})
     .option('--enable', `Toggle to reenable them`)
+    .parse()
+
+if(program.params.filterByDatabases){
+    program.params.operators = program.params.operators.split(',').filter(o => cfg.operators[o].databases === program.params.filterByDatabases).join()
+}
 
 program
     .iterate('locations', async (location) => {
@@ -20,9 +25,6 @@ program
         const DISABLED = program.params.enable !== true
         
         let OPERATORS = program.params.operators.split(',').map(o => cfg.operators[o]).filter(o => o.location === location)
-        if(program.params.filterByDatabases) {
-            OPERATORS = OPERATORS.filter(o => o.databases === program.params.filterByDatabases)
-        }
         
         console.log((DISABLED ? 'Disabling' : 'Enabling') + ' following operators: \n' + OPERATORS.map(o => o.name).join('\n'))
         await program.confirm('Continue?')
