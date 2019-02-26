@@ -50,7 +50,7 @@ program.iterate('hosts', async (name) => {
     let ssh = await new SSHClient().connect({host: host.ip, username: 'root'})
     while (true) {
         await program.sleep(1, 'waiting')
-        let list = await ssh.exec(`mysql -rsN -e "SELECT user, host, state FROM information_schema.PROCESSLIST WHERE user NOT IN ('root', 'slave','safeguard')"`)
+        let list = await ssh.exec(`mysql -rsN -e "SELECT host, user, state FROM information_schema.PROCESSLIST WHERE user LIKE ('%platform')"`)
         let connections = list.trim() ? list.trim().split('\n').length : 0
         console.log(`Found ${connections} active connections`)
         if(connections === 0) break
