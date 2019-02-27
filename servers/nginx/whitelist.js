@@ -15,14 +15,7 @@ const Econf = {silent:true}
 const Url = "https://jira.dopamine.bg/browse"
 const now = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
 
-var jira = new JiraApi({
-    protocol: 'https',
-    host: 'jira.dopamine.bg',
-    username: 'j.doe',
-    password: 'pass',
-    apiVersion: '2',
-    strictSSL: true
-});
+var jira = new JiraApi(cfg.access.jira);
 
 //let program = new Program({chat: cfg.chat.rooms.deployBackend})
 let program = new Program({chat: ''})
@@ -91,14 +84,14 @@ program
         let currentMaster = await shell.exec('git rev-parse --short master',Econf)
         await shell.exec(`git checkout -b ${branch}`,Econf)
 
-        fs.appendFileSync(configFile,'\n# ' + now.padEnd(26,' ') + "#" + task)
+        fs.appendFileSync(configFile,'\n# ' + now.padEnd(26,' ') + "#" + task + '\n')
         for (let ip of ips) {
-            if(existingIps.indexOf(ip) === -1 ) fs.appendFileSync(configFile,'\nallow\t' + (ip + ';').padEnd(20,' ') + '#' + task)
+            if(existingIps.indexOf(ip) === -1 ) fs.appendFileSync(configFile,'allow ' + (ip + ';').padEnd(20,' ') + '#' + task + '\n')
         }
 
-//        await shell.exec(`git add . && git commit -m "Relative to ${Url}/${task}"`,Econf)
+        await shell.exec(`git add . && git commit -m "[${operator}] IP Whitelist (${task})"`,Econf)
         console.log(fs.readFileSync(configFile).toString().grep('^allow'))
-//        await shell.exec(`git push --set-upstream origin ${branch}`)
+        await shell.exec(`git push --set-upstream origin ${branch}`)
         console.log('#Deploy changes using those commands:\n'
             + `node servers/servers-conf/list-changes -l ${location}\n`
             + `node servers/servers-conf/update -l ${location} --reload nginx\n`
