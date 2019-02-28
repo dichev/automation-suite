@@ -102,7 +102,7 @@ program.iterate('hosts', async (name) => {
         if(statusA.trim() === 'active' && statusB.trim() === 'active') break
         await program.sleep(1, 'waiting')
     }
-    await program.confirm('If mysql is stopped, then press <ENTER> to continue')
+    await program.confirm('If mysql is started, then press <ENTER> to continue')
     await ssh.exec('killall tail') // TODO: workaround, must look for better syntax
     await ssh.disconnect()
     
