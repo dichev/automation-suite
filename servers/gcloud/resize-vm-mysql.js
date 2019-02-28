@@ -13,12 +13,12 @@ program
     .description('Resize master mysql VM on Google Cloud with minimal downtime')
     .option('-h, --hosts <list|all>', 'The target host names', { choices: ONLY_GCLOUD_MYSQL_HOSTS, required: true })
     
-//TODO: compare memory against buffer pool size
 //TODO: detect no crons
 program.iterate('hosts', async (name) => {
     let shell = new Shell()
     let host = cfg.hosts[name]
     let force = program.params.force ? '--force' : ''
+    let ssh = null
     
     const DB_GROUP = Object.entries(cfg.databases).find(([group, dbs]) => dbs.master === host.ip)[0]
     if(!DB_GROUP && !cfg.databases[DB_GROUP]) throw Error(`Can't find database group`)
@@ -31,6 +31,9 @@ program.iterate('hosts', async (name) => {
     const ZONE = await shell.exec(`gcloud compute instances list | grep ${host.ip} | awk '{print $2}'`) // TODO: optimize a bit
     if(!INSTANCE) throw Error(`There is no gcloud compute instance with this ip ${host.ip}`)
     await shell.exec(`gcloud compute instances list | grep ${host.ip}`)
+    ssh = await new SSHClient().connect({host: host.ip, username: 'root'})
+    await ssh.exec(`cat /etc/mysql/conf.d/mysqld_custom.cnf  | grep buffer_pool`)
+    await ssh.disconnect()
     await program.confirm(`Are you sure you want to change instance "${INSTANCE}" to custom (${host.resources.cpu} vCPU, ${host.resources.memory} GiB)?`)
 
 
@@ -49,7 +52,7 @@ program.iterate('hosts', async (name) => {
     
     // stop mysql
     await program.chat.message(`Stopping mysql..`)
-    let ssh = await new SSHClient().connect({host: host.ip, username: 'root'})
+    ssh = await new SSHClient().connect({host: host.ip, username: 'root'})
     while (true) {
         await program.sleep(1, 'waiting')
         let list = await ssh.exec(`mysql -rsN -e "SELECT host, user, state FROM information_schema.PROCESSLIST WHERE user LIKE ('%platform')"`)
