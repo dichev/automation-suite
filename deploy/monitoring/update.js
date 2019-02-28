@@ -7,7 +7,7 @@ const cfg = require('configurator')
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
-    .description('Update Grafana-Sensors repo')
+    .description('Update Grafana-Sensors docker')
     .example(`
         node deploy/monitoring/update
     `)
@@ -27,25 +27,22 @@ program
         }
     
         // Update repo
-        await ssh.chdir('/home/dopamine/grafana-sensors')
+        await ssh.chdir('/opt/dopamine/grafana-sensors')
         await chat.notify('Updating repo to last revision')
         
-        await sshRoot.exec(`chown -R dopamine:dopamine /home/dopamine/grafana-sensors/`)
+        await sshRoot.exec(`chown -R dopamine:dopamine /opt/dopamine/grafana-sensors/`)
 
         await ssh.exec(`git reset --hard`) // removing package*.json
         await ssh.exec(`git fetch --prune && git pull`)
 
-        // Update configurator
-        await chat.notify('Updating ONLY configurator')
-        await ssh.exec(`npm install configurator`)
+        // login, build, push docker image
+        await sshRoot.chdir('/opt/dopamine/grafana-sensors')
+        await sshRoot.exec(`bash buildDocker.sh`)
 
-        // Restart
-        await chat.notify('Restart grafana-sensors.service')
-        await sshRoot.exec(`systemctl restart grafana-sensors.service`)
+        await program.sleep(1)
 
-        await program.sleep(2)
+        // deploy prodmon stack
+        await shell.exec(`node deploy/prodmon/update.js`)
 
-        // Check
-        await chat.notify('Check grafana-sensors.service status')
-        await sshRoot.exec(`systemctl status grafana-sensors.service | head -n 3`)
+        await chat.notify('Done')
     })
