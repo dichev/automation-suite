@@ -49,7 +49,7 @@ program
         let location = cfg.getLocationByOperator(operator).name
         let gitProject = 'servers-conf-' + location
         let branch = me + '/' +task
-        let configFile = `${RootDir}/${gitProject}/nginx/conf.d/allow/${operator}.conf`
+        let configFile = `${RootDir}/${gitProject}/nginx/conf.d/allow/${cfg.operators[operator].dir}.conf`
         let existingIps = []
 
         if(ips.length !== ips.unique().length)
@@ -84,7 +84,7 @@ program
         let currentMaster = await shell.exec('git rev-parse --short master',Econf)
         await shell.exec(`git checkout -b ${branch}`,Econf)
 
-        fs.appendFileSync(configFile,'\n# ' + now.padEnd(26,' ') + "#" + task + '\n')
+        fs.appendFileSync(configFile,'\n# ' + now.padEnd(24,' ') + "#" + task + '\n')
         for (let ip of ips) {
             if(existingIps.indexOf(ip) === -1 ) fs.appendFileSync(configFile,'allow ' + (ip + ';').padEnd(20,' ') + '#' + task + '\n')
         }
