@@ -94,7 +94,7 @@ program
         await shell.exec(`git push --set-upstream origin ${branch}`)
         console.log('#Deploy changes using those commands:\n'
             + `node servers/servers-conf/list-changes -l ${location}\n`
-            + `node servers/servers-conf/update -l ${location} --reload nginx\n`
+            + `node servers/servers-conf/update -l ${location} --reload nginx --announce "Whitelist ${operator}" \n`
             + `### node servers/servers-conf/update -l ${location} --rev ${currentMaster} --reload nginx\n`
             + `node  deploy/hermes/check  -p 10 -o ${operator}\n`
         )
