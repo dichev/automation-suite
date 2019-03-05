@@ -43,10 +43,11 @@ program
             if (answer === 'yes') {
                 await program.chat.message(' Restarting mysql..')
                 console.log('Restarting mysql while watching the error log, press ctrl+c to end')
-                ssh.exec(`tail -f /var/log/mysql/error.log`).catch(console.error);
+                ssh.exec(`tail -f /var/log/mysql/error.log`).catch(() => {})
                 await ssh.exec(`systemctl daemon-reload`);
                 await ssh.exec(`/etc/init.d/mysql restart`)
-                await program.sleep(5)
+                // await program.sleep(5)
+                await ssh.exec('killall tail') // TODO: workaround, must look for better syntax
             }
         }
         else {
@@ -62,6 +63,6 @@ program
         
         console.log('Ready (press crtl+c to exit)')
         
-        // await ssh.disconnect()
+        await ssh.disconnect()
 })
 
