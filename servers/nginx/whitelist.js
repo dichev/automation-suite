@@ -33,6 +33,7 @@ Array.prototype.duplicates = function(){ return this.filter( value => this.index
 program
     .description("Whitelist ips for operator")
     .option('-t, --tasks <list>',`Task to be processed`, {required:true})
+    .option('-o, --operator <name>',`Optionally specify the operator name`)
     .iterate('tasks', async (issueNumber) => {
         console.log(issueNumber)
         let issue = await jira.findIssue(issueNumber);
@@ -41,7 +42,7 @@ program
             .column(0)
             .replaceAll(';','')
             .split("\n").filter(a => a)
-        let operator = issue.fields.description.fromTo('*Operator:* ',' As described').toLowerCase()
+        let operator = program.params.operator || issue.fields.description.fromTo('*Operator:* ',' As described').toLowerCase()
         console.log([operator,ips])
 
         let me =  await shell.exec('git config user.name',Econf)
