@@ -1,26 +1,23 @@
 #!/usr/bin/env node
 'use strict';
 
-
 const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 const CloudFlare = require('dopamine-toolbox').plugins.CloudFlare
-const zones = Object.keys(cfg.cloudflare.zones)
 
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
     .description('Set ip to all dns records for desired operator')
     .option('-o, --operators <list|all>', 'Comma-separated list of the operators', {choices: Object.keys(cfg.operators), required: true })
-    .option('--update', `Update dns records, otherwise just list them`)
     
     .iterate('operators', async (name) => {
         const operator = cfg.operators[name]
         const domain = operator.domain
         const addresses = [
-            `gserver-${name}.${domain}`,
-            `gpanel-${name}.${domain}`,
-            `feed-${name}.${domain}`,
+            `gserver-${operator.dir}.${domain}`,
+            `gpanel-${operator.dir}.${domain}`,
+            `feed-${operator.dir}.${domain}`,
         ]
     
         const z = cfg.cloudflare.zones[domain]
