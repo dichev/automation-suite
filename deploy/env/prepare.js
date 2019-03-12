@@ -40,49 +40,12 @@ program
 
         // Check domain DNS
         log(`\nChecking DNS records of the domains`)
-        const DOMAIN = cfg.operators[OPERATOR].domain
-        let addresses = [
-            `gserver-${OPERATOR}.${DOMAIN}`,
-            `gpanel-${OPERATOR}.${DOMAIN}`,
-            `feed-${OPERATOR}.${DOMAIN}`,
-        ]
-
-        const z = cfg.cloudflare.zones[DOMAIN]
-        let cf = new CloudFlare(z.zone, z.email, z.key)
-        cf.silent = true
-
-        let reload = false
-        for (let address of addresses) {
-            let records = await cf.get(`dns_records?name=${address}`)
-            let found = records.result.find(r => r.name === address)
-
-            if(found) {
-                log(`- DNS is found at CloudFlare: ${address}`)
-            } else {
-                log(`- DNS is NOT found at CloudFlare: ${address}`)
-                log(`Adding ${address} to Cloudflare at zone ${LOCATION}`)
-
-                let isPanel = address.startsWith('gpanel')
-
-                await cf.post('dns_records', {
-                    type: 'A',
-                    name: address,
-                    content: cfg.locations[LOCATION].externalIps.incoming,
-                    proxied: !isPanel //TODO: gpanel is still not behind CF
-                })
-    
-                reload = true
-            }
-
-        }
+        await shell.exec(`node servers/dns/update -o ${OPERATOR}`)
         
-        if(reload){
-            console.log('\nReload office dns cache..')
-            let sshOfficeDNS = await new SSHClient().connect({host: cfg.hosts['sofia-office-dhcp-main'].ip, username: 'root'})
-            await sshOfficeDNS.exec('/etc/init.d/bind9 restart')
-            await sshOfficeDNS.disconnect()
-        }
-
+        console.log('\nReload office dns cache..')
+        let sshOfficeDNS = await new SSHClient().connect({host: cfg.hosts['sofia-office-dhcp-main'].ip, username: 'root'})
+        await sshOfficeDNS.exec('/etc/init.d/bind9 restart')
+        await sshOfficeDNS.disconnect()
 
         log('Done')
     
