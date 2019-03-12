@@ -10,11 +10,14 @@ const zones = Object.keys(cfg.cloudflare.zones)
 let program = new Program({ chat: cfg.chat.rooms.devops })
 
 program
-    .description('Set ip to all gserver/gpanel dns records of the zone')
+    .description('DEPRECATED! Set ip to all gserver/gpanel dns records of the zone')
     .option('-z, --zones <list|all>', `Comma-separated list of cloudflare zone aliases`, { choices: zones, required: true })
     .option('--update', `Update dns records, otherwise just list them`)
     
     .iterate('zones', async (zone) => {
+        
+        await program.confirm('This script is DEPRECATED! Use it on your risk!')
+        
         const z = cfg.cloudflare.zones[zone]
         let cf = new CloudFlare(z.zone, z.email, z.key)
         cf.silent = true
