@@ -67,7 +67,7 @@ program
                 await cf.post('dns_records', {
                     type: 'A',
                     name: address,
-                    content: cfg.locations[LOCATION].hosts.public,
+                    content: cfg.locations[LOCATION].externalIps.incoming,
                     proxied: !isPanel //TODO: gpanel is still not behind CF
                 })
     

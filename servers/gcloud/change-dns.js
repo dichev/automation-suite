@@ -33,11 +33,11 @@ program
             }
             let location = Object.values(cfg.operators).find(o => o.dir === dir).location
             let isPanel = record.name.startsWith('gpanel') //TODO: gpanel is still not behind CF
-            let desiredIp = cfg.locations[location].hosts.public
+            let desiredIp = cfg.locations[location].externalIps.incoming
             console.log(record.content.padEnd(15), record.proxied ? '(cf)  ': '      ', '=>', desiredIp.padEnd(15), !isPanel ? '(cf)' : '    ', record.name)
     
             // Override to the desired stats
-            record.targetIP = cfg.locations[location].hosts.public
+            record.targetIP = cfg.locations[location].externalIps.incoming
             record.proxied = !isPanel
         }
         

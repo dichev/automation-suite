@@ -25,7 +25,7 @@ program
         for(let operator of Object.values(cfg.operators).filter(o => o.domain === zone)){
             let record = {
                 name: `${prefix}-${operator.dir}.${operator.domain}`,
-                content: cfg.locations[operator.location].hosts.public,
+                content: cfg.locations[operator.location].externalIps.incoming,
                 type: 'A',
                 proxied: prefix !== 'gpanel'
             }
