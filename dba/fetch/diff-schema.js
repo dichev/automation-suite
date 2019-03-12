@@ -22,6 +22,7 @@ program
     .description('Compare database schemas of the operators')
     .option('-o, --operators <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
     .option('--base <operator>', 'The operator which database will be used as base for the comparison. By default will be used the first one from the --operators list')
+    .option('--db <list>', 'List of database types to be validated. By default will check them all', { choices: DATABASES })
     .parse()
 
 
@@ -49,8 +50,8 @@ program.run(async () => {
     let sshArchive = await new SSHClient().connect({host: dbs.backups.archive, username: 'dopamine'})
     let dbArchive = await new MySQL().connect({user: ronly.user, password: ronly.password}, sshArchive)
     
-    
-    for (let dbType of DATABASES) {
+    let databases = program.params.db ? program.params.db.split(',') : DATABASES
+    for (let dbType of databases) {
         let db = dbType === 'archive' ? dbArchive : dbMaster
         let dbname = cfg.getOperatorDatabaseName(operator, dbType)
         console.warn(`\nDumping ${dbname}..`)
@@ -92,9 +93,10 @@ program.run(async () => {
 .then(async() => program.iterate('operators', async (operator) => {
     if(operator === baseOperator) return // not necessary to compare him against himself
     
-    console.log(`\n\n################### DIFF ${operator} vs ${baseOperator} ###################`)
+    // console.log(`\n\n################### DIFF ${operator} vs ${baseOperator} ###################`)
     
-    for (let dbType of DATABASES) {
+    let databases = program.params.db ? program.params.db.split(',') : DATABASES
+    for (let dbType of databases) {
         const BASE = cfg.getOperatorDatabaseName(baseOperator, dbType) + '.sql'
         const TARGET = cfg.getOperatorDatabaseName(operator, dbType) + '.sql'
         
@@ -104,11 +106,16 @@ program.run(async () => {
         let diffs = diff.diffLines(target, base);
         
         let totalDiffs = 0
-        console.log(`# Compare ${TARGET} against ${BASE}..`)
+        let found = false
+        
         diffs.forEach((part, i) => {
             // green for additions, red for deletions, grey for common parts
             let color = part.added ? 'green' : part.removed ? 'red' : 'grey';
             if (part.added || part.removed) {
+                if(!found) {
+                    console.log(`# Compare ${TARGET} against ${BASE}..`)
+                    found = true
+                }
                 totalDiffs += part.count
                 if (part.added) {
                     console.info(colors.green(part.value.trim().replace(/^/mg, '+')));
