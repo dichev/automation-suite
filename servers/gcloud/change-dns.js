@@ -20,7 +20,7 @@ program
         cf.silent = true
     
         let response = await cf.get('dns_records?per_page=100&type=A')
-        let records = response.result.filter(r => r.name.search(/gserver-|gpanel-/) !== -1)
+        let records = response.result.filter(r => r.name.search(/gserver-|gpanel-|feed-/) !== -1)
                                   // .filter(r=>r.name.includes('rtg')) // for testing
     
         console.log(`Found ${records.length} records:`)
