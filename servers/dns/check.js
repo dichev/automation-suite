@@ -5,7 +5,7 @@ const Program = require('dopamine-toolbox').Program
 const cfg = require('configurator')
 const CloudFlare = require('dopamine-toolbox').plugins.CloudFlare
 
-let program = new Program({ chat: cfg.chat.rooms.devops })
+let program = new Program()
 
 program
     .description('Check ip of all dns records for desired operator')
