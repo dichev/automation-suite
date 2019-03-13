@@ -7,6 +7,7 @@ const Shell = require('dopamine-toolbox').Shell
 const cfg = require('configurator')
 const fs = require('fs')
 const path = require('path')
+const isWin = require('os').platform() === 'win32'
 const Handlebars = require('handlebars')
 
 const NEW_LINE = '\r\n'; //require('os').EOL
@@ -129,7 +130,17 @@ program.iterate('locations', async (location) => {
     }
     
     if(program.params.commit){
-        await new Shell().exec(`cd ${dest} && TortoiseGitProc -command commit -logmsg "${typeof program.params.commit === 'string' ? program.params.commit : ''}"`)
+        let shell = new Shell()
+        let message = typeof program.params.commit === 'string' ? program.params.commit : 'Update servers configs'
+        if(isWin) {
+            await shell.exec(`cd ${dest} && TortoiseGitProc -command commit -logmsg "${message}"`)
+        } else {
+            await shell.exec(`cd ${dest} && git commit -m "${message}"`)
+            console.log(`Don't forget to review the changes and then push`)
+            console.log(`cd ${dest} && git status`)
+            console.log(`cd ${dest} && git diff`)
+            console.log(`cd ${dest} && git push`)
+        }
     }
 })
 
