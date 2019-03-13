@@ -135,10 +135,9 @@ program.iterate('locations', async (location) => {
         if(isWin) {
             await shell.exec(`cd ${dest} && TortoiseGitProc -command commit -logmsg "${message}"`)
         } else {
-            await shell.exec(`cd ${dest} && git commit -m "${message}"`)
-            console.log(`Don't forget to review the changes and then push`)
-            console.log(`cd ${dest} && git status`)
-            console.log(`cd ${dest} && git diff`)
+            await shell.exec(`cd ${dest} && git add . && git commit -m "${message}"`)
+            console.log(`\n\nDon't forget to review the changes and then push`)
+            console.log(`cd ${dest} && git diff HEAD^ HEAD`)
             console.log(`cd ${dest} && git push`)
         }
     }
