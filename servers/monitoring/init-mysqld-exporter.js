@@ -9,6 +9,7 @@ const ipConfig = require('./ipConfig')
 const PORT = 9104;
 const MYSQL_PORT = 3306;
 const devQAMySQLIP = '192.168.14.31';
+const maltaMySQLIP = '192.168.226.202';
 
 program
 .description('Setup monitoring: Mysqld Exporter')
@@ -86,7 +87,12 @@ program.iterate('hosts', async (host) => {
         // Set custom service file for devQA MySQL, because there're too many databases, that lead to memory leak
         if (hostIP === devQAMySQLIP) {
             await ssh.exec('systemctl enable /opt/dopamine/exporters/mysqld_exporter/mysqld_exporter-dev.service')
-        } else {
+        }
+        // Set custom service file for malta MySQL, because there're too many metrics collected that we don't need
+        else if (hostIP === maltaMySQLIP) {
+            await ssh.exec('systemctl enable /opt/dopamine/exporters/mysqld_exporter/mysqld_exporter-malta.service')
+        }
+        else {
             await ssh.exec('systemctl enable /opt/dopamine/exporters/mysqld_exporter/mysqld_exporter.service')
         }
         await ssh.exec('systemctl restart mysqld_exporter.service')
@@ -127,4 +133,3 @@ program.iterate('hosts', async (host) => {
         await program.chat.notify('Success')
     }
 })
-
