@@ -29,7 +29,7 @@ program
         
         let image = (await web1.exec('cat cayetano-stack.yml  | grep image | grep cayetano-math')).trim().replace('image:', '').trim()
         if(!image) throw Error('Wrong configuration, there is no image for the cayetan-math')
-        console.log(`Pulling ${image} on all webs to speed up the deploy populating`)
+        await program.chat.message(`Pulling ${image} on all webs`) // speed up the deploy populating AND resolve expired credential issues
         for(let web of cfg.locations[location].hosts.webs){
             let ssh = await new SSHClient().connect({host: web.ip, username: 'root'})
             await ssh.exec(`docker pull ${image}`)
@@ -43,18 +43,19 @@ program
     
     
         // TODO: look for a better solution to wait deployment to finish (may be docker events)
-        await program.chat.message(`\nWaiting deployment of ${EXPECTED_REPLICAS} replicas`)
+        await program.chat.message(`\nWaiting population of ${EXPECTED_REPLICAS} replicas (it's java, so expected 40-60s per container)`)
         while (true){
-            let count  = parseInt(await web1.exec(`docker stack ps cayetano --format "{{.Node}} ({{.Image}}): {{.CurrentState}} {{.Error}}" --filter 'name=cayetano_math' | grep -i 'running' | grep ${image} | wc -l`, {silent: true}))
-            let status = await web1.exec(`docker stack ps cayetano --format "{{.Node}} ({{.Image}}): {{.CurrentState}} {{.Error}}" --filter 'name=cayetano_math' | grep -vi 'shutdown'`)
+            let count  = parseInt(await web1.exec(`docker stack ps cayetano --format '{{.Node}} ({{.Image}}): {{.CurrentState}} {{.Error}}' --filter 'name=cayetano_math' | grep -i 'running' | grep ${image} | wc -l`, {silent: true}))
+            let status = await web1.exec(`docker stack ps cayetano --format '{{.Node}} ({{.Image}}): {{.CurrentState}} {{.Error}}' --filter 'name=cayetano_math' | grep -vi 'shutdown'`)
             if(count === EXPECTED_REPLICAS){
                 console.log(`Success! Found ${count}/${EXPECTED_REPLICAS} running replicas`)
                 break
             }
             await program.sleep(1, `Found ${count}/${EXPECTED_REPLICAS}, waiting`)
         }
-        
-        
+    
+    
+        await program.chat.message(`Running tests..`)
         let shell = new Shell()
         await shell.exec(`node deploy/cayetano/check -l ${location}`)
         
