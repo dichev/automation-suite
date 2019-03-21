@@ -34,7 +34,7 @@ program.run(async () => {
         operatorsByLocation[operator.location].push(operator)
     }
     
-    const locations = Object.keys(operatorsByLocation).sort()
+    const locations = Object.keys(operatorsByLocation)
     
     if (!program.params.force && allOperators.length >= 3) {
         let answer = await program.ask(`It seems there are ${allOperators.length} iterations. Do you want to activate --force mode?`, ['yes', 'no'], 'yes')
@@ -225,6 +225,7 @@ program.run(async () => {
     if(program.params.strategy === 'direct') await program.chat.message(`QA validation: Please validate and let me know when you are ready`, {popup: true})
 
     console.info(`\nList manual git changes`)
+    let shell = new Shell()
     let changes = await shell.exec('git status --short')
     if(changes.trim()) {
         let answer = await program.ask(`Do you want to hard reset?`, ['yes', 'no'], 'yes')
