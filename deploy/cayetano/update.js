@@ -44,10 +44,11 @@ program
     
         // TODO: look for a better solution to wait deployment to finish (may be docker events)
         await program.chat.message(`\nWaiting population of ${EXPECTED_REPLICAS} replicas (it's java, so it will take some time..)`)
+        await program.sleep(2)
         while (true){
             let count  = parseInt(await web1.exec(`docker stack ps cayetano --format '{{.Node}} ({{.Image}}): {{.CurrentState}} {{.Error}}' --filter 'name=cayetano_math' | grep -i 'running' | grep ${image} | wc -l`, {silent: true}))
             let status = await web1.exec(`docker stack ps cayetano --format '{{.Node}} ({{.Image}}): {{.CurrentState}} {{.Error}}' --filter 'name=cayetano_math' | grep -vi 'shutdown'`)
-            if(count === EXPECTED_REPLICAS){
+            if(count === EXPECTED_REPLICAS && !status.match(/Starting|Ready/i)){ // status.match handles corner case where the containers are updated to the SAME image
                 console.log(`Success! Found ${count}/${EXPECTED_REPLICAS} running replicas`)
                 break
             }
