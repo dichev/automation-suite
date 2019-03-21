@@ -219,13 +219,18 @@ program.run(async () => {
     
         await chat.message(`✓ ${to} deployed to ${OPERATORS.map(o => o.name)}`)
         
-        
-        console.info(`\nList manual git changes`)
-        await shell.exec('git status -u')
-        await program.confirm('Do you want to hard reset?')
-        await shell.exec('git reset --hard')
     }
 })
 .then(async() => {
     if(program.params.strategy === 'direct') await program.chat.message(`QA validation: Please validate and let me know when you are ready`, {popup: true})
+
+    console.info(`\nList manual git changes`)
+    let changes = await shell.exec('git status --short')
+    if(changes.trim()) {
+        let answer = await program.ask(`Do you want to hard reset?`, ['yes', 'no'], 'yes')
+        if (answer === 'yes') {
+            await shell.exec('git reset --hard')
+            await shell.exec('git status --short')
+        }
+    }
 })
