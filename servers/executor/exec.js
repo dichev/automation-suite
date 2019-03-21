@@ -27,7 +27,7 @@ const iterate = async (cmd) => {
         let ssh = null
         try {
             ssh = await new SSHClient().connect({host: cfg.getHost(host).ip, username: program.params.user})
-            await ssh.exec(cmd)
+            await ssh.exec(cmd, { interactive: true })
         } catch (err) {
             if(!ssh) console.error(err.toString())
             errors++
