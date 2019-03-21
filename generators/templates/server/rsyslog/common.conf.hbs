@@ -28,4 +28,7 @@ if $syslogtag == 'ptkill:' then {
        stop
 }
 
-*.* @@(o,z9){{server.externalHosts.logserver}}:514
+if $programname != 'node' then {
+       *.* @@(o,z9){{server.externalHosts.logserver}}:514
+       stop
+}
