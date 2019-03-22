@@ -14,9 +14,9 @@
     "reset-update": "git reset --hard && git pull && npm i && npm i configurator && npm i dopamine-toolbox"
   },
   "dependencies": {
+    "chalk": "^2.4.2",
     "cli-progress": "^2.1.1",
     "clui": "^0.3.6",
-    "colors": "^1.3.2",
     "configurator": "git+ssh://git@gitlab.dopamine.bg:devops/configurator.git",
     "diff": "^4.0.1",
     "dopamine-toolbox": "git+ssh://git@gitlab.dopamine.bg:devops/toolbox.git",

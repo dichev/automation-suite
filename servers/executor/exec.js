@@ -7,7 +7,7 @@ const SSHClient = require('dopamine-toolbox').SSHClient
 const Input = require('dopamine-toolbox').Input
 const cfg = require('configurator')
 const fs = require('fs')
-const colors = require('colors')
+const colors = require('chalk')
 
 let program = new Program()
 
