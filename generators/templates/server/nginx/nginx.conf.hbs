@@ -65,8 +65,8 @@ http {
 				'"$host" to: $upstream_addr rqt: $request_time rspt: $upstream_response_time';
 
 	map $request $_request {
-				~(.*\s)(.*\?|.*)(.*)?(\sHTTP.*) $1$2$4;
-				default                         $request;
+		~(.*\s)(.+?\?|.*)(.*)?(\sHTTP.*) $1$2$4;
+		default                         $request;
 	}
 
 	access_log /var/log/nginx/access.full.log extended;
