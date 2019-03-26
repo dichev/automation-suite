@@ -5,6 +5,7 @@ const Program = require('dopamine-toolbox').Program
 const Shell = require('dopamine-toolbox').Shell
 const SSHClient = require('dopamine-toolbox').SSHClient
 const cfg = require('configurator')
+const fs = require('fs')
 
 const EXPORT_DIR = 'd:/www/analytics/aggregator-live/export'
 const DEST_DIR = '/root/migrations/aggregations'
@@ -18,16 +19,18 @@ program
 
 
 program.iterate('operators', async (operator) => {
-    if(operator !== 'bots') throw Error('Not supported operator' + operator)
     
     const DO_TRANSFER = program.params.mode === 'both' || program.params.mode === 'only-transfer'
     const DO_MIGRATE  = program.params.mode === 'both' || program.params.mode === 'only-migrate'
     
     let today = new Date().toISOString().substr(0, 10)
     let fileName = `${operator}-${today}.sql`
+    let fileSize = (fs.statSync(`${EXPORT_DIR}/${fileName}`).size / 1024 / 1024).toFixed(2) + 'MB'
     let dbs = cfg.databases[cfg.operators[operator].databases]
     let dbname = cfg.operators[operator].dbPrefix + 'segments'
     let ssh = await new SSHClient().connect({host: dbs.master, username: 'root'})
+    
+    await program.chat.message(`Deploying over ${Object.values(cfg.hosts).find(h => h.ip === dbs.master ).name} migration ${fileName} (${fileSize})`)
     
     if(DO_TRANSFER) {
         await program.chat.message('Transferring migration..')
@@ -44,6 +47,6 @@ program.iterate('operators', async (operator) => {
         await ssh.exec(`mysql -u root ${dbname} < ${DEST_DIR}/${fileName}`)
     }
     
-    console.log('Ready')
+    await program.chat.message('Ready')
     await ssh.disconnect()
 })
