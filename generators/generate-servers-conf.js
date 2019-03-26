@@ -55,18 +55,19 @@ const getOperatorVars = (operator) => {// TODO: these are custom mappings from t
 }
 
 program.iterate('locations', async (location) => {
-    console.log(`Generating server-conf..`)
     const dest = (program.params.dest || DEST).replace(/\\/g, '/') + `/servers-conf-${location}`
     
-    console.log('Resetting servers conf repo')
+    console.log('\nResetting servers conf repo')
     let shell = new Shell()
-    await shell.exec(`cd ${dest} && git reset --hard && git checkout -q master && git pull -q --ff-only origin master`)
-    // if (location !== 'dev') {
-    //     await shell.exec(`cd ${dest} && mv nginx/conf.d/allow .keep.allow && rm -rf */ && mkdir -p nginx/conf.d/ && mv .keep.allow nginx/conf.d/allow`) // TODO: protect!
-    // }
+    await shell.exec(`cd ${dest} && git clean -fd && git reset --hard && git checkout -q master && git pull -q --ff-only origin master`)
+    if (location !== 'dev') {
+        console.log('\nCleaning all repo files except the allow lists..')
+        if(!dest.endsWith(`/servers-conf-${location}`)) throw Error('Safety hazard, attempting to delete (with rm -f) unexpected directory: '+ dest) // we should be very careful here
+        await shell.exec(`cd ${dest} && rm -rfv */ && git checkout nginx/conf.d/allow/*.conf`)
+    }
     
     let templates = (await program.shell().exec(`cd ${TEMPLATES} && find -type f`, { silent: true })).split('\n').map(t => t.trim().slice(2))
-    
+    console.log('\nGenerating configurations from templates..')
     for(let file of templates){
         // console.log(file, '=>')
         
