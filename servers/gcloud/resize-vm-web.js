@@ -36,6 +36,11 @@ program.iterate('hosts', async (name) => {
     // deactivate docker node (cayetano math)
     await program.chat.message(`Deactivate cayetano math (docker node)..`)
     let manager = await new SSHClient().connect({host: cfg.locations[host.location].hosts.web1, username: 'root'})
+    
+    let status = await manager.exec(`docker stack ps cayetano --format '{{.Node}} {{.CurrentState}}' --filter 'name=cayetano_math' | grep -viE 'shutdown|error'`)
+    let count  = await manager.exec(`docker stack ps cayetano --format '{{.Node}} {{.CurrentState}}' --filter 'name=cayetano_math' | grep -viE 'shutdown|error' | grep -v ${INSTANCE} | wc -l`, { silent: true })
+    if(parseInt(count)<=0) throw Error('Aborting! There are no running cayetano math containers on the other webs..') // protect from corner case where all running containers are on the node which will be drained
+    
     await manager.exec(`docker node update --availability drain ${INSTANCE}`)
     await manager.exec(`sleep 2 && docker node inspect --pretty ${INSTANCE} | grep Availability`)
     await manager.disconnect()
