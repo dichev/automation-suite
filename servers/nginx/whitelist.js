@@ -35,7 +35,6 @@ program
     .iterate('tasks', async (issueNumber) => {
         console.log(issueNumber)
         let issue = await jira.findIssue(issueNumber);
-        console.log(issue.fields.description.fromTo('{code:java|title=Required rules*}', '{code}'))
         let ips = issue.fields.description
             .fromTo('{code:java|title=Required rules*}','{code}')
             .match(/\d+\.\d+\.\d+\.\d+(\/\d+)?/g)
