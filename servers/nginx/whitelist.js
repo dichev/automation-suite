@@ -23,10 +23,8 @@ let shell = new Shell()
 fs.mkdirSync(RootDir)
 
 // TODO! Maybe add them to toolbox
-String.prototype.replaceAll = function(search, replacement) { return this.replace(new RegExp(search, 'g'), replacement) }
 String.prototype.grep = function(reg){ reg = new RegExp(reg,'i'); return this.split("\n").filter( line => line.match(reg) ).join("\n") }
 String.prototype.fromTo = function(from,to){ let tmp = this.substr(this.indexOf(from) + from.length); return tmp.substr(0,tmp.indexOf(to)) }
-String.prototype.column = function(columnNumber){ return this.replaceAll('\r','').split("\n").map(line => { return line.split(' ')[columnNumber] }).join('\n') }
 Array.prototype.unique = function(){ return this.filter( (value,index) => this.indexOf(value) === index  ) }
 Array.prototype.duplicates = function(){ return this.filter( value => this.indexOf(value) !== this.lastIndexOf(value)  ).unique() }
 
@@ -37,11 +35,11 @@ program
     .iterate('tasks', async (issueNumber) => {
         console.log(issueNumber)
         let issue = await jira.findIssue(issueNumber);
+        console.log(issue.fields.description.fromTo('{code:java|title=Required rules*}', '{code}'))
         let ips = issue.fields.description
             .fromTo('{code:java|title=Required rules*}','{code}')
-            .column(0)
-            .replaceAll(';','')
-            .split("\n").filter(a => a)
+            .match(/\d+\.\d+\.\d+\.\d+(\/\d+)?/g)
+        
         let operator = program.params.operator || issue.fields.description.fromTo('*Operator:* ',' As described').toLowerCase()
         console.log([operator,ips])
 
@@ -89,7 +87,7 @@ program
         for (let ip of ips) {
             if(existingIps.indexOf(ip) === -1 ) fs.appendFileSync(configFile,'allow ' + (ip + ';').padEnd(20,' ') + '#' + task + '\n')
         }
-
+    
         await shell.exec(`git add . && git commit -m "[${operator}] IP Whitelist (${task})"`,Econf)
         console.log(fs.readFileSync(configFile).toString().grep('^allow'))
         await shell.exec(`git push --set-upstream origin ${branch}`)
