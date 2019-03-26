@@ -10,12 +10,13 @@ const fs = require('fs')
 const REPO = "d:/www/_releases/hermes/"
 
 let program = new Program({ chat: cfg.chat.rooms.deployBackend, smartForce: true })
+const DB_TYPES = ['platform', 'demo', 'panel', 'bonus', 'segments', 'stats', 'jackpot', 'tournaments', 'archive', 'reports', 'rewards'] 
 
 program
     .description(`Auto execute SQL migrations to production`)
     .option('-o, --operators <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
     .option('-m, --migration-path <name>', 'The path to migration sql file (like /d/www/_releases/hermes/.migrations/r3.9.16.9/gpanel-r3.9.16.9.sql', { required: true })
-    .option('--db <type>', 'The target database type', { required: true, choices: ['platform', 'demo', 'panel', 'bonus', 'segments', 'stats', 'jackpot', 'tournaments', 'archive', 'reports'] })
+    .option('--db <type>', 'The target database type', { required: true, choices: DB_TYPES})
     .parse()
 
 
