@@ -17,6 +17,7 @@ const read = (path) => fs.readFileSync(path).toString()
 
 // Configuration
 const TEMPLATES = __dirname.replace(/\\/g, '/') + '/output' // TODO: temporary
+const ANOMALY = "d:/www/tools/anomaly/bin/check.js"
 
 let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 
@@ -112,7 +113,12 @@ program
         // Update monitoring
         await program.chat.notify('\nUpdate monitoring configuration')
         await shell.exec(`node deploy/monitoring/update --force`)
-        
-        
+    
+        try {
+            await shell.exec(`node ${ANOMALY} -s all -o ${OPERATOR}`)
+        } catch (e) {
+            throw Error(`There are failed test cases.\nPlease investigate.. \n`)
+        }
+    
         // TODO: clean ./output
     })
