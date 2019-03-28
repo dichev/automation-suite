@@ -15,6 +15,7 @@ const log = console.log
 
 // Configuration
 const OUTPUT = __dirname.replace(/\\/g, '/') + '/output'
+const ANOMALY = "d:/www/tools/anomaly"
 
 let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 
@@ -46,7 +47,9 @@ program
         let sshOfficeDNS = await new SSHClient().connect({host: cfg.hosts['sofia-office-dhcp-main'].ip, username: 'root'})
         await sshOfficeDNS.exec('/etc/init.d/bind9 restart')
         await sshOfficeDNS.disconnect()
-
+        
+        shell.exec(`cd ${ANOMALY} && git pull && npm i configurator`)
+            
         log('Done')
     
     })

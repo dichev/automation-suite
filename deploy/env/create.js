@@ -115,7 +115,7 @@ program
         await shell.exec(`node deploy/monitoring/update --force`)
     
         try {
-            await shell.exec(`node ${ANOMALY} -s games,platform -o ${OPERATOR}`)
+            await shell.exec(`node ${ANOMALY} -s all -o ${OPERATOR}`)
         } catch (e) {
             throw Error(`There are failed test cases.\nPlease investigate.. \n`)
         }
