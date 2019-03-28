@@ -48,7 +48,8 @@ program
         await sshOfficeDNS.exec('/etc/init.d/bind9 restart')
         await sshOfficeDNS.disconnect()
         
-        shell.exec(`cd ${ANOMALY} && git pull && npm i configurator`)
+        log('Updating anomaly project')
+        await shell.exec(`cd ${ANOMALY} && git pull && npm i configurator`)
             
         log('Done')
     
