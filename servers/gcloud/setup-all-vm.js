@@ -30,10 +30,11 @@ program
         await shell.exec(`node servers/servers-conf/init --no-chat ${verbose} -h ${location.name}-lb*`)
         await shell.exec(`node servers/servers-conf/init --no-chat ${verbose} -h ${location.name}-web*`)
         await shell.exec(`node servers/servers-conf/init --no-chat ${verbose} -h ${location.name}-db*`)
-
+    
         await program.chat.message('update conf repos')
         await shell.exec(`node servers/executor/exec -h ${location.name}-* --exec "cd /opt/servers-conf && git pull --no-rebase --ff-only --prune"`)
-
+    
+    
         await program.chat.message('Setup php-binary')
         await shell.exec(`node servers/php-binary/init --no-chat ${verbose} -h ${location.name}-web*`)
 
@@ -48,7 +49,17 @@ program
         await shell.exec(`node servers/vm-setup/rsyslog   --no-chat --force -h ${location.name}-*`)
 
         
-        await program.chat.message('Install sys-metrics')
-        await shell.exec(`node deploy/sys-metrics/init -h ${location.name}-*`)
+        await program.chat.message('install docker')
+        await shell.exec(`node servers/docker/setup -h ${location.name}-lb*`)
+        await shell.exec(`node servers/docker/setup -h ${location.name}-web*`)
+        await shell.exec(`node deploy/cayetano/docker/init -l ${location.name}`)
+        
+        
+        await program.chat.message('install monitoring exporters')
+        await shell.exec(`node servers/monitoring/init-node-exporter  -h ${location.name}-*  -l live `)
+        await shell.exec(`node servers/monitoring/init-mysql-exporter -h ${location.name}-db* -l live `)
+        await shell.exec(`deploy/cayetano/docker/init -l ${location.name}`)
+        
+        
 })
 
