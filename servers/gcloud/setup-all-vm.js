@@ -50,15 +50,15 @@ program
 
         
         await program.chat.message('install docker')
-        await shell.exec(`node servers/docker/setup -h ${location.name}-lb*`)
+        //await shell.exec(`node servers/docker/setup -h ${location.name}-lb*`)
         await shell.exec(`node servers/docker/setup -h ${location.name}-web*`)
-        await shell.exec(`node deploy/cayetano/docker/init -l ${location.name}`)
+        await shell.exec(`node deploy/cayetano/init -l ${location.name}`)
         
         
         await program.chat.message('install monitoring exporters')
         await shell.exec(`node servers/monitoring/init-node-exporter  -h ${location.name}-*  -l live `)
         await shell.exec(`node servers/monitoring/init-mysql-exporter -h ${location.name}-db* -l live `)
-        await shell.exec(`deploy/cayetano/docker/init -l ${location.name}`)
+        //await shell.exec(`deploy/cayetano/docker/init -l ${location.name}`)
         
         
 })
