@@ -22,7 +22,7 @@ program
         await program.chat.message('Fix hosts file and packages')
         let cmd = `sed -i 's/192.168.110./192.168.100./g' /etc/hosts && grep '192.168.100.' /etc/hosts || echo 'NOT FOUND VALID RECORDS'`
         await shell.exec(`node servers/executor/exec -h ${location.name}-* --exec "${cmd}"`)
-        await shell.exec(`node servers/executor/exec -h ${location.name}-* --exec "apt-get -q update && apt-get -q install psmisc"`)
+        await shell.exec(`node servers/executor/exec -h ${location.name}-* --exec "apt-get -q update && apt-get -q install psmisc net-tools"`)
         // -------------------------------------------------
 
 
