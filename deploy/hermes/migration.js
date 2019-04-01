@@ -10,7 +10,7 @@ const fs = require('fs')
 const REPO = "d:/www/_releases/hermes/"
 
 let program = new Program({ chat: cfg.chat.rooms.deployBackend, smartForce: true })
-const DB_TYPES = ['platform', 'demo', 'panel', 'bonus', 'segments', 'stats', 'jackpot', 'tournaments', 'archive', 'reports', 'rewards'] 
+const DB_TYPES = ['platform', 'demo', 'panel', 'bonus', 'segments', 'stats', 'jackpot', 'tournaments', 'archive', 'reports']
 
 program
     .description(`Auto execute SQL migrations to production`)
