@@ -12,6 +12,9 @@ program
 .parse()
 
 program.iterate('hosts', async (host) => {
+    const params = program.params
+    const force  = params.force !== undefined;
+
     let hostIP = cfg.getHost(host).ip;
 
     console.log(`Starting script on HOST:(${host} : ${hostIP})...`)
@@ -19,7 +22,7 @@ program.iterate('hosts', async (host) => {
 
     let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
-    if(await ssh.exists('/opt/dopamine/exporters/sysmetrics_exporter/sysmetrics.service')) {
+    if(!force && await ssh.exists('/opt/dopamine/exporters/sysmetrics_exporter/sysmetrics.service')) {
         await ssh.chdir('/opt/dopamine/exporters/')
         await ssh.exec('git reset --hard')
         await ssh.exec('git pull')
