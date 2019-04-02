@@ -41,9 +41,6 @@ SELECT SLEEP(1);
 # USE {{operator.dbPrefix}}jackpot;
 # custom
 
-USE {{operator.dbPrefix}}rewards;
-{{import '/rewards/.migrator/seed/seed.sql'}}
-
 USE {{operator.dbPrefix}}tournaments;
 {{import '/tournaments/.migrator/seed/seed.sql'}}
 

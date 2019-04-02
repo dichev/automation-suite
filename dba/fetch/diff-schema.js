@@ -14,7 +14,7 @@ const cfg = require('configurator')
 const colors = require('chalk')
 
 const DEST = path.resolve(__dirname + '/../../.tmp/diff-schema').replace(/\\/g, '/')
-const DATABASES = ['platform', 'demo', 'panel', 'jackpot', 'stats', 'segments', 'tournaments', 'rewards', 'bonus', 'archive']
+const DATABASES = ['platform', 'demo', 'panel', 'jackpot', 'stats', 'segments', 'tournaments', 'bonus', 'archive']
 
 
 let program = new Program()

@@ -124,7 +124,6 @@ program.run(async () => {
     await generate(`${TEMPLATES}/hermes/platform-env.php.hbs`,         `${dest}/hermes/platform/config/env.config.php`, vars)
     await generate(`${TEMPLATES}/hermes/replay.php.hbs`,               `${dest}/hermes/replay/config/server.config.php`, vars)
 	await generate(`${TEMPLATES}/hermes/reports.php.hbs`,              `${dest}/hermes/reports/config/server.config.php`, vars)
-    await generate(`${TEMPLATES}/hermes/rewards.php.hbs`,              `${dest}/hermes/rewards/config/server.config.php`, vars)
     await generate(`${TEMPLATES}/hermes/segments.php.hbs`,             `${dest}/hermes/segments/config/server.config.php`, vars)
     await generate(`${TEMPLATES}/hermes/stats.php.hbs`,                `${dest}/hermes/stats/config/server.config.php`, vars)
     await generate(`${TEMPLATES}/hermes/tournaments.php.hbs`,          `${dest}/hermes/tournaments/config/server.config.php`, vars)

@@ -6,7 +6,6 @@ CREATE DATABASE {{operator.dbPrefix}}segments     DEFAULT CHARACTER SET utf8 DEF
 CREATE DATABASE {{operator.dbPrefix}}stats        DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 CREATE DATABASE {{operator.dbPrefix}}panel        DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 CREATE DATABASE {{operator.dbPrefix}}platform     DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-CREATE DATABASE {{operator.dbPrefix}}rewards      DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 CREATE DATABASE {{operator.dbPrefix}}tournaments  DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 CREATE DATABASE {{operator.dbPrefix}}reports      DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 
@@ -32,7 +31,6 @@ GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}reports`.*      TO '{{op
 GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}platform`.*    TO '{{operator.dbPrefix}}platform'@'%';
 GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}bonus`.*       TO '{{operator.dbPrefix}}platform'@'%';
 GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}segments`.*    TO '{{operator.dbPrefix}}platform'@'%';
-GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}rewards`.*     TO '{{operator.dbPrefix}}platform'@'%';
 GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}tournaments`.* TO '{{operator.dbPrefix}}platform'@'%';
 
 GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}%`.*        TO '{{operator.dbPrefix}}panel'@'%';
