@@ -10,13 +10,15 @@ const fs = require('fs')
 const EXPORT_DIR = 'd:/www/analytics/aggregator-live/export'
 const DEST_DIR = '/root/migrations/aggregations'
 
-let program = new Program({ chat: cfg.chat.rooms.deployBackend })
+let program = new Program({ chat: cfg.chat.rooms.deployBackend, smartForce: true })
 
 program
     .description(`Sync segments data to aggregated data`)
     .option('-o, --operators <name>', 'The target operator name', { required: true, choices: Object.keys(cfg.operators) })
     .option('--mode <only-transfer|only-migrate|both>', 'Specify witch part of the deploy to be executed', { required: true, def: 'both', choices: ['only-transfer','only-migrate','both'] })
 
+
+console.warn('WARNING! Do not forget to ensure the segments aggregate cron is disabled AND is currently stopped!')
 
 program.iterate('operators', async (operator) => {
     
@@ -25,6 +27,12 @@ program.iterate('operators', async (operator) => {
     
     let today = new Date().toISOString().substr(0, 10)
     let fileName = `${operator}-${today}.sql`
+    
+    if(!fs.existsSync(`${EXPORT_DIR}/${fileName}`)) {
+        await program.chat(`WARNING! Skipping, no migration file found: ${fileName}`)
+        return
+    }
+    
     let fileSize = (fs.statSync(`${EXPORT_DIR}/${fileName}`).size / 1024 / 1024).toFixed(2) + 'MB'
     let dbs = cfg.databases[cfg.operators[operator].databases]
     let dbname = cfg.operators[operator].dbPrefix + 'segments'
