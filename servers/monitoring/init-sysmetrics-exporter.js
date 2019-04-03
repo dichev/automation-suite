@@ -22,6 +22,10 @@ program.iterate('hosts', async (host) => {
 
     let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
 
+    if (!(host.includes('db') || host.includes('replication') || host.includes('sofia-data-warehouse'))) {
+        throw 'The host is not a mysql host'
+    }
+
     if(!force && await ssh.exists('/opt/dopamine/exporters/sysmetrics_exporter/sysmetrics.service')) {
         await ssh.chdir('/opt/dopamine/exporters/')
         await ssh.exec('git reset --hard')
