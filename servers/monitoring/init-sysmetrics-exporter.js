@@ -29,7 +29,7 @@ program.iterate('hosts', async (host) => {
     if(!force && await ssh.exists('/opt/dopamine/exporters/sysmetrics_exporter/sysmetrics.service')) {
         await ssh.chdir('/opt/dopamine/exporters/')
         await ssh.exec('git reset --hard')
-        await ssh.exec('git pull')
+        await ssh.exec('git reset --hard && git pull')
 
         console.log('App already exist on host. Skipping it...')
     } else {

@@ -64,7 +64,7 @@ program.iterate('hosts', async (host) => {
                 await ssh.exec('git clone git@gitlab.dopamine.bg:devops/monitoring/exporters.git /opt/dopamine/exporters')
             }
             await ssh.chdir('/opt/dopamine/exporters')
-            await ssh.exec('git pull')
+            await ssh.exec('git reset --hard && git pull')
         } else {
             // Install (Some servers does not have git, so we rsync it instead)
             // Starting local shell
