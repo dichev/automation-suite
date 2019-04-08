@@ -55,8 +55,8 @@ program
             log(`Removing ${DEST}`)
             await web1.exec(`rm -rf ${DEST}`)
             await web1.exec(`mkdir ${DEST}`) // create empty dir
-            await web1.exec(`webs-sync --hard ${DEST}`) // sync empty dir, to delete /dev/random
-            await web1.exec(`webs-exec 'rm -d ${DEST}'`) // rm -d is equivelent to rmdir
+            await web1.exec(`/home/dopamine/bin/webs-sync --hard ${DEST}`) // sync empty dir, to delete /dev/random
+            await web1.exec(`/home/dopamine/bin/webs-exec 'rm -d ${DEST}'`) // rm -d is equivelent to rmdir
 
             log(`Done`)
             log(`\n\n===================================================\n\n`)
