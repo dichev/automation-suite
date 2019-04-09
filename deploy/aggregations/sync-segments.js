@@ -29,7 +29,7 @@ program.iterate('operators', async (operator) => {
     let fileName = `${operator}-${today}.sql`
     
     if(!fs.existsSync(`${EXPORT_DIR}/${fileName}`)) {
-        await program.chat(`WARNING! Skipping, no migration file found: ${fileName}`)
+        await program.chat.message(`WARNING! Skipping, no migration file found: ${fileName}`)
         return
     }
     
@@ -51,8 +51,19 @@ program.iterate('operators', async (operator) => {
     
     if(DO_MIGRATE) {
         await program.confirm(`Execute migration over ${dbname}? `)
+        
+        // Protect from cronjob collision
+        await program.chat.message('Prevent collision with cronjob "aggregate"..')
+        await ssh.exec(`mysql ${dbname} -e "UPDATE _commands SET status = 'DISABLED' WHERE status = 'IDLE' AND command = 'aggregate'"`)
+        let status = await ssh.exec(`mysql -sN ${dbname} -e "SELECT status FROM _commands WHERE command = 'aggregate'"`)
+        if(status !== 'DISABLED') throw Error(`Aborting! The cron job 'aggregate' is currently working (status: ${status})!`)
+    
+        // Real migration:
         await program.chat.message('Execute migration..')
-        await ssh.exec(`mysql -u root ${dbname} < ${DEST_DIR}/${fileName}`)
+        await ssh.exec(`mysql ${dbname} < ${DEST_DIR}/${fileName}`)
+    
+        // Restore status of cronjob
+        await ssh.exec(`mysql ${dbname} -e "UPDATE _commands SET status = 'IDLE' WHERE status = 'DISABLED' AND command = 'aggregate'"`)
     }
     
     await program.chat.message('Ready')
