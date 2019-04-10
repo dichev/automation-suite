@@ -24,33 +24,31 @@ Promise.resolve().then(async () => {
     await program.shell().exec(`cd ${REPO} && git fetch --quiet --tags && git reset --hard origin/master`)
     
     await program.iterate('operators', async (operator) => {
-        const validateGameConfigs = async (state) => {
-            try {
-                await program.shell().exec(`node ${ANOMALY} -s games -o ${operator}`)
-            } catch (e) {
-                if (affectedOperators.length > 0) console.log(`\nAffected operators: -${affectedOperators.join(',-')}`)
-                throw Error(`[${state}] There are failed test cases.\nPlease investigate.. \n`)
-            }
-        }
-    
-        console.log('Running pre-deploy validations..')
-        if (!program.params.rollback) await validateGameConfigs('pre-deploy')
-        
-        let dbs = cfg.databases[cfg.operators[operator].databases]
-        let master = await program.mysql({user: 'root', ssh: {user: 'root', host: dbs.master}})
-        let dbname = cfg.operators[operator].dbPrefix + 'platform'
-        await master.query(`USE ${dbname};`)
-    
-        
         let FILE_NAME = `${REPO}/games/${program.params.week}/${operator}.sql`
         if (program.params.rollback) {
             await program.confirm('Are you sure you want to revert the previous state of the games configurations? ')
-           
+        
             FILE_NAME = `${REPO}/games/${program.params.week}/rollback/${operator}.sql`
         }
-
-
+        
         if (fs.existsSync(FILE_NAME)) {
+            const validateGameConfigs = async (state) => {
+                try {
+                    await program.shell().exec(`node ${ANOMALY} -s games -o ${operator}`)
+                } catch (e) {
+                    if (affectedOperators.length > 0) console.log(`\nAffected operators: -${affectedOperators.join(',-')}`)
+                    throw Error(`[${state}] There are failed test cases.\nPlease investigate.. \n`)
+                }
+            }
+        
+            console.log('Running pre-deploy validations..')
+            if (!program.params.rollback) await validateGameConfigs('pre-deploy')
+            
+            let dbs = cfg.databases[cfg.operators[operator].databases]
+            let master = await program.mysql({user: 'root', ssh: {user: 'root', host: dbs.master}})
+            let dbname = cfg.operators[operator].dbPrefix + 'platform'
+            await master.query(`USE ${dbname};`)
+
             console.log('Running migration')
             const migration = fs.readFileSync(FILE_NAME).toString()
             await master.query(migration)
