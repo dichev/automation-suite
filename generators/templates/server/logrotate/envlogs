@@ -1,0 +1,14 @@
+/home/dopamine/*/*/wallet/logs/*.log {
+  rotate 2
+  weekly
+  missingok
+  notifempty
+  compress
+  delaycompress
+  su root root
+  create
+  postrotate
+    service rsyslog rotate >/dev/null 2>&1 || true
+    /opt/servers-conf/php/php-fpm-reopenlogs || true
+  endscript
+}
