@@ -31,8 +31,10 @@ Promise.resolve().then(async () => {
     await program.iterate('operators', async (operator) => {
         let dbs = cfg.databases[cfg.operators[operator].databases]
         let ssh = new SSHClient()
+        let isSharedJackpotDb = program.params.db === 'jackpot' && cfg.operators[operator].sharedJackpot
+
         await ssh.connect({
-            host: program.params.db === 'archive' ? dbs.backups.archive : dbs.backups.master,
+            host: program.params.db === 'archive' ? dbs.backups.archive : (isSharedJackpotDb ? dbs.backups.jackpots : dbs.backups.master),
             username: 'dopamine'
         })
         
