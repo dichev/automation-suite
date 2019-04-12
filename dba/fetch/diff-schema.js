@@ -44,12 +44,15 @@ program.run(async () => {
     let dbs = cfg.databases[cfg.operators[operator].databases]
     let ronly = cfg.access.mysql.readOnly
 
-    let sshMaster = await new SSHClient().connect({host: dbs.backups.master, username: 'dopamine'})
+    let isSharedJackpotDb = program.params.db === 'jackpot' && cfg.operators[operator].sharedJackpot
+    let masterHost = isSharedJackpotDb ? dbs.backups.jackpots : dbs.backups.master
+
+    let sshMaster = await new SSHClient().connect({host: masterHost, username: 'dopamine'})
     let dbMaster = await new MySQL().connect({user: ronly.user, password: ronly.password}, sshMaster)
     
     let sshArchive = await new SSHClient().connect({host: dbs.backups.archive, username: 'dopamine'})
     let dbArchive = await new MySQL().connect({user: ronly.user, password: ronly.password}, sshArchive)
-    
+
     let databases = program.params.db ? program.params.db.split(',') : DATABASES
     for (let dbType of databases) {
         let db = dbType === 'archive' ? dbArchive : dbMaster

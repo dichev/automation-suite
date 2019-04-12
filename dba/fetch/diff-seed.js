@@ -45,13 +45,21 @@ program.run(async () => {
 
     let sshMaster = await new SSHClient().connect({host: dbs.backups.master, username: 'dopamine'})
     let dbMaster = await new MySQL().connect({user: ronly.user, password: ronly.password}, sshMaster)
-    
+
+    let dbJackpots = false
+    let sshJackpots = false
+    if (dbs.backups.jackpots) {
+        sshJackpots = await new SSHClient().connect({host: dbs.backups.jackpots, username: 'dopamine'})
+        dbJackpots = await new MySQL().connect({user: ronly.user, password: ronly.password}, sshJackpots)
+    }
+
     let sshArchive = await new SSHClient().connect({host: dbs.backups.archive, username: 'dopamine'})
     let dbArchive = await new MySQL().connect({user: ronly.user, password: ronly.password}, sshArchive)
     
     
     for (let dbType of DATABASES) {
-        let db = dbType === 'archive' ? dbArchive : dbMaster
+        let isSharedJackpotDb = dbType === 'jackpot' && cfg.operators[operator].sharedJackpot
+        let db = dbType === 'archive' ? dbArchive : (isSharedJackpotDb ? dbJackpots : dbMaster)
         let dbname = cfg.getOperatorDatabaseName(operator, dbType)
         console.warn(`\nDumping ${dbname}..`)
         await db.query(`USE ${dbname};`)
@@ -113,8 +121,8 @@ program.run(async () => {
         })
         
     }
-    
-    await Promise.all([dbMaster, dbArchive, sshMaster, sshArchive].map(async conn => await conn.disconnect()))
+
+    await Promise.all([dbMaster, dbArchive, sshMaster, sshArchive, sshJackpots, dbJackpots].map(async conn => await conn.disconnect()))
 }))
 
 // Disable parallelism here to ensure readability fo the diffs report bellow
