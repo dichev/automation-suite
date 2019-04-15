@@ -44,10 +44,8 @@ program
         }
 
         await program.chat.notify('Cloning pyxbackup repo...')
-        await ssh.exec(`git clone https://github.com/dotmanila/pyxbackup.git ${pyxBackupPath}`)
+        await ssh.exec(`git clone git@gitlab.dopamine.bg:devops/backups/xtrabackup.git ${pyxBackupPath}`)
         await ssh.chdir(pyxBackupBinPath)
-        //reset to the last stable commit. (No tags available in repo)
-        await ssh.exec('git reset --hard 3e3f7af81a312209e19390eee9b947e61e6f9ec9')
         await ssh.exec(`chmod 0755 ${pyxBackupBinPath}`)
     }
 
@@ -69,6 +67,11 @@ program
     // Check wrapper version
     await program.chat.notify(`Checking pyxBackup version`)
     await ssh.exec(`${pyxBackupBinPath} --v`)
+
+    // Rsyslog link file
+    await ssh.exec(`ln -svf /opt/servers-conf-mysql/pyxbackup/rsyslog.d/14-pyxbackup.${host}.conf /etc/rsyslog.d/14-pyxbackup.${host}.conf && [ -f /etc/rsyslog.d/14-pyxbackup.${host}.conf ]`)
+    await ssh.exec('systemctl restart rsyslog')
+    await ssh.exec('sleep 1 && systemctl status rsyslog | head -n 3')
 
     // Remove old cron file
     // await program.chat.notify(`Remove old cron file`)
