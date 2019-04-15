@@ -20,13 +20,14 @@ program
         
         let dbs = cfg.databases[cfg.operators[operator].databases]
         let ssh = new SSHClient()
-        await ssh.connect({ host: program.params.db === 'archive' ? dbs.backups.archive : dbs.backups.master, username: 'dopamine' })
+        let isSharedJackpotDb = program.params.db === 'jackpot' && cfg.operators[operator].sharedJackpot
+
+        await ssh.connect({ host: program.params.db === 'archive' ? dbs.backups.archive : (isSharedJackpotDb ? dbs.backups.jackpots : dbs.backups.master), username: 'dopamine' })
         
         let ronly = cfg.access.mysql.readOnly
         let db = new MySQL()
         await db.connect({user: ronly.user, password: ronly.password}, ssh)
-        let dbname = cfg.operators[operator].dbPrefix + program.params.db
-        
+        let dbname = cfg.getOperatorDatabaseName(operator, program.params.db)
         
         const SQL = `
             SELECT
