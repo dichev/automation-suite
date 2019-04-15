@@ -10,6 +10,8 @@ require_once __DIR__ . '/endpoints/demo.php';
 
 Config::$PRODUCTION = {{server.production}};
 
+Config::$requestLog['name'] = '{{operator.name}}';
+
 Config::$db['default'] = [
     'host'       => '{{operator.databases.master}}',
     'database'   => '{{operator.dbPrefix}}platform',
