@@ -1,0 +1,6 @@
+module(load="imfile" PollingInterval="5")
+
+input(type="imfile"
+      File="/backups/{{host}}/work/*.log"
+      Tag="pyxbackup:"
+)
