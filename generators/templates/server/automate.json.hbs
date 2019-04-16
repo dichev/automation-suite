@@ -24,7 +24,8 @@
             "db": {
                 "host": "{{this._dbMaster}}",
                 "prefix": "{{this.dbPrefix}}",
-                "sharedJackpot": {{#if this.sharedJackpot}}"{{this.sharedJackpot}}"{{else}}false{{/if}}
+                "sharedJackpot": {{#if this.sharedJackpot}}"{{this.sharedJackpot}}"{{else}}false{{/if}},
+                "sharedJackpotHost": {{#if this.sharedJackpot}}"{{this._dbJackpots}}"{{else}}false{{/if}}
             }
         }{{#unless @last}},{{/unless}}
         {{/each}}

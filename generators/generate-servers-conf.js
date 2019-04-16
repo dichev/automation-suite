@@ -111,6 +111,7 @@ program.iterate('locations', async (location) => {
                   .filter(o => o.location === location)
                   .map(operator => {
                       operator['_dbMaster'] = cfg.databases[operator.databases].master
+                      operator['_dbJackpots'] = cfg.databases[operator.databases].jackpots && cfg.databases[operator.databases].jackpots.master || null
                       return operator
                   })
                 
