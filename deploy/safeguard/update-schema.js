@@ -21,7 +21,7 @@ program
         
         let dbs = cfg.databases[cfg.locations[location].hosts.databases[0]]
         let ssh = await new SSHClient().connect({username: 'root', host: dbs.master})
-        let db = await new MySQL().connect({user: 'root'})
+        let db = await new MySQL().connect({user: 'root'}, ssh)
     
         console.log(`Running migration over ${location}..`)
         await db.query('USE `safeguard`')
@@ -29,8 +29,8 @@ program
         await program.confirm('Confirm?')
         await db.query(sql)
         console.log(await db.query(`SHOW WARNINGS`))
-        
-  
+
+
         await db.disconnect()
         await ssh.disconnect()
     })
