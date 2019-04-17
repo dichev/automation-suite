@@ -5,7 +5,7 @@ template(name="json-template"
     constant(value="{")
       constant(value="\"@timestamp\":\"")     property(name="timereported" dateFormat="rfc3339")
       constant(value="\",\"@version\":\"1")
-      constant(value="\",\"message\":\"")     property(name="msg" format="json")
+      constant(value="\",\"message\":\"")     property(name="msg")
       constant(value="\",\"sysloghost\":\"")  property(name="hostname")
       constant(value="\",\"serverip\":\"")    property(name="fromhost-ip")
       constant(value="\",\"severity\":\"")    property(name="syslogseverity-text")
