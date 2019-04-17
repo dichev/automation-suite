@@ -57,7 +57,7 @@ Promise.resolve().then(async() => {
             // WARNING! The actual key removal
             console.log(`Removing ${KEY} from ${DIR}/authorized_keys`)
             await ssh.exec(`grep -v '${KEY}' ${DIR}/authorized_keys > ${DIR}/authorized_keys-NEXT`)
-            await ssh.exec(`rm ${DIR}/authorized_keys && mv ${DIR}/authorized_keys-NEXT ${DIR}/authorized_keys`)
+            await ssh.exec(`cat ${DIR}/authorized_keys-NEXT > ${DIR}/authorized_keys && rm ${DIR}/authorized_keys-NEXT`)
             
             let ssh2 = await new SSHClient().connect({host: cfg.getHost(host).ip, username: 'root'})
             await ssh2.exec('echo success')
