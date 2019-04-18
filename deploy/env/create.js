@@ -113,7 +113,11 @@ program
         // Update monitoring
         await program.chat.notify('\nUpdate monitoring configuration')
         await shell.exec(`node deploy/monitoring/update --force`)
-    
+        
+        // Update anomaly
+        await program.chat.notify('\nUpdate anomaly configuration')
+        await shell.exec(`node deploy/anomaly/update --force`)
+
         try {
             await shell.exec(`node ${ANOMALY} -s all -o ${OPERATOR}`)
         } catch (e) {

@@ -49,7 +49,7 @@ program
         await sshOfficeDNS.disconnect()
         
         log('Updating anomaly project')
-        await shell.exec(`cd ${ANOMALY} && git pull && npm i configurator`)
+        await shell.exec(`cd ${ANOMALY} && git reset --hard && git pull && npm i configurator`)
             
         log('Done')
     
