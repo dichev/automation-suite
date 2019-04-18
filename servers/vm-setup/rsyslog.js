@@ -18,8 +18,8 @@ program
         let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
         const type = cfg.getHost(host).type
 
-        await ssh.exec('echo \'deb http://download.opensuse.org/repositories/home:/rgerhards/Raspbian_9.0/ /\' > /etc/apt/sources.list.d/home:rgerhards.list')
-        await ssh.exec('wget -nv https://download.opensuse.org/repositories/home:rgerhards/Raspbian_9.0/Release.key -O - | apt-key add -')
+        await ssh.exec('echo \'deb https://download.opensuse.org/repositories/home:/rgerhards/Debian_9.0/ /\' > /etc/apt/sources.list.d/home:rgerhards.list')
+        await ssh.exec('wget -nv https://download.opensuse.org/repositories/home:/rgerhards/Debian_9.0/Release.key -O - | apt-key add -')
         await ssh.exec('apt-get update && apt-get -y install rsyslog')
 
         let it = tester.it
