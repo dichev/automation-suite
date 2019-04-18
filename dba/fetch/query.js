@@ -45,7 +45,8 @@ Promise.resolve().then(async () => {
         
         await db.query(`USE ${dbname};`)
         let rows = await db.query(query.replace(/:dbname/g, dbname))
-        console.log(JSON.stringify(rows, null, 2))
+        let output = rows.length > 1 ? JSON.stringify(rows, null, 2) : JSON.stringify(rows)
+        console.log(output)
         
         await db.disconnect()
         await ssh.disconnect()
