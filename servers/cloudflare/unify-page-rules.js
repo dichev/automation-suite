@@ -46,6 +46,17 @@ program
                     {id: 'cache_level', value: 'bypass'}
                 ]
             },
+            {
+                status: 'active',
+                targets: [{
+                    target: 'url',
+                    constraint: {operator: 'matches', value: `data-service.${z.domain}/*`}
+                }], actions: [
+                    {id: 'always_online', value: 'off'},
+                    {id: 'browser_check', value: 'off'},
+                    {id: 'cache_level', value: 'bypass'}
+                ]
+            },
         ]
         
         
