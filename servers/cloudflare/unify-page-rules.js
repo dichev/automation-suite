@@ -28,7 +28,7 @@ program
                 status: 'active',
                 targets: [{
                     target: 'url',
-                    constraint: {operator: 'matches', value: `gserver-*.${z.domain}/`}
+                    constraint: {operator: 'matches', value: `gserver-*.${z.domain}/*`}
                 }], actions: [
                     {id: 'always_online', value: 'off'},
                     {id: 'browser_check', value: 'off'},
@@ -39,7 +39,7 @@ program
                 status: 'active',
                 targets: [{
                     target: 'url',
-                    constraint: {operator: 'matches', value: `feed-*.${z.domain}/`}
+                    constraint: {operator: 'matches', value: `feed-*.${z.domain}/*`}
                 }], actions: [
                     {id: 'always_online', value: 'off'},
                     {id: 'browser_check', value: 'off'},
