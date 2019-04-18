@@ -17,8 +17,12 @@ let program = new Program({ chat: cfg.chat.rooms.deployBackend })
 program
     .description(`Activate jackpot on operator`)
     .option('-o, --operator <string>', 'The target operator name', {required: true, choices: Object.keys(cfg.operators)})
-    .option('--jackpotSeed <string>', 'The target jackpot seed (must be located in seed/next folder)', {required: true})
+    .option('--jackpotSeed <string>', 'The target jackpot seed (must be located in seed/next folder)', {required: false})
     .option('--platformSeed <string>', 'The target platform seed (must be located in seed/envs/next folder)', {required: true})
+    .example(`
+        node deploy/hermes/activate-jackpot.js -o adjarabet --platformSeed adjarabet-next
+        node deploy/hermes/activate-jackpot.js -o mansion --jackpotSeed mansionPop --platformSeed mansion-jackpot
+    `)
     .parse()
 
 
@@ -31,18 +35,26 @@ program.run(async () => {
     await shell.exec(`cd ${REPO}/jackpot && git fetch --quiet --tags && git reset --hard origin/master`)
     
     const PLATFORM_SEED_FILE = `${REPO}/platform/.migrator/seed/envs/next/${program.params.platformSeed}.sql`
-    const JACKPOT_SEED_FILE  = `${REPO}/jackpot/.migrator/seed/next/${program.params.jackpotSeed}.sql`
-    
-    if (!fs.existsSync(PLATFORM_SEED_FILE) || !fs.existsSync(JACKPOT_SEED_FILE)) {
-        throw Error(`${PLATFORM_SEED_FILE} or ${JACKPOT_SEED_FILE} does not exist.`)
+    if (!fs.existsSync(PLATFORM_SEED_FILE)) {
+        throw Error(`${PLATFORM_SEED_FILE} does not exist.`)
     }
+    const platformMigration = fs.readFileSync(PLATFORM_SEED_FILE).toString()
     
-    if (cfg.operators[operator].sharedJackpot) {
-        throw Error(`Shared db ${cfg.operators[operator].sharedJackpot} is not yet supported.`)
+    
+    let jackpotMigration = null
+    let JACKPOT_SEED_FILE = null
+    if (program.params.jackpotSeed) {
+        JACKPOT_SEED_FILE  = `${REPO}/jackpot/.migrator/seed/next/${program.params.jackpotSeed}.sql`
+        if (!fs.existsSync(JACKPOT_SEED_FILE)) {
+            throw Error(`${JACKPOT_SEED_FILE} does not exist.`)
+        }
+    
+        if (cfg.operators[operator].sharedJackpot) {
+            throw Error(`Shared db ${cfg.operators[operator].sharedJackpot} is not yet supported.`)
+        }
+        
+        jackpotMigration  = fs.readFileSync(JACKPOT_SEED_FILE).toString()
     }
-    
-    let platformMigration = fs.readFileSync(PLATFORM_SEED_FILE).toString()
-    let jackpotMigration  = fs.readFileSync(JACKPOT_SEED_FILE).toString()
     
     let dbs = cfg.databases[cfg.operators[operator].databases]
     
@@ -58,17 +70,19 @@ program.run(async () => {
     let db2 = new MySQL()
     await db.connect({user: 'root'}, ssh)
     await db2.connect({user: 'root'}, ssh)
+
+    const dbNamePlatform = `${cfg.operators[operator].dbPrefix}platform`
     
-    let dbNamePlatform = `${cfg.operators[operator].dbPrefix}platform`
-    let dbNameJackpot  = `${cfg.operators[operator].dbPrefix}jackpot`
+    if (jackpotMigration) {
+        const dbNameJackpot = `${cfg.operators[operator].dbPrefix}jackpot`
     
-    await program.chat.message(`• Executing ${JACKPOT_SEED_FILE}`)
-    await db.query(`USE ${dbNameJackpot};`)
-    await db.query(jackpotMigration)
+        await program.chat.message(`• Executing ${JACKPOT_SEED_FILE}`)
+        await db.query(`USE ${dbNameJackpot};`)
+        await db.query(jackpotMigration)
     
-    await program.chat.message('_Please validate jackpot config is OK_')
-    
-    
+        await program.chat.message('_Please validate jackpot config is OK_')
+    }
+
     await program.confirm('Continue with platform migration?')
     await db.query(`USE ${dbNamePlatform}`)
     await db2.query(`USE ${dbNamePlatform}`)
