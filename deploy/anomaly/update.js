@@ -38,6 +38,7 @@ program
         // login, build, push docker image
         await sshRoot.chdir('/opt/dopamine/anomaly')
         await sshRoot.exec(`bash buildDocker.sh`)
+        await ssh.exec(`git reset --hard`) // removing package*.json
 
         await program.sleep(1)
 
