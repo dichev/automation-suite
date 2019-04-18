@@ -76,8 +76,17 @@ program.run(async () => {
     await program.chat.message('• Locking spins')
     await db.query('LOCK TABLE `currencies_exchange_rates` WRITE;')
     
-    await program.chat.message(' _Waiting 2 sec to allow started spin requests to finish_')
-    await program.sleep(2)
+    let spinsInProgress = await areThereSpinsInProgress(db2)
+    let retries = 0
+    
+    while (spinsInProgress !== 0) {
+        console.log(`There are ${spinsInProgress} spins in progress, sleeping for 1 sec`)
+        
+        await program.sleep(1)
+        spinsInProgress = await areThereSpinsInProgress(db2)
+        
+        if (++retries > 30) throw new Error(`Failed to lock spins (there were rounds in progress for more than ${retries} sec)`)
+    }
     
     await program.chat.message(`• Executing ${PLATFORM_SEED_FILE}`)
     await db2.query(platformMigration)
@@ -85,9 +94,15 @@ program.run(async () => {
     await program.chat.message('• Unlocking spins')
     await db.query('UNLOCK TABLE;')
     
-    await program.chat.message('Please validate everything is as expected', {popup: true})
+    await program.chat.message('Please validate\n * There is jackpot contribution\n * Jackpot panel(s) load\n * Jackpot feed works\n * Games are properly configured', {popup: true})
     
     await db.disconnect()
     await db2.disconnect()
     await ssh.disconnect()
 })
+
+async function areThereSpinsInProgress(db) {
+    let res = await db.query('SELECT count(id) as spins FROM transactions_round_instance WHERE statusCode = 100')
+    
+    return parseInt(res[0].spins || 0)
+}
