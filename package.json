@@ -20,7 +20,7 @@
     "configurator": "git+ssh://git@gitlab.dopamine.bg:devops/configurator.git",
     "diff": "^4.0.1",
     "dopamine-toolbox": "git+ssh://git@gitlab.dopamine.bg:devops/toolbox.git",
-    "handlebars": "^4.1.0",
+    "handlebars": "^4.1.2",
     "inquirer": "^6.2.1",
     "inquirer-autocomplete-prompt": "^1.0.1",
     "jira-client": "^6.5.1",
