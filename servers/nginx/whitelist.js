@@ -43,6 +43,7 @@ program
         console.log([operator,ips])
 
         let me =  await shell.exec('git config user.name',Econf)
+        me = me.replace(/\s/g, '')
         let task = issueNumber
         let location = cfg.getLocationByOperator(operator).name
         let gitProject = 'servers-conf-' + location
