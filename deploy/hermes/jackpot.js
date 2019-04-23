@@ -7,8 +7,6 @@ const MySQL = require('dopamine-toolbox').MySQL
 const SSHClient = require('dopamine-toolbox').SSHClient
 const cfg = require('configurator')
 const fs = require('fs')
-const os = require('os')
-const isWin = os.platform() === 'win32'
 
 const REPO = "d:/www/hermes/master"
 
@@ -29,12 +27,6 @@ program
 
 program.run(async () => {
     if (!program.params.platformSeed && !program.params.jackpotSeed) throw Error('You must provide at least one migration.')
-    
-    const readFile = function(fileName) {
-        if (!fs.existsSync(fileName)) throw Error(`${fileName} does not exist.`)
-        
-        return fs.readFileSync(fileName).toString()
-    }
     
     const areThereSpinsInProgress = async function(db) {
         let res = await db.query('SELECT count(id) as spins FROM transactions_round_instance WHERE statusCode = 100')
@@ -60,7 +52,7 @@ program.run(async () => {
     
     if (program.params.platformSeed) {
         PLATFORM_SEED_FILE = `${REPO}/platform/.migrator/seed/envs/next/${program.params.platformSeed}.sql`
-        platformMigration  = readFile(PLATFORM_SEED_FILE)
+        platformMigration  = fs.readFileSync(PLATFORM_SEED_FILE).toString()
     }
     
     if (program.params.jackpotSeed) {
@@ -69,7 +61,7 @@ program.run(async () => {
         }
     
         JACKPOT_SEED_FILE = `${REPO}/jackpot/.migrator/seed/next/${program.params.jackpotSeed}.sql`
-        jackpotMigration  = readFile(JACKPOT_SEED_FILE)
+        jackpotMigration  = fs.readFileSync(JACKPOT_SEED_FILE).toString()
     }
     
     let dbs = cfg.databases[cfg.operators[operator].databases]
@@ -78,8 +70,6 @@ program.run(async () => {
     await ssh.connect({
         host: dbs.master,
         username: 'root',
-        agent: isWin ? 'pageant' : process.env.SSH_AUTH_SOCK,
-        agentForward: true
     })
     
     let db = new MySQL()
@@ -96,17 +86,17 @@ program.run(async () => {
     
     await db2.query(`USE ${DB_NAME_PLATFORM}`)
     
-    let spinsInProgress = await areThereSpinsInProgress(db2)
+    let spinsInProgress
     let retries = 0
     
-    while (spinsInProgress !== 0) {
-        console.log(`There are ${spinsInProgress} spins in progress, sleeping for 1 sec`)
-        
-        await program.sleep(1)
+    do {
         spinsInProgress = await areThereSpinsInProgress(db2)
         
+        console.log(`There are ${spinsInProgress} spins in progress, sleeping for 1 sec`)
+        await program.sleep(1)
+    
         if (++retries > 30) throw new Error(`Failed to lock spins (there were rounds in progress for more than ${retries} sec)`)
-    }
+    } while (spinsInProgress !== 0)
     
     if (jackpotMigration) {
         await db2.query(`USE ${DB_NAME_JACKPOT}`)
