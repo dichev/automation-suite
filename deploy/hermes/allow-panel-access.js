@@ -29,5 +29,5 @@ program
         await chat.notify('GPanel access: allowing for QA..')
         await web1.chdir(DEST)
         await web1.exec(`php gpanel/bin/cmd.php activate-qa-users --minutes=${program.params.minutes} --role=${program.params.role}`)
-        await chat.notify('GPanel access granted for 15 minutes')
+        await chat.notify(`GPanel access granted for ${program.params.minutes} minutes`)
     })
