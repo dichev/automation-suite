@@ -63,6 +63,7 @@ program
         await tester.run(true)
 
         await program.confirm('Do you want to load the configurations?')
+        await ssh.exec('systemctl daemon-reload')
         await ssh.exec('systemctl restart rsyslog')
         await ssh.exec('sleep 1 && systemctl status rsyslog | head -n 3')
 
