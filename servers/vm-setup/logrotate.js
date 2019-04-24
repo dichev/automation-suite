@@ -21,6 +21,7 @@ program
                 case 'web':
                     await ssh.exec('ln -svf /opt/servers-conf/logrotate/php-fpm /etc/logrotate.d/php-fpm && [ -f /etc/logrotate.d/php-fpm ]')
                     await ssh.exec('ln -svf /opt/servers-conf/logrotate/phperror /etc/logrotate.d/phperror && [ -f /etc/logrotate.d/phperror ]')
+                    await ssh.exec('ln -svf /opt/servers-conf/logrotate/envlogs /etc/logrotate.d/envlogs && [ -f /etc/logrotate.d/envlogs ]')
                     break
         
                 case 'mysql':
