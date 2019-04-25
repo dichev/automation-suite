@@ -48,10 +48,11 @@ program
         // Prepare and check ssh connections
         let hosts = cfg.locations[LOCATION].hosts
         let dbs = cfg.databases[cfg.operators[OPERATOR].databases]
-        let [web1, master, archive] = await Promise.all([
+        let [web1, master, archive, jackpots] = await Promise.all([
             program.ssh(hosts.web1, 'dopamine'),
             program.mysql({user: 'root', ssh: {user: 'root', host: dbs.master}}),
             program.mysql({user: 'root', ssh: {user: 'root', host: dbs.archive}}),
+            program.mysql({user: 'root', ssh: {user: 'root', host: dbs.jackpots.master}}),
         ])
         let shell = program.shell()
     
@@ -73,6 +74,13 @@ program
         await program.chat.notify(`\nPreparing databases`)
         log('\nCreating master databases/users')
         await master.query(read(`${TEMPLATES}/${OPERATOR}/db/master.sql`))
+
+        if(cfg.operators[OPERATOR].sharedJackpot) {
+            log('\nCreating shared ONLY users')
+            await jackpots.query(read(`${TEMPLATES}/${OPERATOR}/db/network-jackpots-master.sql`))
+            await jackpots.query(read(`${TEMPLATES}/${OPERATOR}/db/network-jackpots-check.sql`))
+        }
+
         log('\nCreating archive databases/users')
         await archive.query(read(`${TEMPLATES}/${OPERATOR}/db/archive.sql`))
 
@@ -116,7 +124,7 @@ program
         
         // Update anomaly
         await program.chat.notify('\nUpdate anomaly configuration')
-        await shell.exec(`node deploy/anomaly/update --force`)
+        await shell.exec(`node deploy/anomaly/rebuild`)
 
         try {
             await shell.exec(`node ${ANOMALY} -s all -o ${OPERATOR}`)

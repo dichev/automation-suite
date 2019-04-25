@@ -21,8 +21,10 @@ USE {{operator.dbPrefix}}panel;
 USE {{operator.dbPrefix}}platform;
 {{import '/platform/.migrator/schema/schema.sql'}}
 
+{{#unless operator.sharedJackpot}}
 USE {{operator.dbPrefix}}jackpot;
 {{import '/jackpot/.migrator/schema/schema.sql'}}
+{{/unless}}
 
 USE {{operator.dbPrefix}}tournaments;
 {{import '/tournaments/.migrator/schema/schema.sql'}}
