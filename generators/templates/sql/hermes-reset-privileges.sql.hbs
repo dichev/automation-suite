@@ -4,7 +4,9 @@
 
 REVOKE ALL PRIVILEGES, GRANT OPTION FROM '{{operator.dbPrefix}}bonus'@'%';
 REVOKE ALL PRIVILEGES, GRANT OPTION FROM '{{operator.dbPrefix}}demo'@'%';
+{{#unless operator.sharedJackpot}}
 REVOKE ALL PRIVILEGES, GRANT OPTION FROM '{{operator.dbPrefix}}jackpot'@'%';
+{{/unless}}
 REVOKE ALL PRIVILEGES, GRANT OPTION FROM '{{operator.dbPrefix}}segments'@'%';
 REVOKE ALL PRIVILEGES, GRANT OPTION FROM '{{operator.dbPrefix}}stats'@'%';
 REVOKE ALL PRIVILEGES, GRANT OPTION FROM '{{operator.dbPrefix}}platform'@'%';
@@ -16,10 +18,12 @@ GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}bonus`.*    TO '{{operat
 GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}segments`.* TO '{{operator.dbPrefix}}bonus'@'%';
 
 GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}demo`.*         TO '{{operator.dbPrefix}}demo'@'%';
+{{#unless operator.sharedJackpot}}
 GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}jackpot`.*      TO '{{operator.dbPrefix}}jackpot'@'%';
-GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}segments`.* TO '{{operator.dbPrefix}}segments'@'%';
+{{/unless}}
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}segments`.*     TO '{{operator.dbPrefix}}segments'@'%';
 GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}stats`.*        TO '{{operator.dbPrefix}}stats'@'%';
-GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}reports`.*        TO '{{operator.dbPrefix}}reports'@'%';
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}reports`.*      TO '{{operator.dbPrefix}}reports'@'%';
 
 GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}platform`.*    TO '{{operator.dbPrefix}}platform'@'%';
 GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}bonus`.*       TO '{{operator.dbPrefix}}platform'@'%';

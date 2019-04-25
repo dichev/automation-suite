@@ -84,6 +84,7 @@ program.run(async () => {
             master: cfg.databases[o.databases].master,
             archive: cfg.databases[o.databases].archive,
             slave: cfg.databases[o.databases].slave,
+            jackpots_master: (cfg.databases[o.databases].jackpots ? cfg.databases[o.databases].jackpots.master : ''),
         }}),
         server: cfg.locations[o.location],
     }
@@ -99,14 +100,18 @@ program.run(async () => {
     // execSync(`rm -rf output/${operator}`) // TODO
 
     // Generate sql migrations
-    await generate(`${TEMPLATES}/sql/hermes-check.sql.hbs`,            `${dest}/db/check.sql`, vars)
-    await generate(`${TEMPLATES}/sql/hermes-create.sql.hbs`,           `${dest}/db/master.sql`, vars)
-    await generate(`${TEMPLATES}/sql/hermes-create-archive.sql.hbs`,   `${dest}/db/archive.sql`, vars)
-    await generate(`${TEMPLATES}/sql/hermes-rollback.sql.hbs`,         `${dest}/db/master-rollback.sql`, vars)
-    await generate(`${TEMPLATES}/sql/hermes-rollback-archive.sql.hbs`, `${dest}/db/archive-rollback.sql`, vars)
-    await generate(`${TEMPLATES}/sql/hermes-seed.sql.hbs`,             `${dest}/db/seed.sql`, vars)
-    await generate(`${TEMPLATES}/sql/hermes-schema.sql.hbs`,           `${dest}/db/schema.sql`, vars)
-    await generate(`${TEMPLATES}/sql/hermes-schema-archive.sql.hbs`,   `${dest}/db/schema-archive.sql`, vars)
+    await generate(`${TEMPLATES}/sql/hermes-check.sql.hbs`,                    `${dest}/db/check.sql`, vars)
+    await generate(`${TEMPLATES}/sql/hermes-create.sql.hbs`,                   `${dest}/db/master.sql`, vars)
+    await generate(`${TEMPLATES}/sql/hermes-create-archive.sql.hbs`,           `${dest}/db/archive.sql`, vars)
+    if (cfg.operators[operator].sharedJackpot) {
+        await generate(`${TEMPLATES}/sql/hermes-network-jackpots-check.sql.hbs`,   `${dest}/db/network-jackpots-check.sql`, vars)
+        await generate(`${TEMPLATES}/sql/hermes-network-jackpots-create.sql.hbs`,  `${dest}/db/network-jackpots-master.sql`, vars)
+    }
+    await generate(`${TEMPLATES}/sql/hermes-rollback.sql.hbs`,                 `${dest}/db/master-rollback.sql`, vars)
+    await generate(`${TEMPLATES}/sql/hermes-rollback-archive.sql.hbs`,         `${dest}/db/archive-rollback.sql`, vars)
+    await generate(`${TEMPLATES}/sql/hermes-seed.sql.hbs`,                     `${dest}/db/seed.sql`, vars)
+    await generate(`${TEMPLATES}/sql/hermes-schema.sql.hbs`,                   `${dest}/db/schema.sql`, vars)
+    await generate(`${TEMPLATES}/sql/hermes-schema-archive.sql.hbs`,           `${dest}/db/schema-archive.sql`, vars)
     console.log(operatorSeed, '->' , `${dest}/db/operator-seed.sql`)
     fs.copyFileSync(operatorSeed, `${dest}/db/operator-seed.sql`)
     

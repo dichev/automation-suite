@@ -1,0 +1,5 @@
+CREATE DATABASE IF NOT EXISTS jackpots DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+
+CREATE USER '{{operator.dbPrefix}}jackpot'@'%' IDENTIFIED BY '{{custom.passwords.jackpot}}';
+
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}jackpot`.* TO '{{operator.dbPrefix}}jackpot'@'%';
