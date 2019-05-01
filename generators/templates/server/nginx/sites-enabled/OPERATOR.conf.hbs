@@ -189,6 +189,11 @@ server {
             add_header Access-Control-Allow-Headers 'Content-Type';
         }
     }
+    
+    location /{{operator.dir}}/platform/jackpots {
+        deny all;
+    }
+
     {{#unless server.production}}
     location /{{operator.dir}}/demo {
         {{#if server.production}}
