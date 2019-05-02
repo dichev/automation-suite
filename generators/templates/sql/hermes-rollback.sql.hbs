@@ -22,5 +22,3 @@ DROP USER IF EXISTS '{{operator.dbPrefix}}segments'@'%';
 DROP USER IF EXISTS '{{operator.dbPrefix}}stats'@'%';
 DROP USER IF EXISTS '{{operator.dbPrefix}}reports'@'%';
 DROP USER IF EXISTS '{{operator.dbPrefix}}ronly'@'%';
-
-REVOKE SELECT, INSERT ON `{{sqlEscape operator.dbPrefix}}platform`.`_blocked` FROM 'safeguard'@'%'
