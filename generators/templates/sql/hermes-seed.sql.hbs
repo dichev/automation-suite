@@ -38,9 +38,11 @@ UPDATE `settings` SET `value` = '{{server.cdn.public}}' WHERE `type` = 'cdn.addr
 
 SELECT SLEEP(1);
 
+{{#unless operator.sharedJackpot}}
 USE {{operator.dbPrefix}}jackpot;
 {{import '/jackpot/.migrator/seed/seed.sql'}}
 # custom
+{{/unless}}
 
 USE {{operator.dbPrefix}}tournaments;
 {{import '/tournaments/.migrator/seed/seed.sql'}}

@@ -1,7 +1,9 @@
 # Master: {{operator.name}} ------------------------------------
 DROP DATABASE IF EXISTS {{operator.dbPrefix}}bonus;
 DROP DATABASE IF EXISTS {{operator.dbPrefix}}demo;
+{{#unless operator.sharedJackpot}}
 DROP DATABASE IF EXISTS {{operator.dbPrefix}}jackpot;
+{{/unless}}
 DROP DATABASE IF EXISTS {{operator.dbPrefix}}panel;
 DROP DATABASE IF EXISTS {{operator.dbPrefix}}platform;
 DROP DATABASE IF EXISTS {{operator.dbPrefix}}segments;
@@ -11,7 +13,9 @@ DROP DATABASE IF EXISTS {{operator.dbPrefix}}reports;
 
 DROP USER IF EXISTS '{{operator.dbPrefix}}bonus'@'%';
 DROP USER IF EXISTS '{{operator.dbPrefix}}demo'@'%';
+{{#unless operator.sharedJackpot}}
 DROP USER IF EXISTS '{{operator.dbPrefix}}jackpot'@'%';
+{{/unless}}
 DROP USER IF EXISTS '{{operator.dbPrefix}}panel'@'%';
 DROP USER IF EXISTS '{{operator.dbPrefix}}platform'@'%';
 DROP USER IF EXISTS '{{operator.dbPrefix}}segments'@'%';

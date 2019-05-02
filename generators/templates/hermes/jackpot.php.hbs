@@ -4,8 +4,8 @@ namespace jackpot;
 Config::$PRODUCTION = {{server.production}};
 
 Config::$db = [
-    'host'       => '{{operator.databases.master}}',
-    'database'   => '{{operator.dbPrefix}}jackpot',
+    'host'       => {{#if operator.sharedJackpot}}'{{operator.databases.jackpots_master}}'{{else}}'{{operator.databases.master}}'{{/if}},
+    'database'   => {{#if operator.sharedJackpot}}'{{operator.sharedJackpot}}'{{else}}'{{operator.dbPrefix}}jackpot'{{/if}},
     'user'       => '{{operator.dbPrefix}}jackpot',
     'password'   => '{{custom.passwords.jackpot}}'
 ];
