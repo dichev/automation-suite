@@ -44,4 +44,4 @@ GRANT SELECT, SHOW VIEW ON `{{sqlEscape operator.dbPrefix}}%`.*     TO '{{operat
 
 GRANT SELECT, INSERT ON `{{sqlEscape operator.dbPrefix}}platform`.`_blocked` TO 'safeguard'@'%'
 
-GRANT USAGE ON *.* TO '{{operator.dbPrefix}}platform'@'%' WITH MAX_USER_CONNECTIONS 200;
+GRANT USAGE ON *.* TO '{{sqlEscape operator.dbPrefix}}platform'@'%' WITH MAX_USER_CONNECTIONS 200;
