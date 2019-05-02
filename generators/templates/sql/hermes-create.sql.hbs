@@ -42,4 +42,6 @@ GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}tournaments`.* TO '{{ope
 GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}%`.*        TO '{{operator.dbPrefix}}panel'@'%';
 GRANT SELECT, SHOW VIEW ON `{{sqlEscape operator.dbPrefix}}%`.*     TO '{{operator.dbPrefix}}ronly'@'%';
 
+GRANT SELECT, INSERT ON `{{sqlEscape operator.dbPrefix}}platform`.`_blocked` TO 'safeguard'@'%'
+
 GRANT USAGE ON *.* TO '{{operator.dbPrefix}}platform'@'%' WITH MAX_USER_CONNECTIONS 200;
