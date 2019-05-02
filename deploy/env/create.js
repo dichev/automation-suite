@@ -117,6 +117,10 @@ program
         // Update anomaly
         await program.chat.notify('\nUpdate anomaly configuration')
         await shell.exec(`node deploy/anomaly/update --force`)
+        
+        // Restart safeguard to auto update its configuration
+        await program.chat.notify('\nUpdate safeguard configuration')
+        await shell.exec(`node deploy/safeguard/control --mode restart -l ${LOCATION}`)
 
         try {
             await shell.exec(`node ${ANOMALY} -s all -o ${OPERATOR}`)

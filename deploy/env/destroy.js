@@ -108,6 +108,9 @@ program
         await program.confirm('DANGER! Are you sure you want to continue (yes)? ')
         await shell2.exec(`node servers/servers-conf/update --locations ${LOCATION} --reload webs`)
     
+        // Restart safeguard to auto update its configuration
+        await program.chat.notify('\nUpdate safeguard configuration')
+        await shell.exec(`node deploy/safeguard/control --mode restart -l ${LOCATION}`)
     
         log(`Destroyed successfully`)
     })
