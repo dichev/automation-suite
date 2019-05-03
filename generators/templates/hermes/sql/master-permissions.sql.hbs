@@ -1,15 +1,6 @@
 # Master: {{operator.name}} ------------------------------------
-CREATE DATABASE {{operator.dbPrefix}}bonus        DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-CREATE DATABASE {{operator.dbPrefix}}demo         DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-{{#unless operator.sharedJackpot}}
-CREATE DATABASE {{operator.dbPrefix}}jackpot      DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-{{/unless}}
-CREATE DATABASE {{operator.dbPrefix}}segments     DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-CREATE DATABASE {{operator.dbPrefix}}stats        DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-CREATE DATABASE {{operator.dbPrefix}}panel        DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-CREATE DATABASE {{operator.dbPrefix}}platform     DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-CREATE DATABASE {{operator.dbPrefix}}tournaments  DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-CREATE DATABASE {{operator.dbPrefix}}reports      DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+
+
 
 CREATE USER '{{operator.dbPrefix}}bonus'@'%'        IDENTIFIED BY '{{custom.passwords.bonus}}';
 CREATE USER '{{operator.dbPrefix}}demo'@'%'         IDENTIFIED BY '{{custom.passwords.demo}}';
@@ -43,3 +34,6 @@ GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}%`.*        TO '{{operat
 GRANT SELECT, SHOW VIEW ON `{{sqlEscape operator.dbPrefix}}%`.*     TO '{{operator.dbPrefix}}ronly'@'%';
 
 GRANT USAGE ON *.* TO '{{operator.dbPrefix}}platform'@'%' WITH MAX_USER_CONNECTIONS 200;
+
+# table permissions
+GRANT SELECT, INSERT ON `{{sqlEscape operator.dbPrefix}}platform`.`_blocked` TO 'safeguard'@'%';
