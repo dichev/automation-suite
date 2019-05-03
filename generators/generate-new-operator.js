@@ -108,8 +108,7 @@ program.run(async () => {
     await generate(`${TEMPLATES}/hermes/sql/archive-rollback.sql.hbs`,          `${dest}/db/archive-rollback.sql`, vars)
     await generate(`${TEMPLATES}/hermes/sql/archive-permissions.sql.hbs`,       `${dest}/db/archive-permissions.sql`, vars)
     if (cfg.operators[operator].sharedJackpot) {
-        await generate(`${TEMPLATES}/hermes/sql/network-jackpots-check.sql.hbs`,`${dest}/db/network-jackpots-check.sql`, vars)
-        await generate(`${TEMPLATES}/hermes/sql/network-jackpots.sql.hbs`,      `${dest}/db/network-jackpots-master.sql`, vars)
+        await generate(`${TEMPLATES}/hermes/sql/network-jackpots-permissions.sql.hbs`,      `${dest}/db/network-jackpots-permissions.sql`, vars)
     }
     await generate(`${TEMPLATES}/hermes/sql/seed.sql.hbs`,                      `${dest}/db/seed.sql`, vars)
     await generate(`${TEMPLATES}/hermes/sql/schema.sql.hbs`,                    `${dest}/db/schema.sql`, vars)
