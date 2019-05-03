@@ -1,0 +1,36 @@
+# Master: {{operator.name}} ------------------------------------
+
+
+
+CREATE USER '{{operator.dbPrefix}}bonus'@'%'        IDENTIFIED BY '{{custom.passwords.bonus}}';
+CREATE USER '{{operator.dbPrefix}}demo'@'%'         IDENTIFIED BY '{{custom.passwords.demo}}';
+{{#unless operator.sharedJackpot}}
+CREATE USER '{{operator.dbPrefix}}jackpot'@'%'      IDENTIFIED BY '{{custom.passwords.jackpot}}';
+{{/unless}}
+CREATE USER '{{operator.dbPrefix}}segments'@'%'     IDENTIFIED BY '{{custom.passwords.segments}}';
+CREATE USER '{{operator.dbPrefix}}stats'@'%'        IDENTIFIED BY '{{custom.passwords.stats}}';
+CREATE USER '{{operator.dbPrefix}}platform'@'%'     IDENTIFIED BY '{{custom.passwords.platform}}';
+CREATE USER '{{operator.dbPrefix}}panel'@'%'        IDENTIFIED BY '{{custom.passwords.panel}}';
+CREATE USER '{{operator.dbPrefix}}reports'@'%'      IDENTIFIED BY '{{custom.passwords.reports}}';
+CREATE USER '{{operator.dbPrefix}}ronly'@'%'        IDENTIFIED BY '{{custom.passwords.ronly}}';
+
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}bonus`.*        TO '{{operator.dbPrefix}}bonus'@'%';
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}segments`.*     TO '{{operator.dbPrefix}}bonus'@'%';
+
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}demo`.*         TO '{{operator.dbPrefix}}demo'@'%';
+{{#unless operator.sharedJackpot}}
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}jackpot`.*      TO '{{operator.dbPrefix}}jackpot'@'%';
+{{/unless}}
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}segments`.*     TO '{{operator.dbPrefix}}segments'@'%';
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}stats`.*        TO '{{operator.dbPrefix}}stats'@'%';
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}reports`.*      TO '{{operator.dbPrefix}}reports'@'%';
+
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}platform`.*    TO '{{operator.dbPrefix}}platform'@'%';
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}bonus`.*       TO '{{operator.dbPrefix}}platform'@'%';
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}segments`.*    TO '{{operator.dbPrefix}}platform'@'%';
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}tournaments`.* TO '{{operator.dbPrefix}}platform'@'%';
+
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}%`.*        TO '{{operator.dbPrefix}}panel'@'%';
+GRANT SELECT, SHOW VIEW ON `{{sqlEscape operator.dbPrefix}}%`.*     TO '{{operator.dbPrefix}}ronly'@'%';
+
+GRANT USAGE ON *.* TO '{{operator.dbPrefix}}platform'@'%' WITH MAX_USER_CONNECTIONS 200;

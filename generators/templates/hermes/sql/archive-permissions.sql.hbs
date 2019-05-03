@@ -1,0 +1,12 @@
+# Archive: {{operator.name}} ------------------------------------
+
+
+# if not exists because the archive could be over master mysql where the users are already created
+CREATE USER IF NOT EXISTS '{{operator.dbPrefix}}platform'@'%' IDENTIFIED BY '{{custom.passwords.platform}}';
+CREATE USER IF NOT EXISTS '{{operator.dbPrefix}}panel'@'%'    IDENTIFIED BY '{{custom.passwords.panel}}';
+CREATE USER IF NOT EXISTS '{{operator.dbPrefix}}ronly'@'%'    IDENTIFIED BY '{{custom.passwords.ronly}}';
+
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}%`.*    TO '{{operator.dbPrefix}}platform'@'%';
+GRANT ALL PRIVILEGES ON `{{sqlEscape operator.dbPrefix}}%`.*    TO '{{operator.dbPrefix}}panel'@'%';
+GRANT SELECT, SHOW VIEW ON `{{sqlEscape operator.dbPrefix}}%`.* TO '{{operator.dbPrefix}}ronly'@'%';
+

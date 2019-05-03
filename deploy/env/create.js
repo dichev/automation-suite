@@ -74,6 +74,7 @@ program
         await program.chat.notify(`\nPreparing databases`)
         log('\nCreating master databases/users')
         await master.query(read(`${TEMPLATES}/${OPERATOR}/db/master.sql`))
+        await master.query(read(`${TEMPLATES}/${OPERATOR}/db/master-permissions.sql`))
 
         if(cfg.operators[OPERATOR].sharedJackpot) {
             log('\nCreating shared ONLY users')
@@ -83,6 +84,7 @@ program
 
         log('\nCreating archive databases/users')
         await archive.query(read(`${TEMPLATES}/${OPERATOR}/db/archive.sql`))
+        await master.query(read(`${TEMPLATES}/${OPERATOR}/db/archive-permissions.sql`))
 
 
         // Seed databases
