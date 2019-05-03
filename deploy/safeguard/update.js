@@ -25,6 +25,7 @@ program
             echo "Reinstalling npm packages.."
             npm install --no-optional
             
+            systemctl enable safeguard
             systemctl restart safeguard
             systemctl status safeguard | head -n 3
         `)
