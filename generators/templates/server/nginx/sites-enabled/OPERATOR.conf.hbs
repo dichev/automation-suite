@@ -161,6 +161,10 @@ server {
         return 429 '{"success":false,"error":{"msg":"Your access is temporary blocked. Please try again later.","code":429}}';
     }
 
+    location /{{operator.dir}}/platform/jackpots {
+        deny all;
+    }
+    
     location /{{operator.dir}}/platform {
         {{#if server.production}}
         limit_req zone=by_ip_15rs burst=6 nodelay;
@@ -188,10 +192,6 @@ server {
             include fastcgi.conf;
             add_header Access-Control-Allow-Headers 'Content-Type';
         }
-    }
-    
-    location /{{operator.dir}}/platform/jackpots {
-        deny all;
     }
 
     {{#unless server.production}}
