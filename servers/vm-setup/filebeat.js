@@ -12,7 +12,7 @@ let tester = new Tester()
 program
     .description('Setup filebeat log shipper')
     .option('-h, --hosts <list>', 'The target host names', { choices: Object.keys(cfg.hosts), required: true })
-    .option('--only-validate', 'Perform just validation of the current logrotate configuration')
+    .option('--only-validate', 'Perform just validation of the current filebeat configuration')
 
     .iterate('hosts', async (host) => {
         let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
