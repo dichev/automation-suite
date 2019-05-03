@@ -70,11 +70,10 @@ program
         await web1Root.exec(`/home/dopamine/bin/webs-chroot ${DEST}`)
 
 
-        // Creating databases & users
+        // Creating databases
         await program.chat.notify(`\nPreparing databases`)
         log('\nCreating master databases/users')
         await master.query(read(`${TEMPLATES}/${OPERATOR}/db/master.sql`))
-        await master.query(read(`${TEMPLATES}/${OPERATOR}/db/master-permissions.sql`))
 
         if(cfg.operators[OPERATOR].sharedJackpot) {
             log('\nCreating shared ONLY users')
@@ -84,7 +83,6 @@ program
 
         log('\nCreating archive databases/users')
         await archive.query(read(`${TEMPLATES}/${OPERATOR}/db/archive.sql`))
-        await master.query(read(`${TEMPLATES}/${OPERATOR}/db/archive-permissions.sql`))
 
 
         // Seed databases
@@ -99,6 +97,11 @@ program
         await master.query(read(`${TEMPLATES}/${OPERATOR}/db/operator-seed.sql`))
 
 
+        // Database users/permissions
+        log('Creating users and permissions..')
+        await master.query(read(`${TEMPLATES}/${OPERATOR}/db/master-permissions.sql`))
+        await archive.query(read(`${TEMPLATES}/${OPERATOR}/db/archive-permissions.sql`))
+        
         // Crons
         await program.chat.notify(`\nExecuting initial crons`)
         await web1.exec(`php ${DEST}/platform/bin/cmd.php exchange-rates`)
