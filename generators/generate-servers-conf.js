@@ -104,6 +104,19 @@ program.iterate('locations', async (location) => {
                     await save(name, content)
                 }
             }
+            else if (file.includes('HOST')) {
+                let HOSTS = Object.values(cfg.hosts).filter(h => h.location === location)
+
+                for (let host of HOSTS) {
+                    let name = dest + '/' + file.replace(/HOST/g, host.name).slice(0, -'.hbs'.length)
+                    let vars = {
+                        host: host.name,
+                        server: cfg.locations[location]
+                    }
+                    let content = template(vars)
+                    await save(name, content)
+                }
+            }
             else {
                 let name = dest + '/' + file.slice(0, -'.hbs'.length)
     

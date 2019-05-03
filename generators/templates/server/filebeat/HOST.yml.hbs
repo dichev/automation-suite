@@ -1,0 +1,54 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /var/log/nginx/access.log
+  fields:
+    programname: webaccess
+    severity: info
+    name: {{host}}
+
+- type: log
+  enabled: true
+  paths:
+    - /var/log/nginx/error.log
+  fields:
+    programname: weberror
+    severity: err
+    name: {{host}}
+
+- type: log
+  enabled: true
+  paths:
+    - /home/dopamine/*/*/wallet/logs/*.log
+  fields:
+    programname: wallet
+    severity: err
+    name: {{host}}
+
+- type: log
+  enabled: true
+  paths:
+    - /var/log/php/error.log
+  fields:
+    programname: phperror
+    severity: err
+    name: {{host}}
+
+- type: log
+  enabled: true
+  paths:
+    - /var/log/mysql/error.log
+  fields:
+    programname: mysqlerror
+    severity: err
+    name: {{host}}
+
+output.logstash:
+  enabled: true
+  hosts: [ '{{server.externalHosts.logserver2}}:5044' ]
+  compression_level: 9
+
+processors:
+  - drop_fields:
+     fields: [ 'host', 'agent' ]
