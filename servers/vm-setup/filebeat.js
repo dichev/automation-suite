@@ -15,7 +15,10 @@ program
     .option('--only-validate', 'Perform just validation of the current filebeat configuration')
 
     .iterate('hosts', async (host) => {
+        await program.confirm('Do you generate filebeat configs for the location?')
+
         let ssh = await program.ssh(cfg.getHost(host).ip, 'root')
+        const type = cfg.getHost(host).type
 
         if (! await ssh.exists(`/etc/apt/sources.list.d/elastic-7.x.list`)) {
             await ssh.exec('wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -')
@@ -48,6 +51,8 @@ program
         it(`validate filebeat configuration`, async () => await ssh.exec(`filebeat test config`, {silent: true}))
         it(`validate filebeat output`, async () => await ssh.exec(`filebeat test output`, {silent: true}))
         await tester.run(true)
+
+        if(type === 'lb') await ssh.exec('logrotate -f /etc/logrotate.d/nginx && sleep 3')
 
         await program.confirm('Do you want to load the configurations?')
         await ssh.exec('systemctl restart rsyslog && systemctl restart filebeat')
