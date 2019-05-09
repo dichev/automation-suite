@@ -37,7 +37,7 @@ Promise.resolve().then(async() => {
         await program.chat.notify(`Syncing games-certified seed to #${REV}`)
         await master.query(`USE ${dbname};`)
         
-        if(operator === 'paddymars' || operator === 'betfairmars'){ // TODO: temporary
+        if(operator === 'paddymars'){ // TODO: temporary
             await program.chat.notify(`WARNING! Custom seed for ${operator}`)
             let custom = seed.replace(/PaddyPowerGoldHaxe/g, 'PaddyPowerGold')
             await master.query(custom)
