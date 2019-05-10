@@ -5,7 +5,6 @@ const Program = require('dopamine-toolbox').Program
 const GoogleChat = require('dopamine-toolbox').plugins.GoogleChat
 const chunk = require('dopamine-toolbox').lib.Utils.chunk
 const cfg = require('configurator')
-const MAX_OPERATORS_TOGETHER = 8;
 
 let program = new Program({chat: cfg.chat.rooms.deployBackend, smartForce: true})
 
@@ -56,6 +55,8 @@ program.run(async () => {
         // if(location === 'belgium-mga' || location === 'belgium-alderney' ||  location === 'belgium-rtg') continue
         
         let operatorsInLocation = allOperators.filter(o => o.location === location)
+        
+        const MAX_OPERATORS_TOGETHER = location === 'taiwan' ? 3 : 8
         
         for(let OPERATORS of chunk(operatorsInLocation, MAX_OPERATORS_TOGETHER)) {
             await chat.message(`Affected operators: ` + OPERATORS.map(o => o.name).join(', '))
