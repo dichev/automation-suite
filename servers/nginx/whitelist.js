@@ -17,8 +17,7 @@ const now = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
 
 var jira = new JiraApi(cfg.access.jira);
 
-//let program = new Program({chat: cfg.chat.rooms.deployBackend})
-let program = new Program({chat: ''})
+let program = new Program({ chat: cfg.chat.rooms.devops })
 let shell = new Shell()
 fs.mkdirSync(RootDir)
 
@@ -32,13 +31,14 @@ program
     .description("Whitelist ips for operator")
     .option('-t, --tasks <list>',`Task to be processed`, {required:true})
     .option('-o, --operator <name>',`Optionally specify the operator name`)
+    .option('--reload', 'Reload nginx service')
     .iterate('tasks', async (issueNumber) => {
         console.log(issueNumber)
         let issue = await jira.findIssue(issueNumber);
         let ips = issue.fields.description
             .fromTo('{code:java|title=Required rules*}','{code}')
             .match(/\d+\.\d+\.\d+\.\d+(\/\d+)?/g)
-        
+
         let operator = program.params.operator || issue.fields.description.fromTo('*Operator:* ',' As described').toLowerCase()
         console.log([operator,ips])
 
@@ -80,22 +80,53 @@ program
         console.log(currentConfig.grep('^allow'))
         await program.confirm(`Approved or not?`)
         await shell.chdir(RootDir + '/' + gitProject)
-        let currentMaster = await shell.exec('git rev-parse --short master',Econf)
         await shell.exec(`git checkout -b ${branch}`,Econf)
 
         fs.appendFileSync(configFile,'\n# ' + now.padEnd(24,' ') + "#" + task + '\n')
         for (let ip of ips) {
             if(existingIps.indexOf(ip) === -1 ) fs.appendFileSync(configFile,'allow ' + (ip + ';').padEnd(20,' ') + '#' + task + '\n')
         }
-    
+
         await shell.exec(`git add . && git commit -m "[${operator}] IP Whitelist (${task})"`,Econf)
         console.log(fs.readFileSync(configFile).toString().grep('^allow'))
         await shell.exec(`git push --set-upstream origin ${branch}`)
-        console.log('#Deploy changes using those commands:\n'
-            + `node servers/servers-conf/list-changes -l ${location}\n`
-            + `node servers/servers-conf/update -l ${location} --reload nginx --announce "Whitelist ${operator}" \n`
-            + `### node servers/servers-conf/update -l ${location} --rev ${currentMaster} --reload nginx\n`
-            + `node  deploy/hermes/check  -p 10 -o ${operator}\n`
+
+        if (program.params.reload){
+            let answer = await program.ask(`Please confirm if "${branch}" has been merged into "master"?`, ['merged', ''], '')
+            if (answer !== 'merged') throw new Error(`Aborting.. "${branch}" has to be merged into "master"`)
+            let lb = await program.ssh(cfg.locations[location].hosts.lb, 'root')
+            await lb.chdir('/opt/servers-conf')
+            let changes = await lb.exec('git status --short --untracked-files=no')
+
+            if (changes){
+                await lb.exec('git fetch origin master --quiet')
+                await lb.exec('git log HEAD..origin/master --oneline')
+                await lb.exec('git diff HEAD..origin/master --name-status')
+                throw Error('Aborting.. Manual changes found')
+            }
+
+            let rbranch = await lb.exec(`git rev-parse --abbrev-ref HEAD`, { silent: true })
+            if (rbranch !== 'master') throw Error(`Aborting.. Manual changes found. The repo is not on master, but on branch ${rbranch}`)
+
+            await lb.exec('git fetch origin master --prune --quiet')
+            await lb.exec('git log HEAD..origin/master --oneline')
+            await program.confirm('Are you sure you want to apply these changes?')
+
+            await lb.exec('git reset --hard origin/master')
+
+            await program.chat.message(`IPs from "${Url}/${task}" will be whitelisted.`)
+            await program.chat.message('Reloading Nginx configuration..')
+
+            console.log('\n# Reloading Nginx configuration..')
+            await lb.exec(`nginx -s reload`)
+            console.log('# Done.')
+
+            await program.chat.message('Nginx configuration has been reloaded.')
+        }
+
+        console.log('\n# Run deployment tests by executing the following command:\n'
+            + `node deploy/hermes/check -p 10 -o ${operator}\n`
         )
+
     })
 // !TODO remove RootDir
