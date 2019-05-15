@@ -21,7 +21,9 @@ Config::$db['default'] = [
 
 Config::$endpoints['{{operator.dir}}']['apiUrl'] = '{{custom.secret.apiKeys.wallet.apiUrl}}';
 Config::$endpoints['{{operator.dir}}']['credentials']['apiKey'] = '{{custom.secret.apiKeys.wallet.apiKey}}';
+{{#if custom.secret.apiKeys.wallet.reconToken}}
 Config::$endpoints['{{operator.dir}}']['credentials']['reconToken'] = '{{custom.secret.apiKeys.wallet.reconToken}}';
+{{/if}}
 Config::$endpoints['{{operator.dir}}']['curl']['ssl']['ca'] = '/etc/cacert.pem';
 
 #ProxyStart
