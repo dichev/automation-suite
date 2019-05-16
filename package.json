@@ -17,7 +17,7 @@
     "chalk": "^2.4.2",
     "cli-progress": "^2.1.1",
     "clui": "^0.3.6",
-    "configurator": "git+ssh://git@gitlab.dopamine.bg:devops/configurator.git#viplobby",
+    "configurator": "git+ssh://git@gitlab.dopamine.bg:devops/configurator.git",
     "diff": "^4.0.1",
     "dopamine-toolbox": "git+ssh://git@gitlab.dopamine.bg:devops/toolbox.git",
     "handlebars": "^4.1.2",
