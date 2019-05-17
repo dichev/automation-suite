@@ -16,14 +16,13 @@ program
 
 program.iterate('operators', async (operator) => {
     let today = new Date().toISOString().substr(0, 10)
-    let fileName = `${operator}-${today}.sql`
     let dbs = cfg.databases[cfg.operators[operator].databases]
     let dbname = cfg.operators[operator].dbPrefix + 'segments'
     let ssh = await new SSHClient().connect({host: dbs.master, username: 'root'})
 
     
     await program.chat.message('Cleaning migration file..')
-    await ssh.exec(`rm -fv ${DEST_DIR}/${fileName}`)
+    await ssh.exec(`rm -fv ${DEST_DIR}/${operator}-*.sql`)
 
     
     await program.chat.message('Cleaning __archive segments tables..')
