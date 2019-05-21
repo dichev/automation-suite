@@ -22,6 +22,7 @@ const templates = {
 const GROUPS = [
     'deploy',
     'servers',
+    'generators',
     'office',
     'dba',
 ]
@@ -39,10 +40,9 @@ program
         let programs = fs.readdirSync(base).filter(file => fs.lstatSync(base + '/' + file).isDirectory())
         let commands = {}
         for(let name of programs){
-            commands[name] = fs.readdirSync(base + '/' + name).filter(file => file.endsWith('.js') && !file.startsWith('.')).map(file => file.substring(0, file.length-3))
+            commands[name] = fs.readdirSync(base + '/' + name).filter(file => file.endsWith('.js') && !file.startsWith('.') && file === file.toLocaleLowerCase()).map(file => file.substring(0, file.length-3))
         }
-        
-    
+
         let data = { programs: {} }
         
         for(let name of programs){
@@ -58,8 +58,8 @@ program
                     name: command,
                     shortDescription: description.charAt(0).toLowerCase() + description.slice(1, 100) + (description.length > 100 ? '..' : ''),
                     description: description,
-                    help: help.replace('Usage: node ', `Usage: node ${group}/`) // TODO: temporary
-                              .replace(/. Available: .+/g, '')
+                    help: help.replace('Usage: node ', `Usage: node ${name === 'BASE' ? '' : group + '/'}`)
+                              .replace(/(Additional Options:)([\s\S]+)/gm, '$1 (see global options)')
                 }
             }
             

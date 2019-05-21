@@ -15,16 +15,7 @@ Check are all host names resolved from current machine
 
 Options:
 
-Additional Options:
-  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-  -v, --verbose           Turn ON log details of whats happening
-  -f, --force             Suppress confirm messages (used for automation)
-  --dry-run               Dry run mode will do everything as usual except commands execution
-  --quiet                 Turn off chat and some logs in stdout
-  --wait <int>            Pause between iterations in seconds
-  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
-  --no-chat               Disable chat notification if they are activated
-  -h, --help              output usage information
+Additional Options: (see global options)
 ```
 ### <a name="dns-update"></a>update
 Auto sync dns records for all host names in to the office DNS server.
@@ -35,14 +26,6 @@ Auto sync dns records for all host names in to the office DNS server.
 
 Options:
 
-Additional Options:
-  -p, --parallel [limit]  When run with multiple hosts define how many commands to be executed in parallel. Set to 0 execute them all together. By default will be executed sequentially
-  -v, --verbose           Turn ON log details of whats happening
-  -f, --force             Suppress confirm messages (used for automation)
-  --dry-run               Dry run mode will do everything as usual except commands execution
-  --quiet                 Turn off chat and some logs in stdout
-  --wait <int>            Pause between iterations in seconds
-  --announce              Announce what and why is happening and delay the execution to give time to all to prepare
-  --no-chat               Disable chat notification if they are activated
-  -h, --help              output usage information
+Additional Options: (see global options)
 ```
+## <a name="settings"></a>settings
