@@ -8,12 +8,13 @@ const fs = require('fs')
 const cfg = require('configurator')
 
 const DEST = '/opt/dopamine/safeguard'
+let LOCATIONS = Object.values(cfg.locations).filter(l => l.production === true).map(l => l.name)
 
 let program = new Program({chat: cfg.chat.rooms.devops})
 
 program
     .description('Updating safeguard version')
-    .option('-l, --locations <list|all>', 'The target location (will be used web1)', { choices: Object.keys(cfg.locations), required: true })
+    .option('-l, --locations <list|all>', 'The target location (will be used web1)', { choices: LOCATIONS, required: true })
     .option('-m, --migration-path <name>', 'The path to migration sql file (like /d/www/_releases/migrations/safeguard-update.sql', { required: true })
     
     .iterate('locations', async (location) => {
